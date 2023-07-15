@@ -42,7 +42,7 @@ const UserDropdown = () => {
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
       <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>
         <div className='user-nav d-sm-flex d-none'>
-          <span className='user-name fw-bold'>{(userData && userData['username']) || 'John Doe'}</span>
+          <span className='user-name fw-bold'>{(userData && userData['name']) || 'User'}</span>
           <span className='user-status'>{(userData && userData.role) || 'Admin'}</span>
         </div>
         <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
@@ -50,9 +50,9 @@ const UserDropdown = () => {
       <DropdownMenu end>
         <DropdownItem tag={Link} to='/pages/profile'>
           <User size={14} className='me-75' />
-          <span className='align-middle'>Profile</span>
+          <span className='align-middle'>Профиль</span>
         </DropdownItem>
-        <DropdownItem tag={Link} to='/apps/email'>
+        {/* <DropdownItem tag={Link} to='/apps/email'>
           <Mail size={14} className='me-75' />
           <span className='align-middle'>Inbox</span>
         </DropdownItem>
@@ -76,10 +76,10 @@ const UserDropdown = () => {
         <DropdownItem tag={Link} to='/pages/faq'>
           <HelpCircle size={14} className='me-75' />
           <span className='align-middle'>FAQ</span>
-        </DropdownItem>
+        </DropdownItem> */}
         <DropdownItem tag={Link} to='/login' onClick={() => dispatch(handleLogout())}>
           <Power size={14} className='me-75' />
-          <span className='align-middle'>Logout</span>
+          <span className='align-middle'>Выход</span>
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>

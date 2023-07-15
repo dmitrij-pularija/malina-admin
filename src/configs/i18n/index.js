@@ -5,16 +5,16 @@ import { initReactI18next } from 'react-i18next'
 import LanguageDetector from 'i18next-browser-languagedetector'
 
 // ** Languages Imports
+const ru = new URL('../../assets/data/locales/ru.json', import.meta.url).href
 const en = new URL('../../assets/data/locales/en.json', import.meta.url).href
-const fr = new URL('../../assets/data/locales/fr.json', import.meta.url).href
-const de = new URL('../../assets/data/locales/de.json', import.meta.url).href
-const pt = new URL('../../assets/data/locales/pt.json', import.meta.url).href
+
+// const fr = new URL('../../assets/data/locales/fr.json', import.meta.url).href
+// const de = new URL('../../assets/data/locales/de.json', import.meta.url).href
+// const pt = new URL('../../assets/data/locales/pt.json', import.meta.url).href
 
 const languages = {
-  en,
-  fr,
-  de,
-  pt
+  ru,
+  en
 }
 
 i18n
@@ -28,12 +28,12 @@ i18n
   // Enables the hook initialization module
   .use(initReactI18next)
   .init({
-    lng: 'en',
+    lng: 'ru',
     backend: {
       /* translation file path */
       loadPath: lng => languages[lng]
     },
-    fallbackLng: 'en',
+    fallbackLng: 'ru',
     debug: false,
     keySeparator: false,
     react: {

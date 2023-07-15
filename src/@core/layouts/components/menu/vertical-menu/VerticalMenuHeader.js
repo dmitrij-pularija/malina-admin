@@ -4,6 +4,7 @@ import { NavLink } from 'react-router-dom'
 
 // ** Icons Imports
 import { Disc, X, Circle } from 'react-feather'
+import Logo from '@components/logo'
 
 // ** Config
 import themeConfig from '@configs/themeConfig'
@@ -49,13 +50,14 @@ const VerticalMenuHeader = props => {
   return (
     <div className='navbar-header'>
       <ul className='nav navbar-nav flex-row'>
-        <li className='nav-item me-auto'>
-          <NavLink to={user ? getHomeRouteForLoggedInUser(user.role) : '/'} className='navbar-brand'>
+        <li className='nav-item me-auto logo-header'>
+        <Logo />  
+          {/* <NavLink to={user ? getHomeRouteForLoggedInUser(user.role) : '/'} className='navbar-brand'>
             <span className='brand-logo'>
               <img src={themeConfig.app.appLogoImage} alt='logo' />
             </span>
             <h2 className='brand-text mb-0'>{themeConfig.app.appName}</h2>
-          </NavLink>
+          </NavLink> */}
         </li>
         <li className='nav-item nav-toggle'>
           <div className='nav-link modern-nav-toggle cursor-pointer'>

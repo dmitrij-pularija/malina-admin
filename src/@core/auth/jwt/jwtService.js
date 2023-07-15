@@ -1,6 +1,8 @@
 import axios from 'axios'
 import jwtDefaultConfig from './jwtDefaultConfig'
 
+axios.defaults.baseURL = 'http://167.99.246.103/myapps/venv/api/'
+
 export default class JwtService {
   // ** jwtConfig <= Will be used by this service
   jwtConfig = { ...jwtDefaultConfig }
