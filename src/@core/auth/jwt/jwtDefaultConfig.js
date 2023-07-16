@@ -3,7 +3,7 @@ export default {
   loginEndpoint: 'user/storelogin/',
   // registerEndpoint: '/jwt/register',
   // refreshEndpoint: '/jwt/refresh-token',
-  logoutEndpoint: 'storelogout',
+  logoutEndpoint: 'user/storelogout',
 
   // ** This will be prefixed in authorization header with token
   // ? e.g. Authorization: Bearer <token>
