@@ -21,19 +21,19 @@ export default [
     id: 'categories',
     title: 'Categories',
     icon: <Server size={20} />,
-    navLink: '/apps/food/categories'
+    navLink: '/apps/food/categories/list'
   },
   {
     id: 'branches',
     title: 'Branches',
     icon: <GitBranch size={20} />,
-    navLink: '/apps/food/branches'
+    navLink: '/apps/food/branches/list'
   },
   {
     id: 'tables',
     title: 'Tables',
     icon: <BookOpen size={20} />,
-    navLink: '/apps/food/tables'
+    navLink: '/apps/food/tables/list'
   },
   {
     id: 'users',
@@ -42,7 +42,7 @@ export default [
     children: [
       {
         id: 'user',
-        title: 'Users',
+        title: 'User',
         icon: <Circle size={12} />,
         navLink: '/apps/user/list'
       },

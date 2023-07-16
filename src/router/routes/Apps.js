@@ -4,11 +4,9 @@ import { Navigate } from 'react-router-dom'
 
 const Orders = lazy(() => import('../../views/apps/food/orders/list'))
 const Establishments = lazy(() => import('../../views/apps/food/establishments/wishlist'))
-const Categories = lazy(() => import('../../views/apps/food/categories'))
-const Branches = lazy(() => import('../../views/apps/food/branches'))
-const Tables = lazy(() => import('../../views/apps/food/tables'))
-
-
+const Categories = lazy(() => import('../../views/apps/food/categories/list'))
+const Branches = lazy(() => import('../../views/apps/food/branches/list'))
+const Tables = lazy(() => import('../../views/apps/food/tables/list'))
 
 const Chat = lazy(() => import('../../views/apps/chat'))
 const Todo = lazy(() => import('../../views/apps/todo'))
@@ -47,27 +45,15 @@ const AppRoutes = [
   },
   {
     element: <Categories />,
-    path: '/apps/food/categories',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
+    path: '/apps/food/categories/list'
   },
   {
     element: <Branches />,
-    path: '/apps/food/branches',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
+    path: '/apps/food/branches/list'
   },
   {
     element: <Tables />,
-    path: '/apps/food/tables',
-    meta: {
-      appLayout: true,
-      className: 'email-application'
-    }
+    path: '/apps/food/tables/list'
   },
 
   {
