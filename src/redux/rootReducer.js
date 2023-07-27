@@ -1,7 +1,9 @@
 // ** Reducers Imports
+import auth from './authentication'
+import orders from '@src/views/apps/food/orders/store'
+
 import navbar from './navbar'
 import layout from './layout'
-import auth from './authentication'
 import todo from '@src/views/apps/todo/store'
 import chat from '@src/views/apps/chat/store'
 import users from '@src/views/apps/user/store'
@@ -15,6 +17,7 @@ import permissions from '@src/views/apps/roles-permissions/store'
 
 const rootReducer = {
   auth,
+  orders,
   todo,
   chat,
   email,

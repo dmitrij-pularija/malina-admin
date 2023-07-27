@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux'
 // ** User List Component
 import Table from './Table'
 
@@ -8,12 +9,33 @@ import { Row, Col } from 'reactstrap'
 import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
 
 // ** Icons Imports
-import { User, UserPlus, UserCheck, UserX } from 'react-feather'
+import { ShoppingCart, DollarSign, Activity, Star } from 'react-feather'
+import { formatNumberInt, formatNumber, getRate} from '../../../../../utility/Utils'
 
 // ** Styles
 import '@styles/react/apps/app-users.scss'
 
-const UsersList = () => {
+const sumTotalPrice = (data) => data.reduce((accumulator, currentValue) => { return accumulator + currentValue.totalprice }, 0)
+const totalRate = (data) => {
+const sumRate = data.reduce((accumulator, currentValue) => { return accumulator + getRate(currentValue.rate) }, 0)
+const filtredRate = data.filter((item) => item.rate.length > 0)
+const countRate = filtredRate.length
+if (sumRate && countRate) {
+return sumRate / countRate
+} else {
+  return 0
+}
+}
+
+const OrdersList = () => {
+  const { total, allData } = useSelector(state => state.orders)
+  let sum = 0, rate = 0
+
+  if (allData.length) {
+    sum = sumTotalPrice(allData)
+    rate = totalRate(allData)
+  }
+
   return (
     <div className='app-user-list'>
       <Row>
@@ -21,32 +43,32 @@ const UsersList = () => {
           <StatsHorizontal
             color='primary'
             statTitle='Всего заказов'
-            icon={<User size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>21,459</h3>}
+            icon={<ShoppingCart size={20} />}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(total)}</h3>}
           />
         </Col>
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='danger'
             statTitle='На сумму'
-            icon={<UserPlus size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>4,567</h3>}
+            icon={<DollarSign size={20} />}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(sum)}</h3>}
           />
         </Col>
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='success'
             statTitle='Средняя сумма'
-            icon={<UserCheck size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>19,860</h3>}
+            icon={<Activity size={20}/>}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(sum / total)}</h3>}
           />
         </Col>
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='warning'
-            statTitle='Средний рейтинг'
-            icon={<UserX size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>237</h3>}
+            statTitle='Средняя оценка'
+            icon={<Star size={20} />}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumber(rate)}</h3>}
           />
         </Col>
       </Row>
@@ -55,4 +77,4 @@ const UsersList = () => {
   )
 }
 
-export default UsersList
+export default OrdersList

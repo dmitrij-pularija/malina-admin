@@ -3,6 +3,12 @@ import { lazy } from 'react'
 import { Navigate } from 'react-router-dom'
 
 const Orders = lazy(() => import('../../views/apps/food/orders/list'))
+const OrdersPreview = lazy(() => import('../../views/apps/food/orders/preview'))
+const OrdersEdit = lazy(() => import('../../views/apps/food/orders/edit'))
+const OrdersHistory = lazy(() => import('../../views/apps/food/orders/edit'))
+const OrdersOnMap = lazy(() => import('../../views/apps/food/orders/edit'))
+const OrdersReview = lazy(() => import('../../views/apps/food/orders/edit'))
+
 const Establishments = lazy(() => import('../../views/apps/food/establishments/wishlist'))
 const Categories = lazy(() => import('../../views/apps/food/categories/list'))
 const Branches = lazy(() => import('../../views/apps/food/branches/list'))
@@ -35,6 +41,26 @@ const AppRoutes = [
   {
     element: <Orders />,
     path: '/apps/food/orders/list'
+  },
+  {
+    element: <OrdersPreview />,
+    path: '/apps/food/orders/preview/:id'
+  },
+  {
+    element: <OrdersEdit />,
+    path: '/apps/food/orders/edit/:id'
+  },
+  {
+    element: <OrdersHistory />,
+    path: '/apps/food/orders/hist/:id'
+  },
+  {
+    element: <OrdersOnMap />,
+    path: '/apps/food/orders/map/:id'
+  },
+  {
+    element: <OrdersReview />,
+    path: '/apps/food/orders/rev/:id'
   },
   {
     element: <Establishments />,

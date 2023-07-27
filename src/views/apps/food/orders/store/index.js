@@ -3,19 +3,32 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
-
-export const getAllData = createAsyncThunk('appUsers/getAllData', async () => {
-  const response = await axios.get('/api/users/list/all-data')
-  return response.data
+// http://167.99.246.103/myapps/venv/api/item/clientorder/
+export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
+  const response = await axios.get('item/clientorder/')
+// console.log(response.data.results)
+  // const response = await axios.get('/api/users/list/all-data')
+  return response.data.results
 })
 
-export const getData = createAsyncThunk('appUsers/getData', async params => {
-  const response = await axios.get('/api/users/list/data', params)
+export const getData = createAsyncThunk('appOrders/getData', async params => {
+  const response = await axios.get('item/clientorder/', params)
+  // const response = await axios.get('/api/users/list/data', params)
   return {
     params,
-    data: response.data.users,
-    totalPages: response.data.total
+    data: response.data.results,
+    totalPages: response.data.count
   }
+})
+
+export const getWaiter = createAsyncThunk('appOrders/getWaiters', async () => {
+  const { data: { results } } = await axios.get('user/waiter/')
+  return results
+})
+
+export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
+  const response = await axios.get('item/clientorder/', { id })
+  return response.data.user
 })
 
 export const getUser = createAsyncThunk('appUsers/getUser', async id => {
@@ -37,20 +50,27 @@ export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { d
   return id
 })
 
-export const appUsersSlice = createSlice({
-  name: 'appUsers',
+export const appOrdersSlice = createSlice({
+  name: 'appOrders',
   initialState: {
     data: [],
     total: 1,
     params: {},
     allData: [],
-    selectedUser: null
+    waiters: [],
+    selectedOrder: null
   },
   reducers: {},
   extraReducers: builder => {
     builder
       .addCase(getAllData.fulfilled, (state, action) => {
         state.allData = action.payload
+      })
+      .addCase(getOrder.fulfilled, (state, action) => {
+        state.selectedOrder = action.payload
+      })
+      .addCase(getWaiter.fulfilled, (state, action) => {
+        state.waiters = action.payload
       })
       .addCase(getData.fulfilled, (state, action) => {
         state.data = action.payload.data
@@ -63,4 +83,4 @@ export const appUsersSlice = createSlice({
   }
 })
 
-export default appUsersSlice.reducer
+export default appOrdersSlice.reducer

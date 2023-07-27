@@ -33,6 +33,7 @@ export const formatDate = (value, formatting = { month: 'short', day: 'numeric',
   return new Intl.DateTimeFormat('en-US', formatting).format(new Date(value))
 }
 
+
 // ** Returns short month of passed date
 export const formatDateToMonthShort = (value, toTimeForCurrentDay = true) => {
   const date = new Date(value)
@@ -79,3 +80,38 @@ export const selectThemeColors = theme => ({
     neutral30: '#ededed' // for input hover border-color
   }
 })
+
+export const formatData = (value) => {
+  return new Date(value).toLocaleDateString('ru-Ru')
+}
+
+export const formatTime = (value) => {
+  // return new Date(value).toLocaleTimeString('ru-Ru')
+  const date = new Date(value)
+  const hours = String(date.getHours()).padStart(2, '0')
+  const minutes = String(date.getMinutes()).padStart(2, '0')
+  return `${hours}:${minutes}`
+}
+
+export const formatNumber = (value) => {
+  const formattedNumber = Number(value).toLocaleString('ru', {
+    minimumFractionDigits: 2,
+    maximumFractionDigits: 2
+  })
+  return formattedNumber
+}
+
+export const formatNumberInt = (value) => {
+  const integerValue = parseInt(value)
+  const formattedNumber = integerValue.toLocaleString('ru')
+  return formattedNumber
+}
+
+export const getRate = (ratingArray) => {
+  if (!ratingArray || ratingArray.length === 0) return 0
+
+  const sum = ratingArray.reduce((accumulator, item) => accumulator + item.star__value, 0)
+  const average = sum / ratingArray.length
+
+  return Math.round(average)
+}

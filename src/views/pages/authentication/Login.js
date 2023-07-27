@@ -92,7 +92,7 @@ const Login = () => {
         useJwt
         .login({ login: data.loginEmail, password: data.password, key: "qwerty12345"})
         .then(res => {
-          // console.log(res)
+          console.log(res)
           const newAbility = [{action: "manage", subject: "all"}]
           const data = { ...res.data.user, role: roles[res.data.user.type], ability: newAbility, name: res.data.user.name ? res.data.user.name : res.data.user.login.split('@')[0], accessToken: res.data.access, refreshToken: res.data.refresh}
           dispatch(handleLogin(data))

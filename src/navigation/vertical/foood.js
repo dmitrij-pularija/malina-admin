@@ -42,7 +42,7 @@ export default [
     children: [
       {
         id: 'user',
-        title: 'User',
+        title: 'Users',
         icon: <Circle size={12} />,
         navLink: '/apps/user/list'
       },
@@ -50,19 +50,19 @@ export default [
         id: 'waiters',
         title: 'Waiters',
         icon: <Circle size={12} />,
-        navLink: '/forms/elements/input'
+        navLink: '/apps/user/view'
       },
       {
         id: 'customers',
         title: 'Customers',
         icon: <Circle size={12} />,
-        navLink: '/forms/elements/input'
+        navLink: '/apps/user/list'
       },
       {
         id: 'guests',
         title: 'Guests',
         icon: <Circle size={12} />,
-        navLink: '/forms/elements/input'
+        navLink: '/apps/user/view'
       }
     ]
   },

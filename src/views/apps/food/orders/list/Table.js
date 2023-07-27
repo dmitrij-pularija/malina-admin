@@ -8,7 +8,7 @@ import Sidebar from './Sidebar'
 import { columns } from './columns'
 
 // ** Store & Actions
-import { getAllData, getData } from '../store'
+import { getAllData, getData, getWaiter } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Third Party Components
@@ -19,6 +19,7 @@ import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-f
 
 // ** Utils
 import { selectThemeColors } from '@utils'
+import { statusObj } from '../../../../../configs/initial'
 
 // ** Reactstrap Imports
 import {
@@ -40,6 +41,7 @@ import {
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
+import '@styles/base/pages/app-ecommerce.scss'
 
 // ** Table Header
 const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
@@ -101,8 +103,8 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
               style={{ width: '5rem' }}
             >
               <option value='10'>10</option>
-              <option value='25'>25</option>
-              <option value='50'>50</option>
+              <option value='20'>20</option>
+              <option value='40'>40</option>
             </Input>
             <label htmlFor='rows-per-page'>записей</label>
           </div>
@@ -164,10 +166,10 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
   )
 }
 
-const UsersList = () => {
+const OrdersList = () => {
   // ** Store Vars
   const dispatch = useDispatch()
-  const store = useSelector(state => state.users)
+  const store = useSelector(state => state.orders)
 
   // ** States
   const [sort, setSort] = useState('desc')
@@ -176,9 +178,10 @@ const UsersList = () => {
   const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [currentRole, setCurrentRole] = useState({ value: '', label: 'Select Role' })
-  const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'Select Plan' })
-  const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Select Status', number: 0 })
+  // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Select Role' })
+  // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'Select Plan' })
+  const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
+  const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирите статус', number: 0 })
 
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
@@ -186,6 +189,7 @@ const UsersList = () => {
   // ** Get data on mount
   useEffect(() => {
     dispatch(getAllData())
+    dispatch(getWaiter())
     dispatch(
       getData({
         sort,
@@ -193,28 +197,34 @@ const UsersList = () => {
         q: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        role: currentRole.value,
         status: currentStatus.value,
-        currentPlan: currentPlan.value
+        currentStore: currentStore.value
       })
     )
   }, [dispatch, store.data.length, sort, sortColumn, currentPage])
 
   // ** User filter options
-  const roleOptions = [
-    { value: '', label: 'Выберете статус' },
-    { value: 'admin', label: 'Admin' },
-    { value: 'author', label: 'Author' },
-    { value: 'editor', label: 'Editor' },
-    { value: 'maintainer', label: 'Maintainer' },
-    { value: 'subscriber', label: 'Subscriber' }
+  // const roleOptions = [
+  //   { value: '', label: 'Выберете статус' },
+  //   { value: 'admin', label: 'Admin' },
+  //   { value: 'author', label: 'Author' },
+  //   { value: 'editor', label: 'Editor' },
+  //   { value: 'maintainer', label: 'Maintainer' },
+  //   { value: 'subscriber', label: 'Subscriber' }
+  // ]
+
+  const storeOptions = [
+    { value: '', label: 'Выбирите заведение' },
+    { value: '189', label: 'MALINA ECO FOOD' },
+    { value: '236', label: 'Chicken Crispy' }
   ]
 
-  const planOptions = [
-    { value: '', label: 'Выбирите заведение' },
-    { value: 'basic', label: 'MALINA ECO FOOD' },
-    { value: 'company', label: 'Chicken Crispy' }
-  ]
+  const statusOptions = Object.entries(statusObj).map(([number, status]) => ({
+    value: status.label.toLowerCase().replace(/\s+/g, '-'),
+    label: status.label,
+    number: parseInt(number)
+  }))
+  statusOptions.unshift({ value: '', label: 'Выберете статус', number: 0 });
 
   // const statusOptions = [
   //   { value: '', label: 'Select Status', number: 0 },
@@ -232,9 +242,8 @@ const UsersList = () => {
         q: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        role: currentRole.value,
         status: currentStatus.value,
-        currentPlan: currentPlan.value
+        currentStore: currentStore.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -250,9 +259,8 @@ const UsersList = () => {
         q: searchTerm,
         perPage: value,
         page: currentPage,
-        role: currentRole.value,
-        currentPlan: currentPlan.value,
-        status: currentStatus.value
+        status: currentStatus.value,
+        currentStore: currentStore.value
       })
     )
     setRowsPerPage(value)
@@ -268,9 +276,8 @@ const UsersList = () => {
         sortColumn,
         page: currentPage,
         perPage: rowsPerPage,
-        role: currentRole.value,
         status: currentStatus.value,
-        currentPlan: currentPlan.value
+        currentStore: currentStore.value
       })
     )
   }
@@ -301,8 +308,7 @@ const UsersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      role: currentRole.value,
-      currentPlan: currentPlan.value,
+      currentStore: currentStore.value,
       status: currentStatus.value,
       q: searchTerm
     }
@@ -330,9 +336,8 @@ const UsersList = () => {
         q: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        role: currentRole.value,
         status: currentStatus.value,
-        currentPlan: currentPlan.value
+        currentStore: currentStore.value
       })
     )
   }
@@ -349,23 +354,22 @@ const UsersList = () => {
               <Label for='role-select'>Статус</Label>
               <Select
                 isClearable={false}
-                value={currentRole}
-                options={roleOptions}
+                value={currentStatus}
+                options={statusOptions}
                 className='react-select'
                 classNamePrefix='select'
                 theme={selectThemeColors}
                 onChange={data => {
-                  setCurrentRole(data)
+                  setCurrentStatus(data)
                   dispatch(
                     getData({
                       sort,
                       sortColumn,
                       q: searchTerm,
-                      role: data.value,
                       page: currentPage,
                       perPage: rowsPerPage,
-                      status: currentStatus.value,
-                      currentPlan: currentPlan.value
+                      status: data.value,
+                      currentStore: currentStore.value
                     })
                   )
                 }}
@@ -378,10 +382,10 @@ const UsersList = () => {
                 isClearable={false}
                 className='react-select'
                 classNamePrefix='select'
-                options={planOptions}
-                value={currentPlan}
+                options={storeOptions}
+                value={currentStore}
                 onChange={data => {
-                  setCurrentPlan(data)
+                  setCurrentStore(data)
                   dispatch(
                     getData({
                       sort,
@@ -389,9 +393,8 @@ const UsersList = () => {
                       q: searchTerm,
                       page: currentPage,
                       perPage: rowsPerPage,
-                      role: currentRole.value,
-                      currentPlan: data.value,
-                      status: currentStatus.value
+                      status: currentStatus.value,
+                      currentStore: data.value
                     })
                   )
                 }}
@@ -435,4 +438,4 @@ const UsersList = () => {
   )
 }
 
-export default UsersList
+export default OrdersList
