@@ -9,10 +9,10 @@ export const statusObj = {
   3: { label: 'Отменен', colorName: 'light-danger' },
   4: { label: 'Готов', colorName: 'light-success' },
   5: { label: 'В пути', colorName: 'light-secondary' },
-  6: { label: 'Забрали', colorName: 'light-secondary' },
-  7: { label: 'Курьер прибыл', colorName: 'light-secondary' },
+  6: { label: 'Забрали', colorName: 'light-success' },
+  7: { label: 'Курьер прибыл', colorName: 'light-dark' },
   8: { label: 'Доставлен', colorName: 'light-success' },
-  9: { label: 'Отказ клиентв', colorName: 'light-success' },
+  9: { label: 'Отказ клиентв', colorName: 'light-dark' },
   10: { label: 'Выполнен', colorName: 'light-success' }
 }
 

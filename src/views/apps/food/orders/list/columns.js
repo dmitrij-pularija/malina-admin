@@ -13,7 +13,8 @@ import { getOrder, deleteUser } from '../store'
 import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Archive, Star } from 'react-feather'
 
 // ** Reactstrap Imports
-import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
+import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardBody } from 'reactstrap'
+import Rating from 'react-rating'
 import '@styles/base/pages/app-ecommerce.scss'
 import { formatData, formatNumber, getRate } from '../../../../../utility/Utils'
 import { statusObj } from '../../../../../configs/initial'
@@ -105,13 +106,11 @@ export const columns = [
     minWidth: '30px',
     sortField: 'id',
     selector: row => row.id,
-    // cell: row => <span className='text-capitalize'>{row.id}</span>
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
           <Link
             to={`/apps/food/orders/preview/${row.id}`}
             className='user_name text-truncate text-body'
-            // onClick={() => store.dispatch(getOrder(row.id))}
           >
             <span className='fw-bolder'>{row.id}</span>
           </Link>
@@ -122,20 +121,13 @@ export const columns = [
     name: 'Заведение',
     sortable: true,
     minWidth: '250px',
-    sortField: 'store',
+    sortField: 'storeId',
     selector: row => row.storeId,
-    // cell: row => <span className='text-capitalize'>{row.storeId.name}</span>
      cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
           <Logo2 src={row.storeId.image} size={"s"}/>
-        <div className='d-flex flex-column'>
-          {/* <Link
-            to={`/apps/user/view/${row.id}`}
-            className='user_name text-truncate text-body'
-            onClick={() => store.dispatch(getUser(row.id))}
-          > */}
+        <div className='d-flex flex-column ml3'>
             <span className='fw-bolder'>{row.storeId.name}</span>
-          {/* </Link> */}
           <small className='text-truncate text-muted mb-0'>{row.email}</small>
         </div>
       </div>
@@ -145,7 +137,7 @@ export const columns = [
     name: 'Адрес заказа',
     minWidth: '180px',
     sortable: true,
-    sortField: 'address',
+    sortField: 'city, street',
     selector: row => row.address,
     cell: row => <span className='text-capitalize'>{row.address ? `${row.address.city}, ${row.address.name}` : "Внутри заведения"}</span>
   },
@@ -179,32 +171,25 @@ export const columns = [
   },
   {
     name: 'Рейтинг',
-    minWidth: '180px',
+    minWidth: '185px',
     sortable: true,
-    sortField: 'rate',
+    sortField: 'order_waiter_rating',
     selector: row => row.rate,
-    cell: row => (<div className='item-rating'>
-    <ul className='unstyled-list list-inline'>
-      {new Array(5).fill().map((listItem, index) => {
-        const rate = getRate(row.rate)
-        return (
-          <li key={index} className='ratings-list-item me-25'>
-              <Star
-                className={classnames({
-                'filled-star': index + 1 <= rate,
-                'unfilled-star': index + 1 > rate
-                })}
-                />
-          </li>
-        )
-      })}
-    </ul>
-  </div>)
+    cell: row => (
+    <CardBody>
+      <Rating
+        fractions={2}
+        direction={'ltr'}
+        initialRating={getRate(row.rate)}
+        emptySymbol={<Star size={20} fill='#babfc7' stroke='#babfc7' />}
+        fullSymbol={<Star size={20} fill='#ff9f43' stroke='#ff9f43' />}
+      />
+    </CardBody>)
   },
   {
     name: 'Сумма',
     minWidth: '150px',
-    sortable: true,
+    sortable: false,
     sortField: 'totalprice',
     selector: row => row.totalprice,
     cell: row => <span className='text-capitalize'>{formatNumber(row.totalprice)}</span>

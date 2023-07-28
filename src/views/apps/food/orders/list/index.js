@@ -28,12 +28,13 @@ return sumRate / countRate
 }
 
 const OrdersList = () => {
-  const { total, allData } = useSelector(state => state.orders)
-  let sum = 0, rate = 0
+  const { total, data } = useSelector(state => state.orders)
+  let sum = 0, rate = 0, avg = 0
 
-  if (allData.length) {
-    sum = sumTotalPrice(allData)
-    rate = totalRate(allData)
+  if (data.length) {
+    sum = sumTotalPrice(data)
+    rate = totalRate(data)
+    avg = total ? sum / total : 0
   }
 
   return (
@@ -60,7 +61,7 @@ const OrdersList = () => {
             color='success'
             statTitle='Средняя сумма'
             icon={<Activity size={20}/>}
-            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(sum / total)}</h3>}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt( avg )}</h3>}
           />
         </Col>
         <Col lg='3' sm='6'>

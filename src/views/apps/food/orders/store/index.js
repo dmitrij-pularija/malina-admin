@@ -12,7 +12,7 @@ export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
 })
 
 export const getData = createAsyncThunk('appOrders/getData', async params => {
-  const response = await axios.get('item/clientorder/', params)
+  const response = await axios.get('item/clientorder/', { params })
   // const response = await axios.get('/api/users/list/data', params)
   return {
     params,

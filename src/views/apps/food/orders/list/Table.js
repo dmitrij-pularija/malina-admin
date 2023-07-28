@@ -102,9 +102,9 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
               onChange={handlePerPage}
               style={{ width: '5rem' }}
             >
-              <option value='10'>10</option>
               <option value='20'>20</option>
-              <option value='40'>40</option>
+              <option value='50'>50</option>
+              <option value='100'>100</option>
             </Input>
             <label htmlFor='rows-per-page'>записей</label>
           </div>
@@ -176,12 +176,12 @@ const OrdersList = () => {
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('id')
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Select Role' })
   // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'Select Plan' })
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
-  const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирите статус', number: 0 })
+  const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирите статус' })
 
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
@@ -193,12 +193,12 @@ const OrdersList = () => {
     dispatch(
       getData({
         sort,
-        sortColumn,
-        q: searchTerm,
+        ordering: sortColumn,
+        search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
         status: currentStatus.value,
-        currentStore: currentStore.value
+        storeId: currentStore.value
       })
     )
   }, [dispatch, store.data.length, sort, sortColumn, currentPage])
@@ -214,17 +214,16 @@ const OrdersList = () => {
   // ]
 
   const storeOptions = [
-    { value: '', label: 'Выбирите заведение' },
+    { value: '', label: 'Показать все' },
     { value: '189', label: 'MALINA ECO FOOD' },
     { value: '236', label: 'Chicken Crispy' }
   ]
 
   const statusOptions = Object.entries(statusObj).map(([number, status]) => ({
-    value: status.label.toLowerCase().replace(/\s+/g, '-'),
-    label: status.label,
-    number: parseInt(number)
+    value: number,
+    label: status.label
   }))
-  statusOptions.unshift({ value: '', label: 'Выберете статус', number: 0 });
+  statusOptions.unshift({ value: '', label: 'Показать все' })
 
   // const statusOptions = [
   //   { value: '', label: 'Select Status', number: 0 },
@@ -238,12 +237,12 @@ const OrdersList = () => {
     dispatch(
       getData({
         sort,
-        sortColumn,
-        q: searchTerm,
+        ordering: sortColumn,
+        search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
         status: currentStatus.value,
-        currentStore: currentStore.value
+        storeId: currentStore.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -255,12 +254,12 @@ const OrdersList = () => {
     dispatch(
       getData({
         sort,
-        sortColumn,
-        q: searchTerm,
+        ordering: sortColumn,
+        search: searchTerm,
         perPage: value,
         page: currentPage,
         status: currentStatus.value,
-        currentStore: currentStore.value
+        storeId: currentStore.value
       })
     )
     setRowsPerPage(value)
@@ -272,12 +271,12 @@ const OrdersList = () => {
     dispatch(
       getData({
         sort,
-        q: val,
-        sortColumn,
+        search: val,
+        ordering: sortColumn,
         page: currentPage,
         perPage: rowsPerPage,
         status: currentStatus.value,
-        currentStore: currentStore.value
+        storeId: currentStore.value
       })
     )
   }
@@ -308,9 +307,9 @@ const OrdersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      currentStore: currentStore.value,
+      storeId: currentStore.value,
       status: currentStatus.value,
-      q: searchTerm
+      search: searchTerm
     }
 
     const isFiltered = Object.keys(filters).some(function (k) {
@@ -332,12 +331,12 @@ const OrdersList = () => {
     dispatch(
       getData({
         sort,
-        sortColumn,
-        q: searchTerm,
+        ordering: sortColumn,
+        search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
         status: currentStatus.value,
-        currentStore: currentStore.value
+        storeId: currentStore.value
       })
     )
   }
@@ -345,9 +344,9 @@ const OrdersList = () => {
   return (
     <Fragment>
       <Card>
-        <CardHeader>
+        {/* <CardHeader>
           <CardTitle tag='h4'>Фильтры</CardTitle>
-        </CardHeader>
+        </CardHeader> */}
         <CardBody>
           <Row>
             <Col md='4'>
@@ -364,12 +363,12 @@ const OrdersList = () => {
                   dispatch(
                     getData({
                       sort,
-                      sortColumn,
-                      q: searchTerm,
+                      ordering: sortColumn,
+                      search: searchTerm,
                       page: currentPage,
                       perPage: rowsPerPage,
                       status: data.value,
-                      currentStore: currentStore.value
+                      storeId: currentStore.value
                     })
                   )
                 }}
@@ -389,12 +388,12 @@ const OrdersList = () => {
                   dispatch(
                     getData({
                       sort,
-                      sortColumn,
-                      q: searchTerm,
+                      ordering: sortColumn,
+                      search: searchTerm,
                       page: currentPage,
                       perPage: rowsPerPage,
                       status: currentStatus.value,
-                      currentStore: data.value
+                      storeId: data.value
                     })
                   )
                 }}
