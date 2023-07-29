@@ -10,7 +10,7 @@ import { store } from '@store/store'
 import { getOrder, deleteUser } from '../store'
 
 // ** Icons Imports
-import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Archive, Star } from 'react-feather'
+import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Edit, Star } from 'react-feather'
 
 // ** Reactstrap Imports
 import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardBody } from 'reactstrap'
@@ -171,24 +171,22 @@ export const columns = [
   },
   {
     name: 'Рейтинг',
-    minWidth: '185px',
+    minWidth: '142px',
     sortable: true,
     sortField: 'order_waiter_rating',
     selector: row => row.rate,
     cell: row => (
-    <CardBody>
       <Rating
         fractions={2}
         direction={'ltr'}
         initialRating={getRate(row.rate)}
         emptySymbol={<Star size={20} fill='#babfc7' stroke='#babfc7' />}
         fullSymbol={<Star size={20} fill='#ff9f43' stroke='#ff9f43' />}
-      />
-    </CardBody>)
+      />)
   },
   {
     name: 'Сумма',
-    minWidth: '150px',
+    minWidth: '120px',
     sortable: false,
     sortField: 'totalprice',
     selector: row => row.totalprice,
@@ -196,7 +194,7 @@ export const columns = [
   },
   {
     name: 'Действия',
-    minWidth: '50px',
+    minWidth: '120px',
     cell: row => (
       <div className='column-action'>
         <UncontrolledDropdown>
@@ -207,15 +205,15 @@ export const columns = [
             <DropdownItem
               tag={Link}
               className='w-100'
-              to={`/apps/user/view/${row.id}`}
+              to={`/apps/food/orders/preview/${row.id}`}
               onClick={() => store.dispatch(getUser(row.id))}
             >
               <FileText size={14} className='me-50' />
-              <span className='align-middle'>Details</span>
+              <span className='align-middle'>Просмотр</span>
             </DropdownItem>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
-              <Archive size={14} className='me-50' />
-              <span className='align-middle'>Edit</span>
+            <DropdownItem tag='a' href={`/apps/food/orders/edit/${row.id}`} className='w-100'>
+              <Edit size={14} className='me-50' />
+              <span className='align-middle'>Редактировать</span>
             </DropdownItem>
             <DropdownItem
               tag='a'

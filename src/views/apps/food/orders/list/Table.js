@@ -182,7 +182,7 @@ const OrdersList = () => {
   // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'Select Plan' })
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
   const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирите статус' })
-
+// console.log(searchTerm)
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
