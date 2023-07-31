@@ -10,58 +10,108 @@ import Select from 'react-select'
 import { Check, Briefcase, X } from 'react-feather'
 import { useForm, Controller } from 'react-hook-form'
 import withReactContent from 'sweetalert2-react-content'
+import Flatpickr from 'react-flatpickr'
+import { Russian } from "flatpickr/dist/l10n/ru.js"
 
 // ** Custom Components
 import Avatar from '@components/avatar'
-
+// import PickerDefault from './PickerDefault'
 // ** Utils
-import { selectThemeColors } from '@utils'
-
+import { selectThemeColors, formatData } from '@utils'
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
+import '@styles/react/libs/flatpickr/flatpickr.scss'
+// const typeColors = {
+//   1: 'light-info',
+//   2: 'light-danger',
+//   3: 'light-warning'
+// }
 
-const roleColors = {
-  editor: 'light-info',
-  admin: 'light-danger',
-  author: 'light-warning',
-  maintainer: 'light-success',
-  subscriber: 'light-primary'
+const roleObj = {
+  1: {
+    role: 'user',
+    class: 'text-primary',
+    color: 'light-info',
+    icon: "User"
+  },
+  2: {
+    role: 'admin',
+    class: 'text-danger',
+    color: 'light-warning',
+    icon: "Slack"
+  },
+  3: {
+    role: 'superadmin',
+    class: 'text-success',
+    color: 'light-danger',
+    icon: "Command"
+  }
 }
+
+const typeObj = {
+  user: 'Пользователь',
+  customer: 'Клиент',
+  guest: 'Гость',
+  admin: 'Администратор'
+}
+
+const genderObj = {
+  1: 'Мужчина',
+  2: 'Женщина',
+  3: '3',
+  4: 'Не указан'
+}
+
+// maintainer: 'light-success',
+// subscriber: 'light-primary'
 
 const statusColors = {
-  active: 'light-success',
-  pending: 'light-warning',
-  inactive: 'light-secondary'
+  false: 'light-success',
+  true: 'light-warning'
 }
 
-const statusOptions = [
-  { value: 'active', label: 'Active' },
-  { value: 'inactive', label: 'Inactive' },
-  { value: 'suspended', label: 'Suspended' }
+const genderOptions = [
+  { value: 1, label: 'Мужчина' },
+  { value: 2, label: 'Женщина' },
+  { value: 4, label: 'Не указан' }
 ]
+// const statusOptions = [
+//   { value: 'false', label: 'Активный' },
+//   { value: 'true', label: 'Не Активный' }
+// ]
 
-const countryOptions = [
-  { value: 'uk', label: 'UK' },
-  { value: 'usa', label: 'USA' },
-  { value: 'france', label: 'France' },
-  { value: 'russia', label: 'Russia' },
-  { value: 'canada', label: 'Canada' }
-]
+const typeOptions = [
+    { value: 'user', label: 'Пользователь' },
+    { value: 'customer', label: 'Клиент' },
+    { value: 'guest', label: 'Гость' },
+    { value: 'admin', label: 'Администратор' }
+  ]
 
-const languageOptions = [
-  { value: 'english', label: 'English' },
-  { value: 'spanish', label: 'Spanish' },
-  { value: 'french', label: 'French' },
-  { value: 'german', label: 'German' },
-  { value: 'dutch', label: 'Dutch' }
-]
+// const countryOptions = [
+//   { value: 'uk', label: 'UK' },
+//   { value: 'usa', label: 'USA' },
+//   { value: 'france', label: 'France' },
+//   { value: 'russia', label: 'Russia' },
+//   { value: 'canada', label: 'Canada' }
+// ]
+
+// const languageOptions = [
+//   { value: 'english', label: 'English' },
+//   { value: 'spanish', label: 'Spanish' },
+//   { value: 'french', label: 'French' },
+//   { value: 'german', label: 'German' },
+//   { value: 'dutch', label: 'Dutch' }
+// ]
 
 const MySwal = withReactContent(Swal)
 
 const UserInfoCard = ({ selectedUser }) => {
   // ** State
-  const [show, setShow] = useState(false)
+  const initDate = selectedUser.datebirth ? selectedUser.datebirth : (new Date())
 
+  const [show, setShow] = useState(false)
+  const [picker, setPicker] = useState(formatData(initDate))
+  // const handleDateChange = (date) => setPicker(date)
   // ** Hook
   const {
     reset,
@@ -71,15 +121,15 @@ const UserInfoCard = ({ selectedUser }) => {
     formState: { errors }
   } = useForm({
     defaultValues: {
-      username: selectedUser.username,
-      lastName: selectedUser.fullName.split(' ')[1],
-      firstName: selectedUser.fullName.split(' ')[0]
+      username: selectedUser.login,
+      lastName: selectedUser.surname,
+      firstName: selectedUser.name
     }
   })
 
   // ** render user img
   const renderUserImg = () => {
-    if (selectedUser !== null && selectedUser.avatar.length) {
+    if (selectedUser !== null && selectedUser.avatar) {
       return (
         <img
           height='110'
@@ -93,9 +143,9 @@ const UserInfoCard = ({ selectedUser }) => {
       return (
         <Avatar
           initials
-          color={selectedUser.avatarColor || 'light-primary'}
+          color={'light-primary'}
           className='rounded mt-3 mb-2'
-          content={selectedUser.fullName}
+          content={selectedUser.name ? `${selectedUser.name} ${selectedUser.surname}` : 'User'}
           contentStyles={{
             borderRadius: 0,
             fontSize: 'calc(48px)',
@@ -127,19 +177,19 @@ const UserInfoCard = ({ selectedUser }) => {
 
   const handleReset = () => {
     reset({
-      username: selectedUser.username,
-      lastName: selectedUser.fullName.split(' ')[1],
-      firstName: selectedUser.fullName.split(' ')[0]
+      username: selectedUser.login,
+      lastName: selectedUser.surname,
+      firstName: selectedUser.name
     })
   }
 
   const handleSuspendedClick = () => {
     return MySwal.fire({
-      title: 'Are you sure?',
-      text: "You won't be able to revert user!",
+      title: 'Вы уверены?',
+      text: "Вы не сможете вернуть пользователя!",
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonText: 'Yes, Suspend user!',
+      confirmButtonText: 'Да, заблокировать пользователя!',
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -149,16 +199,16 @@ const UserInfoCard = ({ selectedUser }) => {
       if (result.value) {
         MySwal.fire({
           icon: 'success',
-          title: 'Suspended!',
-          text: 'User has been suspended.',
+          title: 'Заблокирован!',
+          text: 'Пользователь был заблокирован.',
           customClass: {
             confirmButton: 'btn btn-success'
           }
         })
       } else if (result.dismiss === MySwal.DismissReason.cancel) {
         MySwal.fire({
-          title: 'Cancelled',
-          text: 'Cancelled Suspension :)',
+          title: 'Отменен',
+          text: 'Отмена блокировки :)',
           icon: 'error',
           customClass: {
             confirmButton: 'btn btn-success'
@@ -172,22 +222,22 @@ const UserInfoCard = ({ selectedUser }) => {
     <Fragment>
       <Card>
         <CardBody>
-          <div className='user-avatar-section'>
+          <div className='user-avatar-section mb-1'>
             <div className='d-flex align-items-center flex-column'>
               {renderUserImg()}
               <div className='d-flex flex-column align-items-center text-center'>
                 <div className='user-info'>
-                  <h4>{selectedUser !== null ? selectedUser.fullName : 'Eleanor Aguilar'}</h4>
+                  <h4>{selectedUser.name !== null ? `${selectedUser.name} ${selectedUser.surname}` : ''}</h4>
                   {selectedUser !== null ? (
-                    <Badge color={roleColors[selectedUser.role]} className='text-capitalize'>
-                      {selectedUser.role}
+                    <Badge color={roleObj[selectedUser.type].color} className='text-capitalize'>
+                      {roleObj[selectedUser.type].role}
                     </Badge>
                   ) : null}
                 </div>
               </div>
             </div>
           </div>
-          <div className='d-flex justify-content-around my-2 pt-75'>
+          {/* <div className='d-flex justify-content-around my-2 pt-75'>
             <div className='d-flex align-items-start me-2'>
               <Badge color='light-primary' className='rounded p-75'>
                 <Check className='font-medium-2' />
@@ -202,58 +252,65 @@ const UserInfoCard = ({ selectedUser }) => {
                 <Briefcase className='font-medium-2' />
               </Badge>
               <div className='ms-75'>
-                <h4 className='mb-0'>568</h4>
-                <small>Projects Done</small>
+                <h4 className='mb-0'>{`ID: ${selectedUser.id}`}</h4>
               </div>
             </div>
-          </div>
-          <h4 className='fw-bolder border-bottom pb-50 mb-1'>Details</h4>
+          </div> */}
+          {/* <div className='d-flex justify-content-around my-2'>
+            <h4 className='mb-0'>{`ID: ${selectedUser.id}`}</h4>
+          </div> */}
+          <h4 className='fw-bolder border-bottom pb-50 mb-1'>Информация:</h4>
           <div className='info-container'>
             {selectedUser !== null ? (
               <ul className='list-unstyled'>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Username:</span>
-                  <span>{selectedUser.username}</span>
+                  <span className='fw-bolder me-25'>ID:</span>
+                  <span>{selectedUser.id}</span>
+                </li>  
+                <li className='mb-75'>
+                  <span className='fw-bolder me-25'>Логин:</span>
+                  <span>{selectedUser.login ? selectedUser.login : "Не указан"}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Billing Email:</span>
-                  <span>{selectedUser.email}</span>
+                  <span className='fw-bolder me-25'>Email:</span>
+                  <span>{selectedUser.email ? selectedUser.email : "Не указан"}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Status:</span>
-                  <Badge className='text-capitalize' color={statusColors[selectedUser.status]}>
-                    {selectedUser.status}
+                  <span className='fw-bolder me-25'>Телефон:</span>
+                  <span>{selectedUser.phone ? selectedUser.phone : "Не указан"}</span>
+                </li>
+                {/* <li className='mb-75'>
+                  <span className='fw-bolder me-25'>Роль:</span>
+                  <span className='text-capitalize'>{typeObj[selectedUser.type]}</span>
+                </li> */}
+                <li className='mb-75'>
+                  <span className='fw-bolder me-25'>Код:</span>
+                  <span>{selectedUser.code ? selectedUser.code : "Не указан"}</span>
+                </li>
+
+                <li className='mb-75'>
+                  <span className='fw-bolder me-25'>День рождения:</span>
+                  <span>{selectedUser.datebirth ? formatData(selectedUser.datebirth) : "Не указан"}</span>
+                </li>
+                <li className='mb-75'>
+                  <span className='fw-bolder me-25'>Пол:</span>
+                  <span>{genderObj[selectedUser.gender]}</span>
+                </li>
+                <li className='mb-75'>
+                  <span className='fw-bolder me-25'>Статус:</span>
+                  <Badge className='text-capitalize' color={statusColors[selectedUser.is_archive]}>
+                    {selectedUser.is_archive ? "Не активный" : "Активный"}
                   </Badge>
-                </li>
-                <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Role:</span>
-                  <span className='text-capitalize'>{selectedUser.role}</span>
-                </li>
-                <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Tax ID:</span>
-                  <span>Tax-{selectedUser.contact.substr(selectedUser.contact.length - 4)}</span>
-                </li>
-                <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Contact:</span>
-                  <span>{selectedUser.contact}</span>
-                </li>
-                <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Language:</span>
-                  <span>English</span>
-                </li>
-                <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Country:</span>
-                  <span>England</span>
                 </li>
               </ul>
             ) : null}
           </div>
           <div className='d-flex justify-content-center pt-2'>
             <Button color='primary' onClick={() => setShow(true)}>
-              Edit
+              Изменить
             </Button>
             <Button className='ms-1' color='danger' outline onClick={handleSuspendedClick}>
-              Suspended
+              Блокировать
             </Button>
           </div>
         </CardBody>
@@ -262,14 +319,14 @@ const UserInfoCard = ({ selectedUser }) => {
         <ModalHeader className='bg-transparent' toggle={() => setShow(!show)}></ModalHeader>
         <ModalBody className='px-sm-5 pt-50 pb-5'>
           <div className='text-center mb-2'>
-            <h1 className='mb-1'>Edit User Information</h1>
-            <p>Updating user details will receive a privacy audit.</p>
+            <h1 className='mb-1'>Изменить информацию о пользователе</h1>
+            <p>При обновлении сведений о пользователе будет проведен аудит конфиденциальности.</p>
           </div>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Row className='gy-1 pt-75'>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='firstName'>
-                  First Name
+                  Имя
                 </Label>
                 <Controller
                   defaultValue=''
@@ -283,7 +340,7 @@ const UserInfoCard = ({ selectedUser }) => {
               </Col>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='lastName'>
-                  Last Name
+                  Фамилия
                 </Label>
                 <Controller
                   defaultValue=''
@@ -297,7 +354,7 @@ const UserInfoCard = ({ selectedUser }) => {
               </Col>
               <Col xs={12}>
                 <Label className='form-label' for='username'>
-                  Username
+                  Login
                 </Label>
                 <Controller
                   defaultValue=''
@@ -311,7 +368,7 @@ const UserInfoCard = ({ selectedUser }) => {
               </Col>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='billing-email'>
-                  Billing Email
+                  Email
                 </Label>
                 <Input
                   type='email'
@@ -322,63 +379,62 @@ const UserInfoCard = ({ selectedUser }) => {
               </Col>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='status'>
-                  Status:
+                Тип пользователя:
                 </Label>
                 <Select
                   id='status'
                   isClearable={false}
                   className='react-select'
                   classNamePrefix='select'
-                  options={statusOptions}
+                  options={typeOptions}
                   theme={selectThemeColors}
-                  defaultValue={statusOptions[statusOptions.findIndex(i => i.value === selectedUser.status)]}
+                  defaultValue={typeOptions[typeOptions.findIndex(i => i.value === selectedUser.client_type)]}
                 />
               </Col>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='tax-id'>
-                  Tax ID
+                  Код
                 </Label>
                 <Input
                   id='tax-id'
-                  placeholder='Tax-1234'
-                  defaultValue={selectedUser.contact.substr(selectedUser.contact.length - 4)}
+                  placeholder='Код'
+                  defaultValue={selectedUser.code}
                 />
               </Col>
               <Col md={6} xs={12}>
                 <Label className='form-label' for='contact'>
-                  Contact
+                Телефон
                 </Label>
-                <Input id='contact' defaultValue={selectedUser.contact} placeholder='+1 609 933 4422' />
+                <Input id='contact' defaultValue={selectedUser.phone} placeholder='+9 967 933 4422' />
               </Col>
               <Col md={6} xs={12}>
-                <Label className='form-label' for='language'>
-                  language
+              {/* <PickerDefault title={"День рождения"} picker={picker} handleChange={handleDateChange}/> */}
+              {/* <Fragment> */}
+                <Label className='form-label' for='default-picker'>
+                  День рождения
+                </Label>
+                <Flatpickr className='form-control' value={picker} onChange={date => setPicker(date)} id='default-picker' options={{ dateFormat: 'd.m.Y', locale: Russian }} />
+              {/* </Fragment> */}
+                {/* <Label className='form-label' for='language'>
+                День рождения
+                </Label>
+                <Input id='contact' defaultValue={selectedUser.datebirth} placeholder='1999-07-26' /> */}
+              </Col>
+              <Col md={6} xs={12}>
+                <Label className='form-label' for='gender'>
+                Пол
                 </Label>
                 <Select
-                  id='language'
+                  id='gender'
                   isClearable={false}
                   className='react-select'
                   classNamePrefix='select'
-                  options={languageOptions}
+                  options={genderOptions}
                   theme={selectThemeColors}
-                  defaultValue={languageOptions[0]}
+                  defaultValue={genderOptions[genderOptions.findIndex(i => i.value === selectedUser.gender)]}
                 />
               </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='country'>
-                  Country
-                </Label>
-                <Select
-                  id='country'
-                  isClearable={false}
-                  className='react-select'
-                  classNamePrefix='select'
-                  options={countryOptions}
-                  theme={selectThemeColors}
-                  defaultValue={countryOptions[0]}
-                />
-              </Col>
-              <Col xs={12}>
+              {/* <Col xs={12}>
                 <div className='d-flex align-items-center mt-1'>
                   <div className='form-switch'>
                     <Input type='switch' defaultChecked id='billing-switch' name='billing-switch' />
@@ -395,10 +451,10 @@ const UserInfoCard = ({ selectedUser }) => {
                     Use as a billing address?
                   </Label>
                 </div>
-              </Col>
+              </Col> */}
               <Col xs={12} className='text-center mt-2 pt-50'>
                 <Button type='submit' className='me-1' color='primary'>
-                  Submit
+                  Сохранить
                 </Button>
                 <Button
                   type='reset'
@@ -409,7 +465,7 @@ const UserInfoCard = ({ selectedUser }) => {
                     setShow(false)
                   }}
                 >
-                  Discard
+                  Отменить
                 </Button>
               </Col>
             </Row>

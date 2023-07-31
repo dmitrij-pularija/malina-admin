@@ -9,6 +9,7 @@ import classnames from 'classnames'
 import { store } from '@store/store'
 import { getOrder, deleteUser } from '../store'
 
+
 // ** Icons Imports
 import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Edit, Star } from 'react-feather'
 
@@ -20,7 +21,7 @@ import { formatData, formatNumber, getRate } from '../../../../../utility/Utils'
 import { statusObj } from '../../../../../configs/initial'
 
 const getWaiterInfo = id => {
-const waiters = useSelector(state => state.orders.waiters)
+const waiters = useSelector(state => state.waiters.data)
 const foundWaiter = waiters.find(waiter => waiter.id === id) || null
 return foundWaiter ? foundWaiter.full_name : ""
 }
@@ -111,6 +112,7 @@ export const columns = [
           <Link
             to={`/apps/food/orders/preview/${row.id}`}
             className='user_name text-truncate text-body'
+            onClick={() => store.dispatch(getOrder(row.id))}
           >
             <span className='fw-bolder'>{row.id}</span>
           </Link>
@@ -206,7 +208,7 @@ export const columns = [
               tag={Link}
               className='w-100'
               to={`/apps/food/orders/preview/${row.id}`}
-              onClick={() => store.dispatch(getUser(row.id))}
+              onClick={() => store.dispatch(getOrder(row.id))}
             >
               <FileText size={14} className='me-50' />
               <span className='align-middle'>Просмотр</span>

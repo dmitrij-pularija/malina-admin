@@ -33,9 +33,11 @@ const EcommerceCheckout = lazy(() => import('../../views/apps/ecommerce/checkout
 
 const UserList = lazy(() => import('../../views/apps/user/list'))
 const UserView = lazy(() => import('../../views/apps/user/view'))
-
 const Roles = lazy(() => import('../../views/apps/roles-permissions/roles'))
 const Permissions = lazy(() => import('../../views/apps/roles-permissions/permissions'))
+
+const WaitersList = lazy(() => import('../../views/apps/user/waiters/list'))
+const WaitersView = lazy(() => import('../../views/apps/user/waiters/view'))
 
 const AppRoutes = [
   {
@@ -225,10 +227,6 @@ const AppRoutes = [
     path: '/apps/user/list'
   },
   {
-    path: '/apps/user/view',
-    element: <Navigate to='/apps/user/view/1' />
-  },
-  {
     element: <UserView />,
     path: '/apps/user/view/:id'
   },
@@ -239,6 +237,14 @@ const AppRoutes = [
   {
     element: <Permissions />,
     path: '/apps/permissions'
+  },
+  {
+    element: <WaitersList />,
+    path: '/apps/user/waiters/list'
+  },
+  {
+    element: <WaitersView />,
+    path: '/apps/user/waiters/view/:id'
   }
 ]
 

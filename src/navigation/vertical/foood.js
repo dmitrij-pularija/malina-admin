@@ -50,19 +50,7 @@ export default [
         id: 'waiters',
         title: 'Waiters',
         icon: <Circle size={12} />,
-        navLink: '/apps/user/view'
-      },
-      {
-        id: 'customers',
-        title: 'Customers',
-        icon: <Circle size={12} />,
-        navLink: '/apps/user/list'
-      },
-      {
-        id: 'guests',
-        title: 'Guests',
-        icon: <Circle size={12} />,
-        navLink: '/apps/user/view'
+        navLink: '/apps/user/waiters/list'
       }
     ]
   },

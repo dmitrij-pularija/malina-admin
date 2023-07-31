@@ -5,14 +5,14 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 // http://167.99.246.103/myapps/venv/api/item/clientorder/
 export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
-  const response = await axios.get('item/clientorder/')
+  const response = await axios.get('/item/clientorder')
 // console.log(response.data.results)
   // const response = await axios.get('/api/users/list/all-data')
   return response.data.results
 })
 
 export const getData = createAsyncThunk('appOrders/getData', async params => {
-  const response = await axios.get('item/clientorder/', { params })
+  const response = await axios.get('/item/clientorder', { params })
   // const response = await axios.get('/api/users/list/data', params)
   return {
     params,
@@ -21,10 +21,10 @@ export const getData = createAsyncThunk('appOrders/getData', async params => {
   }
 })
 
-export const getWaiter = createAsyncThunk('appOrders/getWaiters', async () => {
-  const { data: { results } } = await axios.get('user/waiter/')
-  return results
-})
+// export const getWaiter = createAsyncThunk('appOrders/getWaiters', async () => {
+//   const { data: { results } } = await axios.get('user/waiter/')
+//   return results
+// })
 
 export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
   const response = await axios.get('item/clientorder/', { id })
@@ -57,7 +57,6 @@ export const appOrdersSlice = createSlice({
     total: 1,
     params: {},
     allData: [],
-    waiters: [],
     selectedOrder: null
   },
   reducers: {},
@@ -68,9 +67,6 @@ export const appOrdersSlice = createSlice({
       })
       .addCase(getOrder.fulfilled, (state, action) => {
         state.selectedOrder = action.payload
-      })
-      .addCase(getWaiter.fulfilled, (state, action) => {
-        state.waiters = action.payload
       })
       .addCase(getData.fulfilled, (state, action) => {
         state.data = action.payload.data

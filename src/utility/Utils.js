@@ -82,7 +82,7 @@ export const selectThemeColors = theme => ({
 })
 
 export const formatData = (value) => {
-  return new Date(value).toLocaleDateString('ru-Ru')
+  return value ? new Date(value).toLocaleDateString('ru-Ru') : ""
 }
 
 export const formatTime = (value) => {

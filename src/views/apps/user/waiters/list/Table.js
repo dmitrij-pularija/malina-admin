@@ -8,9 +8,7 @@ import Sidebar from './Sidebar'
 import { columns } from './columns'
 
 // ** Store & Actions
-import { getAllData, getData } from '../store'
-import { getWaiters } from '../../../user/waiters/store'
-
+import { getWaiters } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 
 // ** Third Party Components
@@ -21,7 +19,6 @@ import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-f
 
 // ** Utils
 import { selectThemeColors } from '@utils'
-import { statusObj } from '../../../../../configs/initial'
 
 // ** Reactstrap Imports
 import {
@@ -43,17 +40,16 @@ import {
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
-import '@styles/base/pages/app-ecommerce.scss'
 
 // ** Table Header
-const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
+const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
   // ** Converts table to CSV
   function convertArrayOfObjectsToCSV(array) {
     let result
 
     const columnDelimiter = ','
     const lineDelimiter = '\n'
-    const keys = Object.keys(store.data[0])
+    const keys = Object.keys(data[0])
 
     result = ''
     result += keys.join(columnDelimiter)
@@ -132,14 +128,14 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
             <UncontrolledDropdown className='me-1'>
               <DropdownToggle color='secondary' caret outline>
                 <Share className='font-small-4 me-50' />
-                <span className='align-middle'>Экспорт</span>
+                <span className='align-middle'>Export</span>
               </DropdownToggle>
               <DropdownMenu>
                 <DropdownItem className='w-100'>
                   <Printer className='font-small-4 me-50' />
                   <span className='align-middle'>Print</span>
                 </DropdownItem>
-                <DropdownItem className='w-100' onClick={() => downloadCSV(store.data)}>
+                <DropdownItem className='w-100' onClick={() => downloadCSV(data)}>
                   <FileText className='font-small-4 me-50' />
                   <span className='align-middle'>CSV</span>
                 </DropdownItem>
@@ -158,9 +154,9 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
               </DropdownMenu>
             </UncontrolledDropdown>
 
-            {/* <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
-              Add New User
-            </Button> */}
+            <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
+              Добавить
+            </Button>
           </div>
         </Col>
       </Row>
@@ -168,10 +164,10 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
   )
 }
 
-const OrdersList = () => {
+const WaitersList = () => {
   // ** Store Vars
   const dispatch = useDispatch()
-  const store = useSelector(state => state.orders)
+  const { data, total } = useSelector(state => state.waiters)
 
   // ** States
   const [sort, setSort] = useState('desc')
@@ -180,71 +176,42 @@ const OrdersList = () => {
   const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Select Role' })
-  // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'Select Plan' })
-  const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
-  const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирите статус' })
-// console.log(searchTerm)
+  const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
+
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-
+// console.log(data)
   // ** Get data on mount
   useEffect(() => {
-    dispatch(getAllData())
-    dispatch(getWaiters())
     dispatch(
-      getData({
+      getWaiters({
         sort,
         ordering: sortColumn,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        status: currentStatus.value,
-        storeId: currentStore.value
+        storeid: store.value
       })
     )
-  }, [dispatch, store.data.length, sort, sortColumn, currentPage])
+  }, [dispatch, data.length, sort, sortColumn, currentPage])
 
   // ** User filter options
-  // const roleOptions = [
-  //   { value: '', label: 'Выберете статус' },
-  //   { value: 'admin', label: 'Admin' },
-  //   { value: 'author', label: 'Author' },
-  //   { value: 'editor', label: 'Editor' },
-  //   { value: 'maintainer', label: 'Maintainer' },
-  //   { value: 'subscriber', label: 'Subscriber' }
-  // ]
-
-  const storeOptions = [
+   const storeOptions = [
     { value: '', label: 'Показать все' },
     { value: '189', label: 'MALINA ECO FOOD' },
     { value: '236', label: 'Chicken Crispy' }
-  ]
-
-  const statusOptions = Object.entries(statusObj).map(([number, status]) => ({
-    value: number,
-    label: status.label
-  }))
-  statusOptions.unshift({ value: '', label: 'Показать все' })
-
-  // const statusOptions = [
-  //   { value: '', label: 'Select Status', number: 0 },
-  //   { value: 'pending', label: 'Pending', number: 1 },
-  //   { value: 'active', label: 'Active', number: 2 },
-  //   { value: 'inactive', label: 'Inactive', number: 3 }
-  // ]
-
+  ] 
+  
   // ** Function in get data on page change
   const handlePagination = page => {
     dispatch(
-      getData({
+      getWaiters({
         sort,
         ordering: sortColumn,
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        status: currentStatus.value,
-        storeId: currentStore.value
+        storeid: store.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -254,14 +221,13 @@ const OrdersList = () => {
   const handlePerPage = e => {
     const value = parseInt(e.currentTarget.value)
     dispatch(
-      getData({
+      getWaiters({
         sort,
         ordering: sortColumn,
         search: searchTerm,
         perPage: value,
         page: currentPage,
-        status: currentStatus.value,
-        storeId: currentStore.value
+        storeid: store.value
       })
     )
     setRowsPerPage(value)
@@ -271,22 +237,21 @@ const OrdersList = () => {
   const handleFilter = val => {
     setSearchTerm(val)
     dispatch(
-      getData({
+      getWaiters({
         sort,
         search: val,
         ordering: sortColumn,
         page: currentPage,
         perPage: rowsPerPage,
-        status: currentStatus.value,
-        storeId: currentStore.value
+        storeid: store.value
       })
     )
   }
 
   // ** Custom Pagination
   const CustomPagination = () => {
-    const count = Number(Math.ceil(store.total / rowsPerPage))
-
+    const count = Number(Math.ceil(total / rowsPerPage))
+// console.log(count, total)
     return (
       <ReactPaginate
         previousLabel={''}
@@ -309,8 +274,7 @@ const OrdersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      storeId: currentStore.value,
-      status: currentStatus.value,
+      storeid: store.value,
       search: searchTerm
     }
 
@@ -318,12 +282,13 @@ const OrdersList = () => {
       return filters[k].length > 0
     })
 
-    if (store.data.length > 0) {
-      return store.data
-    } else if (store.data.length === 0 && isFiltered) {
+    if (data.length > 0) {
+      return data
+    } else if (data.length === 0 && isFiltered) {
       return []
     } else {
-      return store.allData.slice(0, rowsPerPage)
+      return []
+      // return store.allData.slice(0, rowsPerPage)
     }
   }
 
@@ -331,14 +296,13 @@ const OrdersList = () => {
     setSort(sortDirection)
     setSortColumn(column.sortField)
     dispatch(
-      getData({
+      getWaiters({
         sort,
         ordering: sortColumn,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        status: currentStatus.value,
-        storeId: currentStore.value
+        storeid: store.value
       })
     )
   }
@@ -346,36 +310,11 @@ const OrdersList = () => {
   return (
     <Fragment>
       <Card>
-        {/* <CardHeader>
-          <CardTitle tag='h4'>Фильтры</CardTitle>
-        </CardHeader> */}
+        <CardHeader>
+          <CardTitle tag='h4'>Фильтр</CardTitle>
+        </CardHeader>
         <CardBody>
           <Row>
-            <Col md='4'>
-              <Label for='role-select'>Статус</Label>
-              <Select
-                isClearable={false}
-                value={currentStatus}
-                options={statusOptions}
-                className='react-select'
-                classNamePrefix='select'
-                theme={selectThemeColors}
-                onChange={data => {
-                  setCurrentStatus(data)
-                  dispatch(
-                    getData({
-                      sort,
-                      ordering: sortColumn,
-                      search: searchTerm,
-                      page: currentPage,
-                      perPage: rowsPerPage,
-                      status: data.value,
-                      storeId: currentStore.value
-                    })
-                  )
-                }}
-              />
-            </Col>
             <Col className='my-md-0 my-1' md='4'>
               <Label for='plan-select'>Заведение</Label>
               <Select
@@ -384,18 +323,18 @@ const OrdersList = () => {
                 className='react-select'
                 classNamePrefix='select'
                 options={storeOptions}
-                value={currentStore}
+                value={store}
                 onChange={data => {
-                  setCurrentStore(data)
+                  setStore(data)
+                  setCurrentPage(1)
                   dispatch(
-                    getData({
+                    getWaiters({
                       sort,
                       ordering: sortColumn,
                       search: searchTerm,
-                      page: currentPage,
+                      page: 1,
                       perPage: rowsPerPage,
-                      status: currentStatus.value,
-                      storeId: data.value
+                      storeid: data.value
                     })
                   )
                 }}
@@ -422,7 +361,7 @@ const OrdersList = () => {
             data={dataToRender()}
             subHeaderComponent={
               <CustomHeader
-                store={store}
+                data={data}
                 searchTerm={searchTerm}
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
@@ -439,4 +378,4 @@ const OrdersList = () => {
   )
 }
 
-export default OrdersList
+export default WaitersList

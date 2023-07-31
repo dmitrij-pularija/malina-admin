@@ -174,13 +174,13 @@ const SecurityTab = () => {
     <Fragment>
       <Card>
         <CardHeader>
-          <CardTitle tag='h4'>Change Password</CardTitle>
+          <CardTitle tag='h4'>Изменить пароль</CardTitle>
         </CardHeader>
         <CardBody>
           <Form onSubmit={handleSubmit(onSubmit)}>
             <Alert color='warning' className='mb-2'>
-              <h4 className='alert-heading'>Ensure that these requirements are met</h4>
-              <div className='alert-body'>Minimum 8 characters long, uppercase & symbol</div>
+              <h4 className='alert-heading'>Убедитесь, что эти требования выполняются</h4>
+              <div className='alert-body'>Минимумальная длинна 8 символов, заглавные буквы и символы</div>
             </Alert>
             <Row>
               <Col className='mb-2' md={6}>
@@ -190,7 +190,7 @@ const SecurityTab = () => {
                   control={control}
                   render={({ field }) => (
                     <InputPasswordToggle
-                      label='New Password'
+                      label='Новый пароль'
                       htmlFor='password'
                       className='input-group-merge'
                       invalid={errors.password && true}
@@ -207,7 +207,7 @@ const SecurityTab = () => {
                   name='confirmPassword'
                   render={({ field }) => (
                     <InputPasswordToggle
-                      label='Confirm New Password'
+                      label='Подтвердите новый пароль'
                       htmlFor='confirmPassword'
                       className='input-group-merge'
                       invalid={errors.confirmPassword && true}
@@ -221,14 +221,14 @@ const SecurityTab = () => {
               </Col>
               <Col xs={12}>
                 <Button type='submit' color='primary'>
-                  Change Password
+                Изменить пароль
                 </Button>
               </Col>
             </Row>
           </Form>
         </CardBody>
       </Card>
-      <Card>
+      {/* <Card>
         <CardBody>
           <CardTitle className='mb-50'>Two-steps verification</CardTitle>
           <span>Keep your account secure with authentication step.</span>
@@ -362,7 +362,7 @@ const SecurityTab = () => {
             <AppSMSComponent setShow={setShow} setShowDetailModal={setShowDetailModal} />
           )}
         </ModalBody>
-      </Modal>
+      </Modal> */}
     </Fragment>
   )
 }

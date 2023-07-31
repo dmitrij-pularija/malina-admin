@@ -1,3 +1,4 @@
+import { useSelector } from 'react-redux'
 // ** User List Component
 import Table from './Table'
 
@@ -8,45 +9,48 @@ import { Row, Col } from 'reactstrap'
 import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
 
 // ** Icons Imports
-import { User, UserPlus, UserCheck, UserX } from 'react-feather'
+import { Users, UserPlus, UserCheck, UserX } from 'react-feather'
+import { formatNumberInt } from '../../../../utility/Utils'
 
 // ** Styles
 import '@styles/react/apps/app-users.scss'
 
 const UsersList = () => {
+  const { totalCount, totalUsers, totalCustomers, totalGuests } = useSelector(state => state.users.count)
+
   return (
     <div className='app-user-list'>
       <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='primary'
-            statTitle='Total Users'
-            icon={<User size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>21,459</h3>}
-          />
-        </Col>
-        <Col lg='3' sm='6'>
-          <StatsHorizontal
-            color='danger'
-            statTitle='Paid Users'
-            icon={<UserPlus size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>4,567</h3>}
+            statTitle='Всего'
+            icon={<Users size={20} />}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(totalCount)}</h3>}
           />
         </Col>
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='success'
-            statTitle='Active Users'
+            statTitle='Пользователи'
+            icon={<UserPlus size={20} />}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(totalUsers)}</h3>}
+          />
+        </Col>
+        <Col lg='3' sm='6'>
+          <StatsHorizontal
+            color='success'
+            statTitle='Клиенты'
             icon={<UserCheck size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>19,860</h3>}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(totalCustomers)}</h3>}
           />
         </Col>
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='warning'
-            statTitle='Pending Users'
+            statTitle='Гости'
             icon={<UserX size={20} />}
-            renderStats={<h3 className='fw-bolder mb-75'>237</h3>}
+            renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(totalGuests)}</h3>}
           />
         </Col>
       </Row>

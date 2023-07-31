@@ -9,12 +9,12 @@ import { ShoppingCart, Lock, Award, Bell, Link } from 'react-feather'
 
 // ** User Components
 // import InvoiceList from './InvoiceList'
-import SecurityTab from './SecurityTab'
+// import SecurityTab from './SecurityTab'
 // import Connections from './Connections'
-import Rewards from './Rewards'
+// import Rewards from './Rewards'
 // import UserTimeline from './UserTimeline'
 // import Notifications from './Notifications'
-import UserOrdersList from './UserOrdersList'
+// import UserOrdersList from './UserOrdersList'
 
 const UserTabs = ({ active, toggleTab, score }) => {
 
@@ -23,19 +23,19 @@ const UserTabs = ({ active, toggleTab, score }) => {
       <Nav pills className='mb-2'>
         <NavItem>
           <NavLink active={active === '1'} onClick={() => toggleTab('1')}>
-            <ShoppingCart className='font-medium-3 me-50' />
+            {/* <ShoppingCart className='font-medium-3 me-50' /> */}
             <span className='fw-bold'>История заказов</span>
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink active={active === '2'} onClick={() => toggleTab('2')}>
-            <Award className='font-medium-3 me-50' />
-            <span className='fw-bold'>Бонусы</span>
+            {/* <Award className='font-medium-3 me-50' /> */}
+            <span className='fw-bold'>Отзывы</span>
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink active={active === '3'} onClick={() => toggleTab('3')}>
-            <Lock className='font-medium-3 me-50' />
+            {/* <Lock className='font-medium-3 me-50' /> */}
             <span className='fw-bold'>Безопасность</span>
           </NavLink>
         </NavItem>
@@ -54,15 +54,15 @@ const UserTabs = ({ active, toggleTab, score }) => {
       </Nav>
       <TabContent activeTab={active}>
         <TabPane tabId='1'>
-          <UserOrdersList />
+          {/* <UserOrdersList /> */}
           {/* <UserTimeline /> */}
           {/* <InvoiceList /> */}
         </TabPane>
         <TabPane tabId='2'>
-          <Rewards score={score} />
+          {/* <Rewards score={score} /> */}
         </TabPane>
         <TabPane tabId='3'>
-          <SecurityTab />
+          {/* <SecurityTab /> */}
         </TabPane>
 {/* 
         <TabPane tabId='4'>

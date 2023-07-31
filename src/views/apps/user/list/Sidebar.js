@@ -20,39 +20,32 @@ import { addUser } from '../store'
 import { useDispatch } from 'react-redux'
 
 const defaultValues = {
+  name: '',
+  surname: '',
+  login: '',
   email: '',
-  contact: '',
-  company: '',
-  fullName: '',
-  username: '',
-  country: null
+  phone: '',
+  datebirth: '01.01.1900',
+  code: ''
 }
 
-const countryOptions = [
-  { label: 'Australia', value: 'Australia' },
-  { label: 'Bangladesh', value: 'Bangladesh' },
-  { label: 'Belarus', value: 'Belarus' },
-  { label: 'Brazil', value: 'Brazil' },
-  { label: 'Canada', value: 'Canada' },
-  { label: 'China', value: 'China' },
-  { label: 'France', value: 'France' },
-  { label: 'Germany', value: 'Germany' },
-  { label: 'India', value: 'India' },
-  { label: 'Indonesia', value: 'Indonesia' },
-  { label: 'Israel', value: 'Israel' },
-  { label: 'Italy', value: 'Italy' },
-  { label: 'Japan', value: 'Japan' },
-  { label: 'Korea', value: 'Korea' },
-  { label: 'Mexico', value: 'Mexico' },
-  { label: 'Philippines', value: 'Philippines' },
-  { label: 'Russia', value: 'Russia' },
-  { label: 'South', value: 'South' },
-  { label: 'Thailand', value: 'Thailand' },
-  { label: 'Turkey', value: 'Turkey' },
-  { label: 'Ukraine', value: 'Ukraine' },
-  { label: 'United Arab Emirates', value: 'United Arab Emirates' },
-  { label: 'United Kingdom', value: 'United Kingdom' },
-  { label: 'United States', value: 'United States' }
+const typeOptions = [
+  { value: 1, label: 'user' },
+  { value: 2, label: 'admin' },
+  { value: 3, label: 'superadmin' }
+]
+
+const genderOptions = [
+  { value: 1, label: 'Мужчина' },
+  { value: 2, label: 'Женщина' },
+  { value: 4, label: 'Не указан' }
+]
+
+const clientTypeOptions = [
+  { value: 'user', label: 'Пользователь' },
+  { value: 'customer', label: 'Клиент' },
+  { value: 'guest', label: 'Гость' },
+  { value: 'admin', label: 'Администратор' }
 ]
 
 const checkIsValid = data => {
@@ -62,8 +55,9 @@ const checkIsValid = data => {
 const SidebarNewUsers = ({ open, toggleSidebar }) => {
   // ** States
   const [data, setData] = useState(null)
-  const [plan, setPlan] = useState('basic')
-  const [role, setRole] = useState('subscriber')
+  const [gender, setGender] = useState(4)
+  const [clientType, setClientType] = useState('user')
+  const [type, setType] = useState(1)
 
   // ** Store Vars
   const dispatch = useDispatch()
@@ -82,34 +76,34 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     setData(data)
     if (checkIsValid(data)) {
       toggleSidebar()
-      dispatch(
-        addUser({
-          role,
-          avatar: '',
-          status: 'active',
-          email: data.email,
-          currentPlan: plan,
-          billing: 'auto debit',
-          company: data.company,
-          contact: data.contact,
-          fullName: data.fullName,
-          username: data.username,
-          country: data.country.value
-        })
-      )
+      // dispatch(
+      //   addUser({
+      //     role,
+      //     avatar: '',
+      //     status: 'active',
+      //     email: data.email,
+      //     currentPlan: plan,
+      //     billing: 'auto debit',
+      //     company: data.company,
+      //     contact: data.contact,
+      //     fullName: data.fullName,
+      //     username: data.username,
+      //     country: data.country.value
+      //   })
+      // )
     } else {
-      for (const key in data) {
-        if (data[key] === null) {
-          setError('country', {
-            type: 'manual'
-          })
-        }
-        if (data[key] !== null && data[key].length === 0) {
-          setError(key, {
-            type: 'manual'
-          })
-        }
-      }
+      // for (const key in data) {
+      //   if (data[key] === null) {
+      //     setError('country', {
+      //       type: 'manual'
+      //     })
+      //   }
+      //   if (data[key] !== null && data[key].length === 0) {
+      //     setError(key, {
+      //       type: 'manual'
+      //     })
+      //   }
+      // }
     }
   }
 
@@ -117,15 +111,16 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     for (const key in defaultValues) {
       setValue(key, '')
     }
-    setRole('subscriber')
-    setPlan('basic')
+    setGender(4)
+    setClientType('user')
+    setType(1)
   }
 
   return (
     <Sidebar
       size='lg'
       open={open}
-      title='New User'
+      title='Новый пользователь'
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={toggleSidebar}
@@ -133,26 +128,38 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <div className='mb-1'>
-          <Label className='form-label' for='fullName'>
-            Full Name <span className='text-danger'>*</span>
+          <Label className='form-label' for='name'>
+            Имя <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='fullName'
+            name='name'
             control={control}
             render={({ field }) => (
-              <Input id='fullName' placeholder='John Doe' invalid={errors.fullName && true} {...field} />
+              <Input id='name' placeholder='John' invalid={errors.name && true} {...field} />
             )}
           />
         </div>
         <div className='mb-1'>
-          <Label className='form-label' for='username'>
-            Username <span className='text-danger'>*</span>
+          <Label className='form-label' for='surname'>
+            Фамилия <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='username'
+            name='surname'
             control={control}
             render={({ field }) => (
-              <Input id='username' placeholder='johnDoe99' invalid={errors.username && true} {...field} />
+              <Input id='surname' placeholder='Doe' invalid={errors.surname && true} {...field} />
+            )}
+          />
+        </div>
+        <div className='mb-1'>
+          <Label className='form-label' for='login'>
+            Логин <span className='text-danger'>*</span>
+          </Label>
+          <Controller
+            name='login'
+            control={control}
+            render={({ field }) => (
+              <Input id='login' placeholder='johnDoe99' invalid={errors.login && true} {...field} />
             )}
           />
         </div>
@@ -173,81 +180,113 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
               />
             )}
           />
-          <FormText color='muted'>You can use letters, numbers & periods</FormText>
+          <FormText color='muted'>Вы можете использовать буквы, цифры и точки</FormText>
         </div>
 
         <div className='mb-1'>
-          <Label className='form-label' for='contact'>
-            Contact <span className='text-danger'>*</span>
+          <Label className='form-label' for='phone'>
+            Телефон <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='contact'
+            name='phone'
             control={control}
             render={({ field }) => (
-              <Input id='contact' placeholder='(397) 294-5153' invalid={errors.contact && true} {...field} />
+              <Input id='phone' placeholder='+996502945153' invalid={errors.phone && true} {...field} />
             )}
           />
         </div>
         <div className='mb-1'>
-          <Label className='form-label' for='company'>
-            Company <span className='text-danger'>*</span>
+          <Label className='form-label' for='datebirth'>
+          День рождения <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='company'
+            name='datebirth'
             control={control}
             render={({ field }) => (
-              <Input id='company' placeholder='Company Pvt Ltd' invalid={errors.company && true} {...field} />
+              <Input id='datebirth' placeholder='01.01.1900' invalid={errors.datebirth && true} {...field} />
             )}
           />
         </div>
+        
         <div className='mb-1'>
-          <Label className='form-label' for='country'>
-            Country <span className='text-danger'>*</span>
+          <Label className='form-label' for='gender'>
+            Пол <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='country'
+            name='gender'
             control={control}
             render={({ field }) => (
               // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
               <Select
                 isClearable={false}
+                defaultValue={gender}
                 classNamePrefix='select'
-                options={countryOptions}
+                options={genderOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.country === null })}
+                className={classnames('react-select', { 'is-invalid': data !== null && data.gender === null })}
                 {...field}
               />
             )}
           />
         </div>
         <div className='mb-1'>
-          <Label className='form-label' for='user-role'>
-            User Role
+          <Label className='form-label' for='code'>
+          Код <span className='text-danger'>*</span>
           </Label>
-          <Input type='select' id='user-role' name='user-role' value={role} onChange={e => setRole(e.target.value)}>
-            <option value='subscriber'>Subscriber</option>
-            <option value='editor'>Editor</option>
-            <option value='maintainer'>Maintainer</option>
-            <option value='author'>Author</option>
-            <option value='admin'>Admin</option>
-          </Input>
+          <Controller
+            name='code'
+            control={control}
+            render={({ field }) => (
+              <Input id='code' placeholder='12345' invalid={errors.code && true} {...field} />
+            )}
+          />
         </div>
-        <div className='mb-1' value={plan} onChange={e => setPlan(e.target.value)}>
-          <Label className='form-label' for='select-plan'>
-            Select Plan
+        <div className='mb-1'>
+          <Label className='form-label' for='client_type'>
+            Тип <span className='text-danger'>*</span>
           </Label>
-          <Input type='select' id='select-plan' name='select-plan'>
-            <option value='basic'>Basic</option>
-            <option value='enterprise'>Enterprise</option>
-            <option value='company'>Company</option>
-            <option value='team'>Team</option>
-          </Input>
+          <Controller
+            name='client_type'
+            control={control}
+            render={({ field }) => (
+              // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
+              <Select
+                isClearable={false}
+                defaultValue={clientType}
+                classNamePrefix='select'
+                options={clientTypeOptions}
+                theme={selectThemeColors}
+                className={classnames('react-select', { 'is-invalid': data !== null && data.client_type === null })}
+                {...field}
+              />
+            )}
+          />
+        </div>
+        <div className='mb-1'>
+          <Label className='form-label' for='type'>
+            Роль <span className='text-danger'>*</span>
+          </Label>
+          <Controller
+            name='type'
+            control={control}
+            render={({ field }) => (
+              // <Input id='country' placeholder='Australia' invalid={errors.country && true} {...field} />
+              <Select
+                isClearable={false}
+                classNamePrefix='select'
+                options={typeOptions}
+                theme={selectThemeColors}
+                className={classnames('react-select', { 'is-invalid': data !== null && data.type === null })}
+                {...field}
+              />
+            )}
+          />
         </div>
         <Button type='submit' className='me-1' color='primary'>
-          Submit
+          Сохранить
         </Button>
         <Button type='reset' color='secondary' outline onClick={toggleSidebar}>
-          Cancel
+          Отменить
         </Button>
       </Form>
     </Sidebar>
