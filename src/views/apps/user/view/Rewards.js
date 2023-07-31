@@ -80,7 +80,7 @@ const Rewards = ({ score }) => {
   //   })
   // }
 
-  return score === 0 ? (<Card><CardHeader tag='h4'><CardTitle tag='h4'>Bонусные баллы отсутствуют</CardTitle></CardHeader></Card>) : (
+  return score === 0 ? (<Card><CardHeader><CardTitle tag='h4'>Бонусные баллы отсутствуют</CardTitle></CardHeader></Card>) : (
     <Fragment>
       <Card>
         <CardHeader>

@@ -49,10 +49,10 @@ const roleObj = {
 }
 
 const typeObj = {
-  user: 'Пользователь',
-  customer: 'Клиент',
-  guest: 'Гость',
-  admin: 'Администратор'
+  user: { type: 'Пользователь', color: 'light-success'},
+  customer:{ type:  'Клиент', color: 'light-primary'},
+  guest:{ type:  'Гость', color: 'light-warning'},
+  admin:{ type:  'Администратор', color: 'light-danger'} 
 }
 
 const genderObj = {
@@ -229,8 +229,8 @@ const UserInfoCard = ({ selectedUser }) => {
                 <div className='user-info'>
                   <h4>{selectedUser.name !== null ? `${selectedUser.name} ${selectedUser.surname}` : ''}</h4>
                   {selectedUser !== null ? (
-                    <Badge color={roleObj[selectedUser.type].color} className='text-capitalize'>
-                      {roleObj[selectedUser.type].role}
+                    <Badge color={typeObj[selectedUser.client_type].color} className='text-capitalize'>
+                      {typeObj[selectedUser.client_type].type}
                     </Badge>
                   ) : null}
                 </div>
@@ -268,6 +268,12 @@ const UserInfoCard = ({ selectedUser }) => {
                   <span>{selectedUser.id}</span>
                 </li>  
                 <li className='mb-75'>
+                  <span className='fw-bolder me-25'>Роль:</span>
+                  <Badge color={roleObj[selectedUser.type].color} className='text-capitalize'>
+                      {roleObj[selectedUser.type].role}
+                  </Badge>
+                </li>
+                <li className='mb-75'>
                   <span className='fw-bolder me-25'>Логин:</span>
                   <span>{selectedUser.login ? selectedUser.login : "Не указан"}</span>
                 </li>
@@ -279,10 +285,6 @@ const UserInfoCard = ({ selectedUser }) => {
                   <span className='fw-bolder me-25'>Телефон:</span>
                   <span>{selectedUser.phone ? selectedUser.phone : "Не указан"}</span>
                 </li>
-                {/* <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Роль:</span>
-                  <span className='text-capitalize'>{typeObj[selectedUser.type]}</span>
-                </li> */}
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Код:</span>
                   <span>{selectedUser.code ? selectedUser.code : "Не указан"}</span>

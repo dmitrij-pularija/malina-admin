@@ -55,8 +55,6 @@ const UserTabs = ({ active, toggleTab, score }) => {
       <TabContent activeTab={active}>
         <TabPane tabId='1'>
           <UserOrdersList />
-          {/* <UserTimeline /> */}
-          {/* <InvoiceList /> */}
         </TabPane>
         <TabPane tabId='2'>
           <Rewards score={score} />

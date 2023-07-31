@@ -21,7 +21,7 @@ const UserView = () => {
   // ** Store Vars
   const { selectedUser } = useSelector(state => state.users)
   const dispatch = useDispatch()
-console.log(selectedUser)
+// console.log(selectedUser)
 
   // ** Hooks
   const { id } = useParams()
@@ -44,7 +44,6 @@ console.log(selectedUser)
       <Row>
         <Col xl='4' lg='5' xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
           <UserInfoCard selectedUser={selectedUser} />
-          {/* <PlanCard /> */}
         </Col>
         <Col xl='8' lg='7' xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
           <UserTabs active={active} toggleTab={toggleTab} score={selectedUser.score}/>

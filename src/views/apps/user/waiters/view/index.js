@@ -44,10 +44,9 @@ const WaiterView = () => {
       <Row>
         <Col xl='4' lg='5' xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
           <WaiterInfoCard selectedWaiter={selectedWaiter} />
-          {/* <PlanCard /> */}
         </Col>
         <Col xl='8' lg='7' xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          {/* <WaiterTabs active={active} toggleTab={toggleTab} score={selectedUser.score}/> */}
+          <WaiterTabs active={active} toggleTab={toggleTab} ratings={selectedWaiter.waiter_ratings}/>
         </Col>
       </Row>
     </div>
