@@ -6,7 +6,7 @@ import { columns } from './columns'
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
-import { getAllData, getData } from '@src/views/apps/user/store'
+import { getData } from '@src/views/apps/user/store'
 
 // ** Third Party Components
 import ReactPaginate from 'react-paginate'
@@ -93,7 +93,6 @@ const Table = () => {
 
   // ** Get data on mount
   useEffect(() => {
-    dispatch(getAllData())
     dispatch(
       getData({
         sort,
