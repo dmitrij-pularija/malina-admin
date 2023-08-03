@@ -44,7 +44,7 @@ export const getUser = createAsyncThunk('appUsers/getUser', async id => {
 export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
   await axios.post('/user/client', user)
   await dispatch(getData(getState().users.params))
-  await dispatch(getAllData())
+  // await dispatch(getAllData())
   return user
 })
 

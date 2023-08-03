@@ -4,39 +4,47 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // ** Axios Imports
 import axios from 'axios'
 
-export const getData = createAsyncThunk('appInvoice/getData', async params => {
-  const response = await axios.get('/apps/invoice/invoices', params)
+export const getData = createAsyncThunk('appTable/getData', async params => {
+  const response = await axios.get('/item/table', params)
   return {
     params,
-    data: response.data.invoices,
-    allData: response.data.allData,
-    totalPages: response.data.total
+    data: response.data.results,
+    total: response.data.count
   }
 })
+export const getTable = createAsyncThunk('appTable/getTable', async id => {
+  const response = await axios.get(`/item/table/${id}`)
+  return response.data
+})
 
-export const deleteInvoice = createAsyncThunk('appInvoice/deleteInvoice', async (id, { dispatch, getState }) => {
-  await axios.delete('/apps/invoice/delete', { id })
-  await dispatch(getData(getState().invoice.params))
+export const addTable = createAsyncThunk('appTable/addTable', async (table, { dispatch, getState }) => {
+  await axios.post('/item/table', table)
+  await dispatch(getData(getState().tables.params))
+  // await dispatch(getAllData())
+  return table
+})
+
+export const deleteTable = createAsyncThunk('appTable/deleteTable', async (id, { dispatch, getState }) => {
+  await axios.delete('/item/table', { id })
+  await dispatch(getData(getState().tables.params))
   return id
 })
 
-export const appInvoiceSlice = createSlice({
-  name: 'appInvoice',
+export const appTableSlice = createSlice({
+  name: 'appTable',
   initialState: {
     data: [],
     total: 1,
-    params: {},
-    allData: []
+    params: {}
   },
   reducers: {},
   extraReducers: builder => {
     builder.addCase(getData.fulfilled, (state, action) => {
       state.data = action.payload.data
-      state.allData = action.payload.allData
-      state.total = action.payload.totalPages
+      state.total = action.payload.total
       state.params = action.payload.params
     })
   }
 })
 
-export default appInvoiceSlice.reducer
+export default appTableSlice.reducer

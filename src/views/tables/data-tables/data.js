@@ -23,6 +23,7 @@ export let data
 
 // ** Get initial Data
 axios.get('/api/datatables/initial-data').then(response => {
+  // console.log(response.data)
   data = response.data
 })
 

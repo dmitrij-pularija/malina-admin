@@ -420,6 +420,7 @@ const OrdersList = () => {
             className='react-dataTable'
             paginationComponent={CustomPagination}
             data={dataToRender()}
+            noDataComponent={<h6 className='text-capitalize'>Заказы не найдены</h6>}
             subHeaderComponent={
               <CustomHeader
                 store={store}

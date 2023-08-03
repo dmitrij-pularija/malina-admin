@@ -11,8 +11,8 @@ import { ChevronDown } from 'react-feather'
 import DataTable from 'react-data-table-component'
 
 // ** Reactstrap Imports
-import { Button, Input, Row, Col, Card } from 'reactstrap'
-
+import { Button, Input, Row, Col, Card, Label } from 'reactstrap'
+import Select from 'react-select'
 // ** Store & Actions
 import { getData } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
@@ -20,14 +20,21 @@ import { useDispatch, useSelector } from 'react-redux'
 // ** Styles
 import '@styles/react/apps/app-invoice.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
+import { selectThemeColors } from '@utils'
 
-const CustomHeader = ({ handleFilter, value, handleStatusValue, statusValue, handlePerPage, rowsPerPage }) => {
+const storeOptions = [
+  { value: '', label: 'Показать все' },
+  { value: '189', label: 'MALINA ECO FOOD' },
+  { value: '236', label: 'Chicken Crispy' }
+] 
+
+const CustomHeader = ({ handleFilter, value, handleStoreValue, store, handlePerPage, rowsPerPage }) => {
   return (
     <div className='invoice-list-table-header w-100 py-2'>
       <Row>
         <Col lg='6' className='d-flex align-items-center px-0 px-lg-1'>
           <div className='d-flex align-items-center me-2'>
-            <label htmlFor='rows-per-page'>Show</label>
+            <label htmlFor='rows-per-page'>Показать</label>
             <Input
               type='select'
               id='rows-per-page'
@@ -35,21 +42,28 @@ const CustomHeader = ({ handleFilter, value, handleStatusValue, statusValue, han
               onChange={handlePerPage}
               className='form-control ms-50 pe-3'
             >
-              <option value='10'>10</option>
-              <option value='25'>25</option>
+              <option value='20'>20</option>
               <option value='50'>50</option>
+              <option value='100'>100</option>
             </Input>
           </div>
-          <Button tag={Link} to='/apps/invoice/add' color='primary'>
-            Add Record
-          </Button>
+          <Label for='plan-select'>Заведение</Label>
+              <Select
+                theme={selectThemeColors}
+                isClearable={false}
+                className='react-select'
+                classNamePrefix='select'
+                options={storeOptions}
+                value={store}
+                onChange={data => handleStoreValue(data)}
+              />
         </Col>
         <Col
           lg='6'
           className='actions-right d-flex align-items-center justify-content-lg-end flex-lg-nowrap flex-wrap mt-lg-0 mt-1 pe-lg-1 p-0'
         >
           <div className='d-flex align-items-center'>
-            <label htmlFor='search-invoice'>Search</label>
+            <label htmlFor='search-invoice'>Поиск</label>
             <Input
               id='search-invoice'
               className='ms-50 me-2 w-100'
@@ -59,57 +73,54 @@ const CustomHeader = ({ handleFilter, value, handleStatusValue, statusValue, han
               placeholder='Search Invoice'
             />
           </div>
-          <Input className='w-auto ' type='select' value={statusValue} onChange={handleStatusValue}>
-            <option value=''>Select Status</option>
-            <option value='downloaded'>Downloaded</option>
-            <option value='draft'>Draft</option>
-            <option value='paid'>Paid</option>
-            <option value='partial payment'>Partial Payment</option>
-            <option value='past due'>Past Due</option>
-            <option value='sent'>Sent</option>
-          </Input>
+          <Button tag={Link} to='/apps/invoice/add' color='primary'>
+            Добавить
+          </Button>  
         </Col>
       </Row>
     </div>
   )
 }
 
-const InvoiceList = () => {
+const TableList = () => {
   // ** Store vars
   const dispatch = useDispatch()
-  const store = useSelector(state => state.invoice)
+  const { data, total } = useSelector(state => state.tables)
+  // const store = useSelector(state => state.invoice)
 
   // ** States
   const [value, setValue] = useState('')
   const [sort, setSort] = useState('desc')
   const [sortColumn, setSortColumn] = useState('id')
   const [currentPage, setCurrentPage] = useState(1)
-  const [statusValue, setStatusValue] = useState('')
-  const [rowsPerPage, setRowsPerPage] = useState(10)
+  const [store, setStore] = useState('')
+  const [rowsPerPage, setRowsPerPage] = useState(20)
+
+  // console.log(data)
 
   useEffect(() => {
     dispatch(
       getData({
         sort,
-        q: value,
-        sortColumn,
+        search: value,
+        ordering: sortColumn,
         page: currentPage,
         perPage: rowsPerPage,
-        status: statusValue
+        store: store.value
       })
     )
-  }, [dispatch, store.data.length])
+  }, [dispatch, data.length])
 
   const handleFilter = val => {
     setValue(val)
     dispatch(
       getData({
         sort,
-        q: val,
-        sortColumn,
+        search: val,
+        ordering: sortColumn,
         page: currentPage,
         perPage: rowsPerPage,
-        status: statusValue
+        store: store.value
       })
     )
   }
@@ -118,26 +129,26 @@ const InvoiceList = () => {
     dispatch(
       getData({
         sort,
-        q: value,
-        sortColumn,
+        search: value,
+        ordering: sortColumn,
         page: currentPage,
-        status: statusValue,
+        store: store.value,
         perPage: parseInt(e.target.value)
       })
     )
     setRowsPerPage(parseInt(e.target.value))
   }
 
-  const handleStatusValue = e => {
-    setStatusValue(e.target.value)
+  const handleStoreValue = data => {
+    setStore(data)
     dispatch(
       getData({
         sort,
-        q: value,
-        sortColumn,
+        search: value,
+        ordering: sortColumn,
         page: currentPage,
         perPage: rowsPerPage,
-        status: e.target.value
+        store: data.value
       })
     )
   }
@@ -146,9 +157,9 @@ const InvoiceList = () => {
     dispatch(
       getData({
         sort,
-        q: value,
-        sortColumn,
-        status: statusValue,
+        search: value,
+        ordering: sortColumn,
+        store: store.value,
         perPage: rowsPerPage,
         page: page.selected + 1
       })
@@ -157,7 +168,8 @@ const InvoiceList = () => {
   }
 
   const CustomPagination = () => {
-    const count = Number((store.total / rowsPerPage).toFixed(0))
+    const count = Number(Math.ceil(total / rowsPerPage))
+    // const count = Number(total / rowsPerPage).toFixed(0))
 
     return (
       <ReactPaginate
@@ -183,20 +195,20 @@ const InvoiceList = () => {
 
   const dataToRender = () => {
     const filters = {
-      q: value,
-      status: statusValue
+      search: value,
+      store
     }
 
     const isFiltered = Object.keys(filters).some(function (k) {
       return filters[k].length > 0
     })
 
-    if (store.data.length > 0) {
-      return store.data
-    } else if (store.data.length === 0 && isFiltered) {
+    if (data.length > 0) {
+      return data
+    } else if (data.length === 0 && isFiltered) {
       return []
     } else {
-      return store.allData.slice(0, rowsPerPage)
+      return []
     }
   }
 
@@ -205,12 +217,12 @@ const InvoiceList = () => {
     setSortColumn(column.sortField)
     dispatch(
       getData({
-        q: value,
+        search: value,
         page: currentPage,
         sort: sortDirection,
-        status: statusValue,
+        store: store.value,
         perPage: rowsPerPage,
-        sortColumn: column.sortField
+        ordering: column.sortField
       })
     )
   }
@@ -237,11 +249,11 @@ const InvoiceList = () => {
             subHeaderComponent={
               <CustomHeader
                 value={value}
-                statusValue={statusValue}
+                store={store}
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                handleStatusValue={handleStatusValue}
+                handleStoreValue={handleStoreValue}
               />
             }
           />
@@ -251,4 +263,4 @@ const InvoiceList = () => {
   )
 }
 
-export default InvoiceList
+export default TableList

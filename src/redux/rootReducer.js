@@ -1,13 +1,16 @@
 // ** Reducers Imports
 import auth from './authentication'
 import orders from '@src/views/apps/food/orders/store'
+import tables from '@src/views/apps/food/tables/store'
+import users from '@src/views/apps/user/store'
+import waiters from '@src/views/apps/user/waiters/store'
+import categories from '@src/views/apps/food/categories/store'
+import branches from '@src/views/apps/food/branches/store'
 
 import navbar from './navbar'
 import layout from './layout'
 import todo from '@src/views/apps/todo/store'
 import chat from '@src/views/apps/chat/store'
-import users from '@src/views/apps/user/store'
-import waiters from '@src/views/apps/user/waiters/store'
 import email from '@src/views/apps/email/store'
 import kanban from '@src/views/apps/kanban/store'
 import invoice from '@src/views/apps/invoice/store'
@@ -24,6 +27,9 @@ const rootReducer = {
   email,
   users,
   waiters,
+  categories,
+  branches,
+  tables,
   kanban,
   navbar,
   layout,

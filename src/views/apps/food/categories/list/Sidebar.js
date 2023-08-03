@@ -16,29 +16,42 @@ import { useForm, Controller } from 'react-hook-form'
 import { Button, Label, FormText, Form, Input } from 'reactstrap'
 
 // ** Store & Actions
-import { addBranch } from '../store'
+import { addCategory } from '../store'
 import { useDispatch } from 'react-redux'
 
 const defaultValues = {
   name: '',
-  address: '',
-  store: { value: null, label: 'Выбирите Заведение' }
+  available: 0,
+  icon: '',
+  state: { value: null, label: 'Выбирите статус' }
 }
 
-const storeOptions = [
-  { value: '189', label: 'MALINA ECO FOOD' },
-  { value: '236', label: 'Chicken Crispy' }
-] 
+const stateOptions = [
+  { value: 0, label: 'Не активная' },
+  { value: 1, label: 'Активная' }
+]
+
+// const genderOptions = [
+//   { value: 1, label: 'Мужчина' },
+//   { value: 2, label: 'Женщина' },
+//   { value: 4, label: 'Не указан' }
+// ]
+
+// const clientTypeOptions = [
+//   { value: 'user', label: 'Пользователь' },
+//   { value: 'customer', label: 'Клиент' },
+//   { value: 'guest', label: 'Гость' },
+//   { value: 'admin', label: 'Администратор' }
+// ]
 
 const checkIsValid = data => {
-  // setStore(defaultValues.store)
   return Object.values(data).every(field => (typeof field === 'object' ? field !== null : field.length > 0))
 }
 
 const SidebarNewUsers = ({ open, toggleSidebar }) => {
   // ** States
   const [data, setData] = useState(null)
-  const [store, setStore] = useState(defaultValues.store)
+  const [state, setState] = useState(defaultValues.state)
 
   // ** Store Vars
   const dispatch = useDispatch()
@@ -55,9 +68,8 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
   // ** Function to handle form submit
   const onSubmit = data => {
     setData(data)
-    console.log(data)
+    // console.log(data)
     if (checkIsValid(data)) {
-      setStore(defaultValues.store)  
       toggleSidebar()
       // dispatch(
       //   addUser({
@@ -94,14 +106,14 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     for (const key in defaultValues) {
       setValue(key, '')
     }
-    setStore(defaultValues.store)
+    setState(defaultValues.state)
   }
 
   return (
     <Sidebar
       size='lg'
       open={open}
-      title='Создание нового бранча'
+      title='Создание новой категории'
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={toggleSidebar}
@@ -116,42 +128,36 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
             name='name'
             control={control}
             render={({ field }) => (
-              <Input id='name' placeholder='Введите название филиала' invalid={errors.name && true} {...field} />
+              <Input id='name' placeholder='Введите название категории' invalid={errors.name && true} {...field} />
             )}
           />
         </div>  
         <div className='mb-1'>
-          <Label className='form-label' for='address'>
-          Адрес <span className='text-danger'>*</span>
+          <Label className='form-label' for='available'>
+          Статус <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='address'
-            control={control}
-            render={({ field }) => (
-              <Input id='address' placeholder='Введите адрес филиала' invalid={errors.address && true} {...field} />
-            )}
-          />
-        </div>
-        <div className='mb-3'>
-          <Label className='form-label' for='store'>
-          Ресторан <span className='text-danger'>*</span>
-          </Label>
-          <Controller
-            name='store'
+            name='available'
             control={control}
             render={({ field }) => (
               <Select
                 isClearable={false}
-                defaultValue={store}
+                defaultValue={state}
                 classNamePrefix='select'
-                options={storeOptions}
+                options={stateOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.store.value !== "" })}
+                className={classnames('react-select', { 'is-invalid': data !== null && data.status.value !== null })}
                 {...field}
               />
             )}
           />
-        </div>  
+        </div>
+        <div className='mb-3'>
+          <Label className='form-label' for='icon'>
+          Аватар
+          </Label>
+          <Input type='file' id='icon' name='icon' />
+        </div>
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
         </Button>

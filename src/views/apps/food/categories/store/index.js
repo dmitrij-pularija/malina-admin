@@ -4,39 +4,65 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // ** Axios Imports
 import axios from 'axios'
 
-export const getData = createAsyncThunk('appInvoice/getData', async params => {
-  const response = await axios.get('/apps/invoice/invoices', params)
+export const getCategories = createAsyncThunk('appCategories/getCategories', async params => {
+  const response = await axios.get('/user/category', { params })
   return {
     params,
-    data: response.data.invoices,
-    allData: response.data.allData,
-    totalPages: response.data.total
+    data: response.data
   }
 })
 
-export const deleteInvoice = createAsyncThunk('appInvoice/deleteInvoice', async (id, { dispatch, getState }) => {
-  await axios.delete('/apps/invoice/delete', { id })
-  await dispatch(getData(getState().invoice.params))
+export const getSubCategories = createAsyncThunk('appCategories/getSubCategories', async params => {
+  const response = await axios.get('/user/subcategory')
+  return {
+    subcategories: response.data
+  }
+})
+
+export const editCategory = createAsyncThunk('appCategories/editCategory', async id => {
+  const response = await axios.put(`/user/category/${id}`)
+  return response
+})
+
+export const editSubCategory = createAsyncThunk('appCategories/editSubCategory', async id => {
+  const response = await axios.put(`/user/subcategory/${id}`)
+  return response
+})
+
+export const addCategory = createAsyncThunk('appCategories/addCategory', async (category, { dispatch, getState }) => {
+  // await axios.post('/user/subcategory', category)
+  // await dispatch(getData(getState().users.params))
+  // await dispatch(getAllData())
+  return category
+})
+
+export const deleteCategory = createAsyncThunk('appCategories/deleteCategory', async (id, { dispatch, getState }) => {
+  // await axios.delete('/user/category/', { id })
+  // await dispatch(getData(getState().users.params))
+  // await dispatch(getAllData())
   return id
 })
 
-export const appInvoiceSlice = createSlice({
-  name: 'appInvoice',
+export const appCategoriesSlice = createSlice({
+  name: 'appCategories',
   initialState: {
     data: [],
-    total: 1,
+    subcategories: [],
     params: {},
-    allData: []
+    selectedCcategory: null,
+    selectedSubCcategory: null
   },
   reducers: {},
   extraReducers: builder => {
-    builder.addCase(getData.fulfilled, (state, action) => {
-      state.data = action.payload.data
-      state.allData = action.payload.allData
-      state.total = action.payload.totalPages
-      state.params = action.payload.params
-    })
+    builder
+      .addCase(getCategories.fulfilled, (state, action) => {
+        state.data = action.payload.data
+        state.params = action.payload.params
+      })
+      .addCase(getSubCategories.fulfilled, (state, action) => {
+        state.subcategories = action.payload.subcategories
+      })
   }
 })
 
-export default appInvoiceSlice.reducer
+export default appCategoriesSlice.reducer

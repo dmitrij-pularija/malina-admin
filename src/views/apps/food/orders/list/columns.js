@@ -179,6 +179,7 @@ export const columns = [
     selector: row => row.rate,
     cell: row => (
       <Rating
+        readonly
         fractions={2}
         direction={'ltr'}
         initialRating={getRate(row.rate)}

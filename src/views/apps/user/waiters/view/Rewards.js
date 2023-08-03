@@ -62,6 +62,7 @@ export const columns = [
     selector: row => row.star.value,
     cell: row => (
       <Rating
+        readonly
         fractions={2}
         direction={'ltr'}
         initialRating={row.star.value}

@@ -12,28 +12,35 @@ export default [
     navLink: '/apps/food/orders/list'
   },
   {
-    id: 'establishments',
-    title: 'Establishments',
+    id: 'structure',
+    title: 'Structure',
     icon: <Grid size={20} />,
-    navLink: '/apps/food/establishments/wishlist'
-  },
-  {
-    id: 'categories',
-    title: 'Categories',
-    icon: <Server size={20} />,
-    navLink: '/apps/food/categories/list'
-  },
-  {
-    id: 'branches',
-    title: 'Branches',
-    icon: <GitBranch size={20} />,
-    navLink: '/apps/food/branches/list'
-  },
-  {
-    id: 'tables',
-    title: 'Tables',
-    icon: <BookOpen size={20} />,
-    navLink: '/apps/food/tables/list'
+    children: [
+      {
+        id: 'branches',
+        title: 'Branches',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/branches/list'
+      },
+      {
+        id: 'categories',
+        title: 'Categories',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/categories/list'
+      },
+      {
+        id: 'store',
+        title: 'Store',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/store/establishments'
+      },
+      {
+        id: 'tables',
+        title: 'Tables',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/tables/list'
+      }
+    ]
   },
   {
     id: 'users',

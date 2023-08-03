@@ -112,6 +112,7 @@ const WaiterInfoCard = ({ selectedWaiter }) => {
       icon: 'warning',
       showCancelButton: true,
       confirmButtonText: 'Да, удалить официанта!',
+      cancelButtonText: 'Отменить',
       customClass: {
         confirmButton: 'btn btn-primary',
         cancelButton: 'btn btn-outline-danger ms-1'
@@ -151,6 +152,7 @@ const WaiterInfoCard = ({ selectedWaiter }) => {
                 <div className='user-info'>
                   <h4>{selectedWaiter.full_name !== null ? selectedWaiter.full_name : ''}</h4>
                   <Rating
+                  readonly
                   fractions={2}
                   direction={'ltr'}
                   initialRating={selectedWaiter.avg_rating}

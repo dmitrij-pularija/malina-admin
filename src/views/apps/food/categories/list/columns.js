@@ -1,5 +1,4 @@
 // ** React Imports
-import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
 
 // ** Custom Components
@@ -7,190 +6,175 @@ import Avatar from '@components/avatar'
 
 // ** Store & Actions
 import { store } from '@store/store'
-import { deleteInvoice } from '../store'
+import { editCategory, deleteCategory } from '../store'
+
+// ** Icons Imports
+import { Slack, User, Command, Edit, Edit2, MoreVertical, FileText, Trash2, Archive } from 'react-feather'
 
 // ** Reactstrap Imports
-import {
-  Badge,
-  DropdownItem,
-  DropdownMenu,
-  DropdownToggle,
-  UncontrolledTooltip,
-  UncontrolledDropdown
-} from 'reactstrap'
+import { Badge, UncontrolledTooltip, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 
-// ** Third Party Components
-import {
-  Eye,
-  Send,
-  Edit,
-  Copy,
-  Save,
-  Info,
-  Trash,
-  PieChart,
-  Download,
-  TrendingUp,
-  CheckCircle,
-  MoreVertical,
-  ArrowDownCircle
-} from 'react-feather'
-
-// ** Vars
-const invoiceStatusObj = {
-  Sent: { color: 'light-secondary', icon: Send },
-  Paid: { color: 'light-success', icon: CheckCircle },
-  Draft: { color: 'light-primary', icon: Save },
-  Downloaded: { color: 'light-info', icon: ArrowDownCircle },
-  'Past Due': { color: 'light-danger', icon: Info },
-  'Partial Payment': { color: 'light-warning', icon: PieChart }
-}
-
-// ** renders client column
+// ** Renders Client Columns
 const renderClient = row => {
-  const stateNum = Math.floor(Math.random() * 6),
-    states = ['light-success', 'light-danger', 'light-warning', 'light-info', 'light-primary', 'light-secondary'],
-    color = states[stateNum]
-
-  if (row.avatar.length) {
-    return <Avatar className='me-50' img={row.avatar} width='32' height='32' />
+  if (row.icon) {
+    return <Avatar className='me-1' img={row.icon} width='32' height='32' />
   } else {
-    return <Avatar color={color} className='me-50' content={row.client ? row.client.name : 'John Doe'} initials />
-  }
-}
-
-// ** Table columns
-export const columns = [
-  {
-    name: '#',
-    sortable: true,
-    sortField: 'id',
-    minWidth: '107px',
-    // selector: row => row.id,
-    cell: row => <Link to={`/apps/invoice/preview/${row.id}`}>{`#${row.id}`}</Link>
-  },
-  {
-    sortable: true,
-    minWidth: '102px',
-    sortField: 'invoiceStatus',
-    name: <TrendingUp size={14} />,
-    // selector: row => row.invoiceStatus,
-    cell: row => {
-      const color = invoiceStatusObj[row.invoiceStatus] ? invoiceStatusObj[row.invoiceStatus].color : 'primary',
-        Icon = invoiceStatusObj[row.invoiceStatus] ? invoiceStatusObj[row.invoiceStatus].icon : Edit
-      return (
-        <Fragment>
-          <Avatar color={color} icon={<Icon size={14} />} id={`av-tooltip-${row.id}`} />
-          <UncontrolledTooltip placement='top' target={`av-tooltip-${row.id}`}>
-            <span className='fw-bold'>{row.invoiceStatus}</span>
-            <br />
-            <span className='fw-bold'>Balance:</span> {row.balance}
-            <br />
-            <span className='fw-bold'>Due Date:</span> {row.dueDate}
-          </UncontrolledTooltip>
-        </Fragment>
-      )
-    }
-  },
-  {
-    name: 'Client',
-    sortable: true,
-    minWidth: '350px',
-    sortField: 'client.name',
-    // selector: row => row.client.name,
-    cell: row => {
-      const name = row.client ? row.client.name : 'John Doe',
-        email = row.client ? row.client.companyEmail : 'johnDoe@email.com'
-      return (
-        <div className='d-flex justify-content-left align-items-center'>
-          {renderClient(row)}
-          <div className='d-flex flex-column'>
-            <h6 className='user-name text-truncate mb-0'>{name}</h6>
-            <small className='text-truncate text-muted mb-0'>{email}</small>
-          </div>
-        </div>
-      )
-    }
-  },
-  {
-    name: 'Total',
-    sortable: true,
-    minWidth: '150px',
-    sortField: 'total',
-    // selector: row => row.total,
-    cell: row => <span>${row.total || 0}</span>
-  },
-  {
-    sortable: true,
-    minWidth: '200px',
-    name: 'Issued Date',
-    sortField: 'dueDate',
-    cell: row => row.dueDate
-    // selector: row => row.dueDate
-  },
-  {
-    sortable: true,
-    name: 'Balance',
-    minWidth: '164px',
-    sortField: 'balance',
-    // selector: row => row.balance,
-    cell: row => {
-      return row.balance !== 0 ? (
-        <span>{row.balance}</span>
-      ) : (
-        <Badge color='light-success' pill>
-          Paid
-        </Badge>
-      )
-    }
-  },
-  {
-    name: 'Action',
-    minWidth: '110px',
-    cell: row => (
-      <div className='column-action d-flex align-items-center'>
-        <Send className='cursor-pointer' size={17} id={`send-tooltip-${row.id}`} />
-        <UncontrolledTooltip placement='top' target={`send-tooltip-${row.id}`}>
-          Send Mail
-        </UncontrolledTooltip>
-        <Link to={`/apps/invoice/preview/${row.id}`} id={`pw-tooltip-${row.id}`}>
-          <Eye size={17} className='mx-1' />
-        </Link>
-        <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.id}`}>
-          Preview Invoice
-        </UncontrolledTooltip>
-        <UncontrolledDropdown>
-          <DropdownToggle tag='span'>
-            <MoreVertical size={17} className='cursor-pointer' />
-          </DropdownToggle>
-          <DropdownMenu end>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
-              <Download size={14} className='me-50' />
-              <span className='align-middle'>Download</span>
-            </DropdownItem>
-            <DropdownItem tag={Link} to={`/apps/invoice/edit/${row.id}`} className='w-100'>
-              <Edit size={14} className='me-50' />
-              <span className='align-middle'>Edit</span>
-            </DropdownItem>
-            <DropdownItem
-              tag='a'
-              href='/'
-              className='w-100'
-              onClick={e => {
-                e.preventDefault()
-                store.dispatch(deleteInvoice(row.id))
-              }}
-            >
-              <Trash size={14} className='me-50' />
-              <span className='align-middle'>Delete</span>
-            </DropdownItem>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
-              <Copy size={14} className='me-50' />
-              <span className='align-middle'>Duplicate</span>
-            </DropdownItem>
-          </DropdownMenu>
-        </UncontrolledDropdown>
-      </div>
+    return (
+      <Avatar
+        initials
+        className='me-1'
+        color={'light-primary'}
+        content={row.name}
+      />
     )
   }
+}
+
+// export const ExpandableTable = ({data}) => {
+//   console.log(data.id)
+//   return (
+//     <div>{data.name}</div>
+//   )
+// }
+
+// ** Renders Role Columns
+// const renderRole = row => {
+//   const roleObj = {
+//     1: {
+//       role: 'user',
+//       class: 'text-primary',
+//       icon: User
+//     },
+//     3: {
+//       role: 'superadmin',
+//       class: 'text-success',
+//       icon: Command
+//     },
+//     2: {
+//       role: 'admin',
+//       class: 'text-danger',
+//       icon: Slack
+//     }
+//   }
+
+  // const Icon = roleObj[row.type] ? roleObj[row.type].icon : Edit2
+
+//   return (
+//     <span className='text-truncate text-capitalize align-middle'>
+//       <Icon size={18} className={`${roleObj[row.type] ? roleObj[row.type].class : ''} me-50`} />
+//       {roleObj[row.type].role}
+//     </span>
+//   )
+// }
+
+const statusObj = {
+  0: 'light-secondary',
+  1: 'light-success'
+}
+// const typeObj = {
+//   user: 'Пользователь',
+//   customer: 'Клиент',
+//   guest: 'Гость',
+//   admin: 'Администратор'
+// }
+
+export const columns = [
+  {
+    name: 'Категория',
+    sortable: true,
+    minWidth: '300px',
+    sortField: 'name',
+    selector: row => row.name,
+    cell: row => (
+      <div className='d-flex justify-content-left align-items-center'>
+        {renderClient(row)}
+        <div className='d-flex flex-column'>
+          <Link
+            to={`/apps/user/view/${row.id}`}
+            className='user_name text-truncate text-body'
+            onClick={() => store.dispatch(getUser(row.id))}
+          >
+            <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
+          </Link>
+          <small className='text-truncate text-muted mb-0'>{row.login}</small>
+        </div>
+      </div>
+    )
+  },
+  {
+    name: 'id',
+    minWidth: '30px',
+    sortable: true,
+    omit: true,
+    sortField: 'id',
+    selector: row => row.id,
+    cell: row => <span className='text-capitalize'>{row.id}</span>
+  },
+  {
+    name: 'Статус',
+    minWidth: '138px',
+    sortable: true,
+    sortField: 'available',
+    selector: row => row.available,
+    cell: row => (
+      <Badge className='text-capitalize' color={statusObj[row.available]} pill>
+        {row.available === 1 ? "Активная" : row.available === 0 ? "Не активная" : ""}
+      </Badge>
+    )
+  },
+  {
+    name: 'Действия',
+    minWidth: '100px',
+    cell: row => (
+      <div className='column-action d-flex align-items-center'>
+        <Edit className='cursor-pointer' size={17} id={`send-tooltip-${row.id}`} />
+        <UncontrolledTooltip placement='top' target={`send-tooltip-${row.id}`}>
+          Редактировать
+        </UncontrolledTooltip>
+        <Link to={`/apps/invoice/preview/${row.id}`} id={`pw-tooltip-${row.id}`}>
+          <Trash2 size={17} className='mx-1' />
+        </Link>
+        <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.id}`}>
+          Удалить
+        </UncontrolledTooltip>
+      </div>
+    )
+    // cell: row => (
+    //   <div className='column-action'>
+    //     <UncontrolledDropdown>
+    //       <DropdownToggle tag='div' className='btn btn-sm'>
+    //         <MoreVertical size={14} className='cursor-pointer' />
+    //       </DropdownToggle>
+    //       <DropdownMenu>
+    //         <DropdownItem
+    //           tag={Link}
+    //           className='w-100'
+    //           to={`/apps/user/view/${row.id}`}
+    //           onClick={() => store.dispatch(getUser(row.id))}
+    //         >
+    //           <FileText size={14} className='me-50' />
+    //           <span className='align-middle'>Подробнее</span>
+    //         </DropdownItem>
+    //         <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
+    //           <Edit size={14} className='me-50' />
+    //           <span className='align-middle'>Редактировать</span>
+    //         </DropdownItem>
+    //         <DropdownItem
+    //           tag='a'
+    //           href='/'
+    //           className='w-100'
+    //           onClick={e => {
+    //             e.preventDefault()
+    //             store.dispatch(deleteUser(row.id))
+    //           }}
+    //         >
+    //           <Trash2 size={14} className='me-50' />
+    //           <span className='align-middle'>Удалить</span>
+    //         </DropdownItem>
+    //       </DropdownMenu>
+    //     </UncontrolledDropdown>
+    //   </div>
+    // )
+  }
 ]
+
