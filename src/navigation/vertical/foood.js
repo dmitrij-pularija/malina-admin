@@ -32,7 +32,7 @@ export default [
         id: 'store',
         title: 'Store',
         icon: <Circle size={12} />,
-        navLink: '/apps/food/store/establishments'
+        navLink: '/apps/food/stores/list'
       },
       {
         id: 'tables',

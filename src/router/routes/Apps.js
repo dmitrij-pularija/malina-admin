@@ -9,7 +9,7 @@ const OrdersHistory = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersOnMap = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersReview = lazy(() => import('../../views/apps/food/orders/edit'))
 
-const Establishments = lazy(() => import('../../views/apps/food/establishments/wishlist'))
+const Stores = lazy(() => import('../../views/apps/food/stores/list'))
 const Categories = lazy(() => import('../../views/apps/food/categories/list'))
 const Branches = lazy(() => import('../../views/apps/food/branches/list'))
 const Tables = lazy(() => import('../../views/apps/food/tables/list'))
@@ -65,8 +65,8 @@ const AppRoutes = [
     path: '/apps/food/orders/rev/:id'
   },
   {
-    element: <Establishments />,
-    path: '/apps/food/establishments/wishlist',
+    element: <Stores />,
+    path: '/apps/food/stores/list',
     meta: {
       className: 'ecommerce-application'
     }
