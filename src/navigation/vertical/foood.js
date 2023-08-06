@@ -76,7 +76,7 @@ export default [
         id: 'orderFeedback',
         title: 'Order Feedback',
         icon: <Circle size={12} />,
-        navLink: '/forms/elements/input'
+        navLink: '/apps/food/rating/orders/list'
       },
       {
         id: 'staffRating',

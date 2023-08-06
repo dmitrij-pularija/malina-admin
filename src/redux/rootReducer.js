@@ -8,6 +8,8 @@ import categories from '@src/views/apps/food/categories/store'
 import branches from '@src/views/apps/food/branches/store'
 import stores from '@src/views/apps/food/stores/store'
 import ratingWaiters from '@src/views/apps/food/rating/waiters/store'
+import ratingOrders from '@src/views/apps/food/rating/orders/store'
+
 
 import navbar from './navbar'
 import layout from './layout'
@@ -31,6 +33,7 @@ const rootReducer = {
   users,
   waiters,
   ratingWaiters,
+  ratingOrders,
   navbar,
   layout,
   todo,
