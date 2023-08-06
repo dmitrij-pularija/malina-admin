@@ -70,7 +70,7 @@ export default [
         id: 'reviewsEstablishments',
         title: 'Reviews about establishments',
         icon: <Circle size={12} />,
-        navLink: '/forms/elements/input'
+        navLink: '/apps/food/rating/stores/list'
       },
       {
         id: 'orderFeedback',

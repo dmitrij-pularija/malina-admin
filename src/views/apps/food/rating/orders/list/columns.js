@@ -32,7 +32,7 @@ const renderClient = row => {
 
 export const columns = [
   {
-    name: '#',
+    name: '№',
     sortable: false,
     minWidth: '30px',
     selector: row => row,
@@ -60,7 +60,7 @@ export const columns = [
   {
     name: 'Клиент',
     sortable: true,
-    minWidth: '300px',
+    minWidth: '200px',
     sortField: 'login',
     selector: row => row,
     cell: row => (
