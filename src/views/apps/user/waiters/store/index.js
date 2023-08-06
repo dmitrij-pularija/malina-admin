@@ -14,6 +14,19 @@ import axios from 'axios'
 //   return data
 // })
 
+export const getAllWaiters = async (params) => {
+  try {
+    const response = await axios.get('/user/waiter', { params })
+    return await {
+      data: response.data.results,
+      total: response.data.count
+    }
+  } catch (error) {
+    return []
+  }
+
+}
+
 export const getWaiters = createAsyncThunk('appWaiters/getWaiters', async params => {
   const response = await axios.get('/user/waiter', { params })
   return {

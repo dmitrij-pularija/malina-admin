@@ -67,8 +67,8 @@ export default [
     icon: <Award size={20} />,
     children: [
       {
-        id: 'staffRating',
-        title: 'Staff rating',
+        id: 'reviewsEstablishments',
+        title: 'Reviews about establishments',
         icon: <Circle size={12} />,
         navLink: '/forms/elements/input'
       },
@@ -79,10 +79,10 @@ export default [
         navLink: '/forms/elements/input'
       },
       {
-        id: 'reviewsEstablishments',
-        title: 'Reviews about establishments',
+        id: 'staffRating',
+        title: 'Staff rating',
         icon: <Circle size={12} />,
-        navLink: '/forms/elements/input'
+        navLink: '/apps/food/rating/waiters/list'
       }
     ]
   }

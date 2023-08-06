@@ -13,6 +13,8 @@ const Stores = lazy(() => import('../../views/apps/food/stores/list'))
 const Categories = lazy(() => import('../../views/apps/food/categories/list'))
 const Branches = lazy(() => import('../../views/apps/food/branches/list'))
 const Tables = lazy(() => import('../../views/apps/food/tables/list'))
+const RatingWaiters = lazy(() => import('../../views/apps/food/rating/waiters/list'))
+
 
 const Chat = lazy(() => import('../../views/apps/chat'))
 const Todo = lazy(() => import('../../views/apps/todo'))
@@ -83,6 +85,11 @@ const AppRoutes = [
     element: <Tables />,
     path: '/apps/food/tables/list'
   },
+  {
+    element: <RatingWaiters />,
+    path: '/apps/food/rating/waiters/list'
+  },
+
 
   {
     element: <Email />,

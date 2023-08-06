@@ -4,15 +4,17 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // ** Axios Imports
 import axios from 'axios'
 
-// export const getAllData = createAsyncThunk('appUsers/getAllData', async () => {
-//   const response = await axios.get('/user/client')
-//   return response.data.results
-// })
-
-// export const getWaiter = createAsyncThunk('appOrders/getWaiters', async () => {
-//   const { data } = await axios.get('user/waiter/')
-//   return data
-// })
+export const getAllUsers = async (params) => {
+  try {
+    const response = await axios.get('/user/client', { params })
+  return await {
+    data: response.data.results,
+    total: response.data.count
+  }  
+  } catch (error) {
+    return []
+  }
+}
 
 export const getAllCount = createAsyncThunk('appUsers/getAllCount', async () => {
   const all = await axios.get('/user/client')
