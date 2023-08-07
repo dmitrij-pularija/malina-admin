@@ -11,7 +11,7 @@ import { deleteTable } from '../store'
 
 // ** Reactstrap Imports
 import {
-  Badge,
+  Button,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
@@ -61,10 +61,10 @@ const renderWaiter  = array => {
   }
 }
 
-const renderQr = url => {
+const renderQr = (url, handleClick) => {
     if (url) {
       return (
-      <div className='d-flex justify-content-center align-items-center'>
+      <div className='d-flex justify-content-center align-items-center' onClick={() => handleClick(url)}>
         <img
           height='40'
           width='40'
@@ -99,13 +99,20 @@ const renderQr = url => {
 }
 
 // ** Table columns
-export const columns = [
+export const columns = (setQqrcodeUrl, toggleModal) => {
+
+const handleClick = url => {
+  setQqrcodeUrl(url)
+  toggleModal()
+}
+
+  return [
   {
-    name: 'id',
+    name: '№',
     sortable: true,
     sortField: 'id',
     minWidth: '20px',
-    cell: row => <Link to={`/apps/invoice/preview/${row.id}`}>{row.id}</Link>
+    cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
     sortable: true,
@@ -125,7 +132,7 @@ export const columns = [
     sortable: false,
     minWidth: '20px',
     sortField: 'number',
-    name: '№',
+    name: 'Номер',
     cell: row => row.number
   },
   {
@@ -133,7 +140,7 @@ export const columns = [
     sortable: false,
     minWidth: '40px',
     sortField: 'qr_code',
-    cell: row => renderQr(row.qr_code)
+    cell: row => renderQr(row.qr_code, handleClick)
   },
   {
     name: 'Официанты',
@@ -156,7 +163,7 @@ export const columns = [
               <Eye size={14} className='me-50' />
               <span className='align-middle'>Просмотр</span>
           </DropdownItem>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
+            <DropdownItem tag='a' href={row.qr_code} download className='w-100' onClick={e => e.preventDefault()}>
               <Download size={14} className='me-50' />
               <span className='align-middle'>Скачать QR-kod</span>
             </DropdownItem>
@@ -182,3 +189,4 @@ export const columns = [
     )
   }
 ]
+}

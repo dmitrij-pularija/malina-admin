@@ -33,7 +33,7 @@ const Stores = () => {
         page: 1
       })
     )
-  }, [dispatch])
+  }, [])
 
   return (
     <Fragment>
