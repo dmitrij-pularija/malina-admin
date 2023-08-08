@@ -18,7 +18,7 @@ import '@styles/react/apps/app-ecommerce.scss'
 const Stores = () => {
   // ** States
   const [activeView, setActiveView] = useState('grid')
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  // const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // ** Vars
   const dispatch = useDispatch()
@@ -33,7 +33,7 @@ const Stores = () => {
         page: 1
       })
     )
-  }, [])
+  }, [dispatch])
 
   return (
     <Fragment>
@@ -42,9 +42,7 @@ const Stores = () => {
         stores={stores}
         dispatch={dispatch}
         activeView={activeView}
-        sidebarOpen={sidebarOpen}
         setActiveView={setActiveView}
-        setSidebarOpen={setSidebarOpen}
       />
       {/* <Sidebar sidebarOpen={sidebarOpen} /> */}
     </Fragment>

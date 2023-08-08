@@ -10,6 +10,7 @@ const OrdersOnMap = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersReview = lazy(() => import('../../views/apps/food/orders/edit'))
 
 const Stores = lazy(() => import('../../views/apps/food/stores/list'))
+const StoreDetail = lazy(() => import('../../views/apps/food/stores/detail'))
 const Categories = lazy(() => import('../../views/apps/food/categories/list'))
 const Branches = lazy(() => import('../../views/apps/food/branches/list'))
 const Tables = lazy(() => import('../../views/apps/food/tables/list'))
@@ -71,6 +72,13 @@ const AppRoutes = [
   {
     element: <Stores />,
     path: '/apps/food/stores/list',
+    meta: {
+      className: 'ecommerce-application'
+    }
+  },
+  {
+    path: '/apps/food/stores/store-detail/:id',
+    element: <StoreDetail />,
     meta: {
       className: 'ecommerce-application'
     }
@@ -224,7 +232,7 @@ const AppRoutes = [
     }
   },
   {
-    path: '/apps/ecommerce/product-detail/:product',
+    path: '/apps/food/stores/product-detail/:store',
     element: <EcommerceDetail />,
     meta: {
       className: 'ecommerce-application'

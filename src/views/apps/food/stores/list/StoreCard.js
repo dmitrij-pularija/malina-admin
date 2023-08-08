@@ -50,9 +50,7 @@ console.log(data)
         return (
           <Card className='ecommerce-card' key={item.name}>
             <div className='item-img text-center mx-auto'>
-              <Link to={`/apps/ecommerce/product-detail/${item.slug}`}>
                 <img className='img-fluid card-img-top' src={item.image} alt={item.name} />
-              </Link>
             </div>
             <CardBody>
                 <CardText tag='span' className='company-name'>
@@ -116,22 +114,17 @@ console.log(data)
                   ) : null}
                 </div>
               </div> */}
+              <Link to={`/apps/food/stores/store-detail/${item.id}`}>
               <Button
                 color='primary'
                 tag={CartBtnTag}
                 className='btn-cart move-cart'
                 onClick={() => handleCartBtn(item.id, item.isInCart)}
-                /*eslint-disable */
-                {...(item.isInCart
-                  ? {
-                      to: '/apps/ecommerce/checkout'
-                    }
-                  : {})}
-                /*eslint-enable */
               >
                 <Edit className='me-50' size={14} />
                 <span>Редактировать</span>
               </Button>
+              </Link>
               <Button
                 className='btn-wishlist'
                 color='light'

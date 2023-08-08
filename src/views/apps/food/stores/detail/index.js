@@ -3,9 +3,9 @@ import { useEffect, Fragment } from 'react'
 import { useParams } from 'react-router-dom'
 
 // ** Product detail components
-import ItemFeatures from './ItemFeatures'
-import ProductDetails from './ProductDetails'
-import RelatedProducts from './RelatedProducts'
+// import ItemFeatures from './ItemFeatures'
+import StoreDetails from './StoreDetails'
+// import RelatedProducts from './RelatedProducts'
 
 // ** Custom Components
 import BreadCrumbs from '@components/breadcrumbs'
@@ -15,47 +15,45 @@ import { Card, CardBody } from 'reactstrap'
 
 // ** Store & Actions
 import { useDispatch, useSelector } from 'react-redux'
-import { getProduct, deleteWishlistItem, addToWishlist, addToCart } from '../store'
+import { getStore } from '../store'
+import { getCategories, getSubCategories } from '../../categories/store'
+
+
 
 import '@styles/base/pages/app-ecommerce-details.scss'
 
 const Details = () => {
   // ** Vars
-  const params = useParams().product
-  const productId = params.substring(params.lastIndexOf('-') + 1)
+  const { id } = useParams()
+  // const params = useParams().product
+  // const productId = params.substring(params.lastIndexOf('-') + 1)
 
   // ** Store Vars
   const dispatch = useDispatch()
-  const store = useSelector(state => state.ecommerce)
+  const store = useSelector(state => state.stores.selectedStore)
+  const categories = useSelector(state => state.categories.data)
+  const subcategories = useSelector(state => state.categories.subcategories)
 
   // ** ComponentDidMount : Get product
   useEffect(() => {
-    dispatch(getProduct(productId))
+    if (!categories.length) dispatch(getCategories())
+    if (!subcategories.length) dispatch(getSubCategories())
+    dispatch(getStore(parseInt(id)))
   }, [])
-
+  // console.log(data)
   return (
     <Fragment>
-      <BreadCrumbs title='Product Details' data={[{ title: 'eCommerce' }, { title: 'Details' }]} />
+      <BreadCrumbs title='Информация о заведении' data={[{ title: 'Структура' }, { title: 'Заведения' }, { title: 'Информация' }]} />
       <div className='app-ecommerce-details'>
-        {Object.keys(store.productDetail).length ? (
           <Card>
             <CardBody>
-              <ProductDetails
-                dispatch={dispatch}
-                addToCart={addToCart}
-                productId={productId}
-                getProduct={getProduct}
-                data={store.productDetail}
-                addToWishlist={addToWishlist}
-                deleteWishlistItem={deleteWishlistItem}
-              />
-            </CardBody>
-            <ItemFeatures />
-            <CardBody>
-              <RelatedProducts />
+            {store && <StoreDetails
+                categories={categories}
+                subcategories={subcategories}
+                data={store}
+              />}
             </CardBody>
           </Card>
-        ) : null}
       </div>
     </Fragment>
   )

@@ -3,7 +3,7 @@ import { Fragment } from 'react'
 
 // ** Product components
 import StoreCard from './StoreCard'
-// import ProductsHeader from './ProductsHeader'
+import ProductsHeader from './ProductsHeader'
 import ProductsSearchbar from './ProductsSearchbar'
 
 // ** Third Party Components
@@ -18,9 +18,7 @@ const StoreList = props => {
     stores,
     dispatch,
     activeView,
-    sidebarOpen,
-    setActiveView,
-    setSidebarOpen
+    setActiveView
   } = props
 
   // ** Handles pagination
@@ -64,21 +62,13 @@ const StoreList = props => {
   return (
     <div className='content-detached'>
       <div className='content-body'>
-        {/* <ProductsHeader
-          store={store}
-          dispatch={dispatch}
-          activeView={activeView}
-          getProducts={getProducts}
-          setActiveView={setActiveView}
-          setSidebarOpen={setSidebarOpen}
-        /> */}
-        <div
-          className={classnames('body-content-overlay', {
-            show: sidebarOpen
-          })}
-          onClick={() => setSidebarOpen(false)}
-        ></div>
+      <div className='d-flex align-items-center justify-content-between gap-10'>
         <ProductsSearchbar dispatch={dispatch} stores={stores} />
+        <ProductsHeader
+          activeView={activeView}
+          setActiveView={setActiveView}
+        />
+       </div>
         {stores.data.length ? (
           <Fragment>
             <StoreCard

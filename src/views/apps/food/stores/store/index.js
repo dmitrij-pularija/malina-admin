@@ -24,7 +24,7 @@ export const getData = createAsyncThunk('appStores/getData', async params => {
 })
 
 export const getStore = createAsyncThunk('appStores/getStore', async id => {
-  const response = await axios.get(`/user/store//${id}`)
+  const response = await axios.get(`/user/store/${id}`)
   return response.data
 })
 
@@ -55,7 +55,7 @@ export const appStoresSlice = createSlice({
     data: [],
     total: 1,
     params: {},
-    selectedUser: null
+    selectedStore: null
   },
   reducers: {},
   extraReducers: builder => {
@@ -66,7 +66,7 @@ export const appStoresSlice = createSlice({
         state.total = action.payload.total
       })
       .addCase(getStore.fulfilled, (state, action) => {
-        state.selectedUser = action.payload
+        state.selectedStore = action.payload
       })
   }
 })
