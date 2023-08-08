@@ -12,7 +12,10 @@ import { selectThemeColors } from '@utils'
 import classnames from 'classnames'
 import { Plus, Minus, DollarSign, Heart, Share2, Facebook, Twitter, Youtube, Instagram } from 'react-feather'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
-
+import logo from "@src/assets/images/slider/03.jpg"
+import telegramIcon from "@src/assets/images/icons/social/telegram.svg"
+import instagramIcon from "@src/assets/images/icons/social/instagram.svg"
+import whatsappIcon from "@src/assets/images/icons/social/whatsapp.svg"
 // ** Reactstrap Imports
 import {
   Row,
@@ -76,7 +79,7 @@ const initSubcategory = data.subcategory ? subcategoryOptions[subcategoryOptions
 
 console.log(data)
 const handleImgReset = () => {
-  setAvatar('/src/assets/images/slider/03.jpg')
+  setAvatar(logo)
 }
 // initialForm = { defaultValues: {
 //   username: data.username,
@@ -350,7 +353,7 @@ const handleImgReset = () => {
         </Label>
         <InputGroup className='input-group-merge'>
           <InputGroupText>
-          <img className='img-fluid bg-transparent' src={'/src/assets/images/icons/social/instagram.svg'} alt={"Telegram"} height='18' width='18' />
+          <img className='img-fluid bg-transparent' src={instagramIcon} alt={"Инстаграм"} height='18' width='18' />
           </InputGroupText>
         <Input id='instagram' defaultValue={defaultValues.instagram} placeholder='Инстаграм' />
       </InputGroup>
@@ -361,7 +364,7 @@ const handleImgReset = () => {
         </Label>
         <InputGroup className='input-group-merge'>
           <InputGroupText>
-          <img className='img-fluid bg-transparent' src={'/src/assets/images/icons/social/whatsapp.svg'} alt={"Telegram"} height='18' width='18' />
+          <img className='img-fluid bg-transparent' src={whatsappIcon} alt={"WhatsApp"} height='18' width='18' />
           </InputGroupText>
         <Input id='whatsapp' defaultValue={defaultValues.whatsapp} placeholder='WhatsApp' />
       </InputGroup>
@@ -372,7 +375,7 @@ const handleImgReset = () => {
         </Label>
         <InputGroup className='input-group-merge'>
           <InputGroupText>
-          <img className='img-fluid bg-transparent' src={'/src/assets/images/icons/social/telegram.svg'} alt={"Telegram"} height='18' width='18' />
+          <img className='img-fluid bg-transparent' src={telegramIcon} alt={"Telegram"} height='18' width='18' />
           </InputGroupText>
         <Input id='telegram' defaultValue={defaultValues.telegram} placeholder='Телеграм' />
       </InputGroup>
@@ -499,7 +502,7 @@ const handleImgReset = () => {
         <Col className='d-flex justify-content-between gap-30'>
         <div>
         <Label className='form-label' for='deliverycost'>
-        Стоимость доставки, &#x0441;&#x332;
+        Доставка, &#x0441;&#x332;
         </Label>
         <Controller
         name='deliverycost'
