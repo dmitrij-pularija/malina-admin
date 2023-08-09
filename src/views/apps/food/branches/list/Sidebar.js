@@ -1,79 +1,74 @@
-// ** React Import
 import { useState } from 'react'
-
-// ** Custom Components
 import Sidebar from '@components/sidebar'
-
-// ** Utils
 import { selectThemeColors } from '@utils'
-
-// ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-
-// ** Reactstrap Imports
-import { Button, Label, FormText, Form, Input } from 'reactstrap'
-
-// ** Store & Actions
-import { addBranch } from '../store'
+import { Button, Label, Form, Input } from 'reactstrap'
+import { addBranch, editBranch } from '../store'
 import { useDispatch } from 'react-redux'
 
 const defaultValues = {
   name: '',
   address: '',
-  store: { value: null, label: 'Выбирите Заведение' }
+  store: { value: "", label: 'Выбирите Заведение' }
 }
-
-const storeOptions = [
-  { value: '189', label: 'MALINA ECO FOOD' },
-  { value: '236', label: 'Chicken Crispy' }
-] 
 
 const checkIsValid = data => {
-  // setStore(defaultValues.store)
-  return Object.values(data).every(field => (typeof field === 'object' ? field !== null : field.length > 0))
+  return Object.values(data).every(field => (typeof field === 'object' ? field.value !== "" : field.length > 0))
 }
 
-const SidebarNewUsers = ({ open, toggleSidebar }) => {
-  // ** States
-  const [data, setData] = useState(null)
-  const [store, setStore] = useState(defaultValues.store)
+const SidebarBranches = ({ stores, open, toggleSidebar, selectedBranch, setSelectedBranch }) => {
 
-  // ** Store Vars
-  const dispatch = useDispatch()
+const dispatch = useDispatch()
+const [data, setData] = useState(null)
+const storeOptions = stores.map((store) => ({
+  value: String(store.id),
+  label: store.name
+}))
 
-  // ** Vars
+const values = selectedBranch ? {
+  name: selectedBranch.name,
+  address: selectedBranch.address,
+  store: storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedBranch.storeid.id))]
+ } : {}
+
   const {
+    reset,
     control,
     setValue,
     setError,
     handleSubmit,
     formState: { errors }
-  } = useForm({ defaultValues })
+  } = useForm({ defaultValues, values })
 
-  // ** Function to handle form submit
   const onSubmit = data => {
     setData(data)
-    console.log(data)
     if (checkIsValid(data)) {
-      setStore(defaultValues.store)  
+      reset()  
       toggleSidebar()
-      // dispatch(
-      //   addUser({
-      //     role,
-      //     avatar: '',
-      //     status: 'active',
-      //     email: data.email,
-      //     currentPlan: plan,
-      //     billing: 'auto debit',
-      //     company: data.company,
-      //     contact: data.contact,
-      //     fullName: data.fullName,
-      //     username: data.username,
-      //     country: data.country.value
-      //   })
-      // )
+      if (selectedBranch) {  
+        console.log(data)
+      dispatch(
+        editBranch({
+          id: selectedBranch.id, 
+          name: data.name,
+          address: data.address,
+          storeid: data.store.value
+        })
+      )
+      setSelectedBranch('')
+      reset()
+      } else {
+        console.log(data)
+        dispatch(
+        addBranch({
+          name: data.name,
+          address: data.address,
+          storeid: data.store.value
+        })
+      )
+      }
     } else {
       for (const key in data) {
         if (data[key] === null) {
@@ -94,14 +89,14 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     for (const key in defaultValues) {
       setValue(key, '')
     }
-    setStore(defaultValues.store)
+    reset()
   }
 
   return (
     <Sidebar
       size='lg'
       open={open}
-      title='Создание нового бранча'
+      title={selectedBranch ? 'Редактирование бранча' : 'Создание нового бранча'}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={toggleSidebar}
@@ -141,12 +136,12 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
             control={control}
             render={({ field }) => (
               <Select
+                id='store'
                 isClearable={false}
-                defaultValue={store}
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.store.value !== "" })}
+                className={classnames('react-select', { 'is-invalid': data && data.store.value === "" })}
                 {...field}
               />
             )}
@@ -163,4 +158,4 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
   )
 }
 
-export default SidebarNewUsers
+export default SidebarBranches

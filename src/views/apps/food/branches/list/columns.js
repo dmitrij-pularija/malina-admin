@@ -5,6 +5,8 @@ import { Link } from 'react-router-dom'
 import Avatar from '@components/avatar'
 
 // ** Store & Actions
+import { useDispatch } from 'react-redux'
+
 import { store } from '@store/store'
 import { editBranch, deleteBranch } from '../store'
 
@@ -12,9 +14,14 @@ import { editBranch, deleteBranch } from '../store'
 import { Slack, User, Command, Edit, Edit2, MoreVertical, FileText, Trash2, Archive } from 'react-feather'
 
 // ** Reactstrap Imports
-import { Badge, UncontrolledTooltip, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
+import { Button, UncontrolledTooltip, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
+// const dispatch = useDispatch()
 
-export const columns = [
+// const handleDel = id => dispatch(deleteBranch(id))
+
+export const columns = (handleDel, handleEdit) => { 
+  
+  return [
   {
     name: '№',
     sortable: false,
@@ -52,18 +59,31 @@ export const columns = [
     minWidth: '100px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
-        <Edit className='cursor-pointer' size={17} id={`send-tooltip-${row.id}`} />
-        <UncontrolledTooltip placement='top' target={`send-tooltip-${row.id}`}>
+        <Button.Ripple 
+        className='btn-icon cursor-pointer' 
+        color='transparent' 
+        id={`edit-tooltip-${row.id}`}  
+        onClick={event => {
+        event.preventDefault()
+        handleEdit(row)}}>
+        <Edit size={17} className='mx-1' />
+        </Button.Ripple>
+        <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
           Редактировать
         </UncontrolledTooltip>
-        <Link to={`/apps/invoice/preview/${row.id}`} id={`pw-tooltip-${row.id}`}>
+        <Button.Ripple 
+        className='btn-icon cursor-pointer' 
+        color='transparent' 
+        id={`del-tooltip-${row.id}`} 
+        onClick={row => handleDel(row.id)}>
           <Trash2 size={17} className='mx-1' />
-        </Link>
-        <UncontrolledTooltip placement='top' target={`pw-tooltip-${row.id}`}>
+        </Button.Ripple>
+        <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
           Удалить
         </UncontrolledTooltip>
       </div>
     )
   }
 ]
+}
 

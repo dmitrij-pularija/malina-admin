@@ -4,6 +4,7 @@ import { Link } from 'react-router-dom'
 
 import InputNumber from 'rc-input-number'
 import Flatpickr from 'react-flatpickr'
+import InputPassword from '@components/input-password-toggle'
 
 import Select from 'react-select'
 import { useForm, Controller } from 'react-hook-form'
@@ -12,6 +13,7 @@ import { selectThemeColors } from '@utils'
 import classnames from 'classnames'
 import { Plus, Minus, DollarSign, Heart, Share2, Facebook, Twitter, Youtube, Instagram } from 'react-feather'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
+import '@styles/react/pages/page-authentication.scss'
 import logo from "@src/assets/images/slider/03.jpg"
 import telegramIcon from "@src/assets/images/icons/social/telegram.svg"
 import instagramIcon from "@src/assets/images/icons/social/instagram.svg"
@@ -21,12 +23,17 @@ import {
   Row,
   Col,
   Button,
+  Card,
+  CardBody,
   CardText,
   Form,
   Input, 
   Label,
   InputGroup,
   DropdownItem,
+  Modal,
+  ModalBody, 
+  ModalHeader,
   InputGroupText,
   DropdownMenu,
   DropdownToggle,
@@ -56,6 +63,17 @@ const initSubcategory = data.subcategory ? subcategoryOptions[subcategoryOptions
   const [subcategory, setSubcategory] = useState(initSubcategory)
   const [timeBeg, setTimeBeg] = useState(startTime)
   const [timeEnd, setTimeEnd] = useState(endTime)
+  const [modalShow, setModalShow] = useState(false)
+  const [password, setPassword] = useState("")
+
+ console.log(password)
+ const toggleModal = () => setModalShow(!modalShow)
+
+ const handleChengPassword = (event) => {
+  event.preventDefault()
+  setPassword(event.target.password.value)
+  if (event.target.password.value === event.target.confirmPassword.value) toggleModal()
+}
 
 
   const numberWithCommas = x => {
@@ -191,6 +209,7 @@ const handleImgReset = () => {
   // }
 
   return (
+    <>
     <Form onSubmit={handleSubmit(onSubmit)}>
     <Row>
     <Col sm={12} className='d-flex'>
@@ -344,7 +363,7 @@ const handleImgReset = () => {
         />
         {errors && errors.login && <FormFeedback>Пожалуйста введите Логин</FormFeedback>}
         </Col>
-        <Button color='warning' block>
+        <Button color='warning' block onClick={toggleModal}>
         Установить новый пароль
         </Button>
         <Col className='mt-2'>
@@ -567,6 +586,29 @@ const handleImgReset = () => {
         </Col>
     </Row>
     </Form>
+    <Modal isOpen={modalShow} toggle={toggleModal} className='modal-dialog-centered'>
+      <ModalHeader className='bg-transparent' toggle={toggleModal}></ModalHeader>
+        <ModalBody className='px-sm-5 mx-50 pb-4'>
+        <Form className='auth-reset-password-form' onSubmit={handleChengPassword}>
+              <div className='mb-1'>
+                <Label className='form-label' for='new-password'>
+                  Новый пароль
+                </Label>
+                <InputPassword className='input-group-merge' id='new-password' name='newPassword' autoFocus />
+              </div>
+              <div className='mb-3'>
+                <Label className='form-label' for='confirm-password' name='confirmPassword'>
+                  Подтвердите пароль
+                </Label>
+                <InputPassword className='input-group-merge' id='confirm-password' />
+              </div>
+              <Button color='primary' block>
+                Установить новый пароль
+              </Button>
+            </Form>
+        </ModalBody>
+    </Modal>
+    </>
   )
 }
 
