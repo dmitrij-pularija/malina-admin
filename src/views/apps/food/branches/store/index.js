@@ -22,14 +22,12 @@ export const editBranch = createAsyncThunk('appBranches/editBranches', async ({ 
 export const addBranch = createAsyncThunk('appBranches/addBranches', async (category, { dispatch, getState }) => {
   await axios.post('/item/branch/', category)
   await dispatch(getBranches(getState().branches.params))
-  // await dispatch(getAllData())
   return category
 })
 
 export const deleteBranch = createAsyncThunk('appBranches/deleteBranches', async (id, { dispatch, getState }) => {
   await axios.delete('/item/branch/', { id })
   await dispatch(getBranches(getState().branches.params))
-  // await dispatch(getAllData())
   return id
 })
 
@@ -38,8 +36,7 @@ export const appBranchesSlice = createSlice({
   initialState: {
     data: [],
     params: {},
-    total: 1,
-    selectedBranch: null
+    total: 1
   },
   reducers: {},
   extraReducers: builder => {
@@ -50,12 +47,7 @@ export const appBranchesSlice = createSlice({
         state.total = action.payload.total
       })
   }
-  // reducers: {
-  //   setSelectedBranch(state) {
-  //     state.selectedBranch = false
-  //   }
-  // }
+
 })
 
 export default appBranchesSlice.reducer
-// export const { setSelectedBranch } = appBranchesSlice.actions

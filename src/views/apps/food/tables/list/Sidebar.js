@@ -1,58 +1,32 @@
-// ** React Import
 import { useState } from 'react'
-
-// ** Custom Components
 import Sidebar from '@components/sidebar'
-
-// ** Utils
 import { selectThemeColors } from '@utils'
-
-// ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-
-// ** Reactstrap Imports
 import { Button, Label, FormText, Form, Input } from 'reactstrap'
-
-// ** Store & Actions
-import { addTable } from '../store'
+import { addTable, editTable } from '../store'
 import { useDispatch } from 'react-redux'
 
 const defaultValues = {
   number: '',
-  branch: { value: '', label: 'Выбирите Бранч>' },
-  waiter: { value: '', label: 'Выбирите официанта' }
+  branch: '',
+  waiter: ''
 }
-
-// const storeOptions = [
-//   { value: '189', label: 'MALINA ECO FOOD' },
-//   { value: '236', label: 'Chicken Crispy' }
-// ] 
-
-
 const checkIsValid = data => {
-  // setStore(defaultValues.store)
-  return Object.values(data).every(field => (typeof field === 'object' ? field !== null : field.length > 0))
-}
+  return Object.values(data).every(field => {
+    if (typeof field === 'object') return field.value !== ''
+    if (Array.isArray(field)) return field.length > 0
+    if (typeof field === 'string') return field.length > 0
+    if (typeof field === 'number') return field > 0    
+})
+} 
 
-const SidebarNewTable = ({ open, toggleSidebar, waiters, branches }) => {
-  // ** States
-  const [data, setData] = useState(null)
-  const [branch, setBranch] = useState(defaultValues.branch)
-  const [waiter, setWaiter] = useState(defaultValues.waiter)
-
-  // ** Store Vars
+const SidebarNewTable = ({ open, toggleSidebar, waiters, branches, selectedTable, setSelectedTable }) => {
   const dispatch = useDispatch()
+  const [data, setData] = useState(null)
 
-  // ** Vars
-  const {
-    control,
-    setValue,
-    setError,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({ defaultValues })
+  const waiterList = selectedTable ? selectedTable.waiter.map(waiter => parseInt(waiter.id)) : [] 
 
   const branchOptions = branches.map((branch) => ({
     value: String(branch.id),
@@ -64,29 +38,47 @@ const SidebarNewTable = ({ open, toggleSidebar, waiters, branches }) => {
     label: waiter.full_name
   }))
 
-  // ** Function to handle form submit
+  const values = selectedTable ? {
+    number: selectedTable.number,
+    branch: branchOptions[branchOptions.findIndex(i => parseInt(i.value) === parseInt(selectedTable.branch.id))],
+    waiter: waiterOptions.filter(i => waiterList.includes(parseInt(i.value)))
+   } : {}
+
+   const {
+    reset,
+    control,
+    setValue,
+    setError,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({ defaultValues, values })
+
   const onSubmit = data => {
     setData(data)
-    console.log(data)
     if (checkIsValid(data)) {
-      setBranch(defaultValues.branch)
-      setWaiter(defaultValues.waiter)  
+      const waiterValues = data.waiter.map(waiter => parseInt(waiter.value))  
+      reset()  
       toggleSidebar()
-      // dispatch(
-      //   addUser({
-      //     role,
-      //     avatar: '',
-      //     status: 'active',
-      //     email: data.email,
-      //     currentPlan: plan,
-      //     billing: 'auto debit',
-      //     company: data.company,
-      //     contact: data.contact,
-      //     fullName: data.fullName,
-      //     username: data.username,
-      //     country: data.country.value
-      //   })
-      // )
+      if (selectedTable) {  
+      dispatch(
+        editTable({
+          id: selectedTable.id, 
+          number: parseInt(data.number),
+          branch: parseInt(data.branch.value),
+          waiter: waiterValues
+        })
+      )
+      setSelectedTable('')
+      reset()
+      } else {
+        dispatch(
+        addTable({
+          number: parseInt(data.number),
+          branch: parseInt(data.branch.value),
+          waiter: waiterValues
+        })
+      )
+      }
     } else {
       for (const key in data) {
         if (data[key] === null) {
@@ -107,15 +99,14 @@ const SidebarNewTable = ({ open, toggleSidebar, waiters, branches }) => {
     for (const key in defaultValues) {
       setValue(key, '')
     }
-    setBranch(defaultValues.branch)
-    setWaiter(defaultValues.waiter)
+    reset()
   }
 
   return (
     <Sidebar
       size='lg'
       open={open}
-      title='Добавление нового столя'
+      title={selectedTable ? 'Редактирование стола' : 'Создание нового стола'}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={toggleSidebar}
@@ -143,12 +134,13 @@ const SidebarNewTable = ({ open, toggleSidebar, waiters, branches }) => {
             control={control}
             render={({ field }) => (
               <Select
+                id='branch'
                 isClearable={false}
-                defaultValue={branch}
                 classNamePrefix='select'
                 options={branchOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.branch.value !== "" })}
+                placeholder="Выбирите бранч"
+                className={classnames('react-select', { 'is-invalid': data !== null && data.branch === "" })}
                 {...field}
               />
             )}
@@ -163,12 +155,14 @@ const SidebarNewTable = ({ open, toggleSidebar, waiters, branches }) => {
             control={control}
             render={({ field }) => (
               <Select
+                isMulti
+                id='waiter'
                 isClearable={false}
-                defaultValue={waiter}
                 classNamePrefix='select'
                 options={waiterOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.waiter.value !== "" })}
+                placeholder="Выбирите официанта(ов)"
+                className={classnames('react-select', { 'is-invalid': data !== null && data.waiter.length > 0 })}
                 {...field}
               />
             )}

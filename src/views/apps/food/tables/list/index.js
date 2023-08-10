@@ -1,13 +1,10 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from 'react'
-// ** User List Component
+import Breadcrumbs from '@components/breadcrumbs'
 import Table from "./Table"
-
 import { getData } from '../../stores/store'
 import { getBranches } from '../../branches/store'
-
 import { getAllWaiters } from "../../../user/waiters/store"
-// ** Styles
 import "@styles/react/apps/app-users.scss"
 
 const getFullData = async (type) => {
@@ -51,6 +48,7 @@ fetchData()
 
   return (
     <div className="app-user-list">
+      <Breadcrumbs title='Столы' data={[{ title: 'Структура' }, { title: 'Столы' }]} />
       <Table waiters={waiters} stores={stores} branches={branches} />
     </div>
   )

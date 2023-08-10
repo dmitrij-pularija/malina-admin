@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 const defaultValues = {
   name: '',
   address: '',
-  store: { value: "", label: 'Выбирите Заведение' }
+  store: ''
 }
 
 const checkIsValid = data => {
@@ -48,7 +48,6 @@ const values = selectedBranch ? {
       reset()  
       toggleSidebar()
       if (selectedBranch) {  
-        console.log(data)
       dispatch(
         editBranch({
           id: selectedBranch.id, 
@@ -60,7 +59,6 @@ const values = selectedBranch ? {
       setSelectedBranch('')
       reset()
       } else {
-        console.log(data)
         dispatch(
         addBranch({
           name: data.name,
@@ -141,7 +139,8 @@ const values = selectedBranch ? {
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data && data.store.value === "" })}
+                placeholder="Выбирите Заведение"
+                className={classnames('react-select', { 'is-invalid': data && data.store === "" })}
                 {...field}
               />
             )}

@@ -1,25 +1,10 @@
-// ** React Imports
-import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
-
-// ** Custom Components
 import Avatar from '@components/avatar'
-
-// ** Store & Actions
-import { store } from '@store/store'
-import { deleteTable } from '../store'
-
-// ** Reactstrap Imports
 import {
-  Button,
   DropdownItem,
   DropdownMenu,
   DropdownToggle,
-  UncontrolledTooltip,
   UncontrolledDropdown
 } from 'reactstrap'
-
-// ** Third Party Components
 import {
   Eye,
   Send,
@@ -36,17 +21,6 @@ import {
   ArrowDownCircle
 } from 'react-feather'
 
-// ** Vars
-// const invoiceStatusObj = {
-//   Sent: { color: 'light-secondary', icon: Send },
-//   Paid: { color: 'light-success', icon: CheckCircle },
-//   Draft: { color: 'light-primary', icon: Save },
-//   Downloaded: { color: 'light-info', icon: ArrowDownCircle },
-//   'Past Due': { color: 'light-danger', icon: Info },
-//   'Partial Payment': { color: 'light-warning', icon: PieChart }
-// }
-
-// ** renders client column
 const renderWaiter  = array => {
   if (array.length > 0) {
     return (
@@ -98,8 +72,7 @@ const renderQr = (url, handleClick) => {
     }
 }
 
-// ** Table columns
-export const columns = (setQqrcodeUrl, toggleModal) => {
+export const columns = (downloadImg, setQqrcodeUrl, toggleModal, handleDel, handleEdit) => {
 
 const handleClick = url => {
   setQqrcodeUrl(url)
@@ -159,15 +132,20 @@ const handleClick = url => {
             <MoreVertical size={17} className='cursor-pointer' />
           </DropdownToggle>
           <DropdownMenu end>
-          <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
+          {/* <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
               <Eye size={14} className='me-50' />
               <span className='align-middle'>Просмотр</span>
-          </DropdownItem>
-            <DropdownItem tag='a' href={row.qr_code} download className='w-100' onClick={e => e.preventDefault()}>
+          </DropdownItem> */}
+            <DropdownItem tag='a' href={row.qr_code} download className='w-100' onClick={e => { e.preventDefault(); downloadImg(row.qr_code) }} >
               <Download size={14} className='me-50' />
               <span className='align-middle'>Скачать QR-kod</span>
             </DropdownItem>
-            <DropdownItem tag={Link} to={`/apps/invoice/edit/${row.id}`} className='w-100'>
+            <DropdownItem
+              tag='a'
+              href='/'
+              className='w-100'
+              onClick={event => handleEdit(event, row)}
+            >
               <Edit size={14} className='me-50' />
               <span className='align-middle'>Редактировать</span>
             </DropdownItem>
@@ -175,10 +153,7 @@ const handleClick = url => {
               tag='a'
               href='/'
               className='w-100'
-              onClick={e => {
-                e.preventDefault()
-                store.dispatch(deleteTable(row.id))
-              }}
+              onClick={event => handleDel(event, row.id)}
             >
               <Trash size={14} className='me-50' />
               <span className='align-middle'>Удалить</span>

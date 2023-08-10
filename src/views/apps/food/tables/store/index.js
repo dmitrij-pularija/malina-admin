@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 export const getData = createAsyncThunk('appTable/getData', async params => {
-  const response = await axios.get('/item/table', params)
+  const response = await axios.get('/item/table', { params })
   return {
     params,
     data: response.data.results,
@@ -18,14 +18,18 @@ export const getTable = createAsyncThunk('appTable/getTable', async id => {
 })
 
 export const addTable = createAsyncThunk('appTable/addTable', async (table, { dispatch, getState }) => {
-  await axios.post('/item/table', table)
+  await axios.post('/item/table/', table)
   await dispatch(getData(getState().tables.params))
-  // await dispatch(getAllData())
   return table
 })
 
+export const editTable = createAsyncThunk('appBranches/editBranches', async ({ id, number, branch, waiter }, { dispatch, getState }) => {
+  await axios.put(`/item/table/${id}/`, { number, branch, waiter })
+  await dispatch(getData(getState().branches.params))
+})
+
 export const deleteTable = createAsyncThunk('appTable/deleteTable', async (id, { dispatch, getState }) => {
-  await axios.delete('/item/table', { id })
+  await axios.delete('/item/table/', { id })
   await dispatch(getData(getState().tables.params))
   return id
 })
