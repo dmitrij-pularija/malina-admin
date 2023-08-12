@@ -1,7 +1,4 @@
-// ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-
-// ** Axios Imports
 import axios from 'axios'
 
 export const getCategories = createAsyncThunk('appCategories/getCategories', async params => {
@@ -19,27 +16,39 @@ export const getSubCategories = createAsyncThunk('appCategories/getSubCategories
   }
 })
 
-export const editCategory = createAsyncThunk('appCategories/editCategory', async id => {
-  const response = await axios.put(`/user/category/${id}`)
-  return response
+export const editCategory = createAsyncThunk('appCategories/editCategory', async ({ id, formData }, { dispatch, getState }) => {
+  await axios.put(`/user/category/${id}/`, formData)
+  await dispatch(getCategories(getState().categories.params))
+  return { id, formData }
 })
 
-export const editSubCategory = createAsyncThunk('appCategories/editSubCategory', async id => {
-  const response = await axios.put(`/user/subcategory/${id}`)
-  return response
+export const editSubCategory = createAsyncThunk('appCategories/editSubCategory', async ({ id, formData }, { dispatch }) => {
+  await axios.put(`/user/subcategory/${id}/`, formData)
+  await dispatch(getSubCategories())
+  return { id, name, category }
 })
 
 export const addCategory = createAsyncThunk('appCategories/addCategory', async (category, { dispatch, getState }) => {
-  // await axios.post('/user/subcategory', category)
-  // await dispatch(getData(getState().users.params))
-  // await dispatch(getAllData())
+  await axios.post('/user/category/', category)
+  await dispatch(getCategories(getState().categories.params))
   return category
 })
 
+export const addSubCategory = createAsyncThunk('appCategories/addSubCategory', async (subCategory, { dispatch }) => {
+  await axios.post('/user/subcategory/', subCategory)
+  await dispatch(getSubCategories())
+  return subCategory
+})
+
 export const deleteCategory = createAsyncThunk('appCategories/deleteCategory', async (id, { dispatch, getState }) => {
-  // await axios.delete('/user/category/', { id })
-  // await dispatch(getData(getState().users.params))
-  // await dispatch(getAllData())
+  await axios.delete(`/user/category/${id}/`)
+  await dispatch(getCategories(getState().categories.params))
+  return id
+})
+
+export const deleteSubCategory = createAsyncThunk('appCategories/deleteSubCategory', async (id, { dispatch }) => {
+  await axios.delete(`/user/subcategory/${id}/`)
+  await dispatch(getSubCategories())
   return id
 })
 
@@ -48,9 +57,7 @@ export const appCategoriesSlice = createSlice({
   initialState: {
     data: [],
     subcategories: [],
-    params: {},
-    selectedCcategory: null,
-    selectedSubCcategory: null
+    params: {}
   },
   reducers: {},
   extraReducers: builder => {

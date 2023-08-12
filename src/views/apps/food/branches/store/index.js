@@ -26,7 +26,7 @@ export const addBranch = createAsyncThunk('appBranches/addBranches', async (cate
 })
 
 export const deleteBranch = createAsyncThunk('appBranches/deleteBranches', async (id, { dispatch, getState }) => {
-  await axios.delete('/item/branch/', { id })
+  await axios.delete(`/item/branch/${id}/`)
   await dispatch(getBranches(getState().branches.params))
   return id
 })

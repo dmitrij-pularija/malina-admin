@@ -1,29 +1,18 @@
-// ** React Import
-import { useState } from 'react'
-
-// ** Custom Components
+import { useState, useEffect } from 'react'
 import Sidebar from '@components/sidebar'
-
-// ** Utils
 import { selectThemeColors } from '@utils'
-
-// ** Third Party Components
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-
-// ** Reactstrap Imports
 import { Button, Label, FormText, Form, Input } from 'reactstrap'
-
-// ** Store & Actions
-import { addCategory } from '../store'
+import logo from "@src/assets/images/slider/03.jpg"
+import Avatar from '@components/avatar'
+import { addCategory, addSubCategory, editCategory, editSubCategory } from '../store'
 import { useDispatch } from 'react-redux'
 
 const defaultValues = {
   name: '',
-  available: 0,
-  icon: '',
-  state: { value: null, label: 'Выбирите статус' }
+  available: ''
 }
 
 const stateOptions = [
@@ -31,61 +20,115 @@ const stateOptions = [
   { value: 1, label: 'Активная' }
 ]
 
-// const genderOptions = [
-//   { value: 1, label: 'Мужчина' },
-//   { value: 2, label: 'Женщина' },
-//   { value: 4, label: 'Не указан' }
-// ]
-
-// const clientTypeOptions = [
-//   { value: 'user', label: 'Пользователь' },
-//   { value: 'customer', label: 'Клиент' },
-//   { value: 'guest', label: 'Гость' },
-//   { value: 'admin', label: 'Администратор' }
-// ]
-
 const checkIsValid = data => {
-  return Object.values(data).every(field => (typeof field === 'object' ? field !== null : field.length > 0))
+  return Object.values(data).every(field => (typeof field === 'object' ? field.value !== "" : field.length > 0))
 }
 
-const SidebarNewUsers = ({ open, toggleSidebar }) => {
-  // ** States
-  const [data, setData] = useState(null)
-  const [state, setState] = useState(defaultValues.state)
+const renderAvatar = data => {
+  if (data.avatar) {
+    return <Avatar className='me-1' img={data.avatar} size='xl' />
+  } else {
+    return (
+      <Avatar
+        initials
+        size='xl'
+        className='me-1'
+        color={'light-primary'}
+        content={data.name ? data.name : "Категория"}
+      />
+    )
+  }
+}
 
-  // ** Store Vars
+const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory }) => {
   const dispatch = useDispatch()
+  const [data, setData] = useState(null)
+  const [item, setItem] = useState('')
+  const [avatar, setAvatar] = useState('')
 
-  // ** Vars
+  useEffect(() => {
+  if (selectedCategory) {
+    setItem(selectedCategory)
+    if (selectedCategory.icon) setAvatar(selectedCategory.icon) 
+  }
+  if (selectedSubCategory) {
+    setItem(selectedSubCategory)
+    if (selectedSubCategory.icon) setAvatar(selectedSubCategory.icon) 
+  } 
+  }, [selectedCategory, selectedSubCategory])
+
+  const categoryOptions = categories.map((category) => ({
+    value: String(category.id),
+    label: category.name
+}))
+
+  const values = item ? {
+    name: item.name,
+    available: selectedSubCategory ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(item.category))] : stateOptions[stateOptions.findIndex(i => parseInt(i.value) === parseInt(item.available))]
+   } : selectedId ? {name: '', available: categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedId))]} : {}
+
   const {
+    reset,
     control,
     setValue,
     setError,
     handleSubmit,
     formState: { errors }
-  } = useForm({ defaultValues })
+  } = useForm({ defaultValues, values })
 
-  // ** Function to handle form submit
+  const handleImg = e => {
+    const reader = new FileReader(),
+      files = e.target.files
+    reader.onload = function () {
+      setAvatar(reader.result)
+    }
+    reader.readAsDataURL(files[0])
+  }  
+   
+  const dataURLtoBlob = dataURL => {
+    const arr = dataURL.split(',')
+    const mime = arr[0].match(/:(.*?);/)[1]
+    const bstr = atob(arr[1])
+    let n = bstr.length
+    const u8arr = new Uint8Array(n)
+  
+    while (n--) {
+      u8arr[n] = bstr.charCodeAt(n)
+    }
+  
+    return new Blob([u8arr], { type: mime })
+  }
+
+
+  const handleImgReset = () => {
+    setAvatar(logo)
+  }
+
   const onSubmit = data => {
     setData(data)
-    // console.log(data)
     if (checkIsValid(data)) {
+      reset()  
       toggleSidebar()
-      // dispatch(
-      //   addUser({
-      //     role,
-      //     avatar: '',
-      //     status: 'active',
-      //     email: data.email,
-      //     currentPlan: plan,
-      //     billing: 'auto debit',
-      //     company: data.company,
-      //     contact: data.contact,
-      //     fullName: data.fullName,
-      //     username: data.username,
-      //     country: data.country.value
-      //   })
-      // )
+      const formData = new FormData();
+      formData.append('name', data.name)
+      if (!selectedId) formData.append('available', data.available.value)
+      if (selectedId) formData.append('category', data.available.value)
+      if (avatar.startsWith('data:image')) {
+        const avatarBlob = dataURLtoBlob(avatar)
+        formData.append('icon', avatarBlob, 'category.jpg')
+      }
+      if (item) {
+          if (selectedCategory) dispatch(editCategory({ id: item.id, formData }))
+          if (selectedSubCategory) dispatch(editSubCategory({ id: item.id, formData }))
+        } else {
+          if (!selectedId) dispatch(addCategory(formData))
+          if (selectedId) dispatch(addSubCategory(formData))
+        }
+        setSelectedSubCategory('')
+        setSelectedCategory('')
+        setAvatar('')
+        setItem('')
+        reset()  
     } else {
       for (const key in data) {
         if (data[key] === null) {
@@ -106,20 +149,40 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
     for (const key in defaultValues) {
       setValue(key, '')
     }
-    setState(defaultValues.state)
+    setSelectedSubCategory('')
+    setSelectedCategory('')
+    setAvatar('')
+    setItem('')
+    reset()
   }
 
   return (
     <Sidebar
       size='lg'
       open={open}
-      title='Создание новой категории'
+      title={selectedCategory ? 'Редактирование категории' : selectedSubCategory ? 'Редактирование субкатегории' : selectedId ? 'Создание новой субкатегории' : 'Создание новой категории'}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={toggleSidebar}
       onClosed={handleSidebarClosed}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
+      <div className='mb-1'>
+        <div className='d-flex align-items-center justify-content-center'>
+        {renderAvatar({avatar, name: item.name})}
+        </div>
+        <div className='d-flex align-items-center justify-content-center mt-75'>
+              <div>
+                <Button tag={Label} className='mb-75 me-75' size='sm' color='primary'>
+                  Загрузить
+                  <Input type='file' onChange={handleImg} hidden accept='image/*' />
+                </Button>
+                <Button className='mb-75' color='secondary' size='sm' outline onClick={handleImgReset}>
+                  Очистить
+                </Button>
+              </div>
+        </div>
+        </div>
         <div className='mb-1'>
           <Label className='form-label' for='name'>
           Название <span className='text-danger'>*</span>
@@ -134,29 +197,25 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
         </div>  
         <div className='mb-1'>
           <Label className='form-label' for='available'>
-          Статус <span className='text-danger'>*</span>
+          {selectedId ? "Категория" : "Статус"}
+          <span className='text-danger'>*</span>
           </Label>
           <Controller
             name='available'
             control={control}
             render={({ field }) => (
               <Select
+                id='available'
                 isClearable={false}
-                defaultValue={state}
                 classNamePrefix='select'
-                options={stateOptions}
+                options={selectedId ? categoryOptions : stateOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.status.value !== null })}
+                placeholder={selectedId ? "Выберите категорию" : "Выберите статус"}
+                className={classnames('react-select', { 'is-invalid': data !== null && data.available === "" })}
                 {...field}
               />
             )}
           />
-        </div>
-        <div className='mb-3'>
-          <Label className='form-label' for='icon'>
-          Аватар
-          </Label>
-          <Input type='file' id='icon' name='icon' />
         </div>
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
@@ -169,4 +228,4 @@ const SidebarNewUsers = ({ open, toggleSidebar }) => {
   )
 }
 
-export default SidebarNewUsers
+export default SidebarNewCategory

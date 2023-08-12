@@ -1,49 +1,26 @@
-// ** React Imports
 import { Fragment, useState, useEffect } from 'react'
-
-// ** Invoice List Sidebar
 import Sidebar from './Sidebar'
-
-// ** Table Columns
 import  { columns } from './columns'
-
-// ** Store & Actions
-import { getCategories, getSubCategories } from '../store'
+import { getCategories, getSubCategories, deleteCategory, deleteSubCategory } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
-
-// ** Third Party Components
-import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy, Plus} from 'react-feather'
-
-// ** Utils
-import { selectThemeColors } from '@utils'
-
-// ** Reactstrap Imports
 import {
   Row,
   Col,
   Card,
   Input,
-  Label,
   Button,
-  CardBody,
-  CardTitle,
-  CardHeader,
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
   UncontrolledDropdown
 } from 'reactstrap'
-
-// ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-// ** Table Header
 const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
-  // ** Converts table to CSV
   function convertArrayOfObjectsToCSV(array) {
     let result
 
@@ -70,7 +47,6 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
     return result
   }
 
-  // ** Downloads CSV
   function downloadCSV(array) {
     const link = document.createElement('a')
     let csv = convertArrayOfObjectsToCSV(array)
@@ -103,7 +79,7 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
             >
               <option value='10'>10</option>
               <option value='20'>20</option>
-              <option value='50'>500</option>
+              <option value='50'>50</option>
             </Input>
             <label htmlFor='rows-per-page'>записей</label>
           </div>
@@ -166,125 +142,76 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
 }
 
 const CategoriesList = () => {
-  // ** Store Vars
   const dispatch = useDispatch()
   const { data, subcategories } = useSelector(state => state.categories)
   const total = data.length
-  // ** States
-  // const [sort, setSort] = useState('desc')
+  const [selectedId, setSelectedId] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  // const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(10)
   const [sidebarOpen, setSidebarOpen] = useState(false)
-  // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Выберите роль' })
-  // const [currentType, setCurrentType] = useState({ value: '', label: 'Выберите тип' })
-  // const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирете статус' })
-  // ** Function to toggle sidebar
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-// console.log(data)
-  // ** Get data on mount
-  useEffect(() => {
-    dispatch(getCategories())
-    dispatch(getSubCategories())
+  const [selectedCategory, setSelectedCategory] = useState('')
+  const [selectedSubCategory, setSelectedSubCategory] = useState('')
 
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     ordering: sortColumn,
-    //     search: searchTerm,
-    //     page: currentPage,
-    //     perPage: rowsPerPage,
-    //     client_type: currentType.value
-    //   })
-    // )
+
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  const handleClose = () => {
+    setSelectedCategory('')
+    setSelectedSubCategory('')
+    setSidebarOpen(false)
+   }
+   const handleDelCategory = (event, id) => {
+    event.preventDefault()
+    dispatch(deleteCategory(id))
+  }
+
+  const handleDelSubCategory = (event, id) => {
+    event.preventDefault()
+    dispatch(deleteSubCategory(id))
+  }
+  const handleEditCategory = (event, row) => {
+    event.preventDefault()
+    setSelectedCategory(row)
+    toggleSidebar()
+  }
+
+  const handleEditSubCategory = (event, row) => {
+    event.preventDefault()
+    setSelectedSubCategory(row)
+    toggleSidebar()
+  }
+
+  useEffect(() => {
+    dispatch(getCategories({
+      search: searchTerm,
+      page: currentPage,
+      perPage: rowsPerPage
+    }))
+    dispatch(getSubCategories())
   }, [dispatch, data.length, currentPage])
 
-  // console.log(data)
-  // console.log(subcategories)
-
-  // ** User filter options
-  //  const typeOptions = [
-  //   { value: '', label: 'Показать все' },
-  //   { value: 'user', label: 'Пользователь' },
-  //   { value: 'customer', label: 'Клиент' },
-  //   { value: 'guest', label: 'Гость' },
-  //   { value: 'admin', label: 'Администратор' }
-  // ] 
-  // const roleOptions = [
-  //   { value: '', label: 'Select Role' },
-  //   { value: 'admin', label: 'Admin' },
-  //   { value: 'author', label: 'Author' },
-  //   { value: 'editor', label: 'Editor' },
-  //   { value: 'maintainer', label: 'Maintainer' },
-  //   { value: 'subscriber', label: 'Subscriber' }
-  // ]
-
-  // const planOptions = [
-  //   { value: '', label: 'Select Plan' },
-  //   { value: 'basic', label: 'Basic' },
-  //   { value: 'company', label: 'Company' },
-  //   { value: 'enterprise', label: 'Enterprise' },
-  //   { value: 'team', label: 'Team' }
-  // ]
-
-  // const statusOptions = [
-  //   { value: '', label: 'Select Status', number: 0 },
-  //   { value: 'pending', label: 'Pending', number: 1 },
-  //   { value: 'active', label: 'Active', number: 2 },
-  //   { value: 'inactive', label: 'Inactive', number: 3 }
-  // ]
-
-  // ** Function in get data on page change
   const handlePagination = page => {
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     ordering: sortColumn,
-    //     search: searchTerm,
-    //     perPage: rowsPerPage,
-    //     page: page.selected + 1,
-    //     client_type: currentType.value
-    //   })
-    // )
     setCurrentPage(page.selected + 1)
   }
 
-  // ** Function in get data on rows per page
   const handlePerPage = e => {
     const value = parseInt(e.currentTarget.value)
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     ordering: sortColumn,
-    //     search: searchTerm,
-    //     perPage: value,
-    //     page: currentPage,
-    //     client_type: currentType.value
-    //   })
-    // )
     setRowsPerPage(value)
   }
 
-  // ** Function in get data on search query change
   const handleFilter = val => {
     setSearchTerm(val)
-    // dispatch(
-    //   getData({
-    //     sort,
-    //     search: val,
-    //     ordering: sortColumn,
-    //     page: currentPage,
-    //     perPage: rowsPerPage,
-    //     client_type: currentType.value
-    //   })
-    // )
+    dispatch(
+      getCategories({
+        search: val,
+        page: currentPage,
+        perPage: rowsPerPage
+      })
+    )
   }
 
-  // ** Custom Pagination
   const CustomPagination = () => {
     const count = Number(Math.ceil(total / rowsPerPage))
-// console.log(count, total)
     return (
       <ReactPaginate
         previousLabel={''}
@@ -304,7 +231,6 @@ const CategoriesList = () => {
     )
   }
 
-  // ** Table data to render
   const dataToRender = () => {
     const filters = {
       search: searchTerm
@@ -323,23 +249,8 @@ const CategoriesList = () => {
     }
   }
 
-  // const handleSort = (column, sortDirection) => {
-  //   setSort(sortDirection)
-  //   setSortColumn(column.sortField)
-  //   // dispatch(
-  //   //   getData({
-  //   //     sort,
-  //   //     ordering: sortColumn,
-  //   //     search: searchTerm,
-  //   //     page: currentPage,
-  //   //     perPage: rowsPerPage,
-  //   //     client_type: currentType.value
-  //   //   })
-  //   // )
-  // }
   const ExpandableTable = ({data: { id }}) => {
     const subcategory = subcategories.filter(({ category }) => category === id)
-    const subcategoryСolumns = columns.filter((item, index) => index !== 2)
     return <DataTable 
     responsive
     title={
@@ -350,7 +261,7 @@ const CategoriesList = () => {
     noDataComponent={<h6 className='text-capitalize'>Субкатегории отсутствуют</h6>}
     noTableHead={true}
     data={subcategory}
-    columns={subcategoryСolumns}
+    columns={columns("subcategory", handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory)}
     sortIcon={<ChevronDown />}
     className='react-dataTable ml-50'
     />
@@ -358,41 +269,6 @@ const CategoriesList = () => {
 
   return (
     <Fragment>
-      {/* <Card>
-        <CardHeader>
-          <CardTitle tag='h4'>Filters</CardTitle>
-        </CardHeader>
-        <CardBody>
-          <Row>
-            <Col className='my-md-0 my-1' md='4'>
-              <Label for='plan-select'>Тип</Label>
-              <Select
-                theme={selectThemeColors}
-                isClearable={false}
-                className='react-select'
-                classNamePrefix='select'
-                options={typeOptions}
-                value={currentType}
-                onChange={data => {
-                  setCurrentType(data)
-                  setCurrentPage(1)
-                  dispatch(
-                    getData({
-                      sort,
-                      ordering: sortColumn,
-                      search: searchTerm,
-                      page: 1,
-                      perPage: rowsPerPage,
-                      client_type: data.value
-                    })
-                  )
-                }}
-              />
-            </Col>
-          </Row>
-        </CardBody>
-      </Card> */}
-
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
         <DataTable
@@ -404,11 +280,12 @@ const CategoriesList = () => {
             expandableRows
             expandOnRowClicked
             paginationServer
-            columns={columns}
+            columns={columns("category", handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory)}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
             paginationComponent={CustomPagination}
             expandableRowsComponent={ExpandableTable}
+            onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
             data={dataToRender()}
             subHeaderComponent={
               <CustomHeader
@@ -424,8 +301,7 @@ const CategoriesList = () => {
          
         </div>
       </Card>
-
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar selectedId={selectedId} open={sidebarOpen} toggleSidebar={handleClose} categories={data} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} selectedSubCategory={selectedSubCategory} setSelectedSubCategory={setSelectedSubCategory}/>
     </Fragment>
   )
 }

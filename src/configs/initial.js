@@ -33,3 +33,5 @@ export const orderType = {
 }
 export const BASE_URL = "https://malina-proxy.onrender.com"
 // export const BASE_URL = "http://167.99.246.103"
+
+// http://167.99.246.103:8080/api/v2/malina/users/user/

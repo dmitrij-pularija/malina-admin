@@ -13,7 +13,7 @@ export const getData = createAsyncThunk('appTable/getData', async params => {
   }
 })
 export const getTable = createAsyncThunk('appTable/getTable', async id => {
-  const response = await axios.get(`/item/table/${id}`)
+  const response = await axios.get(`/item/table/${id}/`)
   return response.data
 })
 
@@ -25,11 +25,11 @@ export const addTable = createAsyncThunk('appTable/addTable', async (table, { di
 
 export const editTable = createAsyncThunk('appBranches/editBranches', async ({ id, number, branch, waiter }, { dispatch, getState }) => {
   await axios.put(`/item/table/${id}/`, { number, branch, waiter })
-  await dispatch(getData(getState().branches.params))
+  await dispatch(getData(getState().tables.params))
 })
 
 export const deleteTable = createAsyncThunk('appTable/deleteTable', async (id, { dispatch, getState }) => {
-  await axios.delete('/item/table/', { id })
+  await axios.delete(`/item/table/${id}/`)
   await dispatch(getData(getState().tables.params))
   return id
 })

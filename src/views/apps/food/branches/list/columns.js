@@ -75,7 +75,9 @@ export const columns = (handleDel, handleEdit) => {
         className='btn-icon cursor-pointer' 
         color='transparent' 
         id={`del-tooltip-${row.id}`} 
-        onClick={row => handleDel(row.id)}>
+        onClick={event => {
+          event.preventDefault()
+          handleDel(row.id)}}>
           <Trash2 size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
