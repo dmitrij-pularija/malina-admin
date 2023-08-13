@@ -1,19 +1,7 @@
-// ** React Imports
 import { Fragment } from 'react'
-
-// ** Reactstrap Imports
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap'
-
-// ** Icons Imports
-import { ShoppingCart, Lock, Award, Bell, Link } from 'react-feather'
-
-// ** User Components
-// import InvoiceList from './InvoiceList'
-// import SecurityTab from './SecurityTab'
-// import Connections from './Connections'
+import { ShoppingCart, Award } from 'react-feather'
 import Rewards from './Rewards'
-// import UserTimeline from './UserTimeline'
-// import Notifications from './Notifications'
 import WaiterOrdersList from './WaiterOrdersList'
 
 const WaiterTabs = ({ active, toggleTab, ratings }) => {
@@ -46,4 +34,5 @@ const WaiterTabs = ({ active, toggleTab, ratings }) => {
     </Fragment>
   )
 }
+
 export default WaiterTabs

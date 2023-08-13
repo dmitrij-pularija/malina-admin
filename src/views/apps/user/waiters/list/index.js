@@ -1,18 +1,11 @@
-// ** User List Component
 import Table from './Table'
-
-// ** Reactstrap Imports
-
-// ** Custom Components
-import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
-
-
-// ** Styles
+import Breadcrumbs from '@components/breadcrumbs'
 import '@styles/react/apps/app-users.scss'
 
 const WaitersList = () => {
   return (
     <div className='app-user-list'>
+      <Breadcrumbs title='Официанты' data={[{ title: 'Пользователи' }, { title: 'Официанты' }]} />
       <Table />
     </div>
   )

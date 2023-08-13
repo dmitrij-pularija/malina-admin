@@ -1,26 +1,14 @@
-// ** React Imports
 import { Fragment, useState, useEffect } from 'react'
-
-// ** Invoice List Sidebar
 import Sidebar from './Sidebar'
-
-// ** Table Columns
 import { columns } from './columns'
-
-// ** Store & Actions
-import { getWaiters } from '../store'
+import { getWaiters, deleteWaiter } from '../store'
+import { getData } from '../../../food/stores/store'
 import { useDispatch, useSelector } from 'react-redux'
-
-// ** Third Party Components
 import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
-
-// ** Utils
 import { selectThemeColors } from '@utils'
-
-// ** Reactstrap Imports
 import {
   Row,
   Col,
@@ -29,21 +17,15 @@ import {
   Label,
   Button,
   CardBody,
-  CardTitle,
-  CardHeader,
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
   UncontrolledDropdown
 } from 'reactstrap'
-
-// ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-// ** Table Header
 const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
-  // ** Converts table to CSV
   function convertArrayOfObjectsToCSV(array) {
     let result
 
@@ -70,7 +52,6 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
     return result
   }
 
-  // ** Downloads CSV
   function downloadCSV(array) {
     const link = document.createElement('a')
     let csv = convertArrayOfObjectsToCSV(array)
@@ -165,24 +146,26 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
 }
 
 const WaitersList = () => {
-  // ** Store Vars
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.waiters)
-
-  // ** States
+  const stores = useSelector(state => state.stores.data)
   const [sort, setSort] = useState('desc')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [selectedWaiter, setSelectedWaiter] = useState('')
   const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
 
-  // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-// console.log(data)
-  // ** Get data on mount
+  const handleClose = () => {
+    setSelectedWaiter('')
+    setSidebarOpen(false)
+   }
+ 
   useEffect(() => {
+    if (!stores.length) dispatch(getData())
     dispatch(
       getWaiters({
         sort,
@@ -195,14 +178,21 @@ const WaitersList = () => {
     )
   }, [dispatch, data.length, sort, sortColumn, currentPage])
 
-  // ** User filter options
-   const storeOptions = [
-    { value: '', label: 'Показать все' },
-    { value: '189', label: 'MALINA ECO FOOD' },
-    { value: '236', label: 'Chicken Crispy' }
-  ] 
-  
-  // ** Function in get data on page change
+  const storeOptions = stores.map((store) => ({
+    value: String(store.id),
+    label: store.name
+}))
+ 
+const handleDelWaiter = (event, id) => {
+  event.preventDefault()
+  dispatch(deleteWaiter(id))
+}
+const handleEditWaiter = (event, row) => {
+  event.preventDefault()
+  setSelectedWaiter(row)
+  toggleSidebar()
+}
+
   const handlePagination = page => {
     dispatch(
       getWaiters({
@@ -216,8 +206,7 @@ const WaitersList = () => {
     )
     setCurrentPage(page.selected + 1)
   }
-
-  // ** Function in get data on rows per page
+ 
   const handlePerPage = e => {
     const value = parseInt(e.currentTarget.value)
     dispatch(
@@ -232,8 +221,7 @@ const WaitersList = () => {
     )
     setRowsPerPage(value)
   }
-
-  // ** Function in get data on search query change
+ 
   const handleFilter = val => {
     setSearchTerm(val)
     dispatch(
@@ -247,8 +235,7 @@ const WaitersList = () => {
       })
     )
   }
-
-  // ** Custom Pagination
+ 
   const CustomPagination = () => {
     const count = Number(Math.ceil(total / rowsPerPage))
 // console.log(count, total)
@@ -270,8 +257,7 @@ const WaitersList = () => {
       />
     )
   }
-
-  // ** Table data to render
+ 
   const dataToRender = () => {
     const filters = {
       storeid: store.value,
@@ -288,7 +274,6 @@ const WaitersList = () => {
       return []
     } else {
       return []
-      // return store.allData.slice(0, rowsPerPage)
     }
   }
 
@@ -310,9 +295,6 @@ const WaitersList = () => {
   return (
     <Fragment>
       <Card>
-        <CardHeader>
-          <CardTitle tag='h4'>Фильтр</CardTitle>
-        </CardHeader>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -353,7 +335,7 @@ const WaitersList = () => {
             pagination
             responsive
             paginationServer
-            columns={columns}
+            columns={columns(stores, handleEditWaiter, handleDelWaiter)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -373,7 +355,7 @@ const WaitersList = () => {
         </div>
       </Card>
 
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} />
     </Fragment>
   )
 }

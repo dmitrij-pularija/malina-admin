@@ -25,7 +25,7 @@ export const editCategory = createAsyncThunk('appCategories/editCategory', async
 export const editSubCategory = createAsyncThunk('appCategories/editSubCategory', async ({ id, formData }, { dispatch }) => {
   await axios.put(`/user/subcategory/${id}/`, formData)
   await dispatch(getSubCategories())
-  return { id, name, category }
+  return { id, formData }
 })
 
 export const addCategory = createAsyncThunk('appCategories/addCategory', async (category, { dispatch, getState }) => {

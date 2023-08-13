@@ -1,18 +1,5 @@
-// ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-
-// ** Axios Imports
 import axios from 'axios'
-
-// export const getAllData = createAsyncThunk('appUsers/getAllData', async () => {
-//   const response = await axios.get('/user/client')
-//   return response.data.results
-// })
-
-// export const getWaiter = createAsyncThunk('appOrders/getWaiters', async () => {
-//   const { data } = await axios.get('user/waiter/')
-//   return data
-// })
 
 export const getAllWaiters = async (params) => {
   try {
@@ -42,17 +29,21 @@ export const getWaiter = createAsyncThunk('appWaiters/getWaiter', async id => {
 })
 
 export const addWaiter = createAsyncThunk('appWaiters/addWaiter', async (waiter, { dispatch, getState }) => {
-  // await axios.post('/user/waiter', waiter)
-  // await dispatch(getData(getState().waiter.params))
-  // await dispatch(getAllData())
+  await axios.post('/user/waiter/', waiter)
+  await dispatch(getWaiters(getState().waiters.params))
   return waiter
 })
 
 export const deleteWaiter = createAsyncThunk('appWaiters/deleteWaiter', async (id, { dispatch, getState }) => {
-  await axios.delete('/user/waiter/', { id })
-  // await dispatch(getData(getState().waiter.params))
-  // await dispatch(getAllData())
+  await axios.delete(`/user/waiter/${id}/`)
+  await dispatch(getWaiters(getState().waiters.params))
   return id
+})
+
+export const editWaiter = createAsyncThunk('appWaiters/editWaiter', async ({ id, formData }, { dispatch, getState }) => {
+  await axios.patch(`/user/waiter/${id}/`)
+  await dispatch(getWaiters(getState().waiters.params))
+  return { id, formData }
 })
 
 export const appWaitersSlice = createSlice({

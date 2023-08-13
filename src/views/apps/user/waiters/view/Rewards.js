@@ -1,23 +1,9 @@
-import { useEffect, useState, dispatch } from 'react'
-import { useParams, Link } from 'react-router-dom'
-
-import axios from 'axios'
-
-// ** Reactstrap Imports
-import { Card, CardHeader, Badge } from 'reactstrap'
-
-// ** Third Party Components
+import { Card, CardHeader } from 'reactstrap'
 import { ChevronDown, Star } from 'react-feather'
+import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component'
 import Rating from 'react-rating'
-
-// ** Custom Components
-import Logo2 from '@components/logo2'
-import { statusObj } from '../../../../../configs/initial'
-import { formatData, formatNumber } from '@utils'
-
-// import { getData } from '../../food/orders/store'
-// ** Styles
+import { formatData } from '@utils'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 export const columns = [
@@ -73,19 +59,7 @@ export const columns = [
 ]
 
 const RewardsList = ({ ratings }) => {
-  // const [data, setData] = useState([])
-  // const { id } = useParams()
-  // // const { data } = useSelector(state => state.orders)
-
-  // useEffect(() => {
-  //   axios.get('/item/clientorder', { params: { ordering: "waiter", search: id } }).then(response => {
-  //     const fullOrders = response.data.results
-  //     const orders = fullOrders.filter(order => order.waiter === parseInt(id))
-  //     setData(orders)
-  //   })
-  // }, [])
-
-
+ 
   return ratings.length ? (
     <Card>
       <CardHeader tag='h4'>Список отзывов об официанте</CardHeader>

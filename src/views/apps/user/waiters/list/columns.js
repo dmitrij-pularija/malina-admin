@@ -1,22 +1,12 @@
-// ** React Imports
 import { Link } from 'react-router-dom'
-
-// ** Custom Components
 import Avatar from '@components/avatar'
 import Logo2 from '@components/logo2'
 import Rating from 'react-rating'
-
-// ** Store & Actions
 import { store } from '@store/store'
-import { getWaiter, deleteWaiter } from '../store'
+import { getWaiter } from '../store'
+import { Edit, MoreVertical, FileText, Trash2, Star } from 'react-feather'
+import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 
-// ** Icons Imports
-import { Slack, User, Command, Edit, Edit2, MoreVertical, FileText, Trash2, Star } from 'react-feather'
-
-// ** Reactstrap Imports
-import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
-
-// ** Renders Client Columns
 const renderClient = row => {
   if (row.profile_picture) {
     return <Avatar className='me-1' img={row.profile_picture} width='32' height='32' />
@@ -31,12 +21,15 @@ const renderClient = row => {
     )
   }
 }
-const storeObj = {
-  189: "http://167.99.246.103/myapps/venv/media/store/6d1ce89a-20f.jpg",
-  236: "http://167.99.246.103/myapps/venv/media/store/5dd1d6d0-2dd.jpg"
+ 
+export const columns = (stores, handleEditWaiter, handleDelWaiter) => {
+
+const getSrc = id => {
+  const storeSrc = stores.find(store => store.id === parseInt(id))
+  return storeSrc ? storeSrc.image : ""
 }
-// ** Renders Columns
-export const columns = [
+
+return [
   {
     name: 'Официант',
     sortable: true,
@@ -67,7 +60,7 @@ export const columns = [
     selector: row => row.storeid,
      cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
-          <Logo2 src={storeObj[row.storeid.id]} size={"s"}/>
+          <Logo2 src={getSrc(row.storeid.id)} size={"s"}/>
         <div className='d-flex flex-column ml3'>
             <span className='fw-bolder'>{row.storeid.name}</span>
         </div>
@@ -109,7 +102,7 @@ export const columns = [
               <FileText size={14} className='me-50' />
               <span className='align-middle'>Подробнее</span>
             </DropdownItem>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
+            <DropdownItem tag='a' href='/' className='w-100' onClick={event => handleEditWaiter(event, row)}>
               <Edit size={14} className='me-50' />
               <span className='align-middle'>Редактировать</span>
             </DropdownItem>
@@ -117,10 +110,7 @@ export const columns = [
               tag='a'
               href='/'
               className='w-100'
-              onClick={e => {
-                e.preventDefault()
-                store.dispatch(deleteUser(row.id))
-              }}
+              onClick={event => handleDelWaiter(event, row.id)}
             >
               <Trash2 size={14} className='me-50' />
               <span className='align-middle'>Удалить</span>
@@ -131,3 +121,4 @@ export const columns = [
     )
   }
 ]
+}
