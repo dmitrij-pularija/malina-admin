@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 // ** User List Component
+import Breadcrumbs from '@components/breadcrumbs'
 import Table from './Table'
 
 // ** Reactstrap Imports
@@ -39,6 +40,7 @@ const OrdersList = () => {
 
   return (
     <div className='app-user-list'>
+<Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} /> 
       <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal

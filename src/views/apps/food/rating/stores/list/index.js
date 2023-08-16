@@ -1,6 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from 'react'
-// ** User List Component
+import Breadcrumbs from '@components/breadcrumbs'
 import Table from "./Table"
 
 import { getAllUsers } from "../../../../user/store"
@@ -50,6 +50,7 @@ fetchData()
 
   return (
     <div className="app-user-list">
+      <Breadcrumbs title='Отзывы о заведениях' data={[{ title: 'Отзывы' }, { title: 'о заведениях' }]} /> 
       <Table users={users} stores={stores} />
     </div>
   )
