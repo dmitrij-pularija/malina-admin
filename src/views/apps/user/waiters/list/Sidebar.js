@@ -95,8 +95,7 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedWaiter, setSel
   const onSubmit = data => {
     setData(data)
     if (checkIsValid(data)) {
-      reset()  
-      toggleSidebar()
+
       const formData = new FormData()
       formData.append('full_name', data.fullName)
       formData.append('storeid', data.storeid.value)
@@ -107,12 +106,12 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedWaiter, setSel
         formData.append('profile_picture', avatarBlob, 'avatar.jpg')
       }
       if (selectedWaiter) {
-        console.log("edit")
         dispatch(editWaiter({ id: selectedWaiter.id, formData }))
       } else {
         dispatch(addWaiter(formData))
       }
       setSelectedWaiter('')
+      toggleSidebar()
       setAvatar('')
       reset()
     } else {

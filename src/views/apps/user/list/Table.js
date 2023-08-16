@@ -1,17 +1,10 @@
-// ** React Imports
 import { Fragment, useState, useEffect } from 'react'
+// import Sidebar from './Sidebar'
+import UserModal from './Modal'
 
-// ** Invoice List Sidebar
-import Sidebar from './Sidebar'
-
-// ** Table Columns
 import { columns } from './columns'
-
-// ** Store & Actions
-import { getData, getAllCount } from '../store'
+import { getData, getAllCount, editUser, deleteUser } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
-
-// ** Third Party Components
 import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
@@ -42,7 +35,7 @@ import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 // ** Table Header
-const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
+const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
   // ** Converts table to CSV
   function convertArrayOfObjectsToCSV(array) {
     let result
@@ -154,7 +147,7 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
               </DropdownMenu>
             </UncontrolledDropdown>
 
-            <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
+            <Button className='add-new-user' color='primary' onClick={toggleModal}>
               Добавить
             </Button>
           </div>
@@ -175,13 +168,14 @@ const UsersList = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(20)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [modalOpen, setModalOpen] = useState(false)
+  const [selectedUser, setSelectedUser] = useState('')
   // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Выберите роль' })
   const [currentType, setCurrentType] = useState({ value: '', label: 'Выберите тип' })
   // const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирете статус' })
 
   // ** Function to toggle sidebar
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  const toggleModal = () => setModalOpen(!modalOpen)
 // console.log(data)
   // ** Get data on mount
   useEffect(() => {
@@ -230,7 +224,16 @@ const UsersList = () => {
   //   { value: 'inactive', label: 'Inactive', number: 3 }
   // ]
 
-  // ** Function in get data on page change
+  const handleDelUser = (event, id) => {
+    event.preventDefault()
+    dispatch(deleteUser(id))
+  }
+  const handleEditUser = (event, row) => {
+    event.preventDefault()
+    setSelectedUser(row)
+    toggleModal()
+  }
+   
   const handlePagination = page => {
     dispatch(
       getData({
@@ -338,9 +341,6 @@ const UsersList = () => {
   return (
     <Fragment>
       <Card>
-        {/* <CardHeader>
-          <CardTitle tag='h4'>Filters</CardTitle>
-        </CardHeader> */}
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -381,7 +381,7 @@ const UsersList = () => {
             pagination
             responsive
             paginationServer
-            columns={columns}
+            columns={columns(handleEditUser, handleDelUser)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -394,14 +394,15 @@ const UsersList = () => {
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                toggleSidebar={toggleSidebar}
+                toggleModal={toggleModal}
               />
             }
           />
         </div>
       </Card>
+      <UserModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
 
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
+      {/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} /> */}
     </Fragment>
   )
 }

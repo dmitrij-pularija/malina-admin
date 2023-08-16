@@ -44,16 +44,23 @@ export const getUser = createAsyncThunk('appUsers/getUser', async id => {
 })
 
 export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
-  await axios.post('/user/client', user)
+  await axios.post('/user/client/', user)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return user
 })
 
 export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { dispatch, getState }) => {
-  await axios.delete('/user/client/', { id })
+  await axios.delete(`/user/client/${id}/`)
   await dispatch(getData(getState().users.params))
-  await dispatch(getAllData())
+  // await dispatch(getAllData())
+  return id
+})
+
+export const editUser = createAsyncThunk('appUsers/editUser', async ({ id, formData }, { dispatch, getState }) => {
+  await axios.patch(`/user/client/${id}/`, formData)
+  await dispatch(getData(getState().users.params))
+  // await dispatch(getAllData())
   return id
 })
 

@@ -1,18 +1,10 @@
 import { useSelector } from 'react-redux'
-// ** User List Component
 import Table from './Table'
-
-// ** Reactstrap Imports
+import Breadcrumbs from '@components/breadcrumbs'
 import { Row, Col } from 'reactstrap'
-
-// ** Custom Components
 import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
-
-// ** Icons Imports
 import { Users, UserPlus, UserCheck, UserX } from 'react-feather'
-import { formatNumberInt } from '../../../../utility/Utils'
-
-// ** Styles
+import { formatNumberInt } from '@utils'
 import '@styles/react/apps/app-users.scss'
 
 const UsersList = () => {
@@ -20,6 +12,7 @@ const UsersList = () => {
 
   return (
     <div className='app-user-list'>
+      <Breadcrumbs title='Пользователи' data={[{ title: 'Пользователи' }]} />
       <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal

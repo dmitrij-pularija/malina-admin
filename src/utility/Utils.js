@@ -92,6 +92,12 @@ export const formatTime = (value) => {
   const minutes = String(date.getMinutes()).padStart(2, '0')
   return `${hours}:${minutes}`
 }
+export const formatDataSave = (value) => {
+const year = value.getFullYear()
+const month = String(value.getMonth() + 1).padStart(2, '0')
+const day = String(value.getDate()).padStart(2, '0')
+return `${year}-${month}-${day}`
+}
 
 export const formatNumber = (value) => {
   const formattedNumber = Number(value).toLocaleString('ru', {

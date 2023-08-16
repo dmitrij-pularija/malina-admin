@@ -71,7 +71,9 @@ const typeObj = {
   admin: 'Администратор'
 }
 
-export const columns = [
+export const columns = (handleEditUser, handleDelUser) => {
+
+return [
   {
     name: 'Пользователь',
     sortable: true,
@@ -141,7 +143,7 @@ export const columns = [
               <FileText size={14} className='me-50' />
               <span className='align-middle'>Подробнее</span>
             </DropdownItem>
-            <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
+            <DropdownItem tag='a' href='/' className='w-100' onClick={event => handleEditUser(event, row)}>
               <Edit size={14} className='me-50' />
               <span className='align-middle'>Редактировать</span>
             </DropdownItem>
@@ -149,10 +151,7 @@ export const columns = [
               tag='a'
               href='/'
               className='w-100'
-              onClick={e => {
-                e.preventDefault()
-                store.dispatch(deleteUser(row.id))
-              }}
+              onClick={event => handleDelUser(event, row.id)}
             >
               <Trash2 size={14} className='me-50' />
               <span className='align-middle'>Удалить</span>
@@ -163,3 +162,4 @@ export const columns = [
     )
   }
 ]
+}

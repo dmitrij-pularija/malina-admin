@@ -7,6 +7,7 @@ import { Row, Col, Card, Form, CardBody, Button, Badge, Modal, Input, Label, Mod
 // ** Third Party Components
 import Swal from 'sweetalert2'
 import Select from 'react-select'
+import UserModal from '../list/Modal'
 import { Check, Briefcase, X } from 'react-feather'
 import { useForm, Controller } from 'react-hook-form'
 import withReactContent from 'sweetalert2-react-content'
@@ -107,25 +108,27 @@ const MySwal = withReactContent(Swal)
 
 const UserInfoCard = ({ selectedUser }) => {
   // ** State
-  const initDate = selectedUser.datebirth ? selectedUser.datebirth : (new Date())
+  // const initDate = selectedUser.datebirth ? selectedUser.datebirth : (new Date())
 
-  const [show, setShow] = useState(false)
-  const [picker, setPicker] = useState(formatData(initDate))
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => setModalOpen(!modalOpen)
+
+  // const [picker, setPicker] = useState(formatData(initDate))
   // const handleDateChange = (date) => setPicker(date)
   // ** Hook
-  const {
-    reset,
-    control,
-    setError,
-    handleSubmit,
-    formState: { errors }
-  } = useForm({
-    defaultValues: {
-      username: selectedUser.login,
-      lastName: selectedUser.surname,
-      firstName: selectedUser.name
-    }
-  })
+  // const {
+  //   reset,
+  //   control,
+  //   setError,
+  //   handleSubmit,
+  //   formState: { errors }
+  // } = useForm({
+  //   defaultValues: {
+  //     username: selectedUser.login,
+  //     lastName: selectedUser.surname,
+  //     firstName: selectedUser.name
+  //   }
+  // })
 
   // ** render user img
   const renderUserImg = () => {
@@ -308,7 +311,7 @@ const UserInfoCard = ({ selectedUser }) => {
             ) : null}
           </div>
           <div className='d-flex justify-content-center pt-2'>
-            <Button color='primary' onClick={() => setShow(true)}>
+            <Button color='primary' onClick={toggleModal}>
               Изменить
             </Button>
             <Button className='ms-1' color='danger' outline onClick={handleSuspendedClick}>
@@ -317,163 +320,7 @@ const UserInfoCard = ({ selectedUser }) => {
           </div>
         </CardBody>
       </Card>
-      <Modal isOpen={show} toggle={() => setShow(!show)} className='modal-dialog-centered modal-lg'>
-        <ModalHeader className='bg-transparent' toggle={() => setShow(!show)}></ModalHeader>
-        <ModalBody className='px-sm-5 pt-50 pb-5'>
-          <div className='text-center mb-2'>
-            <h1 className='mb-1'>Изменить информацию о пользователе</h1>
-            <p>При обновлении сведений о пользователе будет проведен аудит конфиденциальности.</p>
-          </div>
-          <Form onSubmit={handleSubmit(onSubmit)}>
-            <Row className='gy-1 pt-75'>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='firstName'>
-                  Имя
-                </Label>
-                <Controller
-                  defaultValue=''
-                  control={control}
-                  id='firstName'
-                  name='firstName'
-                  render={({ field }) => (
-                    <Input {...field} id='firstName' placeholder='John' invalid={errors.firstName && true} />
-                  )}
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='lastName'>
-                  Фамилия
-                </Label>
-                <Controller
-                  defaultValue=''
-                  control={control}
-                  id='lastName'
-                  name='lastName'
-                  render={({ field }) => (
-                    <Input {...field} id='lastName' placeholder='Doe' invalid={errors.lastName && true} />
-                  )}
-                />
-              </Col>
-              <Col xs={12}>
-                <Label className='form-label' for='username'>
-                  Login
-                </Label>
-                <Controller
-                  defaultValue=''
-                  control={control}
-                  id='username'
-                  name='username'
-                  render={({ field }) => (
-                    <Input {...field} id='username' placeholder='john.doe.007' invalid={errors.username && true} />
-                  )}
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='billing-email'>
-                  Email
-                </Label>
-                <Input
-                  type='email'
-                  id='billing-email'
-                  defaultValue={selectedUser.email}
-                  placeholder='example@domain.com'
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='status'>
-                Тип пользователя:
-                </Label>
-                <Select
-                  id='status'
-                  isClearable={false}
-                  className='react-select'
-                  classNamePrefix='select'
-                  options={typeOptions}
-                  theme={selectThemeColors}
-                  defaultValue={typeOptions[typeOptions.findIndex(i => i.value === selectedUser.client_type)]}
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='tax-id'>
-                  Код
-                </Label>
-                <Input
-                  id='tax-id'
-                  placeholder='Код'
-                  defaultValue={selectedUser.code}
-                />
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='contact'>
-                Телефон
-                </Label>
-                <Input id='contact' defaultValue={selectedUser.phone} placeholder='+9 967 933 4422' />
-              </Col>
-              <Col md={6} xs={12}>
-              {/* <PickerDefault title={"День рождения"} picker={picker} handleChange={handleDateChange}/> */}
-              {/* <Fragment> */}
-                <Label className='form-label' for='default-picker'>
-                  День рождения
-                </Label>
-                <Flatpickr className='form-control' value={picker} onChange={date => setPicker(date)} id='default-picker' options={{ dateFormat: 'd.m.Y', locale: Russian }} />
-              {/* </Fragment> */}
-                {/* <Label className='form-label' for='language'>
-                День рождения
-                </Label>
-                <Input id='contact' defaultValue={selectedUser.datebirth} placeholder='1999-07-26' /> */}
-              </Col>
-              <Col md={6} xs={12}>
-                <Label className='form-label' for='gender'>
-                Пол
-                </Label>
-                <Select
-                  id='gender'
-                  isClearable={false}
-                  className='react-select'
-                  classNamePrefix='select'
-                  options={genderOptions}
-                  theme={selectThemeColors}
-                  defaultValue={genderOptions[genderOptions.findIndex(i => i.value === selectedUser.gender)]}
-                />
-              </Col>
-              {/* <Col xs={12}>
-                <div className='d-flex align-items-center mt-1'>
-                  <div className='form-switch'>
-                    <Input type='switch' defaultChecked id='billing-switch' name='billing-switch' />
-                    <Label className='form-check-label' htmlFor='billing-switch'>
-                      <span className='switch-icon-left'>
-                        <Check size={14} />
-                      </span>
-                      <span className='switch-icon-right'>
-                        <X size={14} />
-                      </span>
-                    </Label>
-                  </div>
-                  <Label className='form-check-label fw-bolder' for='billing-switch'>
-                    Use as a billing address?
-                  </Label>
-                </div>
-              </Col> */}
-              <Col xs={12} className='text-center mt-2 pt-50'>
-                <Button type='submit' className='me-1' color='primary'>
-                  Сохранить
-                </Button>
-                <Button
-                  type='reset'
-                  color='secondary'
-                  outline
-                  onClick={() => {
-                    handleReset()
-                    setShow(false)
-                  }}
-                >
-                  Отменить
-                </Button>
-              </Col>
-            </Row>
-          </Form>
-        </ModalBody>
-      </Modal>
+      <UserModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} setSelectedUser={() => {}} />
     </Fragment>
   )
 }

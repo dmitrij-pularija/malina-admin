@@ -41,7 +41,7 @@ export const deleteWaiter = createAsyncThunk('appWaiters/deleteWaiter', async (i
 })
 
 export const editWaiter = createAsyncThunk('appWaiters/editWaiter', async ({ id, formData }, { dispatch, getState }) => {
-  await axios.patch(`/user/waiter/${id}/`)
+  await axios.patch(`/user/waiter/${id}/`, formData)
   await dispatch(getWaiters(getState().waiters.params))
   return { id, formData }
 })
