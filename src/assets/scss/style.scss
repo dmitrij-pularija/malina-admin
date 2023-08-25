@@ -86,6 +86,17 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .gap-30 {
   gap: 30px;
 }
+.loader {
+position: absolute;
+left: 0;
+top: 0;  
+width: 100vw;
+height: 100vh;  
+display: flex;
+align-items: center;
+justify-content: center;
+background: #3b3b3b4d;
+}
 // .order-dish-col {
 //   padding: 5px;
 // }
@@ -121,4 +132,8 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
   .unfilled-star {
     stroke: #babfc7;
     color: #babfc7;
+  }
+  .form-error {
+    display: flex;
+    // color: #ff9f43;
   }

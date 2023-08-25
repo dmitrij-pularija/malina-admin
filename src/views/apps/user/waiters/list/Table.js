@@ -2,7 +2,7 @@ import { Fragment, useState, useEffect } from 'react'
 import Sidebar from './Sidebar'
 import { columns } from './columns'
 import { getWaiters, deleteWaiter } from '../store'
-import { getData } from '../../../food/stores/store'
+import { getAllStores } from '../../../food/stores/store'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
@@ -135,9 +135,9 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
               </DropdownMenu>
             </UncontrolledDropdown>
 
-            <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
+            {/* <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
               Добавить
-            </Button>
+            </Button> */}
           </div>
         </Col>
       </Row>
@@ -145,35 +145,34 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
   )
 }
 
-const WaitersList = () => {
+const WaitersList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.waiters)
-  const stores = useSelector(state => state.stores.data)
-  const [sort, setSort] = useState('desc')
+  const stores = useSelector(state => state.stores.allStores)
+  const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(20)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  // const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedWaiter, setSelectedWaiter] = useState('')
   const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
-
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  
+  // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const handleClose = () => {
     setSelectedWaiter('')
     setSidebarOpen(false)
    }
  
   useEffect(() => {
-    if (!stores.length) dispatch(getData())
+    if (!stores.length) dispatch(getAllStores({ business_type: 1 }))
     dispatch(
       getWaiters({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        storeid: store.value
+        business_id__id: store.value
       })
     )
   }, [dispatch, data.length, sort, sortColumn, currentPage])
@@ -182,6 +181,7 @@ const WaitersList = () => {
     value: String(store.id),
     label: store.name
 }))
+storeOptions.unshift({ value: '', label: 'Показать все' })
  
 const handleDelWaiter = (event, id) => {
   event.preventDefault()
@@ -201,7 +201,7 @@ const handleEditWaiter = (event, row) => {
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        storeid: store.value
+        business_id__id: store.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -211,12 +211,11 @@ const handleEditWaiter = (event, row) => {
     const value = parseInt(e.currentTarget.value)
     dispatch(
       getWaiters({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
         page: currentPage,
-        storeid: store.value
+        business_id__id: store.value
       })
     )
     setRowsPerPage(value)
@@ -226,12 +225,11 @@ const handleEditWaiter = (event, row) => {
     setSearchTerm(val)
     dispatch(
       getWaiters({
-        sort,
         search: val,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         page: currentPage,
         perPage: rowsPerPage,
-        storeid: store.value
+        business_id__id: store.value
       })
     )
   }
@@ -260,7 +258,7 @@ const handleEditWaiter = (event, row) => {
  
   const dataToRender = () => {
     const filters = {
-      storeid: store.value,
+      business_id__id: store.value,
       search: searchTerm
     }
 
@@ -278,16 +276,15 @@ const handleEditWaiter = (event, row) => {
   }
 
   const handleSort = (column, sortDirection) => {
-    setSort(sortDirection)
+    setSort(sortDirection === "asc" ? "+" : "-")
     setSortColumn(column.sortField)
     dispatch(
       getWaiters({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        storeid: store.value
+        business_id__id: store.value
       })
     )
   }
@@ -316,7 +313,7 @@ const handleEditWaiter = (event, row) => {
                       search: searchTerm,
                       page: 1,
                       perPage: rowsPerPage,
-                      storeid: data.value
+                      business_id__id: data.value
                     })
                   )
                 }}
@@ -341,6 +338,7 @@ const handleEditWaiter = (event, row) => {
             className='react-dataTable'
             paginationComponent={CustomPagination}
             data={dataToRender()}
+            noDataComponent={<h6 className='text-capitalize'>Официанты не найдены</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={data}

@@ -37,13 +37,13 @@ const TablesList = () => {
   const [waiters, setWaiters] = useState([])
 
 useEffect(() => {
-  if (!stores.length) dispatch(getData())
-  if (!branches.length) dispatch(getBranches())
-  const fetchData = async () => {
-    const waitersData = await getFullData("waiters")
-    setWaiters(waitersData)
-  }  
-fetchData()  
+  // if (!stores.length) dispatch(getData())
+  // if (!branches.length) dispatch(getBranches())
+//   const fetchData = async () => {
+//     const waitersData = await getFullData("waiters")
+//     setWaiters(waitersData)
+//   }  
+// fetchData()  
 }, [])
 
   return (

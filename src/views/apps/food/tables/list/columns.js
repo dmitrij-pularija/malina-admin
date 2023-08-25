@@ -82,8 +82,7 @@ const handleClick = url => {
   return [
   {
     name: '№',
-    sortable: true,
-    sortField: 'id',
+    sortable: false,
     minWidth: '20px',
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
@@ -91,18 +90,18 @@ const handleClick = url => {
     sortable: true,
     minWidth: '150px',
     sortField: 'invoiceStatus',
-    name: 'Филиал',
-    cell: row => row.branch.name
+    name: 'Заведение',
+    cell: row => row.business_id.name
   },
   {
     sortable: true,
     minWidth: '150px',
     sortField: 'invoiceStatus',
     name: 'Адрес',
-    cell: row => row.branch.address
+    cell: row => `${row.business_id.business_address.city}, ${row.business_id.business_address.name}`
   },
   {
-    sortable: false,
+    sortable: true,
     minWidth: '20px',
     sortField: 'number',
     name: 'Номер',

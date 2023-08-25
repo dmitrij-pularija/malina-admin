@@ -8,7 +8,7 @@ import Sidebar from './Sidebar'
 import { columns } from './columns'
 
 // ** Store & Actions
-import { getAllData, getData } from '../store'
+import { getAllData, getData, getOrderStatus } from '../store'
 import { getWaiters } from '../../../user/waiters/store'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -172,37 +172,42 @@ const OrdersList = () => {
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector(state => state.orders)
+  const status = useSelector(state => state.orders.status)
 
   // ** States
   const [sort, setSort] = useState('desc')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [sortColumn, setSortColumn] = useState('id')
+  const [sortColumn, setSortColumn] = useState('-order_date')
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Select Role' })
   // const [currentPlan, setCurrentPlan] = useState({ value: '', label: 'Select Plan' })
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
   const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирите статус' })
+  
 // console.log(searchTerm)
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
   // ** Get data on mount
   useEffect(() => {
-    dispatch(getAllData())
-    dispatch(getWaiters())
-    dispatch(
-      getData({
-        sort,
-        ordering: sortColumn,
-        search: searchTerm,
-        page: currentPage,
-        perPage: rowsPerPage,
-        status: currentStatus.value,
-        storeId: currentStore.value
-      })
-    )
+    // dispatch(getData())
+    dispatch(getOrderStatus())
+
+    // dispatch(getAllData())
+    // dispatch(getWaiters())
+    // sort,
+    // dispatch(
+    //   getData({
+    //     ordering: sortColumn,
+    //     search: searchTerm,
+    //     page: currentPage,
+    //     perPage: rowsPerPage,
+    //     status: currentStatus.value,
+    //     storeId: currentStore.value
+    //   })
+    // )
   }, [dispatch, store.data.length, sort, sortColumn, currentPage])
 
   // ** User filter options
@@ -221,9 +226,15 @@ const OrdersList = () => {
     { value: '236', label: 'Chicken Crispy' }
   ]
 
-  const statusOptions = Object.entries(statusObj).map(([number, status]) => ({
-    value: number,
-    label: status.label
+  // const statusOptions = Object.entries(statusObj).map(([number, status]) => ({
+  //   value: number,
+  //   label: status.label
+  // }))
+  // statusOptions.unshift({ value: '', label: 'Показать все' })
+
+  const statusOptions = status.map((stat) => ({
+    value: String(stat.id),
+    label: stat.statusName
   }))
   statusOptions.unshift({ value: '', label: 'Показать все' })
 

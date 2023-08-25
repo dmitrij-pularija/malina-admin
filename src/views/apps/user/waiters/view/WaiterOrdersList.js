@@ -76,9 +76,9 @@ export const columns = [
 const UserOrdersList = () => {
   const [data, setData] = useState([])
   const { id } = useParams()
-
+console.log(data)
   useEffect(() => {
-    axios.get('/item/clientorder', { params: { ordering: "waiter", search: id } }).then(response => {
+    axios.get(`/products/user-order`).then(response => {
       const fullOrders = response.data.results
       const orders = fullOrders.filter(order => order.waiter === parseInt(id))
       setData(orders)

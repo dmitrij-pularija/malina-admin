@@ -13,6 +13,7 @@ export const statusObj = {
   7: { label: 'Курьер прибыл', colorName: 'light-dark' },
   8: { label: 'Доставлен', colorName: 'light-success' },
   9: { label: 'Отказ клиентв', colorName: 'light-dark' },
+  10: { label: 'Выполнен', colorName: 'light-success' },
   10: { label: 'Выполнен', colorName: 'light-success' }
 }
 
@@ -31,7 +32,25 @@ export const orderType = {
   2: "2",
   3: "Внутри заведения"
 }
-export const BASE_URL = "https://malina-proxy.onrender.com"
-// export const BASE_URL = "http://167.99.246.103"
+export const businessType = {
+  1: "Food",
+  2: "Beauty"
+}
 
+export const storeType = {
+  1: "1",
+  2: "2",
+  3: "3",
+  4: "4"
+}
+
+export const priceLevels = {
+  1: "1",
+  2: "2",
+  3: "3"
+}
+
+export const BASE_URL = "https://malina-proxy.onrender.com"
+// export const BASE_URL = "http://167.99.246.103:8080"
+// 
 // http://167.99.246.103:8080/api/v2/malina/users/user/

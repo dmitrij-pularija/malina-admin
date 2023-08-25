@@ -1,12 +1,7 @@
-// ** Icons Imports
 import { Search } from 'react-feather'
+import { InputGroup, Input, InputGroupText } from 'reactstrap'
 
-// ** Reactstrap Imports
-import { Row, Col, InputGroup, Input, InputGroupText } from 'reactstrap'
-
-const ProductsSearchbar = props => {
-  // ** Props
-  const { dispatch, getProducts, store } = props
+const StoresSearchbar = ({ handleFilter }) => {
 
   return (
 
@@ -14,14 +9,13 @@ const ProductsSearchbar = props => {
             <Input
               className='search-product'
               placeholder='Поиск заведения'
-              onChange={e => dispatch(getProducts({ ...store.params, q: e.target.value }))}
+              onChange={e => handleFilter(e.target.value)}
             />
             <InputGroupText>
               <Search className='text-muted' size={14} />
             </InputGroupText>
           </InputGroup>
-
   )
 }
 
-export default ProductsSearchbar
+export default StoresSearchbar

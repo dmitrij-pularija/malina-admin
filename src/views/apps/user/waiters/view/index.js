@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getWaiter } from '../store'
-import { getData } from '../../../food/stores/store'
+import { getAllStores } from '../../../food/stores/store'
 import { useSelector, useDispatch } from 'react-redux'
 import { Row, Col, Alert } from 'reactstrap'
 import Breadcrumbs from '@components/breadcrumbs'
@@ -12,11 +12,11 @@ import '@styles/react/apps/app-users.scss'
 const WaiterView = () => {
   const dispatch = useDispatch()
   const { selectedWaiter } = useSelector(state => state.waiters)
-  const stores = useSelector(state => state.stores.data)
+  const stores = useSelector(state => state.stores.allStores)
   const { id } = useParams()
 
   useEffect(() => {
-    if (!stores.length) dispatch(getData())
+    if (!stores.length) dispatch(getAllStores({ business_type: 1 }))
     dispatch(getWaiter(parseInt(id)))
   }, [dispatch])
 

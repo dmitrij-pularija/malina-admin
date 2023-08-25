@@ -3,6 +3,12 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 
 // ** Axios Imports
 import axios from 'axios'
+export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async () => {
+  const response = await axios.get('/products/user-order/get_status/')
+  // console.log(response.data)
+  return response.data
+})
+
 // http://167.99.246.103/myapps/venv/api/item/clientorder/
 export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
   const response = await axios.get('/item/clientorder')
@@ -12,7 +18,8 @@ export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
 })
 
 export const getData = createAsyncThunk('appOrders/getData', async params => {
-  const response = await axios.get('/item/clientorder', { params })
+  const response = await axios.get('/products/user-order/', { params })
+  // console.log(response)
   // const response = await axios.get('/api/users/list/data', params)
   return {
     params,
@@ -27,14 +34,14 @@ export const getData = createAsyncThunk('appOrders/getData', async params => {
 // })
 
 export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
-  const response = await axios.get('item/clientorder/', { id })
-  return response.data.user
+  const response = await axios.get(`/products/user-order/${id}/`)
+  return response.data
 })
 
-export const getUser = createAsyncThunk('appUsers/getUser', async id => {
-  const response = await axios.get('/api/users/user', { id })
-  return response.data.user
-})
+// export const getUser = createAsyncThunk('appUsers/getUser', async id => {
+//   const response = await axios.get('/api/users/user', { id })
+//   return response.data.user
+// })
 
 export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
   await axios.post('/apps/users/add-user', user)
@@ -56,6 +63,7 @@ export const appOrdersSlice = createSlice({
     data: [],
     total: 1,
     params: {},
+    status: [],
     allData: [],
     selectedOrder: null
   },
@@ -73,8 +81,8 @@ export const appOrdersSlice = createSlice({
         state.params = action.payload.params
         state.total = action.payload.totalPages
       })
-      .addCase(getUser.fulfilled, (state, action) => {
-        state.selectedUser = action.payload
+      .addCase(getOrderStatus.fulfilled, (state, action) => {
+        state.status = action.payload
       })
   }
 })

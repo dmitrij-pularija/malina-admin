@@ -16,12 +16,12 @@ export default [
     title: 'Structure',
     icon: <Grid size={20} />,
     children: [
-      {
-        id: 'branches',
-        title: 'Branches',
-        icon: <Circle size={12} />,
-        navLink: '/apps/food/branches/list'
-      },
+      // {
+      //   id: 'branches',
+      //   title: 'Branches',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/apps/food/branches/list'
+      // },
       {
         id: 'categories',
         title: 'Categories',

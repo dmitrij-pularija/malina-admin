@@ -56,8 +56,21 @@ return [
     sortField: 'available',
     selector: row => row.available,
     cell: row => (
-      <Badge className='text-capitalize' color={statusObj[row.available]} pill>
-        {row.available === 1 ? "Активная" : row.available === 0 ? "Не активная" : ""}
+      <Badge className='text-capitalize' color={statusObj[2]} pill>
+        {row.available}
+      </Badge>
+    )
+  },
+  {
+    name: 'Тип',
+    minWidth: '138px',
+    sortable: true,
+    omit: !!(type === "subcategory"),
+    sortField: 'category_type',
+    selector: row => row.category_type,
+    cell: row => (
+      <Badge className='text-capitalize' color={statusObj[row.category_type]} pill>
+        {row.category_type === 1 ? "Food" : "Beauty"}
       </Badge>
     )
   },

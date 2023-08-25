@@ -1,16 +1,16 @@
 // ** React Imports
 import { Fragment, useState, useEffect } from 'react'
-
+import { Link, useNavigate } from 'react-router-dom'
 // ** Shop Components
-import Sidebar from './Sidebar'
+// import Sidebar from './Sidebar'
 import StoreList from './StoreList'
 
 // ** Custom Components
 import Breadcrumbs from '@components/breadcrumbs'
 
 // ** Store & Actions
-import { useDispatch, useSelector } from 'react-redux'
-import { getData } from '../store'
+// import { useDispatch, useSelector } from 'react-redux'
+// import { getData } from '../store'
 
 // ** Styles
 import '@styles/react/apps/app-ecommerce.scss'
@@ -21,30 +21,28 @@ const Stores = () => {
   // const [sidebarOpen, setSidebarOpen] = useState(false)
 
   // ** Vars
-  const dispatch = useDispatch()
-  const stores = useSelector(state => state.stores)
+  // const dispatch = useDispatch()
+  const navigate = useNavigate()
+  // const stores = useSelector(state => state.stores)
 
+  // useEffect(() => {
+  //   dispatch(
+  //     getData({
+  //       perPage: 100,
+  //       page: 1
+  //     })
+  //   )
+  // }, [dispatch])
 
-  // ** Get products
-  useEffect(() => {
-    dispatch(
-      getData({
-        perPage: 20,
-        page: 1
-      })
-    )
-  }, [dispatch])
+  const handleAdd = () => navigate('/apps/food/stores/add/') 
 
   return (
     <Fragment>
-      <Breadcrumbs title='Заведения' data={[{ title: 'Структура' }, { title: 'Заведения' }]} />
+      <Breadcrumbs title='Заведения' data={[{ title: 'Структура' }, { title: 'Заведения' }]} onClick={handleAdd} />
       <StoreList
-        stores={stores}
-        dispatch={dispatch}
         activeView={activeView}
         setActiveView={setActiveView}
       />
-      {/* <Sidebar sidebarOpen={sidebarOpen} /> */}
     </Fragment>
   )
 }

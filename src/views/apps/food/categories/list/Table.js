@@ -1,6 +1,8 @@
 import { Fragment, useState, useEffect } from 'react'
 import Sidebar from './Sidebar'
 import  { columns } from './columns'
+import Select from 'react-select'
+import { selectThemeColors } from '@utils'
 import { getCategories, getSubCategories, deleteCategory, deleteSubCategory } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactPaginate from 'react-paginate'
@@ -11,7 +13,9 @@ import {
   Col,
   Card,
   Input,
+  Label,
   Button,
+  CardBody,
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
@@ -77,9 +81,9 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
               onChange={handlePerPage}
               style={{ width: '5rem' }}
             >
-              <option value='10'>10</option>
               <option value='20'>20</option>
               <option value='50'>50</option>
+              <option value='100'>100</option>
             </Input>
             <label htmlFor='rows-per-page'>записей</label>
           </div>
@@ -131,9 +135,9 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
               </DropdownMenu>
             </UncontrolledDropdown>
 
-            <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
+            {/* <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
               Добавить
-            </Button>
+            </Button> */}
           </div>
         </Col>
       </Row>
@@ -141,20 +145,27 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
   )
 }
 
-const CategoriesList = () => {
+const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
-  const { data, subcategories } = useSelector(state => state.categories)
-  const total = data.length
+  const { data, subcategories, total } = useSelector(state => state.categories)
+  const [sort, setSort] = useState('+')
   const [selectedId, setSelectedId] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [rowsPerPage, setRowsPerPage] = useState(10)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
+  const [rowsPerPage, setRowsPerPage] = useState(20)
+  // const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedSubCategory, setSelectedSubCategory] = useState('')
+  const [sortColumn, setSortColumn] = useState('name')
+  const [currentType, setCurrentType] = useState({ value: '', label: 'Выбирите тип' })
 
+  const typeOptions = [
+    { value: '', label: 'Показать все' },
+    { value: '1', label: 'Food' },
+    { value: '2', label: 'Beauty' }
+  ]
 
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const handleClose = () => {
     setSelectedCategory('')
     setSelectedSubCategory('')
@@ -183,6 +194,8 @@ const CategoriesList = () => {
 
   useEffect(() => {
     dispatch(getCategories({
+      ordering: `${sort}${sortColumn}`,
+      category_type: currentType.value,
       search: searchTerm,
       page: currentPage,
       perPage: rowsPerPage
@@ -191,23 +204,40 @@ const CategoriesList = () => {
   }, [dispatch, data.length, currentPage])
 
   const handlePagination = page => {
+    dispatch(getCategories({
+      ordering: `${sort}${sortColumn}`,
+      category_type: currentType.value,
+      search: searchTerm,
+      page: page.selected + 1,
+      perPage: rowsPerPage
+    }))
+    dispatch(getSubCategories())  
     setCurrentPage(page.selected + 1)
   }
 
   const handlePerPage = e => {
     const value = parseInt(e.currentTarget.value)
     setRowsPerPage(value)
+    dispatch(getCategories({
+      ordering: `${sort}${sortColumn}`,
+      category_type: currentType.value,
+      search: searchTerm,
+      page: currentPage,
+      perPage: rowsPerPage
+    }))
+    dispatch(getSubCategories())  
   }
 
   const handleFilter = val => {
     setSearchTerm(val)
-    dispatch(
-      getCategories({
-        search: val,
-        page: currentPage,
-        perPage: rowsPerPage
-      })
-    )
+    dispatch(getCategories({
+      ordering: `${sort}${sortColumn}`,
+      category_type: currentType.value,
+      search: val,
+      page: currentPage,
+      perPage: rowsPerPage
+    }))
+    dispatch(getSubCategories())  
   }
 
   const CustomPagination = () => {
@@ -233,6 +263,7 @@ const CategoriesList = () => {
 
   const dataToRender = () => {
     const filters = {
+      category_type: currentType.value,
       search: searchTerm
     }
 
@@ -245,8 +276,21 @@ const CategoriesList = () => {
     } else if (data.length === 0 && isFiltered) {
       return []
     } else {
-      return data.slice(0, rowsPerPage)
+      return []
     }
+  }
+
+  const handleSort = (column, sortDirection) => {
+    setSort(sortDirection === "asc" ? "+" : "-")
+    setSortColumn(column.sortField)
+    dispatch(getCategories({
+      ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
+      category_type: currentType.value,
+      search: searchTerm,
+      page: currentPage,
+      perPage: rowsPerPage
+    }))
+    dispatch(getSubCategories())  
   }
 
   const ExpandableTable = ({data: { id }}) => {
@@ -269,24 +313,55 @@ const CategoriesList = () => {
 
   return (
     <Fragment>
+          <Card>
+        <CardBody>
+          <Row>
+            <Col className='my-md-0 my-1' md='4'>
+              <Label for='plan-select'>Тип</Label>
+              <Select
+                theme={selectThemeColors}
+                isClearable={false}
+                className='react-select'
+                classNamePrefix='select'
+                options={typeOptions}
+                value={currentType}
+                onChange={data => {
+                  setCurrentType(data)
+                  dispatch(getCategories({
+                    ordering: `${sort}${sortColumn}`,
+                    category_type: data.value,
+                    search: searchTerm,
+                    page: currentPage,
+                    perPage: rowsPerPage
+                  }))
+                  dispatch(getSubCategories())  
+                }}
+              />
+            </Col>
+          </Row>
+        </CardBody>
+      </Card>  
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
         <DataTable
             dataKey="id"
             noHeader
             subHeader
+            sortServer
             pagination
             responsive
             expandableRows
             expandOnRowClicked
             paginationServer
             columns={columns("category", handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory)}
+            onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
             paginationComponent={CustomPagination}
             expandableRowsComponent={ExpandableTable}
             onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
             data={dataToRender()}
+            noDataComponent={<h6 className='text-capitalize'>Категории не найдены</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={data}

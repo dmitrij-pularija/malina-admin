@@ -9,6 +9,7 @@ import { Grid, CheckSquare, MessageSquare, Mail, Calendar } from 'react-feather'
 
 // ** Reactstrap Imports
 import {
+  Button,
   Breadcrumb,
   DropdownMenu,
   DropdownItem,
@@ -19,7 +20,7 @@ import {
 
 const BreadCrumbs = props => {
   // ** Props
-  const { data, title } = props
+  const { data, title, onClick } = props
 
   const renderBreadCrumbs = () => {
     return data.map((item, index) => {
@@ -57,7 +58,10 @@ const BreadCrumbs = props => {
       </div>
       <div className='content-header-right text-md-end col-md-3 col-12 d-md-block d-none'>
         <div className='breadcrumb-right dropdown'>
-          <UncontrolledButtonDropdown>
+        {onClick && <Button className='add-new-user' color='primary' onClick={onClick}>
+              Добавить
+        </Button>}  
+          {/* <UncontrolledButtonDropdown>
             <DropdownToggle color='primary' className='btn-icon btn-round dropdown-toggle'>
               <Grid size={14} />
             </DropdownToggle>
@@ -79,7 +83,7 @@ const BreadCrumbs = props => {
                 <span className='align-middle'>Calendar</span>
               </DropdownItem>
             </DropdownMenu>
-          </UncontrolledButtonDropdown>
+          </UncontrolledButtonDropdown> */}
         </div>
       </div>
     </div>

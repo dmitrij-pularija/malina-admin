@@ -7,16 +7,16 @@ import { getWaiter } from '../store'
 import { Edit, MoreVertical, FileText, Trash2, Star } from 'react-feather'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 
-const renderClient = row => {
-  if (row.profile_picture) {
-    return <Avatar className='me-1' img={row.profile_picture} width='32' height='32' />
+const renderClient = (picture, name) => {
+  if (picture) {
+    return <Avatar className='me-1' img={picture} width='32' height='32' />
   } else {
     return (
       <Avatar
         initials
         className='me-1'
         color={'light-primary'}
-        content={row.full_name}
+        content={name}
       />
     )
   }
@@ -34,11 +34,11 @@ return [
     name: 'Официант',
     sortable: true,
     minWidth: '300px',
-    sortField: 'login',
+    sortField: 'full_name',
     selector: row => row,
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row)}
+        {renderClient(row.profile_picture, row.full_name)}
         <div className='d-flex flex-column'>
           <Link
             to={`/apps/user/waiters/view/${row.id}`}
@@ -56,13 +56,14 @@ return [
     name: 'Заведение',
     sortable: true,
     minWidth: '250px',
-    sortField: 'storeid',
+    sortField: 'business_id.name',
     selector: row => row.storeid,
      cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
-          <Logo2 src={getSrc(row.storeid.id)} size={"s"}/>
+        {renderClient(getSrc(row.business_id.id), row.business_id.name)}
+          {/* <Logo2 src={getSrc(row.business_id.id)} size={"s"}/> */}
         <div className='d-flex flex-column ml3'>
-            <span className='fw-bolder'>{row.storeid.name}</span>
+            <span className='fw-bolder'>{row.business_id.name}</span>
         </div>
       </div>
     )
@@ -72,7 +73,7 @@ return [
     minWidth: '142px',
     sortable: true,
     sortField: 'order_waiter_rating',
-    selector: row => row.rate,
+    selector: row => row.avg_rating,
     cell: row => (
       <Rating
         readonly

@@ -129,11 +129,11 @@ const WaiterInfoCard = ({ stores, selectedWaiter }) => {
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Ресторан:</span>
-                  <span>{selectedWaiter.storeid ? selectedWaiter.storeid.name : "Не указан"}</span>
+                  <span>{selectedWaiter.business_id ? selectedWaiter.business_id.name : "Не указан"}</span>
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Телефон:</span>
-                  <span>{selectedWaiter.storeid.phone ? selectedWaiter.storeid.phone : "Не указан"}</span>
+                  <span>{selectedWaiter.business_id ? selectedWaiter.business_id.phone : "Не указан"}</span>
                 </li>
               </ul>
             ) : null}
@@ -148,7 +148,7 @@ const WaiterInfoCard = ({ stores, selectedWaiter }) => {
           </div>
         </CardBody>
       </Card>
-      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />  
+      {/* <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />   */}
     </Fragment>
   )
 }

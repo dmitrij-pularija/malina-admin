@@ -1,46 +1,77 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
-
+import Avatar from '@components/avatar'
+// import { useDispatch } from 'react-redux'
+// import { deleteStore } from '../store'
 // ** Third Party Components
 import classnames from 'classnames'
 import { Star, Edit, Trash2 } from 'react-feather'
 
 // ** Reactstrap Imports
 import { Card, CardBody, CardText, Button, Badge } from 'reactstrap'
+import '@styles/react/libs/flatpickr/flatpickr.scss'
+import '@styles/react/pages/page-authentication.scss'
+
+const renderLogo = (avatar, name) => {
+  if (avatar) {
+    return (
+      <img 
+      className='rounded rounded mt-3 mb-2' 
+      src={avatar} 
+      alt={name ? name : "Логотип заведения"}
+      style={{
+        height: '150px',
+        width: '267px'
+      }}
+      />
+    )
+  } else {
+    return (
+      <Avatar
+        initials
+        color={'light-primary'}
+        className='rounded rounded mt-3 mb-2'
+        content={name ? name : 'Malina'}
+        contentStyles={{
+          borderRadius: 0,
+          fontSize: 'calc(64px)',
+          width: '100%',
+          height: '100%'
+        }}
+        style={{
+          height: '150px',
+          width: '267px'
+        }}
+      />
+    )
+  }
+}
+
 
 const StoreCard = props => {
+  // const dispatch = useDispatch()  
   // ** Props
-  const {
-    stores,
-    data,
-    dispatch,
-    addToCart,
-    activeView,
-    getProducts,
-    getCartItems,
-    addToWishlist,
-    deleteWishlistItem
-  } = props
+  const { handleDel, data, activeView } = props
 
   // ** Handle Move/Add to cart
-  const handleCartBtn = (id, val) => {
-    if (val === false) {
-      dispatch(addToCart(id))
-    }
-    dispatch(getCartItems())
-    dispatch(getProducts(stores.params))
-  }
+  // const handleCartBtn = (id, val) => {
+  //   if (val === false) {
+  //     dispatch(addToCart(id))
+  //   }
+  //   dispatch(getCartItems())
+  //   dispatch(getProducts(stores.params))
+  // }
 
   // ** Handle Wishlist item toggle
-  const handleWishlistClick = (id, val) => {
-    if (val) {
-      dispatch(deleteWishlistItem(id))
-    } else {
-      dispatch(addToWishlist(id))
-    }
-    dispatch(getProducts(stores.params))
-  }
-console.log(data)
+  // const handleWishlistClick = (id, val) => {
+  //   if (val) {
+  //     dispatch(deleteWishlistItem(id))
+  //   } else {
+  //     dispatch(addToWishlist(id))
+  //   }
+  //   dispatch(getProducts(stores.params))
+  // }
+// console.log(data)
   // ** Renders products
   const renderProducts = () => {
     if (data.length) {
@@ -50,7 +81,8 @@ console.log(data)
         return (
           <Card className='ecommerce-card' key={item.name}>
             <div className='item-img text-center mx-auto'>
-                <img className='img-fluid card-img-top' src={item.image} alt={item.name} />
+              {renderLogo(item.image, item.name)}
+                {/* <img className='img-fluid card-img-top' src={item.image} alt={item.name} /> */}
             </div>
             <CardBody>
                 <CardText tag='span' className='company-name'>
@@ -60,7 +92,7 @@ console.log(data)
                 </CardText>
               <div className='item-wrapper'>
                 <div className='item-cost'>
-                  <h6 className='item-price'>Рейтинг заведения:</h6>
+                  <h6 className='item-price'>заведение:</h6>
                 </div>
                 <div className='item-rating'>
                   <ul className='unstyled-list list-inline'>
@@ -81,7 +113,7 @@ console.log(data)
               </div>
               <div className='item-wrapper'>
                 <div className='item-cost'>
-                  <h6 className='item-price'>Рейтинг персонала:</h6>
+                  <h6 className='item-price'>персонал:</h6>
                 </div>
                 <div className='item-rating'>
                   <ul className='unstyled-list list-inline'>
@@ -119,7 +151,7 @@ console.log(data)
                 color='primary'
                 tag={CartBtnTag}
                 className='btn-cart move-cart'
-                onClick={() => handleCartBtn(item.id, item.isInCart)}
+                // onClick={() => handleCartBtn(item.id, item.isInCart)}
               >
                 <Edit className='me-50' size={14} />
                 <span>Редактировать</span>
@@ -128,12 +160,10 @@ console.log(data)
               <Button
                 className='btn-wishlist'
                 color='light'
-                onClick={() => handleWishlistClick(item.id, item.isInWishlist)}
+                onClick={() => handleDel(item.id)}
               >
                 <Trash2
-                  className={classnames('me-50', {
-                    'text-danger': item.isInWishlist
-                  })}
+                  className='me-50'
                   size={14}
                 />
                 <span>Удалить</span>

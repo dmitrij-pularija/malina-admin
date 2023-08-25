@@ -12,12 +12,12 @@ import { useDispatch } from 'react-redux'
 
 const defaultValues = {
   name: '',
-  available: ''
+  type: ''
 }
 
-const stateOptions = [
-  { value: 0, label: 'Не активная' },
-  { value: 1, label: 'Активная' }
+const typeOptions = [
+  { value: 1, label: 'Food' },
+  { value: 2, label: 'Beauty' }
 ]
 
 const checkIsValid = data => {
@@ -64,8 +64,8 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
 
   const values = item ? {
     name: item.name,
-    available: selectedSubCategory ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(item.category))] : stateOptions[stateOptions.findIndex(i => parseInt(i.value) === parseInt(item.available))]
-   } : selectedId ? {name: '', available: categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedId))]} : {}
+    type: selectedSubCategory ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(item.category))] : typeOptions[typeOptions.findIndex(i => parseInt(i.value) === parseInt(item.category_type))]
+   } : selectedId ? {name: '', type: categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedId))]} : {}
 
   const {
     reset,
@@ -111,8 +111,8 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
       toggleSidebar()
       const formData = new FormData();
       formData.append('name', data.name)
-      if (!selectedId) formData.append('available', data.available.value)
-      if (selectedId) formData.append('category', data.available.value)
+      if (!selectedId) formData.append('category_type', data.type.value)
+      if (selectedId) formData.append('category', data.type.value)
       if (avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
         formData.append('icon', avatarBlob, 'category.jpg')
@@ -196,22 +196,22 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
           />
         </div>  
         <div className='mb-1'>
-          <Label className='form-label' for='available'>
-          {selectedId ? "Категория" : "Статус"}
+          <Label className='form-label' for='type'>
+          {selectedId ? "Категория" : "Тип"}
           <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='available'
+            name='type'
             control={control}
             render={({ field }) => (
               <Select
-                id='available'
+                id='type'
                 isClearable={false}
                 classNamePrefix='select'
-                options={selectedId ? categoryOptions : stateOptions}
+                options={selectedId ? categoryOptions : typeOptions}
                 theme={selectThemeColors}
-                placeholder={selectedId ? "Выберите категорию" : "Выберите статус"}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.available === "" })}
+                placeholder={selectedId ? "Выберите категорию" : "Выберите тип"}
+                className={classnames('react-select', { 'is-invalid': data !== null && data.type === "" })}
                 {...field}
               />
             )}

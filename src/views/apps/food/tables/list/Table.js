@@ -151,8 +151,8 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
 const TablesList = ({waiters, stores, branches}) => {
   const dispatch = useDispatch()
   const { data, total} = useSelector(state => state.tables)
-
-  const [sort, setSort] = useState('desc')
+console.log(data)
+  const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [qrcodeUrl, setQqrcodeUrl] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
@@ -182,8 +182,7 @@ const TablesList = ({waiters, stores, branches}) => {
   useEffect(() => {
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
@@ -201,8 +200,7 @@ const TablesList = ({waiters, stores, branches}) => {
   const handlePagination = page => {
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
@@ -216,8 +214,7 @@ const TablesList = ({waiters, stores, branches}) => {
     const value = parseInt(e.currentTarget.value)
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
         page: currentPage,
@@ -231,9 +228,8 @@ const TablesList = ({waiters, stores, branches}) => {
     setSearchTerm(val)
     dispatch(
       getData({
-        sort,
         search: val,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         page: currentPage,
         perPage: rowsPerPage,
         store: currentStore.value
@@ -283,12 +279,11 @@ const TablesList = ({waiters, stores, branches}) => {
   }
 
   const handleSort = (column, sortDirection) => {
-    setSort(sortDirection)
+    setSort(sortDirection === "asc" ? "+" : "-")
     setSortColumn(column.sortField)
     dispatch(
       getData({
-        sort,
-        ordering: column.sortField,
+        ordering: `${sort}${column.sortField}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,

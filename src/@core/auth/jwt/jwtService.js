@@ -4,7 +4,7 @@ import { BASE_URL } from '../../../configs/initial'
 
 // const { BASE_URL } = process.env
 // const BASE_URL = 'http://167.99.246.103'
-axios.defaults.baseURL = `${BASE_URL}/myapps/venv/api/`
+axios.defaults.baseURL = `${BASE_URL}/api/v2/malina/`
 
 export default class JwtService {
   // ** jwtConfig <= Will be used by this service
