@@ -177,13 +177,13 @@ const [data, setData] = useState(null)
   const [passwords, setPasswords] = useState({ newPassword: '', confirmPassword: ''})
   const [passwordsMatch, setPasswordsMatch] = useState(true)
   const values = {}
-  console.log(selectedStore)
+  // console.log(selectedStore)
 
   useEffect(() => {
-    // if (selectedStore.length > 0) {
+    if (selectedStore.length !== 0) {
     setAvatar(selectedStore.image)
-    setTimeBeg(selectedStore.work_time_start)
-    setTimeEnd(selectedStore.work_time_end)
+    setTimeBeg(selectedStore.work_time_start.toString())
+    setTimeEnd(selectedStore.work_time_end.toString())
     // const categoryOptions = categories.map(category => ({
     //   value: String(category.id),
     //   label: category.name
@@ -193,35 +193,35 @@ const [data, setData] = useState(null)
     //   label: subcategory.name
     // }))
 
-    values.name = selectedStore.name
-    values.login = selectedStore.login
-    values.email = selectedStore.email
-    values.phone = selectedStore.phone
-    values.city = selectedStore.business_address ? selectedStore.business_address.city : ""
-    values.address = selectedStore.business_address ? selectedStore.business_address.name : ""
-    values.longitude = selectedStore.business_address ? selectedStore.business_address.longitude : ""
-    values.latitude = selectedStore.business_address ? selectedStore.business_address.latitude : ""
-    values.merchantId = selectedStore.merchant_id
-    values.secretKey = selectedStore.pay_secret_key
-    values.adminTelegram = selectedStore.admin_telegram_id
-    values.telegram = selectedStore.telegram
-    values.instagram = selectedStore.instagram
-    values.whatsapp = selectedStore.whatsapp
-    values.percentage = selectedStore.percentage
-    values.percentService = selectedStore.service_charge
+    values.name = selectedStore.name ? selectedStore.name : defaultValues.name
+    values.login = selectedStore.login ? selectedStore.login : defaultValues.login
+    values.email = selectedStore.email ? selectedStore.email : defaultValues.email
+    values.phone = selectedStore.phone ? selectedStore.phone : defaultValues.phone
+    values.city = selectedStore.business_address ? selectedStore.business_address.city : defaultValues.city
+    values.address = selectedStore.business_address ? selectedStore.business_address.name : defaultValues.address
+    values.longitude = selectedStore.business_address ? selectedStore.business_address.longitude : defaultValues.longitude
+    values.latitude = selectedStore.business_address ? selectedStore.business_address.latitude : defaultValues.latitude
+    values.merchantId = selectedStore.merchant_id ? selectedStore.merchant_id : defaultValues.merchantId
+    values.secretKey = selectedStore.pay_secret_key ? selectedStore.pay_secret_key : defaultValues.secretKey
+    values.adminTelegram = selectedStore.admin_telegram_id ? selectedStore.admin_telegram_id : defaultValues.adminTelegram
+    values.telegram = selectedStore.telegram ? selectedStore.telegram : defaultValues.telegram
+    values.instagram = selectedStore.instagram ? selectedStore.instagram : defaultValues.instagram
+    values.whatsapp = selectedStore.whatsapp ? selectedStore.whatsapp : defaultValues.whatsapp
+    values.percentage = selectedStore.percentage ? selectedStore.percentage : defaultValues.percentage
+    values.percentService = selectedStore.service_charge ? selectedStore.service_charge : defaultValues.percentService
     values.deliverycost = 0
-    values.avgcheck = selectedStore.average_check
-    values.slogan = selectedStore.slogan
-    values.description = selectedStore.description
-    values.business = selectedStore.business_type ? businessTypeOptions[businessTypeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.business_type))] : { value: '', label: 'Выбирите направление' }
-    values.type = selectedStore.type ? storeTypeOptions[storeTypeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.type))] : { value: '', label: 'Выбирите тип заведения' }
-    values.category = selectedStore.category ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.category))] : { value: '', label: 'Выбирите категорию' }
-    values.subcategory = selectedStore.subcategory ? subcategoryOptions[subcategoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.subcategory))] : { value: '', label: 'Выбирите подкатегорию' }
-    values.priceLevel = selectedStore.price_level ? priceLevelOptions[priceLevelOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.price_level))] : { value: '', label: 'Выбирите уровень цен' }
-    // } 
+    values.avgcheck = selectedStore.average_check ? selectedStore.average_check : defaultValues.avgcheck
+    values.slogan = selectedStore.slogan ? selectedStore.slogan : defaultValues.slogan
+    values.description = selectedStore.description ? selectedStore.description : defaultValues.description
+    values.business = selectedStore.business_type ? businessTypeOptions[businessTypeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.business_type))] : defaultValues.business
+    values.type = selectedStore.type ? storeTypeOptions[storeTypeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.type))] : defaultValues.type
+    values.category = selectedStore.category ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.category))] : defaultValues.category
+    values.subcategory = selectedStore.subcategory ? subcategoryOptions[subcategoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.subcategory))] : defaultValues.subcategory
+    values.priceLevel = selectedStore.price_level ? priceLevelOptions[priceLevelOptions.findIndex(i => parseInt(i.value) === parseInt(selectedStore.price_level))] : defaultValues.priceLevel
+    } 
     }, [selectedStore.length])
-
-
+    // selectedStore.length === 0
+// console.log("sel", selectedStore.length !== 0)
 // console.log(passwordsMatch)
   const handlePasswordChange = (event) => {
     const { name, value } = event.target
@@ -428,20 +428,19 @@ const [data, setData] = useState(null)
   //   }
   //   reader.readAsDataURL(files[0])
   // }
-
   const onSubmit = data => {
+    console.log(data)
     setData(data)
     if (checkIsValid(data)) {
-      console.log(data)
-      if (!password) toggleModal()
+      console.log(formatTime(timeBeg), formatTime(timeEnd))
+      if (!passwords.newPassword && selectedStore.length === 0) return toggleModal()
       const formData = new FormData()
       formData.append('login', data.login)
-      formData.append('password', password)
       formData.append('business_address.name', data.address)
       formData.append('business_address.city', data.city)
       formData.append('business_address.longitude', data.longitude)
       formData.append('business_address.latitude', data.latitude)
-
+      if (passwords.newPassword) formData.append('password', passwords.newPassword)
       if (data.name) formData.append('name', data.name)
       if (data.phone) formData.append('phone', data.phone)
       if (data.email) formData.append('email', data.email)
@@ -449,8 +448,8 @@ const [data, setData] = useState(null)
       if (data.business) formData.append('business_type', data.business.value)
       if (data.percentage) formData.append('percentage', data.percentage)
       if (data.percentService) formData.append('service_charge', data.percentService)
-      if (timeBeg) formData.append('work_time_start', formatTime(timeBeg))
-      if (timeEnd) formData.append('work_time_end', formatTime(timeEnd))
+      if (timeBeg) formData.append('work_time_start', selectedStore.length === 0 ? formatTime(timeBeg) : timeBeg)
+      if (timeEnd) formData.append('work_time_end',  selectedStore.length === 0 ? formatTime(timeEnd) : timeEnd)
       if (data.telegram) formData.append('telegram', data.telegram)
       if (data.instagram) formData.append('instagram', data.instagram)
       if (data.whatsapp) formData.append('whatsapp', data.whatsapp)
@@ -467,7 +466,7 @@ const [data, setData] = useState(null)
         const avatarBlob = dataURLtoBlob(avatar)
         formData.append('image', avatarBlob, 'logo.jpg')
       }
-      if (selectedStore.length) {
+      if (selectedStore.length !== 0) {
         dispatch(editStore({ id: selectedStore.id, formData }))
       } else {
         dispatch(addStore(formData))
@@ -526,6 +525,7 @@ const [data, setData] = useState(null)
           <Controller
             name='business'
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Select
                 id='business'
@@ -548,6 +548,7 @@ const [data, setData] = useState(null)
           <Controller
             name='category'
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Select
                 id='category'
@@ -571,6 +572,7 @@ const [data, setData] = useState(null)
           <Controller
             name='subcategory'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
               <Select
                 isDisabled={!getValues("category").value}
@@ -592,6 +594,7 @@ const [data, setData] = useState(null)
           <Controller
             name='type'
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Select
                 isClearable={false}
@@ -612,6 +615,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='merchantId'
                   control={control}
+                  rules={{ required: false }}
                   render={({ field }) => (
                     <Input id='merchantId' placeholder='Введите Merchant Id магазина' invalid={errors.merchantId && true} {...field} />
                   )}
@@ -625,6 +629,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='adminTelegram'
                   control={control}
+                  rules={{ required: false }}
                   render={({ field }) => (
                     <Input id='adminTelegram' placeholder='Введите Телеграм ID' invalid={errors.adminTelegram && true} {...field} />
                   )}
@@ -640,6 +645,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='name'
                   control={control}
+                  rules={{ required: true }}
                   render={({ field }) => (
                     <Input id='name' placeholder='Введите название заведения' invalid={errors.name && true} {...field} />
                   )}
@@ -653,6 +659,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='email'
                   control={control}
+                  rules={{ required: false }}
                   render={({ field }) => (
                     <Input id='email' placeholder='Введите название email' invalid={errors.email && true} {...field} />
                   )}
@@ -666,6 +673,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='phone'
                   control={control}
+                  rules={{ required: false }}
                   render={({ field }) => (
                     <Input id='phone' placeholder='Введите Логин' invalid={errors.phone && true} {...field} />
                   )}
@@ -679,6 +687,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='login'
                   control={control}
+                  rules={{ required: true }}
                   render={({ field }) => (
                     <Input id='login' placeholder='Введите Логин' invalid={errors.login && true} {...field} />
                   )}
@@ -698,6 +707,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='secretKey'
                   control={control}
+                  rules={{ required: false }}
                   render={({ field }) => (
                     <Input id='secretKey' placeholder='Введите Secret Key магазина' invalid={errors.secretKey && true} {...field} />
                   )}
@@ -715,6 +725,7 @@ const [data, setData] = useState(null)
           <Controller
             name='instagram'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
             <Input 
               {...field} 
@@ -736,6 +747,7 @@ const [data, setData] = useState(null)
           <Controller
             name='whatsapp'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
             <Input 
               {...field} 
@@ -757,6 +769,7 @@ const [data, setData] = useState(null)
           <Controller
             name='telegram'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
             <Input 
               {...field} 
@@ -776,6 +789,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='city'
                   control={control}
+                  rules={{ required: true }}
                   render={({ field }) => (
                     <Input id='city' placeholder='Введите город' invalid={errors.city && true} {...field} />
                   )}
@@ -789,6 +803,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='address'
                   control={control}
+                  rules={{ required: true }}
                   render={({ field }) => (
                     <Input id='address' placeholder='Введите адрес' invalid={errors.address && true} {...field} />
                   )}
@@ -802,6 +817,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='longitude'
                   control={control}
+                  rules={{ required: true }}
                   render={({ field }) => (
                     <Input id='longitude' placeholder='Введите долготу' invalid={errors.longitude && true} {...field} />
                   )}
@@ -815,6 +831,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='latitude'
                   control={control}
+                  rules={{ required: true }}
                   render={({ field }) => (
                     <Input id='latitude' placeholder='Введите широту' invalid={errors.latitude && true} {...field} />
                   )}
@@ -868,6 +885,7 @@ const [data, setData] = useState(null)
           <Controller
             name='percentage'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
             <InputNumber 
               {...field} 
@@ -892,6 +910,7 @@ const [data, setData] = useState(null)
           <Controller
             name='percentService'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
             <InputNumber 
               {...field} 
@@ -918,6 +937,7 @@ const [data, setData] = useState(null)
         <Controller
         name='deliverycost'
         control={control}
+        rules={{ required: false }}
                   render={({ field }) => (
                     <Input 
                     name='deliverycost'
@@ -936,6 +956,7 @@ const [data, setData] = useState(null)
         <Controller
         name='avgcheck'
         control={control}
+        rules={{ required: false }}
                   render={({ field }) => (
                     <Input
                     name='avgcheck' 
@@ -955,6 +976,7 @@ const [data, setData] = useState(null)
           <Controller
             name='priceLevel'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
               <Select
                 isClearable={false}
@@ -979,6 +1001,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='slogan'
                   control={control}
+                  rules={{ required: false }}
                   render={({ field }) => (
                     <Input id='slogan' placeholder='Введите слоган' invalid={errors.slogan && true} {...field} />
                   )}
@@ -992,6 +1015,7 @@ const [data, setData] = useState(null)
                 <Controller
                   name='description'
                   control={control}
+                  rules={{ required: false }}
                   render={({ field }) => (
                     <Input id='description' type='textarea' placeholder='Введите описание' invalid={errors.description && true} {...field} />
                   )}

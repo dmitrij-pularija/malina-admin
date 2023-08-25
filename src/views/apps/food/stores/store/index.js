@@ -36,7 +36,7 @@ export const addStore = createAsyncThunk('appStores/addStore', async (formData, 
 })
 
 export const editStore = createAsyncThunk('appStores/editStore', async ({ id, formData }, { dispatch, getState }) => {
-  await axios.post(`/users/businesses/${ id }/`, formData)
+  await axios.put(`/users/businesses/${ id }/`, formData)
   await dispatch(getData(getState().stores.params))
   await dispatch(getAllStores())
   return id

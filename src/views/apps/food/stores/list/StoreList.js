@@ -43,12 +43,13 @@ const StoreList = props => {
 
   const handlePerPage = e => {
     const value = parseInt(e.currentTarget.value)
+    setCurrentPage(1)
     setRowsPerPage(value)
     dispatch(getData({
       ordering: `${sort}${sortColumn}`,
       business_type: businessType.value,
       search: searchTerm,
-      page: currentPage,
+      page: 1,
       perPage: value
     }))
   }
@@ -99,7 +100,7 @@ const StoreList = props => {
 
 
   const handleFilter = val => {
-    console.log(val)
+    setCurrentPage(1)
     setSearchTerm(val)
     dispatch(getData({
       ordering: `${sort}${sortColumn}`,
@@ -129,38 +130,40 @@ const StoreList = props => {
     }
   }
 
-  const handleSort = (column, sortDirection) => {
-    setSort(sortDirection === "asc" ? "+" : "-")
-    setSortColumn(column.sortField)
-    dispatch(getData({
-      ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
-      business_type: businessType.value,
-      search: searchTerm,
-      page: currentPage,
-      perPage: rowsPerPage
-    }))
-  }
+  // const handleSort = (column, sortDirection) => {
+  //   setSort(sortDirection === "asc" ? "+" : "-")
+  //   setSortColumn(column.sortField)
+  //   dispatch(getData({
+  //     ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
+  //     business_type: businessType.value,
+  //     search: searchTerm,
+  //     page: currentPage,
+  //     perPage: rowsPerPage
+  //   }))
+  // }
 
   const handleChangeBuseness = data => {
+    setCurrentPage(1)
     setBusinessType(data)
     dispatch(getData({
       ordering: `${sort}${sortColumn}`,
       business_type: data.value,
       search: searchTerm,
-      page: currentPage,
+      page: 1,
       perPage: rowsPerPage
     }))
   }
   
   // ** Handles pagination
   const handlePageChange = val => {
-    if (val === 'next') {
+    if (val === 'next' && stores.params.page <= Math.ceil(Number(stores.total) / rowsPerPage)) {
       dispatch(getData({ ...stores.params, page: stores.params.page + 1 }))
       setCurrentPage(stores.params.page + 1)
-    } else if (val === 'prev') {
+    } else if (val === 'prev' && stores.params.page >= 1) {
       dispatch(getData({ ...stores.params, page: stores.params.page - 1 }))
       setCurrentPage(stores.params.page - 1)
     } else {
+      if (val === 'prev' || val === 'next') return
       dispatch(getData({ ...stores.params, page: val }))
       setCurrentPage(val)
     }
@@ -169,7 +172,7 @@ const StoreList = props => {
   // ** Render pages
   const renderPageItems = () => {
     const arrLength =
-      stores.total !== 0 && stores.data.length !== 0 ? Number(stores.total) / stores.data.length : 3
+      stores.total !== 0 && stores.data.length !== 0 ? Math.ceil(Number(stores.total) / rowsPerPage) : 3
 
     return new Array(Math.trunc(arrLength)).fill().map((item, index) => {
       return (
@@ -188,7 +191,7 @@ const StoreList = props => {
 
   // ** handle next page click
   const handleNext = () => {
-    if (stores.params.page !== Number(stores.total) / stores.data.length) {
+    if (stores.params.page !== Math.ceil(Number(stores.total) / rowsPerPage)) {
       handlePageChange('next')
     }
   }
