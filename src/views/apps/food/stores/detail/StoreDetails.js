@@ -463,7 +463,7 @@ const [data, setData] = useState(null)
       if (data.priceLevel) formData.append('price_level', data.priceLevel.value)
       if (data.merchantId) formData.append('merchant_id', data.merchantId)
       if (data.secretKey) formData.append('pay_secret_key', data.secretKey)
-      if (avatar.startsWith('data:image')) {
+      if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
         formData.append('image', avatarBlob, 'logo.jpg')
       }
