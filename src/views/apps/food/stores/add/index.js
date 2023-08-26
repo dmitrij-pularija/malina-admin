@@ -23,11 +23,11 @@ const Details = () => {
       <div className='app-ecommerce-details'>
           <Card>
             <CardBody>
-            <StoreDetails
+            {categories.length && subcategories.length && <StoreDetails
                 categories={categories}
                 subcategories={subcategories}
                 selectedStore={[]}
-              />
+              />}
             </CardBody>
           </Card>
       </div>

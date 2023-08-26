@@ -65,11 +65,11 @@ const defaultValues = {
   avgcheck: 0,
   slogan: '',
   description: '',
-  business : { value: '', label: 'Выбирите направление' },
-  type: { value: '', label: 'Выбирите тип заведения' },
-  category: { value: '', label: 'Выбирите категорию' },
-  subcategory: { value: '', label: 'Выбирите подкатегорию' },
-  priceLevel: { value: '', label: 'Выбирите уровень цен' }
+  business : '',
+  type: '',
+  category: '',
+  subcategory: '',
+  priceLevel: ''
 }
 
 const requiredFields = ['name', 'login', 'city', 'address', 'longitude', 'latitude', 'business', 'type', 'category']
@@ -380,6 +380,7 @@ const [data, setData] = useState(null)
     handleSubmit,
     formState: { errors }
   } = useForm({ defaultValues, values })
+// console.log(errors)
 
   const handleBusinessChange = (selectedOption) => {
     // setValue('business', selectedOption)
@@ -480,8 +481,8 @@ const [data, setData] = useState(null)
         if (data[key].length === 0) {
           setError(key, {
             type: 'manual'
-          })
-        }
+          })  
+        }  
       }
     }
   }  
@@ -536,10 +537,13 @@ const [data, setData] = useState(null)
                 classNamePrefix='select'
                 options={businessTypeOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.business === null })}
+                placeholder='Выберите направление'
+                // invalid={errors.login && true}
+                className={classnames('react-select', { 'is-invalid': errors.business && true })}
               />
   )}
           />
+      {errors && errors.business && <FormFeedback>Пожалуйста выберите направление деятельности</FormFeedback>}    
       </Col>
       <Col>
       <Label className='form-label' for='category'>
@@ -560,10 +564,12 @@ const [data, setData] = useState(null)
                 options={categoryOptions}
                 theme={selectThemeColors}
                 onChange={handleCategoryChange}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.category === null })}
+                placeholder='Выберите категорию'
+                className={classnames('react-select', { 'is-invalid': errors.category && true })}
               />
               )}
           />
+      {errors && errors.category && <FormFeedback>Пожалуйста выберите категорию</FormFeedback>}    
       </Col>
       <Col>
       <Label className='form-label' for='subcategory'>
@@ -581,7 +587,8 @@ const [data, setData] = useState(null)
                 classNamePrefix='select'
                 options={subcategoryOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.subcategory === null })}
+                placeholder='Выберите подкатегорию'
+                className={classnames('react-select', { 'is-invalid': errors.subcategory && true })}
                 {...field}
               />
             )}
@@ -602,11 +609,13 @@ const [data, setData] = useState(null)
                 classNamePrefix='select'
                 options={storeTypeOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.type === null })}
+                placeholder='Выбирите тип заведения'
+                className={classnames('react-select', { 'is-invalid': errors.type && true })}
                 {...field}
               />
             )}
           />
+      {errors && errors.type && <FormFeedback>Пожалуйста выберите тип заведения</FormFeedback>}    
       </Col> 
       <Col>
                 <Label className='form-label' for='merchantId'>
@@ -984,7 +993,8 @@ const [data, setData] = useState(null)
                 classNamePrefix='select'
                 options={storeTypeOptions}
                 theme={selectThemeColors}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.priceLevel === null })}
+                placeholder='Выбирите уровень цен'
+                className={classnames('react-select', { 'is-invalid': errors.priceLevel && true })}
                 {...field}
               />
             )}
