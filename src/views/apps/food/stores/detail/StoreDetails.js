@@ -145,26 +145,31 @@ const Store = (props) => {
     label: priceLevels[key]
   }))
 
-  const initCategoryOptions = categories.map((category) => ({
+  const initCategoryOptions = () => {
+    const filteredCategories = selectedStore ? categories.filter(
+      (category) => parseInt(category.category_type) === parseInt(selectedStore.business_type)
+    ) : categories
+    return filteredCategories.map((category) => ({
     value: String(category.id),
     label: category.name
   }))
+}
 
-  const initSubcategoryOptions = subcategories.map((subcategory) => ({
+  const initSubcategoryOptions = () => {
+    const filteredSubCategories = selectedStore ? subcategories.filter(
+      (subcategory) => parseInt(subcategory.category) === parseInt(selectedStore.category)
+    ) : subcategories
+    return filteredSubCategories.map((subcategory) => ({
     value: String(subcategory.id),
     label: subcategory.name
   }))
+}
 
   const [avatar, setAvatar] = useState("")
-  const [categoryOptions, setCategoryOptions] = useState(initCategoryOptions)
-  const [subcategoryOptions, setSubcategoryOptions] = useState(
-    initSubcategoryOptions
-  )
+  const [categoryOptions, setCategoryOptions] = useState(initCategoryOptions())
+  const [subcategoryOptions, setSubcategoryOptions] = useState(initSubcategoryOptions())
   const [modalShow, setModalShow] = useState(false)
-  const [passwords, setPasswords] = useState({
-    newPassword: "",
-    confirmPassword: ""
-  })
+  const [passwords, setPasswords] = useState({ newPassword: "", confirmPassword: "" })
   const [passwordsMatch, setPasswordsMatch] = useState(true)
   const values = {}
 
@@ -332,8 +337,8 @@ const Store = (props) => {
       if (data.name) formData.append("name", data.name)
       if (data.phone) formData.append("phone", data.phone)
       if (data.email) formData.append("email", data.email)
-      if (data.type) formData.append("type", data.type.value)
-      if (data.business) formData.append("business_type", data.business.value)
+      if (data.type) formData.append("type", parseInt(data.type.value))
+      if (data.business) formData.append("business_type", parseInt(data.business.value))
       if (data.percentage) formData.append("percentage", data.percentage)
       if (data.percentService) formData.append("service_charge", data.percentService)
       if (data.timeBeg) formData.append(
@@ -510,11 +515,14 @@ const Store = (props) => {
                   Тип заведения <span className="text-danger">*</span>
                 </Label>
                 <Controller
+                  id="type"
                   name="type"
                   control={control}
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Select
+                      id="type"
+                      name="type"
                       isClearable={false}
                       classNamePrefix="select"
                       options={storeTypeOptions}
