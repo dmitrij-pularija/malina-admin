@@ -1,7 +1,5 @@
-// ** Third Party Components
 import classnames from 'classnames'
 import { Menu, Grid, List } from 'react-feather'
-
 // ** Reactstrap Imports
 import {
   Row,
@@ -14,7 +12,7 @@ import {
   UncontrolledButtonDropdown
 } from 'reactstrap'
 
-const ProductsHeader = props => {
+const StoresHeader = props => {
   // ** Props
   const { activeView, setActiveView } = props
 
@@ -96,4 +94,4 @@ const ProductsHeader = props => {
   )
 }
 
-export default ProductsHeader
+export default StoresHeader

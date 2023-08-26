@@ -1,19 +1,12 @@
-// ** React Imports
 import { Fragment, useState, useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { getData, deleteStore } from '../store'
-// ** Product components
 import StoreCard from './StoreCard'
-import ProductsHeader from './ProductsHeader'
+import StoresHeader from './StoresHeader'
 import StoresSearchbar from './StoresSearchbar'
 import StoresFilter from './StoresFilter'
 import Swal from 'sweetalert2'
 import withReactContent from 'sweetalert2-react-content'
-
-// ** Third Party Components
-import classnames from 'classnames'
-
-// ** Reactstrap Imports
 import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 
 const MySwal = withReactContent(Swal)
@@ -26,9 +19,8 @@ const StoreList = props => {
   const [searchTerm, setSearchTerm] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sortColumn, setSortColumn] = useState('name')
-  const [currentPage, setCurrentPage] = useState(stores.params.page)
+  const [currentPage, setCurrentPage] = useState(1)
   const [businessType, setBusinessType] = useState({ value: '', label: 'Выбирите бизнес' })
-  
 
   useEffect(() => {
     dispatch(
@@ -54,13 +46,7 @@ const StoreList = props => {
     }))
   }
 
-  // const handleDel = id => {
-  //   console.log(id);
-  //   // dispatch(deleteStore(id))
-  // } 
-
   const handleDel = id => {
-    // dispatch(deleteStore(id))
     return MySwal.fire({
       title: 'Удаление заведения',
       text: "Вы не сможете востановить заведение!",
@@ -154,9 +140,8 @@ const StoreList = props => {
     }))
   }
   
-  // ** Handles pagination
   const handlePageChange = val => {
-    if (val === 'next' && stores.params.page <= Math.ceil(Number(stores.total) / rowsPerPage)) {
+    if (val === 'next' && stores.params.page <= Math.ceil(Number(stores.total) / stores.data.length)) {
       dispatch(getData({ ...stores.params, page: stores.params.page + 1 }))
       setCurrentPage(stores.params.page + 1)
     } else if (val === 'prev' && stores.params.page >= 1) {
@@ -169,7 +154,6 @@ const StoreList = props => {
     }
   }
 
-  // ** Render pages
   const renderPageItems = () => {
     const arrLength =
       stores.total !== 0 && stores.data.length !== 0 ? Math.ceil(Number(stores.total) / rowsPerPage) : 3
@@ -178,7 +162,7 @@ const StoreList = props => {
       return (
         <PaginationItem
           key={index}
-          active={stores.params.page === index + 1}
+          active={currentPage === index + 1}
           onClick={() => handlePageChange(index + 1)}
         >
           <PaginationLink href='/' onClick={e => e.preventDefault()}>
@@ -189,9 +173,8 @@ const StoreList = props => {
     })
   }
 
-  // ** handle next page click
   const handleNext = () => {
-    if (stores.params.page !== Math.ceil(Number(stores.total) / rowsPerPage)) {
+    if (currentPage !== Math.ceil(Number(stores.total) / rowsPerPage)) {
       handlePageChange('next')
     }
   }
@@ -202,7 +185,7 @@ const StoreList = props => {
       <div className='d-flex align-items-center justify-content-between gap-10'>
         <StoresFilter businessType={businessType} rowsPerPage={rowsPerPage} handlePerPage={handlePerPage} handleChangeBuseness={handleChangeBuseness} />
         <StoresSearchbar handleFilter={handleFilter} />
-        <ProductsHeader
+        <StoresHeader
           activeView={activeView}
           setActiveView={setActiveView}
         />
@@ -226,7 +209,7 @@ const StoreList = props => {
               <PaginationItem
                 className='next-item'
                 onClick={() => handleNext()}
-                disabled={stores.params.page === Number(stores.total) / stores.data.length}
+                disabled={currentPage === Math.ceil(stores.total / rowsPerPage)}
               >
                 <PaginationLink href='/' onClick={e => e.preventDefault()}></PaginationLink>
               </PaginationItem>

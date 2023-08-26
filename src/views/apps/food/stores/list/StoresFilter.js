@@ -16,10 +16,10 @@ const StoresFilter = ({ businessType, rowsPerPage, handlePerPage, handleChangeBu
   ]  
 
   return (
-    <div className="invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75">
+    <div className="invoice-list-table-header w-100">
       <Row>
-        <Col xl="6" className="d-flex align-items-center p-0">
-          <div className="d-flex align-items-center w-100">
+        <Col>
+          <div className="d-flex align-items-center">
             <label htmlFor="rows-per-page">Показать</label>
             <Input
               className="mx-50"
@@ -36,8 +36,8 @@ const StoresFilter = ({ businessType, rowsPerPage, handlePerPage, handleChangeBu
             {/* <label htmlFor="rows-per-page">записей</label> */}
           </div>
         </Col>
-        <Col className="d-flex align-items-center p-0">
-        <div className="d-flex align-items-center w-100">
+        <Col>
+        {/* <div className="d-flex align-items-center w-100"> */}
         {/* <label htmlFor="business">Бизнес</label> */}
           <Select
             id="business"
@@ -49,7 +49,7 @@ const StoresFilter = ({ businessType, rowsPerPage, handlePerPage, handleChangeBu
             value={businessType}
             onChange={data => handleChangeBuseness(data)}
           />
-        </div>  
+        {/* </div>   */}
         </Col>
       </Row>
     </div>
