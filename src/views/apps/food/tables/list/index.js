@@ -1,55 +1,25 @@
 import { useDispatch, useSelector } from "react-redux"
-import { useEffect, useState } from 'react'
+import { useEffect } from 'react'
 import Breadcrumbs from '@components/breadcrumbs'
 import Table from "./Table"
-import { getData } from '../../stores/store'
-import { getBranches } from '../../branches/store'
+import { getAllStores } from '../../stores/store'
 import { getAllWaiters } from "../../../user/waiters/store"
 import "@styles/react/apps/app-users.scss"
 
-const getFullData = async (type) => {
-  let isFinished = false
-  let page = 1
-  let count = 0
-  const acc = []
-while (!isFinished) {
-if (type  === "users") {
-const { data, total } = await getAllUsers({page})
-acc.push(...data)
-count = total
-}
-if (type  === "waiters") {
-const { data, total } = await getAllWaiters({page})
-acc.push(...data)
-count = total
-}
-if (acc.length === count) isFinished = true
-page += 1
-}
-
-return acc
-}
-
 const TablesList = () => {
   const dispatch = useDispatch()
-  const stores = useSelector(state => state.stores.data)
-  const branches = useSelector(state => state.branches.data)
-  const [waiters, setWaiters] = useState([])
+  const stores = useSelector(state => state.stores.allStores)
+  const waiters = useSelector(state => state.waiters.allWaiters)
 
 useEffect(() => {
-  // if (!stores.length) dispatch(getData())
-  // if (!branches.length) dispatch(getBranches())
-//   const fetchData = async () => {
-//     const waitersData = await getFullData("waiters")
-//     setWaiters(waitersData)
-//   }  
-// fetchData()  
+  if (!stores.length) dispatch(getAllStores())
+  if (!waiters.length) dispatch(getAllWaiters())
 }, [])
 
   return (
     <div className="app-user-list">
       <Breadcrumbs title='Столы' data={[{ title: 'Структура' }, { title: 'Столы' }]} />
-      <Table waiters={waiters} stores={stores} branches={branches} />
+      <Table waiters={waiters} stores={stores} />
     </div>
   )
 }

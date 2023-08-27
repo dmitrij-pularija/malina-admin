@@ -10,16 +10,19 @@ export const getShifts = async () => {
 }
 }
 
-export const getAllWaiters = createAsyncThunk('appWaiters/getAllWaiters', async param => {
+export const getAllWaiters = createAsyncThunk('appWaiters/getAllWaiters', async () => {
   try {
-    const { data: { count } } = await axios.get('/user/waiter')
-    const { data: { results } } = await axios.get('/user/waiter', { params: { perPage: count, ...param } })
-    return { allWaiters: results }
-    // const response = await axios.get('/user/waiter', { params })
-    // return await {
-    //   data: response.data.results,
-    //   total: response.data.count
-    // }
+    let isFinished = false
+    let page = 1
+    const acc = []
+    const { data: { count } } = await axios.get('/users/waiter')
+    while (!isFinished) {
+    const { data: { results } } = await axios.get('/users/waiter', { params: { perPage: 100, page }})
+    acc.push(...results)
+    if (acc.length === count) isFinished = true
+    page += 1
+    }
+    return acc
   } catch (error) {
     return []
   }
@@ -79,7 +82,7 @@ export const appWaitersSlice = createSlice({
         state.selectedWaiter = action.payload
       })
       .addCase(getAllWaiters.fulfilled, (state, action) => {
-        state.selectedWaiter = action.payload
+        state.allWaiters = action.payload
       })
   }
 })

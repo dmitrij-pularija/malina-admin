@@ -148,10 +148,9 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
   )
 }
 
-const TablesList = ({waiters, stores, branches}) => {
+const TablesList = ({waiters, stores }) => {
   const dispatch = useDispatch()
   const { data, total} = useSelector(state => state.tables)
-console.log(data)
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [qrcodeUrl, setQqrcodeUrl] = useState('')
@@ -186,7 +185,7 @@ console.log(data)
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        store: currentStore.value
+        business_id: currentStore.value
       })
     )
   }, [dispatch, data.length, sort, sortColumn, currentPage])
@@ -204,7 +203,7 @@ console.log(data)
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        store: currentStore.value
+        business_id: currentStore.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -218,7 +217,7 @@ console.log(data)
         search: searchTerm,
         perPage: value,
         page: currentPage,
-        store: currentStore.value
+        business_id: currentStore.value
       })
     )
     setRowsPerPage(value)
@@ -232,7 +231,7 @@ console.log(data)
         ordering: `${sort}${sortColumn}`,
         page: currentPage,
         perPage: rowsPerPage,
-        store: currentStore.value
+        business_id: currentStore.value
       })
     )
   }
@@ -287,7 +286,7 @@ console.log(data)
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        store: currentStore.value
+        business_id: currentStore.value
       })
     )
   }
@@ -319,12 +318,11 @@ console.log(data)
                   setCurrentStore(data)
                   dispatch(
                     getData({
-                      sort,
-                      ordering: sortColumn,
+                      ordering: `${sort}${sortColumn}`,
                       search: searchTerm,
                       page: currentPage,
                       perPage: rowsPerPage,
-                      store: data.value
+                      business_id: data.value
                     })
                   )
                 }}
@@ -363,7 +361,7 @@ console.log(data)
           />
         </div>
       </Card>
-      <Sidebar open={sidebarOpen} toggleSidebar={handleClose} waiters={waiters} branches={branches} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
+      <Sidebar open={sidebarOpen} toggleSidebar={handleClose} waiters={waiters} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
       <Modal isOpen={modalShow} toggle={toggleModal} className='modal-dialog-centered'>
       <ModalHeader className='bg-transparent' toggle={toggleModal}></ModalHeader>
         <ModalBody className='px-sm-5 pt-50 pb-5'>

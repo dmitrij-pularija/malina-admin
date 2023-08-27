@@ -98,7 +98,7 @@ const handleClick = url => {
     minWidth: '150px',
     sortField: 'invoiceStatus',
     name: 'Адрес',
-    cell: row => `${row.business_id.business_address.city}, ${row.business_id.business_address.name}`
+    cell: row => `${row.business_id.business_address.city ? row.business_id.business_address.city : ''}, ${row.business_id.business_address.name ? row.business_id.business_address.name : ''}`
   },
   {
     sortable: true,
