@@ -1,7 +1,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import Sidebar from './Sidebar'
 import { columns } from './columns'
-import { getWaiters, deleteWaiter } from '../store'
+import { getWaiters, deleteWaiter, getShifts } from '../store'
 import { getAllStores } from '../../../food/stores/store'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
@@ -151,21 +151,27 @@ const WaitersList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const stores = useSelector(state => state.stores.allStores)
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
+  const [shifts, setShifts] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [sortColumn, setSortColumn] = useState('id')
+  const [sortColumn, setSortColumn] = useState('full_name')
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedWaiter, setSelectedWaiter] = useState('')
   const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
-  
   // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const handleClose = () => {
     setSelectedWaiter('')
     setSidebarOpen(false)
    }
+
+   useEffect(() => {
+    if (!stores.length) dispatch(getAllStores())
+    getShifts().then(response => {
+      setShifts(response)
+    })
+  }, []) 
  
   useEffect(() => {
-    if (!stores.length) dispatch(getAllStores({ business_type: 1 }))
     dispatch(
       getWaiters({
         ordering: `${sort}${sortColumn}`,
@@ -236,7 +242,7 @@ const handleEditWaiter = (event, row) => {
  
   const CustomPagination = () => {
     const count = Number(Math.ceil(total / rowsPerPage))
-// console.log(count, total)
+ 
     return (
       <ReactPaginate
         previousLabel={''}
@@ -353,7 +359,7 @@ const handleEditWaiter = (event, row) => {
         </div>
       </Card>
 
-      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} />
+      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={handleClose} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} />
     </Fragment>
   )
 }

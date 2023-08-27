@@ -48,7 +48,7 @@ const BreadCrumbs = props => {
             <div className='breadcrumb-wrapper vs-breadcrumbs d-sm-block d-none col-12'>
               <Breadcrumb>
                 <BreadcrumbItem tag='li'>
-                  <Link to='/'>Домашняя страница</Link>
+                  <Link to='/'>Главная</Link>
                 </BreadcrumbItem>
                 {renderBreadCrumbs()}
               </Breadcrumb>

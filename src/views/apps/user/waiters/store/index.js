@@ -1,7 +1,15 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
-// export const getAllWaiters = async () => {
+export const getShifts = async () => {
+  try {
+  const { data: { results }} = await axios.get('/users/waiter-shifts/')
+  return results
+} catch (error) {
+  return []
+}
+}
+
 export const getAllWaiters = createAsyncThunk('appWaiters/getAllWaiters', async param => {
   try {
     const { data: { count } } = await axios.get('/user/waiter')

@@ -4,15 +4,25 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // ** Axios Imports
 import axios from 'axios'
 
-export const getAllStores = createAsyncThunk('appStores/getAllStores', async param => {
+export const getAllStores = createAsyncThunk('appStores/getAllStores', async () => {
+  let isFinished = false
+  let page = 1
+  const acc = []
   const { data: { count } } = await axios.get('/users/businesses/')
-  const { data: { results } } = await axios.get('/users/businesses', { params: { perPage: count, ...param } })
-  return results
+
+  while (!isFinished) {
+  const { data: { results } } = await axios.get('/users/businesses', { params: { perPage: 100, page } })
+  acc.push(...results)
+  if (acc.length === count) isFinished = true
+  page += 1
+  }
+  return acc
 })
 
-// export const getWaiter = createAsyncThunk('appOrders/getWaiters', async () => {
-//   const { data } = await axios.get('user/waiter/')
-//   return data
+// export const getAllStores = createAsyncThunk('appStores/getAllStores', async param => {
+//   const { data: { count } } = await axios.get('/users/businesses/')
+//   const { data: { results } } = await axios.get('/users/businesses', { params: { perPage: count, ...param } })
+//   return results
 // })
 
 export const getData = createAsyncThunk('appStores/getData', async params => {

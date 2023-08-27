@@ -64,7 +64,21 @@ return [
           {/* <Logo2 src={getSrc(row.business_id.id)} size={"s"}/> */}
         <div className='d-flex flex-column ml3'>
             <span className='fw-bolder'>{row.business_id.name}</span>
+            <span className='fw-bolder'>{row.business_id.phone}</span>
         </div>
+      </div>
+    )
+  },
+  {
+    name: 'Смена',
+    sortable: true,
+    minWidth: '250px',
+    sortField: 'shift.id',
+    selector: row => row,
+     cell: row => (
+      <div className='d-flex flex-column justify-content-center align-items-center'>
+        <span className='fw-bolder'>{row.shift ? row.shift.description : ''}</span>
+        <span className='fw-bolder'>{row.shift ? `${row.shift.start_time.slice(0, -3)} - ${row.shift.end_time.slice(0, -3)}` : ''}</span>
       </div>
     )
   },

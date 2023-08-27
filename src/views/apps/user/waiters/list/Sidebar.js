@@ -5,19 +5,33 @@ import { selectThemeColors } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-import { Button, Label, Form, Input } from 'reactstrap'
+import { Button, Label, Form, Input, FormFeedback } from 'reactstrap'
 import { addWaiter, editWaiter } from '../store'
 import { useDispatch } from 'react-redux'
 
 const defaultValues = {
-  storeid: '',
+  shift: '',
   fullName: '',
   telegram: ''
 }
 
-const checkIsValid = data => {
-  return Object.values(data).every(field => (typeof field === 'object' ? field.value !== "" : field.length > 0))
+const requiredFields = ["fullName"]
+
+const checkIsValid = (data) => {
+  return Object.keys(data).every((key) => {
+    const field = data[key]
+    if (requiredFields.includes(key)) {
+      if (typeof field === "object") {
+        return field.value !== ""
+      } else {
+        return field.length > 0
+      }
+    } else {
+      return true
+    }
+  })
 }
+
 
 const renderAvatar = data => {
   if (data.avatar) {
@@ -35,30 +49,30 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
+const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
   const dispatch = useDispatch()
-  const [data, setData] = useState(null)
   const [avatar, setAvatar] = useState('')
 
   useEffect(() => {
     if (selectedWaiter) setAvatar(selectedWaiter.profile_picture) 
     }, [selectedWaiter])
 
-  const storeOptions = stores.map((store) => ({
-    value: String(store.id),
-    label: store.name
+  const shiftsOptions = shifts.map((item) => ({
+    value: String(item.id),
+    label: `${item.business.name} ${item.start_time.slice(0, -3)} - ${item.end_time.slice(0, -3)}`
   }))
 
   const values = selectedWaiter ? {
-    fullName: selectedWaiter.full_name,
-    telegram: selectedWaiter.telegram,
-    storeid: storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.storeid.id))]} : {}
+    fullName: selectedWaiter.full_name ? selectedWaiter.full_name : '',
+    telegram: selectedWaiter.telegram ? selectedWaiter.telegram : '',
+    shift: selectedWaiter.shift ? shiftsOptions[shiftsOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.shift.id))] : ''} : {}
   
     const {
       reset,
       control,
-      setValue,
       setError,
+      setValue,
+      getValues,
       handleSubmit,
       formState: { errors }
     } = useForm({ defaultValues, values })
@@ -93,13 +107,10 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedWaiter, setSel
 
 
   const onSubmit = data => {
-    setData(data)
     if (checkIsValid(data)) {
-
       const formData = new FormData()
       formData.append('full_name', data.fullName)
-      formData.append('storeid', data.storeid.value)
-
+      if (data.shift) formData.append('shift', data.shift.value)
       if (data.telegram) formData.append('telegram', data.telegram)
       if (avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
@@ -116,14 +127,9 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedWaiter, setSel
       reset()
     } else {
       for (const key in data) {
-        if (data[key] === null) {
-          setError('country', {
-            type: 'manual'
-          })
-        }
-        if (data[key] !== null && data[key].length === 0) {
+        if (data[key].length === 0) {
           setError(key, {
-            type: 'manual'
+            type: "manual"
           })
         }
       }
@@ -173,10 +179,12 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedWaiter, setSel
           <Controller
             name='fullName'
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Input id='fullName' placeholder='John' invalid={errors.fullName && true} {...field} />
             )}
           />
+          {errors && errors.fullName && (<FormFeedback>Пожалуйста заполните имя</FormFeedback>)}  
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='telegram'>
@@ -185,27 +193,30 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedWaiter, setSel
           <Controller
             name='telegram'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
               <Input id='telegram' placeholder='12345' invalid={errors.telegram && true} {...field} />
             )}
           />
+          {errors && errors.telegram && (<FormFeedback>Введите Телеграмм ID</FormFeedback>)}  
         </div>  
         <div className='mb-3'>
-          <Label className='form-label' for='storeid'>
-          Ресторан <span className='text-danger'>*</span>
+          <Label className='form-label' for='shift'>
+          Смена
           </Label>
           <Controller
-            name='storeid'
+            name='shift'
             control={control}
+            rules={{ required: false }}
             render={({ field }) => (
               <Select
-                id='storeid'
+                id='shift'
                 isClearable={false}
                 classNamePrefix='select'
-                options={storeOptions}
+                options={shiftsOptions}
                 theme={selectThemeColors}
-                placeholder="Выберите заведение"
-                className={classnames('react-select', { 'is-invalid': data !== null && data.store === null })}
+                placeholder="Выберите смену"
+                className={classnames('react-select', { 'is-invalid': errors.shift && true })}
                 {...field}
               />
             )}
