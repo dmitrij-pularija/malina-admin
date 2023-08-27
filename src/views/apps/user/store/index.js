@@ -6,7 +6,7 @@ import axios from 'axios'
 
 export const getAllUsers = async (params) => {
   try {
-    const response = await axios.get('/user/client', { params })
+    const response = await axios.get('/users/user', { params })
   return await {
     data: response.data.results,
     total: response.data.count
@@ -17,10 +17,10 @@ export const getAllUsers = async (params) => {
 }
 
 export const getAllCount = createAsyncThunk('appUsers/getAllCount', async () => {
-  const all = await axios.get('/user/client')
-  const users = await axios.get('/user/client', { params: { client_type: 'user' } })
-  const customers = await axios.get('/user/client', { params: { client_type: 'customer' } })
-  const guests = await axios.get('/user/client', { params: { client_type: 'guest' }})
+  const all = await axios.get('/users/user')
+  const users = await axios.get('/users/user', { params: { user_type: 'user' } })
+  const customers = await axios.get('/users/user', { params: { user_type: 'customer' } })
+  const guests = await axios.get('/users/user', { params: { user_type: 'guest' }})
   return {
     totalCount: all.data.count,
     totalUsers: users.data.count,
@@ -30,7 +30,7 @@ export const getAllCount = createAsyncThunk('appUsers/getAllCount', async () => 
 })
 
 export const getData = createAsyncThunk('appUsers/getData', async params => {
-  const response = await axios.get('/user/client', { params })
+  const response = await axios.get('/users/user', { params })
   return {
     params,
     data: response.data.results,
@@ -39,26 +39,26 @@ export const getData = createAsyncThunk('appUsers/getData', async params => {
 })
 
 export const getUser = createAsyncThunk('appUsers/getUser', async id => {
-  const response = await axios.get(`/user/client/${id}`)
+  const response = await axios.get(`/users/user/${id}/`)
   return response.data
 })
 
 export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
-  await axios.post('/user/client/', user)
+  await axios.post('/users/user/', user)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return user
 })
 
 export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { dispatch, getState }) => {
-  await axios.delete(`/user/client/${id}/`)
+  await axios.delete(`/users/user/${id}/`)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return id
 })
 
 export const editUser = createAsyncThunk('appUsers/editUser', async ({ id, formData }, { dispatch, getState }) => {
-  await axios.patch(`/user/client/${id}/`, formData)
+  await axios.patch(`/users/user/${id}/`, formData)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return id

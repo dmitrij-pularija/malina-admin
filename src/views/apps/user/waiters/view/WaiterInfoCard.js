@@ -14,13 +14,13 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const MySwal = withReactContent(Swal)
 
-const WaiterInfoCard = ({ stores, selectedWaiter }) => {
+const WaiterInfoCard = ({ shifts, selectedWaiter }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
 
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-   
+  const handleClose = () => navigate("/apps/user/waiters/list/") 
   const renderUserImg = () => {
     if (selectedWaiter !== null && selectedWaiter.profile_picture) {
       return (
@@ -132,6 +132,11 @@ const WaiterInfoCard = ({ stores, selectedWaiter }) => {
                   <span>{selectedWaiter.business_id ? selectedWaiter.business_id.name : "Не указан"}</span>
                 </li>
                 <li className='mb-75'>
+                  <span className='fw-bolder me-25'>Смена:</span>
+                  <span>{selectedWaiter.shift ? `${selectedWaiter.shift.start_time.slice(0, -3)} - ${selectedWaiter.shift.end_time.slice(0, -3)}` : "Не указана"}</span>
+                  {/* <span>{selectedWaiter.shift ? selectedWaiter.shift.description : ''}</span> */}
+                </li>
+                <li className='mb-75'>
                   <span className='fw-bolder me-25'>Телефон:</span>
                   <span>{selectedWaiter.business_id ? selectedWaiter.business_id.phone : "Не указан"}</span>
                 </li>
@@ -142,13 +147,13 @@ const WaiterInfoCard = ({ stores, selectedWaiter }) => {
             <Button color='primary' onClick={toggleSidebar}>
               Изменить
             </Button>
-            <Button className='ms-1' color='danger' outline onClick={handleSuspendedClick}>
-              Удалить
+            <Button className='ms-1' color='danger' outline onClick={handleClose}>
+            Отменить
             </Button>
           </div>
         </CardBody>
       </Card>
-      {/* <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />   */}
+      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />  
     </Fragment>
   )
 }

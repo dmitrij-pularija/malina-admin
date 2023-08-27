@@ -163,7 +163,7 @@ const UsersList = () => {
   const { data, total } = useSelector(state => state.users)
 
   // ** States
-  const [sort, setSort] = useState('desc')
+  const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('id')
@@ -182,23 +182,21 @@ const UsersList = () => {
     dispatch(getAllCount())
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        client_type: currentType.value
+        user_type: currentType.value
       })
     )
-  }, [dispatch, data.length, sort, sortColumn, currentPage])
+  }, [])
 
   // ** User filter options
    const typeOptions = [
     { value: '', label: 'Показать все' },
     { value: 'user', label: 'Пользователь' },
     { value: 'customer', label: 'Клиент' },
-    { value: 'guest', label: 'Гость' },
-    { value: 'admin', label: 'Администратор' }
+    { value: 'guest', label: 'Гость' }
   ] 
   // const roleOptions = [
   //   { value: '', label: 'Select Role' },
@@ -237,12 +235,11 @@ const UsersList = () => {
   const handlePagination = page => {
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        client_type: currentType.value
+        user_type: currentType.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -253,12 +250,11 @@ const UsersList = () => {
     const value = parseInt(e.currentTarget.value)
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
         page: currentPage,
-        client_type: currentType.value
+        user_type: currentType.value
       })
     )
     setRowsPerPage(value)
@@ -269,12 +265,11 @@ const UsersList = () => {
     setSearchTerm(val)
     dispatch(
       getData({
-        sort,
         search: val,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         page: currentPage,
         perPage: rowsPerPage,
-        client_type: currentType.value
+        user_type: currentType.value
       })
     )
   }
@@ -305,7 +300,7 @@ const UsersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      client_type: currentType.value,
+      user_type: currentType.value,
       search: searchTerm
     }
 
@@ -324,16 +319,15 @@ const UsersList = () => {
   }
 
   const handleSort = (column, sortDirection) => {
-    setSort(sortDirection)
+    setSort(sortDirection === "asc" ? "+" : "-")
     setSortColumn(column.sortField)
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sortDirection === "asc" ? "+" : "-"}${column.sortField}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        client_type: currentType.value
+        user_type: currentType.value
       })
     )
   }
@@ -357,12 +351,11 @@ const UsersList = () => {
                   setCurrentPage(1)
                   dispatch(
                     getData({
-                      sort,
-                      ordering: sortColumn,
+                      ordering: `${sort}${sortColumn}`,
                       search: searchTerm,
                       page: 1,
                       perPage: rowsPerPage,
-                      client_type: data.value
+                      user_type: data.value
                     })
                   )
                 }}
@@ -387,6 +380,7 @@ const UsersList = () => {
             className='react-dataTable'
             paginationComponent={CustomPagination}
             data={dataToRender()}
+            noDataComponent={<h6 className='text-capitalize'>Информация не найдена</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={data}

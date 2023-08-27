@@ -15,7 +15,7 @@ const UserView = () => {
 
   useEffect(() => {
     dispatch(getUser(parseInt(id)))
-  }, [dispatch])
+  }, [])
 
   const [active, setActive] = useState('1')
 

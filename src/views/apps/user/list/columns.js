@@ -16,7 +16,7 @@ import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 
 // ** Renders Client Columns
 const renderClient = row => {
-  if (row.avatar) {
+  if (row.avatar && row.avatar && row.avatar.includes("http")) {
     return <Avatar className='me-1' img={row.avatar} width='32' height='32' />
   } else {
     return (
@@ -79,20 +79,18 @@ return [
     sortable: true,
     minWidth: '300px',
     sortField: 'login',
-    selector: row => row,
+    selector: row => row.login,
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
         {renderClient(row)}
-        <div className='d-flex flex-column'>
           <Link
             to={`/apps/user/view/${row.id}`}
-            className='user_name text-truncate text-body'
+            className='user_name text-truncate text-body d-flex flex-column'
             onClick={() => store.dispatch(getUser(row.id))}
           >
             <span className='fw-bolder'>{ row.name ? `${row.name} ${row.surname}` : "" }</span>
+            <small className='text-truncate text-muted mb-0'>{row.login}</small>
           </Link>
-          <small className='text-truncate text-muted mb-0'>{row.login}</small>
-        </div>
       </div>
     )
   },
@@ -100,15 +98,15 @@ return [
     name: 'Тип',
     minWidth: '138px',
     sortable: true,
-    sortField: 'client_type',
-    selector: row => row,
-    cell: row => <span className='text-capitalize'>{typeObj[row.client_type]}</span>
+    sortField: 'user_type',
+    selector: row => row.user_type,
+    cell: row => <span className='text-capitalize'>{typeObj[row.user_type]}</span>
   },
   {
     name: 'Роль',
     sortable: true,
     minWidth: '172px',
-    sortField: 'role',
+    sortField: 'type',
     selector: row => row.type,
     cell: row => renderRole(row)
   },
@@ -117,7 +115,7 @@ return [
     minWidth: '138px',
     sortable: true,
     sortField: 'is_archive',
-    selector: row => row.status,
+    selector: row => row.is_archive,
     cell: row => (
       <Badge className='text-capitalize' color={statusObj[row.is_archive]} pill>
         {row.is_archive ? "Не активный" : "Активный"}

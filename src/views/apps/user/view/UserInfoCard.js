@@ -1,6 +1,6 @@
 // ** React Imports
 import { useState, Fragment } from 'react'
-
+import { useNavigate } from "react-router-dom"
 // ** Reactstrap Imports
 import { Row, Col, Card, Form, CardBody, Button, Badge, Modal, Input, Label, ModalBody, ModalHeader } from 'reactstrap'
 
@@ -74,6 +74,7 @@ const statusColors = {
 const genderOptions = [
   { value: 1, label: 'Мужчина' },
   { value: 2, label: 'Женщина' },
+  { value: 3, label: '3' },
   { value: 4, label: 'Не указан' }
 ]
 // const statusOptions = [
@@ -107,12 +108,13 @@ const typeOptions = [
 const MySwal = withReactContent(Swal)
 
 const UserInfoCard = ({ selectedUser }) => {
+  const navigate = useNavigate()
   // ** State
   // const initDate = selectedUser.datebirth ? selectedUser.datebirth : (new Date())
 
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
-
+  const handleClose = () => navigate("/apps/user/list")
   // const [picker, setPicker] = useState(formatData(initDate))
   // const handleDateChange = (date) => setPicker(date)
   // ** Hook
@@ -132,7 +134,7 @@ const UserInfoCard = ({ selectedUser }) => {
 
   // ** render user img
   const renderUserImg = () => {
-    if (selectedUser !== null && selectedUser.avatar) {
+    if (selectedUser && selectedUser.avatar && selectedUser.avatar.includes("http")) {
       return (
         <img
           height='110'
@@ -151,7 +153,7 @@ const UserInfoCard = ({ selectedUser }) => {
           content={selectedUser.name ? `${selectedUser.name} ${selectedUser.surname}` : 'User'}
           contentStyles={{
             borderRadius: 0,
-            fontSize: 'calc(48px)',
+            fontSize: 'calc(42px)',
             width: '100%',
             height: '100%'
           }}
@@ -232,8 +234,8 @@ const UserInfoCard = ({ selectedUser }) => {
                 <div className='user-info'>
                   <h4>{selectedUser.name !== null ? `${selectedUser.name} ${selectedUser.surname}` : ''}</h4>
                   {selectedUser !== null ? (
-                    <Badge color={typeObj[selectedUser.client_type].color} className='text-capitalize'>
-                      {typeObj[selectedUser.client_type].type}
+                    <Badge color={typeObj[selectedUser.user_type].color} className='text-capitalize'>
+                      {typeObj[selectedUser.user_type].type}
                     </Badge>
                   ) : null}
                 </div>
@@ -310,12 +312,12 @@ const UserInfoCard = ({ selectedUser }) => {
               </ul>
             ) : null}
           </div>
-          <div className='d-flex justify-content-center pt-2'>
+          <div className='d-flex justify-content-center pt-2 gap-10'>
             <Button color='primary' onClick={toggleModal}>
               Изменить
             </Button>
-            <Button className='ms-1' color='danger' outline onClick={handleSuspendedClick}>
-              Блокировать
+            <Button color="secondary" outline onClick={handleClose}>
+              Отменить
             </Button>
           </div>
         </CardBody>
