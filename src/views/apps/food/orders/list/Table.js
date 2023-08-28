@@ -10,6 +10,7 @@ import { columns } from './columns'
 // ** Store & Actions
 import { getAllData, getData, getOrderStatus } from '../store'
 import { getWaiters } from '../../../user/waiters/store'
+import { getAllStores } from '../../stores/store'
 
 import { useDispatch, useSelector } from 'react-redux'
 
@@ -173,9 +174,9 @@ const OrdersList = () => {
   const dispatch = useDispatch()
   const store = useSelector(state => state.orders)
   const status = useSelector(state => state.orders.status)
-
+  const stores = useSelector(state => state.stores.allStores)
   // ** States
-  const [sort, setSort] = useState('desc')
+  const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('-order_date')
@@ -192,23 +193,23 @@ const OrdersList = () => {
 
   // ** Get data on mount
   useEffect(() => {
-    // dispatch(getData())
-    dispatch(getOrderStatus())
-
+    dispatch(getData())
+    if (!stores.length) dispatch(getAllStores())
+    if (!status.length) dispatch(getOrderStatus())  
     // dispatch(getAllData())
     // dispatch(getWaiters())
     // sort,
     // dispatch(
     //   getData({
-    //     ordering: sortColumn,
+    //     ordering: `${sort}${sortColumn}`,
     //     search: searchTerm,
     //     page: currentPage,
     //     perPage: rowsPerPage,
     //     status: currentStatus.value,
-    //     storeId: currentStore.value
+    //     business_id: currentStore.value
     //   })
     // )
-  }, [dispatch, store.data.length, sort, sortColumn, currentPage])
+  }, [])
 
   // ** User filter options
   // const roleOptions = [
@@ -220,11 +221,16 @@ const OrdersList = () => {
   //   { value: 'subscriber', label: 'Subscriber' }
   // ]
 
-  const storeOptions = [
-    { value: '', label: 'Показать все' },
-    { value: '189', label: 'MALINA ECO FOOD' },
-    { value: '236', label: 'Chicken Crispy' }
-  ]
+  // const storeOptions = [
+  //   { value: '', label: 'Показать все' },
+  //   { value: '189', label: 'MALINA ECO FOOD' },
+  //   { value: '236', label: 'Chicken Crispy' }
+  // ]
+  const storeOptions = stores.map((store) => ({
+    value: String(store.id),
+    label: store.name
+}))
+storeOptions.unshift({ value: '', label: 'Показать все' })
 
   // const statusOptions = Object.entries(statusObj).map(([number, status]) => ({
   //   value: number,
@@ -249,13 +255,12 @@ const OrdersList = () => {
   const handlePagination = page => {
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
         status: currentStatus.value,
-        storeId: currentStore.value
+        business_id: currentStore.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -266,13 +271,12 @@ const OrdersList = () => {
     const value = parseInt(e.currentTarget.value)
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
         page: currentPage,
         status: currentStatus.value,
-        storeId: currentStore.value
+        business_id: currentStore.value
       })
     )
     setRowsPerPage(value)
@@ -283,13 +287,12 @@ const OrdersList = () => {
     setSearchTerm(val)
     dispatch(
       getData({
-        sort,
         search: val,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         page: currentPage,
         perPage: rowsPerPage,
         status: currentStatus.value,
-        storeId: currentStore.value
+        business_id: currentStore.value
       })
     )
   }
@@ -320,7 +323,7 @@ const OrdersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      storeId: currentStore.value,
+      business_id: currentStore.value,
       status: currentStatus.value,
       search: searchTerm
     }
@@ -339,17 +342,16 @@ const OrdersList = () => {
   }
 
   const handleSort = (column, sortDirection) => {
-    setSort(sortDirection)
+    setSort(sortDirection === "asc" ? "+" : "-")
     setSortColumn(column.sortField)
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
         status: currentStatus.value,
-        storeId: currentStore.value
+        business_id: currentStore.value
       })
     )
   }
@@ -375,13 +377,12 @@ const OrdersList = () => {
                   setCurrentStatus(data)
                   dispatch(
                     getData({
-                      sort,
-                      ordering: sortColumn,
+                      ordering: `${sort}${sortColumn}`,
                       search: searchTerm,
                       page: currentPage,
                       perPage: rowsPerPage,
                       status: data.value,
-                      storeId: currentStore.value
+                      business_id: currentStore.value
                     })
                   )
                 }}
@@ -400,13 +401,12 @@ const OrdersList = () => {
                   setCurrentStore(data)
                   dispatch(
                     getData({
-                      sort,
-                      ordering: sortColumn,
+                      ordering: `${sort}${sortColumn}`,
                       search: searchTerm,
                       page: currentPage,
                       perPage: rowsPerPage,
                       status: currentStatus.value,
-                      storeId: data.value
+                      business_id: data.value
                     })
                   )
                 }}

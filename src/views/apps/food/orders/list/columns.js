@@ -7,7 +7,7 @@ import Logo2 from '@components/logo2'
 import classnames from 'classnames'
 // ** Store & Actions
 import { store } from '@store/store'
-import { getOrder, deleteUser } from '../store'
+import { getOrder } from '../store'
 
 
 // ** Icons Imports
@@ -224,7 +224,7 @@ export const columns = [
               className='w-100'
               onClick={e => {
                 e.preventDefault()
-                store.dispatch(deleteUser(row.id))
+                // store.dispatch(deleteUser(row.id))
               }}
             >
               <Trash2 size={14} className='me-50' />

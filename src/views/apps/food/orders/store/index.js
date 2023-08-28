@@ -11,14 +11,14 @@ export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async
 
 // http://167.99.246.103/myapps/venv/api/item/clientorder/
 export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
-  const response = await axios.get('/item/clientorder')
+  const response = await axios.get('/products/user-order')
 // console.log(response.data.results)
   // const response = await axios.get('/api/users/list/all-data')
   return response.data.results
 })
 
 export const getData = createAsyncThunk('appOrders/getData', async params => {
-  const response = await axios.get('/products/user-order/', { params })
+  const response = await axios.get('/products/user-order', { params })
   // console.log(response)
   // const response = await axios.get('/api/users/list/data', params)
   return {
@@ -43,19 +43,19 @@ export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
 //   return response.data.user
 // })
 
-export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
-  await axios.post('/apps/users/add-user', user)
-  await dispatch(getData(getState().users.params))
-  await dispatch(getAllData())
-  return user
-})
+// export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
+//   await axios.post('/apps/users/add-user', user)
+//   await dispatch(getData(getState().users.params))
+//   await dispatch(getAllData())
+//   return user
+// })
 
-export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { dispatch, getState }) => {
-  await axios.delete('/apps/users/delete', { id })
-  await dispatch(getData(getState().users.params))
-  await dispatch(getAllData())
-  return id
-})
+// export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { dispatch, getState }) => {
+//   await axios.delete('/apps/users/delete', { id })
+//   await dispatch(getData(getState().users.params))
+//   await dispatch(getAllData())
+//   return id
+// })
 
 export const appOrdersSlice = createSlice({
   name: 'appOrders',

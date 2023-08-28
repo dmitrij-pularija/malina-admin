@@ -202,8 +202,7 @@ const handleEditWaiter = (event, row) => {
   const handlePagination = page => {
     dispatch(
       getWaiters({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
@@ -314,8 +313,7 @@ const handleEditWaiter = (event, row) => {
                   setCurrentPage(1)
                   dispatch(
                     getWaiters({
-                      sort,
-                      ordering: sortColumn,
+                      ordering: `${sort}${sortColumn}`,
                       search: searchTerm,
                       page: 1,
                       perPage: rowsPerPage,
