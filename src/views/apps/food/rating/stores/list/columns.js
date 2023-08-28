@@ -12,7 +12,7 @@ import '@styles/base/pages/app-ecommerce.scss'
 import { formatData } from '@utils'
 
   const getAvatar = data => {
-  if (data.avatar) {
+  if (data.avatar && data.avatar.includes("http")) {
     return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
   } else {
     return (
@@ -33,8 +33,8 @@ export const columns = (users, stores) => {
 
   const getUserInfo = id => {
       const foundUser = users.find(item => item.id === id)
-      if (!foundUser) return {name: "", avatar: "", login: ""}
-      return {name: `${foundUser.name} ${foundUser.surname}`, avatar: foundUser.avatar, login: foundUser.login }
+      if (!foundUser) return {name: "User", avatar: "", login: ""}
+      return {name: `${foundUser.name ? foundUser.name : ''} ${foundUser.surname ? foundUser.surname : ''}`, avatar: foundUser.avatar, login: foundUser.login }
     }
 
   const renderClient = (id, type) => {
@@ -63,10 +63,11 @@ export const columns = (users, stores) => {
     const foundStore = stores.find(item => item.id === id)
     return (
       <div className='d-flex justify-content-left align-items-center'>
-      <Logo2 src={foundStore.image} size={"s"}/>
+      {getAvatar(foundStore)}   
+      {/* <Logo2 src={foundStore.image} size={"s"}/> */}
     <div className='d-flex flex-column ml3'>
         <span className='fw-bolder'>{foundStore.name}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore.storeaddress.name}</small>
+      <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
     </div>
   </div>
     )
@@ -126,7 +127,7 @@ export const columns = (users, stores) => {
     minWidth: '250px',
     sortable: false,
     selector: row => row.store,
-    cell: row => renderStoore(row.store)
+    cell: row => renderStoore(row.business)
   }
 ]
 }

@@ -5,7 +5,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import axios from 'axios'
 
 export const getData = createAsyncThunk('appRatingOrders/getData', async params => {
-  const response = await axios.get('/item/rateorder', { params })
+  const response = await axios.get('/products/rate-order', { params })
   return {
     params,
     data: response.data.results,
