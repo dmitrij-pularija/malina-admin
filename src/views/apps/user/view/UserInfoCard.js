@@ -150,7 +150,7 @@ const UserInfoCard = ({ selectedUser }) => {
           initials
           color={'light-primary'}
           className='rounded mt-3 mb-2'
-          content={selectedUser.name ? `${selectedUser.name} ${selectedUser.surname}` : 'User'}
+          content={selectedUser.name ? `${selectedUser.name} ${selectedUser.surname}` : selectedUser.user_type}
           contentStyles={{
             borderRadius: 0,
             fontSize: 'calc(42px)',

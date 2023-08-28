@@ -150,7 +150,7 @@ const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
               initials
               color={'light-primary'}
               className='rounded mb-1'
-              content={selectedUser.name ? `${selectedUser.name} ${selectedUser.surname}` : 'User'}
+              content={selectedUser.name ? `${selectedUser.name} ${selectedUser.surname}` : selectedUser.user_type}
               contentStyles={{
                 borderRadius: 0,
                 fontSize: 'calc(48px)',
@@ -306,7 +306,7 @@ return (
         </Col>
         <Col md={6} xs={12}>
           <Label className='form-label' for='type'>
-          Тип пользователя
+          Роль
           </Label>
           <Controller
             id='type'
@@ -350,7 +350,7 @@ return (
         </Col>
         <Col md={6} xs={12}>
           <Label className='form-label' for='clientType'>
-          Роль
+          Тип пользователя
           </Label>
           <Controller
             id='clientType'

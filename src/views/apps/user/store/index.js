@@ -4,17 +4,23 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 // ** Axios Imports
 import axios from 'axios'
 
-export const getAllUsers = async (params) => {
+export const getAllUsers = createAsyncThunk('appUsers/getAllWaiters', async () => {
   try {
-    const response = await axios.get('/users/user', { params })
-  return await {
-    data: response.data.results,
-    total: response.data.count
-  }  
+    let isFinished = false
+    let page = 1
+    const acc = []
+    const { data: { count } } = await axios.get('/users/user')
+    while (!isFinished) {
+      const { data: { results } } = await axios.get('/users/user', { params: { perPage: 100, page }})
+      acc.push(...results)
+      if (acc.length === count) isFinished = true
+      page += 1
+      }
+      return acc 
   } catch (error) {
     return []
   }
-}
+})
 
 export const getAllCount = createAsyncThunk('appUsers/getAllCount', async () => {
   const all = await axios.get('/users/user')
@@ -68,6 +74,7 @@ export const appUsersSlice = createSlice({
   name: 'appUsers',
   initialState: {
     data: [],
+    allUsers: [],
     total: 1,
     count: { totalCount: 0, totalUsers: 0,  totalCustomers: 0,  totalGuests: 0 },
     params: {},
@@ -86,6 +93,9 @@ export const appUsersSlice = createSlice({
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.selectedUser = action.payload
+      })
+      .addCase(getAllUsers.fulfilled, (state, action) => {
+        state.allUsers = action.payload
       })
   }
 })

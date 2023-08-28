@@ -24,7 +24,7 @@ const renderClient = row => {
         initials
         className='me-1'
         color={'light-primary'}
-        content={row.name ? `${row.name} ${row.surname}` : 'User'}
+        content={row.name ? `${row.name} ${row.surname}` : row.user_type}
       />
     )
   }

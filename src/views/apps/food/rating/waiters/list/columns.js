@@ -12,7 +12,7 @@ import '@styles/base/pages/app-ecommerce.scss'
 import { formatData } from '@utils'
 
   const getAvatar = data => {
-  if (data.avatar) {
+  if (data.avatar && data.avatar.includes("http")) {
     return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
   } else {
     return (
@@ -34,13 +34,13 @@ export const columns = (users, waiters, stores) => {
   const getWaiterInfo = id => {
     const foundWaiter = waiters.find(item => item.id === id)
     if (!foundWaiter) return {name: "", avatar: ""}
-    return {name: foundWaiter.full_name, avatar: foundWaiter.profile_picture}
+    return {name: foundWaiter.full_name ? foundWaiter.full_name : '', avatar: foundWaiter.profile_picture}
     }
     
     const getUserInfo = id => {
       const foundUser = users.find(item => item.id === id)
-      if (!foundUser) return {name: "", avatar: ""}
-      return {name: `${foundUser.name} ${foundUser.surname}`, avatar: foundUser.avatar }
+      if (!foundUser) return {name: "User", avatar: ""}
+      return {name: `${foundUser.name ? foundUser.name : 'Customer'} ${foundUser.surname ? foundUser.surname : foundUser.id}`, avatar: foundUser.avatar }
     }
 
   const renderClient = (id, type) => {
@@ -59,15 +59,15 @@ export const columns = (users, waiters, stores) => {
   }
 
   const renderStoore = (id) => {
-    if (!stores.length || !waiters.length) return
-    const foundWaiter = waiters.find(item => item.id === id)
-    const foundStore = stores.find(item => item.id === foundWaiter.storeid.id)
+    if (!stores.length) return
+    const foundStore = stores.find(item => item.id === id)
     return (
       <div className='d-flex justify-content-left align-items-center'>
-      <Logo2 src={foundStore.image} size={"s"}/>
+      {getAvatar(foundStore)}  
+      {/* <Logo2 src={foundStore.image} size={"s"}/> */}
     <div className='d-flex flex-column ml3'>
         <span className='fw-bolder'>{foundStore.name}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore.storeaddress.name}</small>
+      <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
     </div>
   </div>
     )
@@ -127,14 +127,23 @@ export const columns = (users, waiters, stores) => {
     sortable: true,
     sortField: 'date',
     selector: row => row.date,
-    cell: row => <span className='text-capitalize'>{formatData(row.date)}</span>
+    cell: row => <span className='text-capitalize'>{row.date ? formatData(row.date) : ''}</span>
   },
+  // {
+  //   name: 'Заказ',
+  //   minWidth: '120px',
+  //   sortable: true,
+  //   sortField: 'order',
+  //   selector: row => row.order,
+  //   cell: row => <span className='text-capitalize'>{row.order ? row.order : ''}</span>
+  // },
   {
     name: 'Заведение',
     minWidth: '250px',
-    sortable: false,
-    selector: row => row.waiter,
-    cell: row => renderStoore(row.waiter)
+    sortable: true,
+    sortField: 'row.business_id',
+    selector: row => row.business_id,
+    cell: row => renderStoore(row.business_id)
   }
 ]
 }
