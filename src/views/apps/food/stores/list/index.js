@@ -1,4 +1,5 @@
 import { Fragment, useState } from 'react'
+import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import { useNavigate } from 'react-router-dom'
 import StoreList from './StoreList'
 import Breadcrumbs from '@components/breadcrumbs'
@@ -16,6 +17,7 @@ const Stores = () => {
         activeView={activeView}
         setActiveView={setActiveView}
       />
+      <Loading />
     </Fragment>
   )
 }

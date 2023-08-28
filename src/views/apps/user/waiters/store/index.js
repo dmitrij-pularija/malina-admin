@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import axios from 'axios'
 
 export const getShifts = async () => {
@@ -68,6 +69,8 @@ export const appWaitersSlice = createSlice({
     allWaiters: [],
     total: 1,
     params: {},
+    loading: false,
+    error: null,
     selectedWaiter: null
   },
   reducers: {},
@@ -77,13 +80,34 @@ export const appWaitersSlice = createSlice({
         state.data = data
         state.params = params
         state.total = total
+        state.loading = false
+        state.error = null
       })
       .addCase(getWaiter.fulfilled, (state, action) => {
         state.selectedWaiter = action.payload
+        state.loading = false
+        state.error = null
       })
       .addCase(getAllWaiters.fulfilled, (state, action) => {
         state.allWaiters = action.payload
+        state.loading = false
+        state.error = null
       })
+      .addCase(getWaiters.pending, handlePending)
+      .addCase(getWaiter.pending, handlePending)
+      .addCase(getAllWaiters.pending, handlePending)
+      .addCase(addWaiter.pending, handlePending)
+      .addCase(deleteWaiter.pending, handlePending)
+      .addCase(editWaiter.pending, handlePending)
+      .addCase(getWaiters.rejected, handleRejected)
+      .addCase(getWaiter.rejected, handleRejected)
+      .addCase(getAllWaiters.rejected, handleRejected)
+      .addCase(addWaiter.rejected, handleRejected)
+      .addCase(deleteWaiter.rejected, handleRejected)
+      .addCase(editWaiter.rejected, handleRejected)
+      .addCase(addWaiter.fulfilled, handleFulfilled)
+      .addCase(deleteWaiter.fulfilled, handleFulfilled)
+      .addCase(editWaiter.fulfilled, handleFulfilled)
   }
 })
 

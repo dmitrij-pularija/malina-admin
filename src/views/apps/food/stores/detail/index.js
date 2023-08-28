@@ -6,6 +6,7 @@ import { Alert, Card, CardBody } from "reactstrap"
 import { useDispatch, useSelector } from "react-redux"
 import { getStore } from "../store"
 import { getAllCategories, getSubCategories } from "../../categories/store"
+import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import "@styles/react/apps/app-users.scss"
 import "@styles/base/pages/app-ecommerce-details.scss"
 
@@ -23,6 +24,7 @@ const Details = () => {
   }, [])
 
   return (
+    <>
     <Fragment>
       <BreadCrumbs
         title="Информация о заведении"
@@ -55,6 +57,8 @@ const Details = () => {
         </Card>
       </div>
     </Fragment>
+    <Loading />
+    </>
   )
 }
 

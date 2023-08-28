@@ -1,4 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
+import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import axios from 'axios'
 
 export const getAllCategories = createAsyncThunk('appCategories/getAllCategories', async () => {
@@ -16,12 +17,6 @@ export const getAllCategories = createAsyncThunk('appCategories/getAllCategories
   return acc
 })
 
-// export const getAllCategories = createAsyncThunk('appCategories/getAllCategories', async param => {
-//   const { data: { count } } = await axios.get('/users/category', { params: { ...param } })
-//   const { data: { results } } = await axios.get('/users/category', { params: { perPage: count, ...param } })
-//   return results
-// })
-
 export const getCategories = createAsyncThunk('appCategories/getCategories', async params => {
   const response = await axios.get('/users/category', { params })
   return {
@@ -31,20 +26,6 @@ export const getCategories = createAsyncThunk('appCategories/getCategories', asy
   }
 })
 
-// export const getSubCategories = createAsyncThunk('appCategories/getSubCategories', async params => {
-//   const response = await axios.get('/users/subcategory')
-//   return {
-//     subcategories: response.data.results
-//   }
-// })
-// export const getSubCategories = createAsyncThunk('appCategories/getSubCategories', async () => {
-//   const { data: { count } } = await axios.get('/users/subcategory')
-
-//   const response = await axios.get('/users/subcategory', { params: { perPage: count } })
-//   return {
-//     subcategories: response.data.results
-//   }
-// })
 export const getSubCategories = createAsyncThunk('appCategories/getSubCategories', async () => {
   let isFinished = false
   let page = 1
@@ -102,6 +83,8 @@ export const appCategoriesSlice = createSlice({
     data: [],
     allCategories: [],
     subcategories: [],
+    loading: false,
+    error: null,
     params: {}
   },
   reducers: {},
@@ -111,16 +94,47 @@ export const appCategoriesSlice = createSlice({
         state.data = action.payload.data
         state.total = action.payload.total
         state.params = action.payload.params
+        state.loading = false
+        state.error = null
       })
       .addCase(getAllCategories.fulfilled, (state, action) => {
         state.allCategories = action.payload
+        state.loading = false
+        state.error = null
       })
       .addCase(getSubCategories.pending, (state, action) => {
         state.subcategories = []
+        state.loading = true
+        state.error = null
       })
       .addCase(getSubCategories.fulfilled, (state, action) => {
         state.subcategories = action.payload
+        state.loading = false
+        state.error = null
       })
+      .addCase(getCategories.pending, handlePending)
+      .addCase(getAllCategories.pending, handlePending)
+      .addCase(editCategory.pending, handlePending)
+      .addCase(editSubCategory.pending, handlePending)
+      .addCase(addCategory.pending, handlePending)
+      .addCase(addSubCategory.pending, handlePending)
+      .addCase(deleteCategory.pending, handlePending)
+      .addCase(deleteSubCategory.pending, handlePending)
+      .addCase(getCategories.rejected, handleRejected)
+      .addCase(getAllCategories.rejected, handleRejected)
+      .addCase(getSubCategories.rejected, handleRejected)
+      .addCase(editCategory.rejected, handleRejected)
+      .addCase(editSubCategory.rejected, handleRejected)
+      .addCase(addCategory.rejected, handleRejected)
+      .addCase(addSubCategory.rejected, handleRejected)
+      .addCase(deleteCategory.rejected, handleRejected)
+      .addCase(deleteSubCategory.rejected, handleRejected)
+      .addCase(editCategory.fulfilled, handleFulfilled)
+      .addCase(editSubCategory.fulfilled, handleFulfilled)
+      .addCase(addCategory.fulfilled, handleFulfilled)
+      .addCase(addSubCategory.fulfilled, handleFulfilled)
+      .addCase(deleteCategory.fulfilled, handleFulfilled)
+      .addCase(deleteSubCategory.fulfilled, handleFulfilled)
   }
 })
 

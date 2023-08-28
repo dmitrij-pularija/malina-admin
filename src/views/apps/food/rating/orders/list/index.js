@@ -1,10 +1,9 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect} from 'react'
 import Breadcrumbs from '@components/breadcrumbs'
+import Loading from '../../../../../../../src/@core/components/spinner/Loading'
 import Table from "./Table"
 import { getAllStores } from '../../../stores/store'
-
-// ** Styles
 import "@styles/react/apps/app-users.scss"
 
 const RatingOrdersList = () => {
@@ -20,6 +19,7 @@ useEffect(() => {
     <div className="app-user-list">
       <Breadcrumbs title='Отзывы о заказах' data={[{ title: 'Отзывы' }, { title: 'о заказах' }]} /> 
       <Table stores={stores} />
+      <Loading />  
     </div>
   )
 }

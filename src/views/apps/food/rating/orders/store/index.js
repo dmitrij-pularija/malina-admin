@@ -1,7 +1,5 @@
-// ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-
-// ** Axios Imports
+import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import axios from 'axios'
 
 export const getData = createAsyncThunk('appRatingOrders/getData', async params => {
@@ -18,6 +16,8 @@ export const appRatingOrdersSlice = createSlice({
   initialState: {
     data: [],
     total: 1,
+    loading: false,
+    error: null,
     params: {}
   },
   reducers: {},
@@ -27,7 +27,11 @@ export const appRatingOrdersSlice = createSlice({
         state.data = action.payload.data
         state.params = action.payload.params
         state.total = action.payload.total
+        state.loading = false
+        state.error = null
       })
+      .addCase(getData.pending, handlePending)
+      .addCase(getData.rejected, handleRejected)
   }
 })
 

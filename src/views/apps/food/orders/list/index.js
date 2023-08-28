@@ -1,5 +1,5 @@
 import { useSelector } from 'react-redux'
-// ** User List Component
+import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import Breadcrumbs from '@components/breadcrumbs'
 import Table from './Table'
 
@@ -76,6 +76,7 @@ const OrdersList = () => {
         </Col>
       </Row>
       <Table />
+      <Loading />
     </div>
   )
 }

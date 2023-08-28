@@ -1,7 +1,5 @@
-// ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-
-// ** Axios Imports
+import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import axios from 'axios'
 
 export const getAllUsers = createAsyncThunk('appUsers/getAllWaiters', async () => {
@@ -78,6 +76,8 @@ export const appUsersSlice = createSlice({
     total: 1,
     count: { totalCount: 0, totalUsers: 0,  totalCustomers: 0,  totalGuests: 0 },
     params: {},
+    loading: false,
+    error: null,
     selectedUser: null
   },
   reducers: {},
@@ -87,16 +87,41 @@ export const appUsersSlice = createSlice({
         state.data = action.payload.data
         state.params = action.payload.params
         state.total = action.payload.total
+        state.loading = false
+        state.error = null
       })
       .addCase(getAllCount.fulfilled, (state, { payload }) => {
         state.count = payload
+        state.loading = false
+        state.error = null
       })
       .addCase(getUser.fulfilled, (state, action) => {
         state.selectedUser = action.payload
+        state.loading = false
+        state.error = null
       })
       .addCase(getAllUsers.fulfilled, (state, action) => {
         state.allUsers = action.payload
+        state.loading = false
+        state.error = null
       })
+      .addCase(getData.pending, handlePending)
+      .addCase(getAllUsers.pending, handlePending)
+      .addCase(getAllCount.pending, handlePending)
+      .addCase(getUser.pending, handlePending)
+      .addCase(addUser.pending, handlePending)
+      .addCase(deleteUser.pending, handlePending)
+      .addCase(editUser.pending, handlePending)
+      .addCase(getData.rejected, handleRejected)
+      .addCase(getAllUsers.rejected, handleRejected)
+      .addCase(getAllCount.rejected, handleRejected)
+      .addCase(getUser.rejected, handleRejected)
+      .addCase(addUser.rejected, handleRejected)
+      .addCase(deleteUser.rejected, handleRejected)
+      .addCase(editUser.rejected, handleRejected)  
+      .addCase(addUser.fulfilled, handleFulfilled)
+      .addCase(deleteUser.fulfilled, handleFulfilled)
+      .addCase(editUser.fulfilled, handleFulfilled)
   }
 })
 

@@ -1,5 +1,6 @@
 import { useSelector } from 'react-redux'
 import Table from './Table'
+import Loading from '../../../../../src/@core/components/spinner/Loading'
 import Breadcrumbs from '@components/breadcrumbs'
 import { Row, Col } from 'reactstrap'
 import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
@@ -48,6 +49,7 @@ const UsersList = () => {
         </Col>
       </Row>
       <Table />
+      <Loading />  
     </div>
   )
 }

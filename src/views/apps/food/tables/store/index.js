@@ -1,7 +1,5 @@
-// ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-
-// ** Axios Imports
+import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import axios from 'axios'
 
 export const getData = createAsyncThunk('appTable/getData', async params => {
@@ -39,6 +37,8 @@ export const appTableSlice = createSlice({
   initialState: {
     data: [],
     total: 1,
+    loading: false,
+    error: null,
     params: {}
   },
   reducers: {},
@@ -47,7 +47,23 @@ export const appTableSlice = createSlice({
       state.data = action.payload.data
       state.total = action.payload.total
       state.params = action.payload.params
+      state.loading = false
+      state.error = null
     })
+    .addCase(getData.pending, handlePending)
+    .addCase(getTable.pending, handlePending)
+    .addCase(addTable.pending, handlePending)
+    .addCase(editTable.pending, handlePending)
+    .addCase(deleteTable.pending, handlePending)
+    .addCase(getData.rejected, handleRejected)
+    .addCase(getTable.rejected, handleRejected)
+    .addCase(addTable.rejected, handleRejected)
+    .addCase(editTable.rejected, handleRejected)
+    .addCase(deleteTable.rejected, handleRejected)
+    .addCase(getTable.fulfilled, handleFulfilled)
+    .addCase(addTable.fulfilled, handleFulfilled)
+    .addCase(editTable.fulfilled, handleFulfilled)
+    .addCase(deleteTable.fulfilled, handleFulfilled)
   }
 })
 

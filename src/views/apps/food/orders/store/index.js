@@ -1,6 +1,5 @@
-// ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-
+import { handlePending, handleFulfilled, handleRejected } from "@utils"
 // ** Axios Imports
 import axios from 'axios'
 export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async () => {
@@ -24,7 +23,7 @@ export const getData = createAsyncThunk('appOrders/getData', async params => {
   return {
     params,
     data: response.data.results,
-    totalPages: response.data.count
+    total: response.data.count
   }
 })
 
@@ -65,6 +64,8 @@ export const appOrdersSlice = createSlice({
     params: {},
     status: [],
     allData: [],
+    loading: false,
+    error: null,
     selectedOrder: null
   },
   reducers: {},
@@ -72,18 +73,34 @@ export const appOrdersSlice = createSlice({
     builder
       .addCase(getAllData.fulfilled, (state, action) => {
         state.allData = action.payload
+        state.loading = false
+        state.error = null
       })
       .addCase(getOrder.fulfilled, (state, action) => {
         state.selectedOrder = action.payload
+        state.loading = false
+        state.error = null
       })
       .addCase(getData.fulfilled, (state, action) => {
         state.data = action.payload.data
         state.params = action.payload.params
-        state.total = action.payload.totalPages
+        state.total = action.payload.total
+        state.loading = false
+        state.error = null
       })
       .addCase(getOrderStatus.fulfilled, (state, action) => {
         state.status = action.payload
+        state.loading = false
+        state.error = null
       })
+      .addCase(getData.pending, handlePending)
+      .addCase(getAllData.pending, handlePending)
+      .addCase(getOrder.pending, handlePending)
+      .addCase(getOrderStatus.pending, handlePending)
+      .addCase(getData.rejected, handleRejected)
+      .addCase(getAllData.rejected, handleRejected)
+      .addCase(getOrder.rejected, handleRejected)
+      .addCase(getOrderStatus.rejected, handleRejected)
   }
 })
 

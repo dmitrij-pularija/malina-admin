@@ -1,7 +1,5 @@
-// ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-
-// ** Axios Imports
+import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import axios from 'axios'
 
 export const getAllStores = createAsyncThunk('appStores/getAllStores', async () => {
@@ -19,16 +17,12 @@ export const getAllStores = createAsyncThunk('appStores/getAllStores', async () 
   return acc
 })
 
-// export const getAllStores = createAsyncThunk('appStores/getAllStores', async param => {
-//   const { data: { count } } = await axios.get('/users/businesses/')
-//   const { data: { results } } = await axios.get('/users/businesses', { params: { perPage: count, ...param } })
-//   return results
-// })
-
 export const getData = createAsyncThunk('appStores/getData', async params => {
   const response = await axios.get('/users/businesses', { params })
   return {
     params,
+    loading: false,
+    error: null,
     data: response.data.results,
     total: response.data.count
   }
@@ -75,16 +69,36 @@ export const appStoresSlice = createSlice({
         state.data = action.payload.data
         state.params = action.payload.params
         state.total = action.payload.total
+        state.loading = false
+        state.error = null
       })
       .addCase(getAllStores.fulfilled, (state, action) => {
         state.allStores = action.payload
+        state.loading = false
+        state.error = null
       })
       .addCase(getStore.pending, (state, action) => {
         state.selectedStore = null
+        state.loading = true
+        state.error = null
       })
       .addCase(getStore.fulfilled, (state, action) => {
         state.selectedStore = action.payload
+        state.loading = false
+        state.error = null
       })
+      .addCase(getData.pending, handlePending)
+      .addCase(getAllStores.pending, handlePending)
+      .addCase(editStore.pending, handlePending)
+      .addCase(deleteStore.pending, handlePending)
+      .addCase(getData.rejected, handleRejected)
+      .addCase(getAllStores.rejected, handleRejected)
+      .addCase(editStore.rejected, handleRejected)
+      .addCase(getStore.rejected, handleRejected)
+      .addCase(deleteStore.rejected, handleRejected)
+      .addCase(editStore.fulfilled, handleFulfilled)
+      .addCase(deleteStore.fulfilled, handleFulfilled)
+
   }
 })
 

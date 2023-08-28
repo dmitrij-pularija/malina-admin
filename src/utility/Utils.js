@@ -122,3 +122,17 @@ export const getRate = (ratingArray) => {
 
   return Math.round(average)
 }
+
+export const handlePending = (state) => {
+  state.error = null
+  state.loading = true
+}
+
+export const handleFulfilled = (state) => {
+  state.loading = false
+}
+
+export const handleRejected = (state, { payload }) => {
+  state.loading = false
+  state.error = payload
+}

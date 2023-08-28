@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useEffect, useState } from 'react'
 import Breadcrumbs from '@components/breadcrumbs'
+import Loading from '../../../../../../../src/@core/components/spinner/Loading'
 import Table from "./Table"
 import { getAllUsers } from "../../../../user/store"
 import { getAllStores } from '../../../stores/store'
@@ -18,10 +19,13 @@ useEffect(() => {
 }, [])
 
   return (
+  <> 
     <div className="app-user-list">
       <Breadcrumbs title='Отзывы о заведениях' data={[{ title: 'Отзывы' }, { title: 'о заведениях' }]} /> 
       <Table users={users} stores={stores} />
     </div>
+    <Loading />
+  </>
   )
 }
 

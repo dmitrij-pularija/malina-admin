@@ -1,6 +1,7 @@
 import { useEffect, Fragment } from "react"
 import StoreDetails from "../detail/StoreDetails"
 import BreadCrumbs from "@components/breadcrumbs"
+import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import { Card, CardBody } from "reactstrap"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllCategories, getSubCategories } from "../../categories/store"
@@ -18,6 +19,7 @@ const Details = () => {
   }, [])
 
   return (
+    <>
     <Fragment>
       <BreadCrumbs
         title="Создание заведения"
@@ -41,6 +43,8 @@ const Details = () => {
         </Card>
       </div>
     </Fragment>
+    <Loading />
+    </>
   )
 }
 
