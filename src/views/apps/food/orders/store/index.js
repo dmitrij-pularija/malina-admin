@@ -1,14 +1,14 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
-// ** Axios Imports
+import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
+
 export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async () => {
   const response = await axios.get('/products/user-order/get_status/')
   // console.log(response.data)
   return response.data
 })
 
-// http://167.99.246.103/myapps/venv/api/item/clientorder/
 export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
   const response = await axios.get('/products/user-order')
 // console.log(response.data.results)
@@ -17,20 +17,18 @@ export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
 })
 
 export const getData = createAsyncThunk('appOrders/getData', async params => {
+  try {
   const response = await axios.get('/products/user-order', { params })
-  // console.log(response)
-  // const response = await axios.get('/api/users/list/data', params)
   return {
     params,
     data: response.data.results,
     total: response.data.count
   }
+} catch (error) {
+  errorMessage(error.response.statusText)
+  return thunkAPI.rejectWithValue(error)
+}
 })
-
-// export const getWaiter = createAsyncThunk('appOrders/getWaiters', async () => {
-//   const { data: { results } } = await axios.get('user/waiter/')
-//   return results
-// })
 
 export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
   const response = await axios.get(`/products/user-order/${id}/`)

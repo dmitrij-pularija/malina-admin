@@ -331,7 +331,7 @@ const UsersList = () => {
       })
     )
   }
-
+ 
   return (
     <Fragment>
       <Card>
@@ -395,8 +395,6 @@ const UsersList = () => {
         </div>
       </Card>
       <UserModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
-
-      {/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} /> */}
     </Fragment>
   )
 }

@@ -100,11 +100,21 @@ const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
         reset,
         control,
         setValue,
+        getValues,
         setError,
         handleSubmit,
         formState: { errors }
       } = useForm({ defaultValues, values, resolver: yupResolver(SignupSchema) })
       
+const handleClose = () => {
+  setSelectedUser('')
+  setAvatar('')
+  reset({
+    ...defaultValues
+  })
+  toggleModal()
+}
+
       const handleImg = e => {
         const reader = new FileReader(),
           files = e.target.files
@@ -132,7 +142,7 @@ const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
         setAvatar('')
       }
 
-      const renderUserImg = () => {
+      const renderUserImg = (avatar, name) => {
         if (avatar) {
           return (
             <img
@@ -150,7 +160,7 @@ const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
               initials
               color={'light-primary'}
               className='rounded mb-1'
-              content={selectedUser.name ? `${selectedUser.name} ${selectedUser.surname}` : selectedUser.user_type}
+              content={name}
               contentStyles={{
                 borderRadius: 0,
                 fontSize: 'calc(48px)',
@@ -186,14 +196,14 @@ const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
         formData.append('profile_picture', avatarBlob, 'avatar.jpg')
       }
       if (selectedUser) {
-        dispatch(editUser({ id: selectedUser.id, formData }))
+        dispatch(editUser({ id: selectedUser.id, formData })).then(response => response.payload.ok && handleClose())
       } else {
-        dispatch(addUser(formData))
+        dispatch(addUser(formData)).then(response => response.payload.ok && handleClose())
       }
-      setSelectedUser('')
-      toggleModal()
-      setAvatar('')
-      reset()
+      // setSelectedUser('')
+      // toggleModal()
+      // setAvatar('')
+      // reset()
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -205,19 +215,11 @@ const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
     }
   }
 
-  const handleModalClosed = () => {
-    for (const key in defaultValues) {
-      setValue(key, '')
-    }
-    setSelectedUser('')
-    setAvatar('')
-    toggleModal()
-    reset()
-  }
+  // const handleModalClosed = () => handleClear()
 
 return (
-  <Modal isOpen={open} toggle={handleModalClosed} className='modal-dialog-centered modal-lg'>
-  <ModalHeader className='bg-transparent' toggle={handleModalClosed}></ModalHeader>
+  <Modal isOpen={open} toggle={handleClose} className='modal-dialog-centered modal-lg'>
+  <ModalHeader className='bg-transparent' toggle={handleClose}></ModalHeader>
   <ModalBody className='px-sm-5 pt-50 pb-5'>
     <div className='text-center mb-2'>
       <h1 className='mb-1'>{selectedUser ? "Изменение информации о пользователе" : "Добавление нового пользователя"}</h1>
@@ -226,7 +228,7 @@ return (
       <Row className='gy-1 pt-75'>
       <Col md={6} xs={12}>
       <div className='d-flex align-items-center flex-column'>
-      {renderUserImg()}
+      {renderUserImg(avatar, selectedUser ? `${selectedUser.name} ${selectedUser.surname}` : "User")}
               <div className='d-flex align-items-center gap-10'>
                 <Button className='mb-0' tag={Label} size='sm' color='primary'>
                   Загрузить
@@ -482,7 +484,7 @@ return (
             type='reset'
             color='secondary'
             outline
-            onClick={toggleModal}
+            onClick={handleClose}
           >
             Отменить
           </Button>

@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
+import errorMessage from "../../../../@core/components/errorMessage"
 import axios from 'axios'
 
 export const getAllUsers = createAsyncThunk('appUsers/getAllWaiters', async () => {
@@ -16,11 +17,13 @@ export const getAllUsers = createAsyncThunk('appUsers/getAllWaiters', async () =
       }
       return acc 
   } catch (error) {
-    return []
+    errorMessage(error.response.data.detail)
+    return thunkAPI.rejectWithValue(error)
   }
 })
 
 export const getAllCount = createAsyncThunk('appUsers/getAllCount', async () => {
+  try {
   const all = await axios.get('/users/user')
   const users = await axios.get('/users/user', { params: { user_type: 'user' } })
   const customers = await axios.get('/users/user', { params: { user_type: 'customer' } })
@@ -31,41 +34,70 @@ export const getAllCount = createAsyncThunk('appUsers/getAllCount', async () => 
     totalCustomers: customers.data.count,
     totalGuests: guests.data.count
   }
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const getData = createAsyncThunk('appUsers/getData', async params => {
+  try {
   const response = await axios.get('/users/user', { params })
   return {
     params,
     data: response.data.results,
     total: response.data.count
   }
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const getUser = createAsyncThunk('appUsers/getUser', async id => {
+  try {
   const response = await axios.get(`/users/user/${id}/`)
   return response.data
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
+  try {
   await axios.post('/users/user/', user)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return user
+} catch (error) {
+  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { dispatch, getState }) => {
+  try {
   await axios.delete(`/users/user/${id}/`)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return id
+} catch (error) {
+  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const editUser = createAsyncThunk('appUsers/editUser', async ({ id, formData }, { dispatch, getState }) => {
+  try {
   await axios.patch(`/users/user/${id}/`, formData)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return id
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const appUsersSlice = createSlice({
