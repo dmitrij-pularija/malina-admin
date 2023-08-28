@@ -87,21 +87,19 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
   gap: 30px;
 }
 .loader {
-position: absolute;
+position: fixed;
 left: 0;
 top: 0;
-width: 100%;
-height: 100%;  
-// width: 100vw;
-// height: 100vh;  
+width: 100vw;
+height: 100vh;  
 display: flex;
 align-items: center;
 justify-content: center;
 background: #f8f8f821;
 }
-.relative {
-  position: relative;
-}  
+// .relative {
+//   position: relative;
+// }  
 // .order-dish-col {
 //   padding: 5px;
 // }

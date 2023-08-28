@@ -38,16 +38,16 @@ export const businessType = {
 }
 
 export const storeType = {
-  1: "1",
-  2: "2",
-  3: "3",
-  4: "4"
+  1: "Пользователь",
+  2: "Предприятие",
+  3: "Администратор",
+  4: "Мастер"
 }
 
 export const priceLevels = {
-  1: "1",
-  2: "2",
-  3: "3"
+  1: "Cheap",
+  2: "Medium",
+  3: "Expensive"
 }
 
 export const BASE_URL = "https://malina-proxy.onrender.com"
