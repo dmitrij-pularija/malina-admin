@@ -161,7 +161,7 @@ const RatingWaitersList = ({stores}) => {
   const { data, total} = useSelector(state => state.ratingOrders)
 
   // ** States
-  const [sort, setSort] = useState('desc')
+  const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('date')
@@ -173,12 +173,11 @@ const RatingWaitersList = ({stores}) => {
   useEffect(() => {
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        store: currentStore.value
+        business: currentStore.value
       })
     )
   }, [dispatch, data.length, sort, sortColumn, currentPage])
@@ -193,12 +192,11 @@ const RatingWaitersList = ({stores}) => {
   const handlePagination = page => {
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        store: currentStore.value
+        business: currentStore.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -209,12 +207,11 @@ const RatingWaitersList = ({stores}) => {
     const value = parseInt(e.currentTarget.value)
     dispatch(
       getData({
-        sort,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
         page: currentPage,
-        store: currentStore.value
+        business: currentStore.value
       })
     )
     setRowsPerPage(value)
@@ -225,12 +222,11 @@ const RatingWaitersList = ({stores}) => {
     setSearchTerm(val)
     dispatch(
       getData({
-        sort,
         search: val,
-        ordering: sortColumn,
+        ordering: `${sort}${sortColumn}`,
         page: currentPage,
         perPage: rowsPerPage,
-        store: currentStore.value
+        business: currentStore.value
       })
     )
   }
@@ -261,7 +257,7 @@ const RatingWaitersList = ({stores}) => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      store: currentStore.value,
+      business: currentStore.value,
       search: searchTerm
     }
 
@@ -279,16 +275,15 @@ const RatingWaitersList = ({stores}) => {
   }
 
   const handleSort = (column, sortDirection) => {
-    setSort(sortDirection)
+    setSort(sortDirection === "asc" ? "+" : "-")
     setSortColumn(column.sortField)
     dispatch(
       getData({
-        sort,
-        ordering: column.sortField,
+        ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        store: currentStore.value
+        business: currentStore.value
       })
     )
   }
@@ -311,12 +306,11 @@ const RatingWaitersList = ({stores}) => {
                   setCurrentStore(data)
                   dispatch(
                     getData({
-                      sort,
-                      ordering: sortColumn,
+                      ordering: `${sort}${sortColumn}`,
                       search: searchTerm,
                       page: currentPage,
                       perPage: rowsPerPage,
-                      store: data.value
+                      business: data.value
                     })
                   )
                 }}
