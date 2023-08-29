@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getWaiter, getShifts } from '../store'
-// import { getAllStores } from '../../../food/stores/store'
+import { getData } from '../../../food/rating/waiters/store'
 import { useSelector, useDispatch } from 'react-redux'
 import { Row, Col, Alert } from 'reactstrap'
 import Breadcrumbs from '@components/breadcrumbs'
@@ -12,12 +12,15 @@ import '@styles/react/apps/app-users.scss'
 const WaiterView = () => {
   const dispatch = useDispatch()
   const [shifts, setShifts] = useState([])
+  // const [rating, setRating] = useState([])
   const { selectedWaiter } = useSelector(state => state.waiters)
-  // const stores = useSelector(state => state.stores.allStores)
+  const rating = useSelector(state => state.ratingWaiters.data)
   const { id } = useParams()
-
+ 
   useEffect(() => {
-    getShifts().then(response => {setShifts(response)})
+    dispatch(getData({ waiter: id }))
+    getShifts().then(response => { setShifts(response) })
+    // getWaiterRating(parseInt(id)).then(response => setRating(response))
     dispatch(getWaiter(parseInt(id)))
   }, [])
 
@@ -37,7 +40,7 @@ const WaiterView = () => {
           <WaiterInfoCard shifts={shifts} selectedWaiter={selectedWaiter} />
         </Col>
         <Col xl='8' lg='7' xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <WaiterTabs active={active} toggleTab={toggleTab} ratings={selectedWaiter.waiter_ratings}/>
+          <WaiterTabs active={active} toggleTab={toggleTab} ratings={rating}/>
         </Col>
       </Row>
     </div>

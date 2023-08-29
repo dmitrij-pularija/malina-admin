@@ -59,7 +59,6 @@ export const columns = [
 ]
 
 const RewardsList = ({ ratings }) => {
- 
   return ratings.length ? (
     <Card>
       <CardHeader tag='h4'>Список отзывов об официанте</CardHeader>

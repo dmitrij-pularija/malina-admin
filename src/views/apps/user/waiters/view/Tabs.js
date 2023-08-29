@@ -27,7 +27,7 @@ const WaiterTabs = ({ active, toggleTab, ratings }) => {
           <WaiterOrdersList />
         </TabPane>
         <TabPane tabId='2'>
-          {/* <Rewards ratings={ratings} /> */}
+          <Rewards ratings={ratings} />
         </TabPane>
 
       </TabContent>

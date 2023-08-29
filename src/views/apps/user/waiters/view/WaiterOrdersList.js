@@ -76,14 +76,14 @@ export const columns = [
 const UserOrdersList = () => {
   const [data, setData] = useState([])
   const { id } = useParams()
-console.log(data)
-  useEffect(() => {
-    axios.get(`/products/user-order`).then(response => {
-      const fullOrders = response.data.results
-      const orders = fullOrders.filter(order => order.waiter === parseInt(id))
-      setData(orders)
-    })
-  }, [])
+// console.log(data)
+  // useEffect(() => {
+    // axios.get(`/products/user-order/${parseInt(id)}/`).then(response => {
+    //   const orders = response.data.results || []
+    //   // const orders = fullOrders.filter(order => order.waiter === parseInt(id))
+    //   setData(orders)
+    // })
+  // }, [])
 
 
   return data.length ? (

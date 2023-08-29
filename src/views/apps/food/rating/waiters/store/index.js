@@ -1,6 +1,19 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
+import errorMessage from "../../../../../../@core/components/errorMessage"
 import axios from 'axios'
+
+export const getWaiterRating = async id => {
+  try {
+  const { data: { results }} = await axios.get(`/users/waiter-rating/${id}/`)
+  return results || []
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return []
+  // return thunkAPI.rejectWithValue(error)
+}
+}
+
 
 export const getData = createAsyncThunk('appRatingWaiters/getData', async params => {
   const response = await axios.get('/users/waiter-rating', { params })
