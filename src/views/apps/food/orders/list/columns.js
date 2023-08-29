@@ -4,6 +4,7 @@ import { useSelector } from 'react-redux'
 
 // ** Custom Components
 import Logo2 from '@components/logo2'
+import Avatar from '@components/avatar'
 import classnames from 'classnames'
 // ** Store & Actions
 import { store } from '@store/store'
@@ -26,20 +27,20 @@ const foundWaiter = waiters.find(waiter => waiter.id === id) || null
 return foundWaiter ? foundWaiter.full_name : ""
 }
 // ** Renders Client Columns
-// const renderClient = row => {
-//   // if (row.storeId) {
-//     return <Avatar className='me-1' img={row.storeId.image} width='32' height='32' />
-//   // } else {
-//   //   return (
-//   //     <Avatar
-//   //       initials
-//   //       className='me-1'
-//   //       color={'light-primary'}
-//   //       content={row.storeId.name || 'Malina'}
-//   //     />
-//   //   )
-//   // }
-// }
+const renderClient = (name, avatar) => {
+  if (avatar && row.avatar.includes("http")) {
+    return <Avatar className='me-1' img={row.storeId.image} width='32' height='32' />
+  } else {
+    return (
+      <Avatar
+        initials
+        className='me-1'
+        color={'light-primary'}
+        content={name || 'Malina'}
+      />
+    )
+  }
+}
 
 // ** Renders Role Columns
 // const renderRole = row => {
@@ -120,57 +121,80 @@ export const columns = [
     )
   },
   {
+    name: 'Дата',
+    minWidth: '120px',
+    sortable: true,
+    sortField: 'date',
+    selector: row => row.order_date,
+    cell: row => <span className='text-capitalize'>{formatData(row.order_date)}</span>
+  },
+  {
+    name: 'Сумма',
+    minWidth: '120px',
+    sortable: true,
+    sortField: 'total_order_price',
+    selector: row => row.total_order_price,
+    cell: row => <span className='text-capitalize'>{formatNumber(row.total_order_price)}</span>
+  },
+  {
     name: 'Заведение',
     sortable: true,
     minWidth: '250px',
-    sortField: 'storeId',
-    selector: row => row.storeId,
+    sortField: 'business_id.id',
+    selector: row => row.business_id,
      cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-          <Logo2 src={row.storeId.image} size={"s"}/>
+      <Link
+            to={row.business_id ? `/apps/food/stores/store-detail/${row.business_id.id}` : `/apps/food/stores/list/`}
+            className='user_name text-truncate text-body d-flex justify-content-left align-items-center'
+            // onClick={() => { if (row.user_id) store.dispatch(getUser(row.user_id.id)) } }
+          >
+        {renderClient(row.business_id && row.business_id.name ? row.business_id.name : 'Заведение', row.business_id ? row.business_id.image : '')}
+          {/* <Logo2 src={row.business_id.image} size={"s"}/> */}
         <div className='d-flex flex-column ml3'>
-            <span className='fw-bolder'>{row.storeId.name}</span>
-          <small className='text-truncate text-muted mb-0'>{row.email}</small>
+            <span className='fw-bolder'>{row.business_id.name}</span>
+          {/* <small className='text-truncate text-muted mb-0'>{row.business_id.business_address ? `${row.business_id.business_address.city}, ${row.business_id.business_address.name}` : ''}</small> */}
         </div>
-      </div>
+      </Link>
     )
   },
   {
     name: 'Адрес заказа',
     minWidth: '180px',
     sortable: true,
-    sortField: 'city, street',
-    selector: row => row.address,
-    cell: row => <span className='text-capitalize'>{row.address ? `${row.address.city}, ${row.address.name}` : "Внутри заведения"}</span>
+    sortField: 'delivery_address',
+    selector: row => row.delivery_address,
+    cell: row => <span className='text-capitalize'>{row.delivery_address ? delivery_address : "Внутри заведения"}</span>
   },
   {
-    name: 'Статус',
-    minWidth: '120px',
+    name: 'Клиент',
     sortable: true,
-    sortField: 'status',
-    selector: row => row.status,
+    minWidth: '200px',
+    sortField: 'user_id.id',
+    selector: row => row.user_id,
     cell: row => (
-      <Badge className='text-capitalize' color={statusObj[row.status.toString()].colorName} pill>
-        {statusObj[row.status.toString()].label}
-      </Badge>
+      // <div className='d-flex justify-content-left align-items-center'>
+          <Link
+            to={row.user_id ? `/apps/user/view/${row.user_id.id}` : `/apps/user/list/`}
+            className='user_name text-truncate text-body d-flex justify-content-left align-items-center'
+            onClick={() => { if (row.user_id) store.dispatch(getUser(row.user_id.id)) } }
+          >
+            {renderClient(row.user_id ? `${row.user_id.name ? row.user_id.name : ''} ${row.user_id.surname ? row.user_id.surname : ''}` : 'Клиент', row.user_id ? row.user_id.avatar : '')}
+            <div className='d-flex flex-column ml3'>
+            <span className='fw-bolder'>{ row.user_id ? `${row.user_id.name ? row.user_id.name : ''} ${row.user_id.surname ? row.user_id.surname : ''}` : "" }</span>
+            <small className='text-truncate text-muted mb-0'>{row.user_id ? row.user_id.login : ''}</small>
+            </div>
+          </Link>
+      // </div>
     )
   },
-  {
-    name: 'Официант',
-    minWidth: '150px',
-    sortable: true,
-    sortField: 'waiter',
-    selector: row => row.waiter,
-    cell: row => <span className='text-capitalize'>{getWaiterInfo(row.waiter)}</span>
-  },
-  {
-    name: 'Дата',
-    minWidth: '120px',
-    sortable: true,
-    sortField: 'date',
-    selector: row => row.date,
-    cell: row => <span className='text-capitalize'>{formatData(row.date)}</span>
-  },
+  // {
+  //   name: 'Официант',
+  //   minWidth: '150px',
+  //   sortable: true,
+  //   sortField: 'waiter',
+  //   selector: row => row.waiter,
+  //   cell: row => <span className='text-capitalize'>{getWaiterInfo(row.waiter)}</span>
+  // },
   {
     name: 'Рейтинг',
     minWidth: '142px',
@@ -188,12 +212,16 @@ export const columns = [
       />)
   },
   {
-    name: 'Сумма',
+    name: 'Статус',
     minWidth: '120px',
-    sortable: false,
-    sortField: 'totalprice',
-    selector: row => row.totalprice,
-    cell: row => <span className='text-capitalize'>{formatNumber(row.totalprice)}</span>
+    sortable: true,
+    sortField: 'status',
+    selector: row => row.status,
+    cell: row => (
+      <Badge className='text-capitalize' color={statusObj[row.status.toString()].colorName} pill>
+        {statusObj[row.status.toString()].label}
+      </Badge>
+    )
   },
   {
     name: 'Действия',
@@ -228,7 +256,7 @@ export const columns = [
               }}
             >
               <Trash2 size={14} className='me-50' />
-              <span className='align-middle'>Delete</span>
+              <span className='align-middle'>Удалить</span>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

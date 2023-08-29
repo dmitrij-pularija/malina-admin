@@ -39,17 +39,17 @@ const defaultValues = {
 }
 
 const typeOptions = [
-  { value: 1, label: 'user' },
-  { value: 2, label: 'admin' },
-  { value: 3, label: 'superadmin' },
-  { value: 4, label: '4' }
+  { value: 1, label: 'Пользователь' },
+  { value: 2, label: 'Предприятие' },
+  { value: 3, label: 'Администратор' },
+  { value: 4, label: 'Мастер' }
 ]
 
 const genderOptions = [
-  { value: 1, label: 'Мужчина' },
-  { value: 2, label: 'Женщина' },
-  { value: 3, label: '3' },
-  { value: 4, label: '4' }
+  { value: 1, label: 'Мужской' },
+  { value: 2, label: 'Женский' },
+  { value: 3, label: 'Другое' },
+  { value: 4, label: 'Не указано' }
 ]
 
 const clientTypeOptions = [
@@ -193,7 +193,7 @@ const handleClose = () => {
       if (data.birthday) formData.append('birthday', formatDataSave(data.birthday))
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
-        formData.append('profile_picture', avatarBlob, 'avatar.jpg')
+        formData.append('avatar', avatarBlob, 'avatar.jpg')
       }
       if (selectedUser) {
         dispatch(editUser({ id: selectedUser.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())

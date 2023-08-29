@@ -16,12 +16,17 @@ export const getWaiterRating = async id => {
 
 
 export const getData = createAsyncThunk('appRatingWaiters/getData', async params => {
+  try {
   const response = await axios.get('/users/waiter-rating', { params })
   return {
     params,
     data: response.data.results,
     total: response.data.count
   }
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const appRatingWaitersSlice = createSlice({

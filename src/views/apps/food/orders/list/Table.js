@@ -8,7 +8,7 @@ import Sidebar from './Sidebar'
 import { columns } from './columns'
 
 // ** Store & Actions
-import { getAllData, getData, getOrderStatus } from '../store'
+import { getData, getOrderStatus } from '../store'
 import { getWaiters } from '../../../user/waiters/store'
 import { getAllStores } from '../../stores/store'
 
@@ -194,6 +194,7 @@ const OrdersList = () => {
   // ** Get data on mount
   useEffect(() => {
     dispatch(getData())
+    // dispatch(getAllData())
     if (!stores.length) dispatch(getAllStores())
     if (!status.length) dispatch(getOrderStatus())  
     // dispatch(getAllData())
@@ -210,7 +211,7 @@ const OrdersList = () => {
     //   })
     // )
   }, [])
-
+// console.log(store.data)
   // ** User filter options
   // const roleOptions = [
   //   { value: '', label: 'Выберете статус' },
@@ -332,12 +333,12 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
       return filters[k].length > 0
     })
 
-    if (store.data.length > 0) {
+    if (store.data && store.data.length > 0) {
       return store.data
     } else if (store.data.length === 0 && isFiltered) {
       return []
     } else {
-      return store.allData.slice(0, rowsPerPage)
+      return store.allOrders.slice(0, rowsPerPage)
     }
   }
 

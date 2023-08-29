@@ -5,16 +5,16 @@ export const roles = {
 }
 export const statusObj = {
   1: { label: 'Новый',  colorName: 'light-warning' },
-  2: { label: 'Обрабатывается',  colorName: 'light-primary' },
+  2: { label: 'Подтвержден',  colorName: 'light-primary' },
   3: { label: 'Отменен', colorName: 'light-danger' },
-  4: { label: 'Готов', colorName: 'light-success' },
+  4: { label: 'Готово', colorName: 'light-success' },
   5: { label: 'В пути', colorName: 'light-secondary' },
-  6: { label: 'Забрали', colorName: 'light-success' },
-  7: { label: 'Курьер прибыл', colorName: 'light-dark' },
-  8: { label: 'Доставлен', colorName: 'light-success' },
-  9: { label: 'Отказ клиентв', colorName: 'light-dark' },
+  6: { label: 'Получен', colorName: 'light-success' },
+  7: { label: 'Прибыл', colorName: 'light-dark' },
+  8: { label: 'Доставлено', colorName: 'light-success' },
+  9: { label: 'Отказ клиента', colorName: 'light-danger' },
   10: { label: 'Выполнен', colorName: 'light-success' },
-  10: { label: 'Выполнен', colorName: 'light-success' }
+  11: { label: 'Начислены баллы', colorName: 'light-success' }
 }
 
 export const logoSize = {

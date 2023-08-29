@@ -57,10 +57,10 @@ const typeObj = {
 }
 
 const genderObj = {
-  1: 'Мужчина',
-  2: 'Женщина',
-  3: '3',
-  4: 'Не указан'
+  1: 'Мужской',
+  2: 'Женский',
+  3: 'Другое',
+  4: 'Не указано'
 }
 
 // maintainer: 'light-success',
@@ -71,12 +71,12 @@ const statusColors = {
   true: 'light-warning'
 }
 
-const genderOptions = [
-  { value: 1, label: 'Мужчина' },
-  { value: 2, label: 'Женщина' },
-  { value: 3, label: '3' },
-  { value: 4, label: 'Не указан' }
-]
+// const genderOptions = [
+//   { value: 1, label: 'Мужской' },
+//   { value: 2, label: 'Женский' },
+//   { value: 3, label: 'Другое' },
+//   { value: 4, label: 'Не указано' }
+// ]
 // const statusOptions = [
 //   { value: 'false', label: 'Активный' },
 //   { value: 'true', label: 'Не Активный' }

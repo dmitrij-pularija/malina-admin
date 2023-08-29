@@ -3,17 +3,42 @@ import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
+
 export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async () => {
   const response = await axios.get('/products/user-order/get_status/')
   // console.log(response.data)
   return response.data
 })
 
-export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
-  const response = await axios.get('/products/user-order')
-// console.log(response.data.results)
-  // const response = await axios.get('/api/users/list/all-data')
-  return response.data.results
+// export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
+//   const response = await axios.get('/products/user-order')
+// // console.log(response.data.results)
+//   // const response = await axios.get('/api/users/list/all-data')
+//   return response.data.results
+// })
+
+export const getAllOrders = createAsyncThunk('appUsers/getAllOrders', async () => {
+  try {
+    let isFinished = false
+    let page = 1
+    const acc = []
+    const { data: { count } } = await axios.get('/products/user-order')
+    while (!isFinished) {
+      const { data: { results } } = await axios.get('/products/user-order', { params: { perPage: 100, page }})
+      acc.push(...results)
+      if (acc.length === count) isFinished = true
+      page += 1
+      }
+   const totalPrice = acc.reduce((accumulator, item) => { return accumulator + item.total_order_price }, 0)
+   const totalRait = acc.reduce((accumulator, item) => { return accumulator + parseInt(item.rait) }, 0)
+   const filtredRate = acc.filter((item) => parseInt(item.rate) > 0)
+   const countRate = filtredRate.length
+
+    return {data: acc, count: { totalOrder: count, totalPrice,  avgPrice: count ? totalPrice / count : 0,  avgRait: countRate ? totalRait / countRate : 0 } }
+  } catch (error) {
+    errorMessage(error.response.data.detail)
+    return thunkAPI.rejectWithValue(error)
+  }
 })
 
 export const getData = createAsyncThunk('appOrders/getData', async params => {
@@ -31,8 +56,13 @@ export const getData = createAsyncThunk('appOrders/getData', async params => {
 })
 
 export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
+  try {
   const response = await axios.get(`/products/user-order/${id}/`)
   return response.data
+} catch (error) {
+  errorMessage(error.response.statusText)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 // export const getUser = createAsyncThunk('appUsers/getUser', async id => {
@@ -58,10 +88,11 @@ export const appOrdersSlice = createSlice({
   name: 'appOrders',
   initialState: {
     data: [],
+    allOrders: [],
+    count: { totalOrder: 0, totalPrice: 0,  avgPrice: 0,  avgRait: 0 },
     total: 1,
     params: {},
     status: [],
-    allData: [],
     loading: false,
     error: null,
     selectedOrder: null
@@ -69,8 +100,9 @@ export const appOrdersSlice = createSlice({
   reducers: {},
   extraReducers: builder => {
     builder
-      .addCase(getAllData.fulfilled, (state, action) => {
-        state.allData = action.payload
+      .addCase(getAllOrders.fulfilled, (state, action) => {
+        state.allOrders = action.payload.data
+        state.count = action.payload.count
         state.loading = false
         state.error = null
       })
@@ -92,11 +124,11 @@ export const appOrdersSlice = createSlice({
         state.error = null
       })
       .addCase(getData.pending, handlePending)
-      .addCase(getAllData.pending, handlePending)
+      .addCase(getAllOrders.pending, handlePending)
       .addCase(getOrder.pending, handlePending)
       .addCase(getOrderStatus.pending, handlePending)
       .addCase(getData.rejected, handleRejected)
-      .addCase(getAllData.rejected, handleRejected)
+      .addCase(getAllOrders.rejected, handleRejected)
       .addCase(getOrder.rejected, handleRejected)
       .addCase(getOrderStatus.rejected, handleRejected)
   }

@@ -26,6 +26,9 @@ const PreviewActions = ({ id, setSendSidebarOpen, setAddPaymentOpen }) => {
         <Button color='secondary' tag={Link} to='/apps/food/orders/print' target='_blank' block outline className='mb-75'>
           Распечатать
         </Button>
+        <Button color='secondary' tag={Link} to='/apps/food/orders/list' block outline className='mb-75'>
+          Отмена
+        </Button>
       </CardBody>
     </Card>
   )
