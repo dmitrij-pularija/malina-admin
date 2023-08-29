@@ -11,7 +11,7 @@ const WaitersList = () => {
   return (
     <div className='app-user-list'>
       <Breadcrumbs title='Официанты' data={[{ title: 'Пользователи' }, { title: 'Официанты' }]}  onClick={toggleSidebar} />
-      <Table sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Table sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
       <Loading />  
     </div>
   )

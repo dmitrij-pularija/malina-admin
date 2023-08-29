@@ -358,7 +358,7 @@ const Store = (props) => {
       if (data.avgcheck) formData.append("average_check", data.avgcheck)
       if (data.category) formData.append("category", data.category.value)
       if (data.subcategory) formData.append("subcategory", data.subcategory.value)
-      if (data.priceLevel) formData.append("price_level", data.priceLevel.value)
+      if (data.priceLevel) formData.append("price_level", parseInt(data.priceLevel.value))
       if (data.merchantId) formData.append("merchant_id", data.merchantId)
       if (data.secretKey) formData.append("pay_secret_key", data.secretKey)
       if (avatar && avatar.startsWith("data:image")) {
@@ -1026,7 +1026,7 @@ const Store = (props) => {
                     <Select
                       isClearable={false}
                       classNamePrefix="select"
-                      options={storeTypeOptions}
+                      options={priceLevelOptions}
                       theme={selectThemeColors}
                       placeholder="Выбирите уровень цен"
                       className={classnames("react-select", {

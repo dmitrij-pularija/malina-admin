@@ -196,9 +196,9 @@ const handleClose = () => {
         formData.append('profile_picture', avatarBlob, 'avatar.jpg')
       }
       if (selectedUser) {
-        dispatch(editUser({ id: selectedUser.id, formData })).then(response => response.payload.ok && handleClose())
+        dispatch(editUser({ id: selectedUser.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
-        dispatch(addUser(formData)).then(response => response.payload.ok && handleClose())
+        dispatch(addUser(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
       // setSelectedUser('')
       // toggleModal()

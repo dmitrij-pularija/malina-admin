@@ -1,5 +1,6 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
+import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
 export const getShifts = async () => {
@@ -7,7 +8,8 @@ export const getShifts = async () => {
   const { data: { results }} = await axios.get('/users/waiter-shifts/')
   return results
 } catch (error) {
-  return []
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
 }
 }
 
@@ -25,41 +27,67 @@ export const getAllWaiters = createAsyncThunk('appWaiters/getAllWaiters', async 
     }
     return acc
   } catch (error) {
-    return []
+    errorMessage(error.response.data.detail)
+    return thunkAPI.rejectWithValue(error)
   }
 
 })
 
 export const getWaiters = createAsyncThunk('appWaiters/getWaiters', async params => {
+try {
   const response = await axios.get('/users/waiter', { params })
   return {
     params,
     data: response.data.results,
     total: response.data.count
   }
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const getWaiter = createAsyncThunk('appWaiters/getWaiter', async id => {
+try {
   const { data } = await axios.get(`/users/waiter/${id}`)
   return data
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const addWaiter = createAsyncThunk('appWaiters/addWaiter', async (waiter, { dispatch, getState }) => {
+try {
   await axios.post('/users/waiter/', waiter)
   await dispatch(getWaiters(getState().waiters.params))
   return waiter
+} catch (error) {
+  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const deleteWaiter = createAsyncThunk('appWaiters/deleteWaiter', async (id, { dispatch, getState }) => {
+try {
   await axios.delete(`/users/waiter/${id}/`)
   await dispatch(getWaiters(getState().waiters.params))
   return id
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const editWaiter = createAsyncThunk('appWaiters/editWaiter', async ({ id, formData }, { dispatch, getState }) => {
+ try {
   await axios.patch(`/users/waiter/${id}/`, formData)
   await dispatch(getWaiters(getState().waiters.params))
   return { id, formData }
+} catch (error) {
+  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const appWaitersSlice = createSlice({

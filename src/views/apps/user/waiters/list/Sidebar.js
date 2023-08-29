@@ -104,7 +104,16 @@ const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSel
     const handleImgReset = () => {
       setAvatar('')
     } 
-
+    const handleClose = () => {
+      console.log('clear')
+      for (const key in defaultValues) {
+        setValue(key, '')
+      }
+        setSelectedWaiter('')
+        toggleSidebar()
+        setAvatar('')
+        reset()
+    }
 
   const onSubmit = data => {
     if (checkIsValid(data)) {
@@ -117,14 +126,14 @@ const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSel
         formData.append('profile_picture', avatarBlob, 'avatar.jpg')
       }
       if (selectedWaiter) {
-        dispatch(editWaiter({ id: selectedWaiter.id, formData }))
+        dispatch(editWaiter({ id: selectedWaiter.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
-        dispatch(addWaiter(formData))
+        dispatch(addWaiter(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
-      setSelectedWaiter('')
-      toggleSidebar()
-      setAvatar('')
-      reset()
+      // setSelectedWaiter('')
+      // toggleSidebar()
+      // setAvatar('')
+      // reset()
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -136,14 +145,7 @@ const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSel
     }
   }
 
-  const handleSidebarClosed = () => {
-    for (const key in defaultValues) {
-      setValue(key, '')
-    }
-    setSelectedWaiter('')
-    setAvatar('')
-    reset()
-  }
+
 
   return (
     <Sidebar
@@ -152,8 +154,8 @@ const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSel
       title={selectedWaiter ? 'Редактирование официанта' : 'Новый официант'}
       headerClassName='mb-1'
       contentClassName='pt-0'
-      toggleSidebar={toggleSidebar}
-      onClosed={handleSidebarClosed}
+      toggleSidebar={handleClose}
+      // onClosed={handleClose}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-1'>
@@ -225,7 +227,7 @@ const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSel
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
         </Button>
-        <Button type='reset' color='secondary' outline onClick={toggleSidebar}>
+        <Button type='reset' color='secondary' outline onClick={handleClose}>
           Отменить
         </Button>
       </Form>

@@ -145,7 +145,7 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
   )
 }
 
-const WaitersList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
+const WaitersList = ({ sidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.waiters)
   const stores = useSelector(state => state.stores.allStores)
@@ -159,10 +159,10 @@ const WaitersList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const [selectedWaiter, setSelectedWaiter] = useState('')
   const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
   // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-  const handleClose = () => {
-    setSelectedWaiter('')
-    setSidebarOpen(false)
-   }
+  // const handleClose = () => {
+  //   setSelectedWaiter('')
+  //   setSidebarOpen(false)
+  //  }
 
    useEffect(() => {
     if (!stores.length) dispatch(getAllStores())
@@ -357,7 +357,7 @@ const handleEditWaiter = (event, row) => {
         </div>
       </Card>
 
-      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={handleClose} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} />
+      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} />
     </Fragment>
   )
 }

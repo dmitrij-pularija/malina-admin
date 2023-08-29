@@ -253,7 +253,7 @@ const UsersList = () => {
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
-        page: currentPage,
+        page: 1,
         user_type: currentType.value
       })
     )
@@ -267,7 +267,7 @@ const UsersList = () => {
       getData({
         search: val,
         ordering: `${sort}${sortColumn}`,
-        page: currentPage,
+        page: 1,
         perPage: rowsPerPage,
         user_type: currentType.value
       })
@@ -325,7 +325,7 @@ const UsersList = () => {
       getData({
         ordering: `${sortDirection === "asc" ? "+" : "-"}${column.sortField}`,
         search: searchTerm,
-        page: currentPage,
+        page: 1,
         perPage: rowsPerPage,
         user_type: currentType.value
       })
