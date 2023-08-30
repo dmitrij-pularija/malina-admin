@@ -136,3 +136,32 @@ export const handleRejected = (state, { payload }) => {
   state.loading = false
   state.error = payload
 }
+
+export const checkIsValid = (data, requiredFields) => {
+  return Object.keys(data).every((key) => {
+    const field = data[key]
+    if (requiredFields.includes(key)) {
+      if (typeof field === "object") {
+        return field.value !== ""
+      } else {
+        return field.length > 0
+      }
+    } else {
+      return true
+    }
+  })
+}
+
+export const dataURLtoBlob = dataURL => {
+  const arr = dataURL.split(',')
+  const mime = arr[0].match(/:(.*?);/)[1]
+  const bstr = atob(arr[1])
+  let n = bstr.length
+  const u8arr = new Uint8Array(n)
+
+  while (n--) {
+    u8arr[n] = bstr.charCodeAt(n)
+  }
+
+  return new Blob([u8arr], { type: mime })
+}

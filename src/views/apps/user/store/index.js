@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { handlePending, handleFulfilled, handleRejected } from "@utils"
+import { handlePending, handleFulfilled, handleRejected, dataURLtoBlob } from "@utils"
 import errorMessage from "../../../../@core/components/errorMessage"
 import axios from 'axios'
 
@@ -64,12 +64,23 @@ export const getUser = createAsyncThunk('appUsers/getUser', async id => {
 }
 })
 
-export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
+export const addUser = createAsyncThunk('appUsers/addUser', async ({ formData, avatar }, { dispatch, getState }) => {
+  if (avatar && avatar.startsWith('data:image')) {
+    const formDataImage = new FormData()
+    try {  
+      const avatarBlob = dataURLtoBlob(avatar)
+      formDataImage.append('image', avatarBlob, 'avatar.jpg')
+      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+      formData.append('avatar', image)
+    } catch (error) {
+      errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    }
+    }
   try {
-  await axios.post('/users/user/', user)
+  await axios.post('/users/user/', formData)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
-  return user
+  // return user
 } catch (error) {
   errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
@@ -88,14 +99,25 @@ export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { d
 }
 })
 
-export const editUser = createAsyncThunk('appUsers/editUser', async ({ id, formData }, { dispatch, getState }) => {
+export const editUser = createAsyncThunk('appUsers/editUser', async ({ id, formData, avatar }, { dispatch, getState }) => {
+    if (avatar && avatar.startsWith('data:image')) {
+      const formDataImage = new FormData()
+      try {  
+        const avatarBlob = dataURLtoBlob(avatar)
+        formDataImage.append('image', avatarBlob, 'avatar.jpg')
+        const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+        formData.append('avatar', image)
+      } catch (error) {
+        errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+      }
+      }
   try {
   await axios.patch(`/users/user/${id}/`, formData)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
-  return id
+  // return id
 } catch (error) {
-  errorMessage(error.response.data.detail)
+  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })

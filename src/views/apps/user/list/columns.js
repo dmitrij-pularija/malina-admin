@@ -16,7 +16,7 @@ import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem
 
 // ** Renders Client Columns
 const renderClient = row => {
-  if (row.avatar && row.avatar && row.avatar.includes("http")) {
+  if (row.avatar && row.avatar.includes("http")) {
     return <Avatar className='me-1' img={row.avatar} width='32' height='32' />
   } else {
     return (

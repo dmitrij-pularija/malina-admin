@@ -1,9 +1,9 @@
 import { Fragment, useState, useEffect } from 'react'
 // import Sidebar from './Sidebar'
-import UserModal from './Modal'
+import UsersListModal from './Modal'
 
 import { columns } from './columns'
-import { getData, getAllCount, editUser, deleteUser } from '../store'
+import { getData, getAllCount, deleteUser } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
@@ -158,7 +158,6 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
 }
 
 const UsersList = () => {
-  // ** Store Vars
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.users)
 
@@ -231,7 +230,7 @@ const UsersList = () => {
     setSelectedUser(row)
     toggleModal()
   }
-   
+
   const handlePagination = page => {
     dispatch(
       getData({
@@ -394,7 +393,7 @@ const UsersList = () => {
           />
         </div>
       </Card>
-      <UserModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} setSelectedUser={setSelectedUser}/>
+      <UsersListModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} />
     </Fragment>
   )
 }

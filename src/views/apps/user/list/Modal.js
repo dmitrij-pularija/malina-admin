@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import InputPasswordToggle from '@components/input-password-toggle'
 import * as yup from 'yup'
 import { yupResolver } from '@hookform/resolvers/yup'
-import { selectThemeColors, formatData, formatDataSave } from '@utils'
+import { selectThemeColors, formatData, formatDataSave, checkIsValid, dataURLtoBlob } from '@utils'
 import Avatar from '@components/avatar'
 import Select from 'react-select'
 import classnames from 'classnames'
@@ -61,25 +61,26 @@ const clientTypeOptions = [
 
 const requiredFields = ["login"]
 
-const checkIsValid = (data) => {
-  return Object.keys(data).every((key) => {
-    const field = data[key]
-    if (requiredFields.includes(key)) {
-      if (typeof field === "object") {
-        return field.value !== ""
-      } else {
-        return field.length > 0
-      }
-    } else {
-      return true
-    }
-  })
-}
+// const checkIsValid = (data) => {
+//   return Object.keys(data).every((key) => {
+//     const field = data[key]
+//     if (requiredFields.includes(key)) {
+//       if (typeof field === "object") {
+//         return field.value !== ""
+//       } else {
+//         return field.length > 0
+//       }
+//     } else {
+//       return true
+//     }
+//   })
+// }
 
-const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
+const UserModal = ({ open, toggleModal, selectedUser }) => {
   const dispatch = useDispatch()
-  const [avatar, setAvatar] = useState('')
+  const [avatar, setAvatar] = useState(selectedUser && selectedUser.avatar && selectedUser.avatar.includes("http") ? selectedUser.avatar : '')
   const values = selectedUser ? {
+    // avatar: (selectedUser.avatar && selectedUser.avatar.includes("http")) ? selectedUser.avatar : '',
     name: selectedUser.name ? selectedUser.name : '',
     surname: selectedUser.surname ? selectedUser.surname : '',
     login: selectedUser.login ? selectedUser.login : '',
@@ -94,8 +95,8 @@ const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
 
   useEffect(() => {
     if (selectedUser && selectedUser.avatar && selectedUser.avatar.includes("http")) setAvatar(selectedUser.avatar)
-    }, [])
-    
+    }, [selectedUser])
+  
       const {
         reset,
         control,
@@ -107,8 +108,9 @@ const UserModal = ({ open, toggleModal, selectedUser, setSelectedUser }) => {
       } = useForm({ defaultValues, values, resolver: yupResolver(SignupSchema) })
       
 const handleClose = () => {
-  setSelectedUser('')
-  setAvatar('')
+  // setSelectedUser('')
+  // setValue('avatar', '')
+  // setAvatar('')
   reset({
     ...defaultValues
   })
@@ -119,37 +121,39 @@ const handleClose = () => {
         const reader = new FileReader(),
           files = e.target.files
         reader.onload = function () {
+          // setValue('avatar', reader.result)
           setAvatar(reader.result)
         }
         reader.readAsDataURL(files[0])
       }  
        
-      const dataURLtoBlob = dataURL => {
-        const arr = dataURL.split(',')
-        const mime = arr[0].match(/:(.*?);/)[1]
-        const bstr = atob(arr[1])
-        let n = bstr.length
-        const u8arr = new Uint8Array(n)
+      // const dataURLtoBlob = dataURL => {
+      //   const arr = dataURL.split(',')
+      //   const mime = arr[0].match(/:(.*?);/)[1]
+      //   const bstr = atob(arr[1])
+      //   let n = bstr.length
+      //   const u8arr = new Uint8Array(n)
       
-        while (n--) {
-          u8arr[n] = bstr.charCodeAt(n)
-        }
+      //   while (n--) {
+      //     u8arr[n] = bstr.charCodeAt(n)
+      //   }
       
-        return new Blob([u8arr], { type: mime })
-      }
+      //   return new Blob([u8arr], { type: mime })
+      // }
     
       const handleImgReset = () => {
+        // setValue('avatar', '')
         setAvatar('')
       }
 
-      const renderUserImg = (avatar, name) => {
-        if (avatar) {
+      const renderUserImg = (image, name) => {
+        if (image) {
           return (
             <img
               height='110'
               width='110'
               alt='user-avatar'
-              src={avatar}
+              src={image}
               className='img-fluid rounded mb-1'
               
             />
@@ -178,7 +182,7 @@ const handleClose = () => {
 
   const onSubmit = data => {
     if (!selectedUser && !data.password) return setError('password', { type: 'manual'})
-    if (checkIsValid(data)) {
+    if (checkIsValid(data, requiredFields)) {
       const formData = new FormData()
       formData.append('login', data.login)
       if (data.password) formData.append('password', data.password)
@@ -191,14 +195,14 @@ const handleClose = () => {
       if (data.clientType) formData.append('type', data.clientType.value)
       if (data.gender) formData.append('gender', data.gender.value)
       if (data.birthday) formData.append('birthday', formatDataSave(data.birthday))
-      if (avatar && avatar.startsWith('data:image')) {
-        const avatarBlob = dataURLtoBlob(avatar)
-        formData.append('avatar', avatarBlob, 'avatar.jpg')
-      }
+      // if (avatar && avatar.startsWith('data:image')) {
+      //   const avatarBlob = dataURLtoBlob(avatar)
+      //   formData.append('avatar', avatarBlob, 'avatar.jpg')
+      // }
       if (selectedUser) {
-        dispatch(editUser({ id: selectedUser.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(editUser({ id: selectedUser.id, formData,  avatar })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
-        dispatch(addUser(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(addUser({ formData,  avatar })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
       // setSelectedUser('')
       // toggleModal()

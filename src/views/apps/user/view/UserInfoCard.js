@@ -166,62 +166,62 @@ const UserInfoCard = ({ selectedUser }) => {
     }
   }
 
-  const onSubmit = data => {
-    if (Object.values(data).every(field => field.length > 0)) {
-      setShow(false)
-    } else {
-      for (const key in data) {
-        if (data[key].length === 0) {
-          setError(key, {
-            type: 'manual'
-          })
-        }
-      }
-    }
-  }
+  // const onSubmit = data => {
+  //   if (Object.values(data).every(field => field.length > 0)) {
+  //     setShow(false)
+  //   } else {
+  //     for (const key in data) {
+  //       if (data[key].length === 0) {
+  //         setError(key, {
+  //           type: 'manual'
+  //         })
+  //       }
+  //     }
+  //   }
+  // }
 
-  const handleReset = () => {
-    reset({
-      username: selectedUser.login,
-      lastName: selectedUser.surname,
-      firstName: selectedUser.name
-    })
-  }
+  // const handleReset = () => {
+  //   reset({
+  //     username: selectedUser.login,
+  //     lastName: selectedUser.surname,
+  //     firstName: selectedUser.name
+  //   })
+  // }
 
-  const handleSuspendedClick = () => {
-    return MySwal.fire({
-      title: 'Вы уверены?',
-      text: "Вы не сможете вернуть пользователя!",
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonText: 'Да, заблокировать пользователя!',
-      customClass: {
-        confirmButton: 'btn btn-primary',
-        cancelButton: 'btn btn-outline-danger ms-1'
-      },
-      buttonsStyling: false
-    }).then(function (result) {
-      if (result.value) {
-        MySwal.fire({
-          icon: 'success',
-          title: 'Заблокирован!',
-          text: 'Пользователь был заблокирован.',
-          customClass: {
-            confirmButton: 'btn btn-success'
-          }
-        })
-      } else if (result.dismiss === MySwal.DismissReason.cancel) {
-        MySwal.fire({
-          title: 'Отменен',
-          text: 'Отмена блокировки :)',
-          icon: 'error',
-          customClass: {
-            confirmButton: 'btn btn-success'
-          }
-        })
-      }
-    })
-  }
+  // const handleSuspendedClick = () => {
+  //   return MySwal.fire({
+  //     title: 'Вы уверены?',
+  //     text: "Вы не сможете вернуть пользователя!",
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonText: 'Да, заблокировать пользователя!',
+  //     customClass: {
+  //       confirmButton: 'btn btn-primary',
+  //       cancelButton: 'btn btn-outline-danger ms-1'
+  //     },
+  //     buttonsStyling: false
+  //   }).then(function (result) {
+  //     if (result.value) {
+  //       MySwal.fire({
+  //         icon: 'success',
+  //         title: 'Заблокирован!',
+  //         text: 'Пользователь был заблокирован.',
+  //         customClass: {
+  //           confirmButton: 'btn btn-success'
+  //         }
+  //       })
+  //     } else if (result.dismiss === MySwal.DismissReason.cancel) {
+  //       MySwal.fire({
+  //         title: 'Отменен',
+  //         text: 'Отмена блокировки :)',
+  //         icon: 'error',
+  //         customClass: {
+  //           confirmButton: 'btn btn-success'
+  //         }
+  //       })
+  //     }
+  //   })
+  // }
 
   return (
     <Fragment>
