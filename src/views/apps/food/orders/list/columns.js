@@ -28,8 +28,8 @@ return foundWaiter ? foundWaiter.full_name : ""
 }
 // ** Renders Client Columns
 const renderClient = (name, avatar) => {
-  if (avatar && row.avatar.includes("http")) {
-    return <Avatar className='me-1' img={row.storeId.image} width='32' height='32' />
+  if (avatar && avatar.includes("http")) {
+    return <Avatar className='me-1' img={avatar} width='32' height='32' />
   } else {
     return (
       <Avatar
@@ -178,7 +178,7 @@ export const columns = [
             className='user_name text-truncate text-body d-flex justify-content-left align-items-center'
             onClick={() => { if (row.user_id) store.dispatch(getUser(row.user_id.id)) } }
           >
-            {renderClient(row.user_id ? `${row.user_id.name ? row.user_id.name : ''} ${row.user_id.surname ? row.user_id.surname : ''}` : 'Клиент', row.user_id ? row.user_id.avatar : '')}
+            {renderClient(row.user_id && row.user_id.name ? `${row.user_id.name ? row.user_id.name : ''} ${row.user_id.surname ? row.user_id.surname : ''}` : 'Клиент', row.user_id ? row.user_id.avatar : '')}
             <div className='d-flex flex-column ml3'>
             <span className='fw-bolder'>{ row.user_id ? `${row.user_id.name ? row.user_id.name : ''} ${row.user_id.surname ? row.user_id.surname : ''}` : "" }</span>
             <small className='text-truncate text-muted mb-0'>{row.user_id ? row.user_id.login : ''}</small>

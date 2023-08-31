@@ -166,7 +166,7 @@ const PreviewCard = ({ data }) => {
           <Col className='p-0 mt-xl-0 mt-2' xl='4'>  
             <h6 className='mb-2'>Клиент:</h6>
             <div className='order-avatar'>
-            {renderImg(data.user_id ? data.user_id : "", data.user_id && data.user_id.name ? `${data.user_id.name} ${data.user_id.surname}` : 'Клиент')}
+            {renderImg(data.user_id ? data.user_id.avatar : "", data.user_id && data.user_id.name ? `${data.user_id.name} ${data.user_id.surname}` : 'Клиент')}
             </div>
             <div className='invoice-date-wrapper'>
               <p className='invoice-date-title'>Имя:</p>
