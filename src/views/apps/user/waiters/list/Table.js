@@ -357,7 +357,7 @@ const handleEditWaiter = (event, row) => {
         </div>
       </Card>
 
-      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} />
+      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} stores={stores} />
     </Fragment>
   )
 }

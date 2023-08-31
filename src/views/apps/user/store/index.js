@@ -94,7 +94,7 @@ export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { d
   // await dispatch(getAllData())
   return id
 } catch (error) {
-  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
@@ -117,7 +117,7 @@ export const editUser = createAsyncThunk('appUsers/editUser', async ({ id, formD
   // await dispatch(getAllData())
   // return id
 } catch (error) {
-  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })

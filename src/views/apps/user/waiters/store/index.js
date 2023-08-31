@@ -2,7 +2,7 @@ import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
-
+ 
 export const getShifts = async () => {
   try {
   const { data: { results }} = await axios.get('/users/waiter-shifts/')
@@ -63,7 +63,7 @@ try {
   await dispatch(getWaiters(getState().waiters.params))
   return waiter
 } catch (error) {
-  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
@@ -85,7 +85,7 @@ export const editWaiter = createAsyncThunk('appWaiters/editWaiter', async ({ id,
   await dispatch(getWaiters(getState().waiters.params))
   return { id, formData }
 } catch (error) {
-  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })

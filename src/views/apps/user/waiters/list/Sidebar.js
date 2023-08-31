@@ -1,9 +1,10 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@components/sidebar'
 import Avatar from '@components/avatar'
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, checkIsValid } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
+import CreatableSelect from 'react-select/creatable';
 import { useForm, Controller } from 'react-hook-form'
 import { Button, Label, Form, Input, FormFeedback } from 'reactstrap'
 import { addWaiter, editWaiter } from '../store'
@@ -11,26 +12,48 @@ import { useDispatch } from 'react-redux'
 
 const defaultValues = {
   shift: '',
+  businessId: '',
   fullName: '',
   telegram: ''
 }
 
-const requiredFields = ["fullName"]
+// const CustomCreatableSelect = ({ onCreateOption, ...props }) => {
+//   const handleCreateOption = (inputValue) => {
+//     const [timeRange, description] = inputValue.split(' ')
+//     const startTime = timeRange.split('-')[0].trim()
+//     const endTime = timeRange.split('-')[1].trim()
+//     onCreateOption({
+//       start_time: startTime,
+//       end_time: endTime,
+//       description
+//     })
+//   }
 
-const checkIsValid = (data) => {
-  return Object.keys(data).every((key) => {
-    const field = data[key]
-    if (requiredFields.includes(key)) {
-      if (typeof field === "object") {
-        return field.value !== ""
-      } else {
-        return field.length > 0
-      }
-    } else {
-      return true
-    }
-  })
-}
+//   return (
+//     <CreatableSelect
+//       formatCreateLabel={({ label }) => `Создать смену: ${label}`}
+//       onCreateOption={handleCreateOption}
+//       {...props}
+//     />
+//   )
+// }
+
+const requiredFields = ["fullName", "businessId"]
+
+// const checkIsValid = (data) => {
+//   return Object.keys(data).every((key) => {
+//     const field = data[key]
+//     if (requiredFields.includes(key)) {
+//       if (typeof field === "object") {
+//         return field.value !== ""
+//       } else {
+//         return field.length > 0
+//       }
+//     } else {
+//       return true
+//     }
+//   })
+// }
 
 
 const renderAvatar = data => {
@@ -49,18 +72,30 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
+const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
-
-  useEffect(() => {
-    if (selectedWaiter) setAvatar(selectedWaiter.profile_picture) 
-    }, [selectedWaiter])
-
+  // const values = {}
   const shiftsOptions = shifts.map((item) => ({
     value: String(item.id),
-    label: `${item.business.name} ${item.start_time.slice(0, -3)} - ${item.end_time.slice(0, -3)}`
+    label: `${item.start_time.slice(0, -3)} - ${item.end_time.slice(0, -3)} ${item.description} `
   }))
+
+  const storeOptions = stores.map((store) => ({
+    value: String(store.id),
+    label: store.name
+}))
+
+  useEffect(() => {
+    if (selectedWaiter) {
+      setAvatar(selectedWaiter.profile_picture)
+      // values.fullName = selectedWaiter.full_name ? selectedWaiter.full_name : ''
+      // values.telegram = selectedWaiter.telegram ? selectedWaiter.telegram : ''
+      // values.businessId = selectedWaiter.business_id ? storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.business_id.id))] : ''
+      // values.shift = selectedWaiter.shift ? shiftsOptions[shiftsOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.shift.id))] : ''
+    }
+
+    }, [selectedWaiter])
 
   const values = selectedWaiter ? {
     fullName: selectedWaiter.full_name ? selectedWaiter.full_name : '',
@@ -100,25 +135,38 @@ const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSel
       return new Blob([u8arr], { type: mime })
     }
   
+//     const handleCreateOption = (value) => {
+// console.log(value)
+//     }
+
+//     const formatCreateLabel = (inputValue) => {
+//       return `Создать смену: ${inputValue}`
+//     }
+
   
     const handleImgReset = () => {
       setAvatar('')
     } 
     const handleClose = () => {
-      console.log('clear')
+      // console.log('clear')
       for (const key in defaultValues) {
         setValue(key, '')
       }
+      // for (const key in values) {
+      //   setValue(key, '')
+      // }
         setSelectedWaiter('')
         toggleSidebar()
         setAvatar('')
-        reset()
+        reset({...defaultValues})
     }
 
   const onSubmit = data => {
-    if (checkIsValid(data)) {
+    // console.log(data)
+    if (checkIsValid(data, requiredFields)) {
       const formData = new FormData()
       formData.append('full_name', data.fullName)
+      formData.append('business_id', data.businessId.value)
       if (data.shift) formData.append('shift', data.shift.value)
       if (data.telegram) formData.append('telegram', data.telegram)
       if (avatar.startsWith('data:image')) {
@@ -189,20 +237,29 @@ const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSel
           {errors && errors.fullName && (<FormFeedback>Пожалуйста заполните имя</FormFeedback>)}  
         </div>
         <div className='mb-1'>
-          <Label className='form-label' for='telegram'>
-          ID полученный в Телеграмм - боте <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span>
+          <Label className='form-label' for='businessId'>
+          Заведение <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='telegram'
+            name='businessId'
             control={control}
-            rules={{ required: false }}
+            rules={{ required: true }}
             render={({ field }) => (
-              <Input id='telegram' placeholder='12345' invalid={errors.telegram && true} {...field} />
+              <Select
+                id='businessId'
+                isClearable={false}
+                classNamePrefix='select'
+                options={storeOptions}
+                theme={selectThemeColors}
+                placeholder="Выберите Заведение"
+                className={classnames('react-select', { 'is-invalid': errors.businessId && true })}
+                {...field}
+              />
             )}
           />
-          {errors && errors.telegram && (<FormFeedback>Введите Телеграмм ID</FormFeedback>)}  
-        </div>  
-        <div className='mb-3'>
+          {errors && errors.businessId && (<FormFeedback>Пожалуйста выберите заведение</FormFeedback>)}  
+        </div>
+        <div className='mb-1'>
           <Label className='form-label' for='shift'>
           Смена
           </Label>
@@ -224,6 +281,64 @@ const SidebarNewWaiters = ({ shifts, open, toggleSidebar, selectedWaiter, setSel
             )}
           />
         </div>
+        {/* <div className='mb-3'>
+  <Label className='form-label' htmlFor='shift'>
+    Смена
+  </Label>
+  <Controller
+    name='shift'
+    control={control}
+    rules={{ required: false }}
+    render={({ field }) => (
+      <CreatableSelect
+        id='shift'
+        isClearable={false}
+        options={shiftsOptions}
+        theme={selectThemeColors}
+        onCreateOption={handleCreateOption}
+        formatCreateLabel={formatCreateLabel}
+        placeholder="Выберите смену или добавьте новую"
+        className={classnames('react-select', { 'is-invalid': errors.shift && true })}
+        {...field}
+      />
+    )}
+  />
+</div> */}
+{/* <div className='mb-3'>
+  <Label className='form-label' htmlFor='shift'>
+    Смена
+  </Label>
+  <Controller
+    name='shift'
+    control={control}
+    rules={{ required: false }}
+    render={({ field }) => (
+      <CustomCreatableSelect
+        id='shift'
+        isClearable={false}
+        options={shiftsOptions}
+        theme={selectThemeColors}
+        placeholder="Введите смену в формате ЧЧ:ММ - ЧЧ:ММ"
+        className={classnames('react-select', { 'is-invalid': errors.shift && true })}
+        {...field}
+      />
+    )}
+  />
+</div> */}
+<div className='mb-3'>
+          <Label className='form-label' for='telegram'>
+          ID полученный в Телеграмм - боте <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span>
+          </Label>
+          <Controller
+            name='telegram'
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input id='telegram' placeholder='12345' invalid={errors.telegram && true} {...field} />
+            )}
+          />
+          {errors && errors.telegram && (<FormFeedback>Введите Телеграмм ID</FormFeedback>)}  
+        </div>  
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
         </Button>
