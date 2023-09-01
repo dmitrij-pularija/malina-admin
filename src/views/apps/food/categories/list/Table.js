@@ -201,7 +201,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
       perPage: rowsPerPage
     }))
     dispatch(getSubCategories())
-  }, [dispatch, data.length, currentPage])
+  }, [])
 
   const handlePagination = page => {
     dispatch(getCategories({
@@ -222,7 +222,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
       ordering: `${sort}${sortColumn}`,
       category_type: currentType.value,
       search: searchTerm,
-      page: currentPage,
+      page: 1,
       perPage: rowsPerPage
     }))
     dispatch(getSubCategories())  
@@ -234,7 +234,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
       ordering: `${sort}${sortColumn}`,
       category_type: currentType.value,
       search: val,
-      page: currentPage,
+      page: 1,
       perPage: rowsPerPage
     }))
     dispatch(getSubCategories())  
@@ -287,7 +287,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
       ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
       category_type: currentType.value,
       search: searchTerm,
-      page: currentPage,
+      page: 1,
       perPage: rowsPerPage
     }))
     dispatch(getSubCategories())  
@@ -331,7 +331,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
                     ordering: `${sort}${sortColumn}`,
                     category_type: data.value,
                     search: searchTerm,
-                    page: currentPage,
+                    page: 1,
                     perPage: rowsPerPage
                   }))
                   dispatch(getSubCategories())  

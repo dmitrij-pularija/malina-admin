@@ -219,7 +219,7 @@ const handleEditWaiter = (event, row) => {
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
-        page: currentPage,
+        page: 1,
         business_id__id: store.value
       })
     )
@@ -232,7 +232,7 @@ const handleEditWaiter = (event, row) => {
       getWaiters({
         search: val,
         ordering: `${sort}${sortColumn}`,
-        page: currentPage,
+        page: 1,
         perPage: rowsPerPage,
         business_id__id: store.value
       })
@@ -287,7 +287,7 @@ const handleEditWaiter = (event, row) => {
       getWaiters({
         ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
         search: searchTerm,
-        page: currentPage,
+        page: 1,
         perPage: rowsPerPage,
         business_id__id: store.value
       })
