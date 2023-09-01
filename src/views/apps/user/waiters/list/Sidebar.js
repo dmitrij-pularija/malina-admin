@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@components/sidebar'
 import Avatar from '@components/avatar'
-import { selectThemeColors, checkIsValid } from '@utils'
+import { selectThemeColors, checkIsValid, dataURLtoBlob } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import CreatableSelect from 'react-select/creatable';
@@ -100,6 +100,7 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
   const values = selectedWaiter ? {
     fullName: selectedWaiter.full_name ? selectedWaiter.full_name : '',
     telegram: selectedWaiter.telegram ? selectedWaiter.telegram : '',
+    businessId: selectedWaiter.business_id ? storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.business_id.id))] : '',
     shift: selectedWaiter.shift ? shiftsOptions[shiftsOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.shift.id))] : ''} : {}
   
     const {
@@ -121,19 +122,19 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
       reader.readAsDataURL(files[0])
     }  
      
-    const dataURLtoBlob = dataURL => {
-      const arr = dataURL.split(',')
-      const mime = arr[0].match(/:(.*?);/)[1]
-      const bstr = atob(arr[1])
-      let n = bstr.length
-      const u8arr = new Uint8Array(n)
+    // const dataURLtoBlob = dataURL => {
+    //   const arr = dataURL.split(',')
+    //   const mime = arr[0].match(/:(.*?);/)[1]
+    //   const bstr = atob(arr[1])
+    //   let n = bstr.length
+    //   const u8arr = new Uint8Array(n)
     
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n)
-      }
+    //   while (n--) {
+    //     u8arr[n] = bstr.charCodeAt(n)
+    //   }
     
-      return new Blob([u8arr], { type: mime })
-    }
+    //   return new Blob([u8arr], { type: mime })
+    // }
   
 //     const handleCreateOption = (value) => {
 // console.log(value)

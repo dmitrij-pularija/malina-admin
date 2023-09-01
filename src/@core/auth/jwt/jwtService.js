@@ -1,7 +1,6 @@
 import axios from 'axios'
 import jwtDefaultConfig from './jwtDefaultConfig'
 import { BASE_URL } from '../../../configs/initial'
-
 // const { BASE_URL } = process.env
 // const BASE_URL = 'http://167.99.246.103'
 axios.defaults.baseURL = `${BASE_URL}/api/v2/malina/`

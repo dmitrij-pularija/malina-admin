@@ -1,11 +1,11 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@components/sidebar'
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, checkIsValid, dataURLtoBlob } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
-import { Button, Label, FormText, Form, Input } from 'reactstrap'
-import logo from "@src/assets/images/slider/03.jpg"
+import { Button, Label, FormFeedback, Form, Input } from 'reactstrap'
+// import logo from "@src/assets/images/slider/03.jpg"
 import Avatar from '@components/avatar'
 import { addCategory, addSubCategory, editCategory, editSubCategory } from '../store'
 import { useDispatch } from 'react-redux'
@@ -20,9 +20,11 @@ const typeOptions = [
   { value: 2, label: 'Beauty' }
 ]
 
-const checkIsValid = data => {
-  return Object.values(data).every(field => (typeof field === 'object' ? field.value !== "" : field.length > 0))
-}
+const requiredFields = ["name", "name"]
+
+// const checkIsValid = data => {
+//   return Object.values(data).every(field => (typeof field === 'object' ? field.value !== "" : field.length > 0))
+// }
 
 const renderAvatar = data => {
   if (data.avatar) {
@@ -42,7 +44,7 @@ const renderAvatar = data => {
 
 const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory }) => {
   const dispatch = useDispatch()
-  const [data, setData] = useState(null)
+  // const [data, setData] = useState(null)
   const [item, setItem] = useState('')
   const [avatar, setAvatar] = useState('')
 
@@ -85,28 +87,38 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
     reader.readAsDataURL(files[0])
   }  
    
-  const dataURLtoBlob = dataURL => {
-    const arr = dataURL.split(',')
-    const mime = arr[0].match(/:(.*?);/)[1]
-    const bstr = atob(arr[1])
-    let n = bstr.length
-    const u8arr = new Uint8Array(n)
+  // const dataURLtoBlob = dataURL => {
+  //   const arr = dataURL.split(',')
+  //   const mime = arr[0].match(/:(.*?);/)[1]
+  //   const bstr = atob(arr[1])
+  //   let n = bstr.length
+  //   const u8arr = new Uint8Array(n)
   
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n)
+  //   while (n--) {
+  //     u8arr[n] = bstr.charCodeAt(n)
+  //   }
+  
+  //   return new Blob([u8arr], { type: mime })
+  // }
+  const handleClose = () => {
+    for (const key in defaultValues) {
+      setValue(key, '')
     }
-  
-    return new Blob([u8arr], { type: mime })
+      setItem('')
+      setAvatar('')
+      toggleSidebar()
+      setSelectedSubCategory('')
+      setSelectedCategory('')
+      reset({...defaultValues})
   }
 
-
   const handleImgReset = () => {
-    setAvatar(logo)
+    setAvatar('')
   }
 
   const onSubmit = data => {
-    setData(data)
-    if (checkIsValid(data)) {
+    // setData(data)
+    if (checkIsValid(data, requiredFields)) {
       reset()  
       toggleSidebar()
       const formData = new FormData();
@@ -118,43 +130,38 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
         formData.append('icon', avatarBlob, 'category.jpg')
       }
       if (item) {
-          if (selectedCategory) dispatch(editCategory({ id: item.id, formData }))
-          if (selectedSubCategory) dispatch(editSubCategory({ id: item.id, formData }))
+          if (selectedCategory) dispatch(editCategory({ id: item.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+          if (selectedSubCategory) dispatch(editSubCategory({ id: item.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
         } else {
-          if (!selectedId) dispatch(addCategory(formData))
-          if (selectedId) dispatch(addSubCategory(formData))
+          if (!selectedId) dispatch(addCategory(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+          if (selectedId) dispatch(addSubCategory(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
         }
-        setSelectedSubCategory('')
-        setSelectedCategory('')
-        setAvatar('')
-        setItem('')
-        reset()  
+        // setSelectedSubCategory('')
+        // setSelectedCategory('')
+        // setAvatar('')
+        // setItem('')
+        // reset()  
     } else {
       for (const key in data) {
-        if (data[key] === null) {
-          setError('country', {
-            type: 'manual'
-          })
-        }
-        if (data[key] !== null && data[key].length === 0) {
+        if (data[key].length === 0) {
           setError(key, {
-            type: 'manual'
+            type: "manual"
           })
         }
       }
     }
   }
 
-  const handleSidebarClosed = () => {
-    for (const key in defaultValues) {
-      setValue(key, '')
-    }
-    setSelectedSubCategory('')
-    setSelectedCategory('')
-    setAvatar('')
-    setItem('')
-    reset()
-  }
+  // const handleSidebarClosed = () => {
+  //   for (const key in defaultValues) {
+  //     setValue(key, '')
+  //   }
+  //   setSelectedSubCategory('')
+  //   setSelectedCategory('')
+  //   setAvatar('')
+  //   setItem('')
+  //   reset()
+  // }
 
   return (
     <Sidebar
@@ -163,8 +170,8 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
       title={selectedCategory ? 'Редактирование категории' : selectedSubCategory ? 'Редактирование субкатегории' : selectedId ? 'Создание новой субкатегории' : 'Создание новой категории'}
       headerClassName='mb-1'
       contentClassName='pt-0'
-      toggleSidebar={toggleSidebar}
-      onClosed={handleSidebarClosed}
+      toggleSidebar={handleClose}
+      // onClosed={handleSidebarClosed}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-1'>
@@ -190,10 +197,12 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
           <Controller
             name='name'
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
-              <Input id='name' placeholder='Введите название категории' invalid={errors.name && true} {...field} />
+              <Input id='name' placeholder='Введите название' invalid={errors.name && true} {...field} />
             )}
           />
+          {errors && errors.name && (<FormFeedback>Пожалуйста название</FormFeedback>)}
         </div>  
         <div className='mb-1'>
           <Label className='form-label' for='type'>
@@ -203,6 +212,7 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
           <Controller
             name='type'
             control={control}
+            rules={{ required: true }}
             render={({ field }) => (
               <Select
                 id='type'
@@ -211,16 +221,17 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
                 options={selectedId ? categoryOptions : typeOptions}
                 theme={selectThemeColors}
                 placeholder={selectedId ? "Выберите категорию" : "Выберите тип"}
-                className={classnames('react-select', { 'is-invalid': data !== null && data.type === "" })}
+                className={classnames('react-select', { 'is-invalid': errors.type && true })}
                 {...field}
               />
             )}
           />
+        {errors && errors.type && (<FormFeedback>{`Пожалуйста выберите ${selectedId ? "Категорию" : "Тип"}`}</FormFeedback>)}
         </div>
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
         </Button>
-        <Button type='reset' color='secondary' outline onClick={toggleSidebar}>
+        <Button type='reset' color='secondary' outline onClick={handleClose}>
           Отменить
         </Button>
       </Form>

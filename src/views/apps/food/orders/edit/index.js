@@ -1,11 +1,12 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
-
+import Loading from '../../../../../@core/components/spinner/Loading'
 // ** Third Party Components
-import axios from 'axios'
+// import axios from 'axios'
 
-// ** Reactstrap Imports
+import { getOrder } from '../store'
 import { Alert, Row, Col } from 'reactstrap'
 
 // ** Invoice Edit Components
@@ -17,9 +18,9 @@ import AddPaymentSidebar from '../shared-sidebar/SidebarAddPayment'
 const InvoiceEdit = () => {
   // ** Hooks
   const { id } = useParams()
-
-  // ** States
-  const [data, setData] = useState(null)
+  const dispatch = useDispatch()
+  const { selectedOrder } = useSelector(state => state.orders)
+  
   const [sendSidebarOpen, setSendSidebarOpen] = useState(false)
   const [addPaymentOpen, setAddPaymentOpen] = useState(false)
 
@@ -29,20 +30,18 @@ const InvoiceEdit = () => {
 
   // ** Get invoice on mount based on id
   useEffect(() => {
-    axios.get(`item/clientorder/${id}`).then(response => {
-      setData(response.data)
-    })
+    dispatch(getOrder(id))
   }, [])
-  // console.log(data)
+  console.log(selectedOrder)
 
-  return data !== null && data !== undefined ? (
+  return selectedOrder !== null && selectedOrder !== undefined ? (
     <div className='invoice-edit-wrapper'>
       <Row className='invoice-edit'>
         <Col xl={9} md={8} sm={12}>
-          <EditCard data={data} />
+          <EditCard data={selectedOrder} />
         </Col>
         <Col xl={3} md={4} sm={12}>
-          <EditActions id={id} status={data ? data.status : 1} setSendSidebarOpen={setSendSidebarOpen} setAddPaymentOpen={setAddPaymentOpen} />
+          <EditActions id={id} status={selectedOrder ? selectedOrder.status : 1} setSendSidebarOpen={setSendSidebarOpen} setAddPaymentOpen={setAddPaymentOpen} />
         </Col>
       </Row>
       <SendInvoiceSidebar toggleSidebar={toggleSendSidebar} open={sendSidebarOpen} />
@@ -55,6 +54,7 @@ const InvoiceEdit = () => {
       Информация о заказе с id: {id} не доступка. Проверьте список заказов:{' '}
         <Link to='/apps/food/orders/list'>Список заказов</Link>
       </div>
+      <Loading />
     </Alert>
   )
 }
