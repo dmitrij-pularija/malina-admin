@@ -63,7 +63,7 @@ export const editCategory = createAsyncThunk('appCategories/editCategory', async
   await dispatch(getCategories(getState().categories.params))
   return { id, formData }
 } catch (error) {
-  errorMessage(error.response.data.detail)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
@@ -74,7 +74,7 @@ export const editSubCategory = createAsyncThunk('appCategories/editSubCategory',
   await dispatch(getSubCategories())
   return { id, formData }
 } catch (error) {
-  errorMessage(error.response.data.detail)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
@@ -85,7 +85,7 @@ export const addCategory = createAsyncThunk('appCategories/addCategory', async (
   await dispatch(getCategories(getState().categories.params))
   return category
 } catch (error) {
-  errorMessage(error.response.data.detail)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
@@ -96,7 +96,7 @@ export const addSubCategory = createAsyncThunk('appCategories/addSubCategory', a
   await dispatch(getSubCategories())
   return subCategory
 } catch (error) {
-  errorMessage(error.response.data.detail)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })

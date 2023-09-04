@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
+import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
 export const getAllStores = createAsyncThunk('appStores/getAllStores', async () => {
+  try {
   let isFinished = false
   let page = 1
   const acc = []
@@ -15,9 +17,14 @@ export const getAllStores = createAsyncThunk('appStores/getAllStores', async () 
   page += 1
   }
   return acc
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const getData = createAsyncThunk('appStores/getData', async params => {
+  try {
   const response = await axios.get('/users/businesses', { params })
   return {
     params,
@@ -26,31 +33,55 @@ export const getData = createAsyncThunk('appStores/getData', async params => {
     data: response.data.results,
     total: response.data.count
   }
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const getStore = createAsyncThunk('appStores/getStore', async id => {
+  try {
   const response = await axios.get(`/users/businesses/${id}/`)
   return response.data
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const addStore = createAsyncThunk('appStores/addStore', async (formData, { dispatch, getState }) => {
+  try {
   await axios.post('/users/businesses/', formData)
   await dispatch(getData(getState().stores.params))
   await dispatch(getAllStores())
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const editStore = createAsyncThunk('appStores/editStore', async ({ id, formData }, { dispatch, getState }) => {
+  try {
   await axios.put(`/users/businesses/${ id }/`, formData)
   await dispatch(getData(getState().stores.params))
   await dispatch(getAllStores())
   return id
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const deleteStore = createAsyncThunk('appStores/deleteStore', async (id, { dispatch, getState }) => {
+  try {
   await axios.delete(`/users/businesses/${ id }/`)
   await dispatch(getData(getState().stores.params))
   await dispatch(getAllStores())
   return id
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
 
 export const appStoresSlice = createSlice({
