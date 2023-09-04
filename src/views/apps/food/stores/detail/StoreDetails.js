@@ -96,11 +96,17 @@ const renderLogo = (avatar, name) => {
   if (avatar) {
     return (
       <img
-        className="img-fluid rounded"
+        className="img-fluid rounded mt-3 mb-2"
         src={avatar}
         alt={name ? name : "Логотип заведения"}
         height="150px"
-        width="267px"
+        width="150px"
+        // width="267px"
+        style={{
+          height: "150px",
+          width: "150px"
+          // width: "267px"
+        }}
       />
     )
   } else {
@@ -114,11 +120,12 @@ const renderLogo = (avatar, name) => {
           borderRadius: 0,
           fontSize: "calc(64px)",
           width: "100%",
-          height: "100%",
+          height: "100%"
         }}
         style={{
           height: "150px",
-          width: "267px",
+          width: "150px"
+          // width: "267px"
         }}
       />
     )

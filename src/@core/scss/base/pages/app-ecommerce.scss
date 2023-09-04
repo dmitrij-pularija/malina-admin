@@ -234,7 +234,7 @@ $search-bar-height: 48px;
   // Grid View Specific style
   .grid-view {
     display: grid;
-    grid-template-columns: 1fr 1fr 1fr;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
     column-gap: 2rem;
     &.wishlist-items {
       grid-template-columns: 1fr 1fr 1fr 1fr;
@@ -524,7 +524,7 @@ $search-bar-height: 48px;
       }
     }
     .grid-view.wishlist-items {
-      grid-template-columns: 1fr 1fr 1fr;
+      grid-template-columns: 1fr 1fr 1fr ;
     }
     // overlay style for e-commerce page
     .body-content-overlay {

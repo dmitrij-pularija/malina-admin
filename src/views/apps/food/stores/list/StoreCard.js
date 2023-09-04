@@ -16,12 +16,15 @@ const renderLogo = (avatar, name) => {
   if (avatar) {
     return (
       <img 
-      className='rounded rounded mt-3 mb-2' 
+      className='rounded mb-0' 
       src={avatar} 
       alt={name ? name : "Логотип заведения"}
       style={{
-        height: '150px',
-        width: '267px'
+        height: '200px',
+        width: '100%'
+        // height: '150px',
+        // width: '150px'
+        // width: '267px'
       }}
       />
     )
@@ -30,7 +33,7 @@ const renderLogo = (avatar, name) => {
       <Avatar
         initials
         color={'light-primary'}
-        className='rounded rounded mt-3 mb-2'
+        className='rounded'
         content={name ? name : 'Malina'}
         contentStyles={{
           borderRadius: 0,
@@ -39,8 +42,11 @@ const renderLogo = (avatar, name) => {
           height: '100%'
         }}
         style={{
-          height: '150px',
-          width: '267px'
+          // height: 'auto',
+          width: '100%',
+          height: '200px'
+          // width: '150px'
+          // width: '267px'
         }}
       />
     )
@@ -80,13 +86,12 @@ const StoreCard = props => {
 
         return (
           <Card className='ecommerce-card' key={item.name}>
-            <div className='item-img text-center mx-auto'>
+            {/* <div className='item-img text-center mx-auto'> */}
               {renderLogo(item.image, item.name)}
-                {/* <img className='img-fluid card-img-top' src={item.image} alt={item.name} /> */}
-            </div>
+            {/* </div> */}
             <CardBody>
                 <CardText tag='span' className='company-name'>
-                <h3 className='text-center mb-2'>
+                <h3 className='text-center mt-1 mb-1'>
                 {item.name}
                 </h3>
                 </CardText>
@@ -153,8 +158,8 @@ const StoreCard = props => {
                 className='btn-cart move-cart'
                 // onClick={() => handleCartBtn(item.id, item.isInCart)}
               >
-                <Edit className='me-50' size={14} />
-                <span>Редактировать</span>
+                {/* <Edit className='me-50' size={14} /> */}
+                <span>Изменить</span>
               </Button>
               </Link>
               <Button
@@ -162,10 +167,10 @@ const StoreCard = props => {
                 color='light'
                 onClick={() => handleDel(item.id)}
               >
-                <Trash2
+                {/* <Trash2
                   className='me-50'
                   size={14}
-                />
+                /> */}
                 <span>Удалить</span>
               </Button>
             </div>
