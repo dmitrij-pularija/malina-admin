@@ -16,9 +16,12 @@ const renderClient = row => {
     )
   }
 }
-
+const availableObj = {
+  false: 'light-danger',
+  true: 'light-success'
+}
 const statusObj = {
-  0: 'light-secondary',
+  2: 'light-primary',
   1: 'light-success'
 }
 
@@ -56,8 +59,8 @@ return [
     sortField: 'available',
     selector: row => row.available,
     cell: row => (
-      <Badge className='text-capitalize' color={statusObj[2]} pill>
-        {row.available}
+      <Badge className='text-capitalize' color={availableObj[row.available]} pill>
+        {row.available ? "Активна" : "Не активна"}
       </Badge>
     )
   },

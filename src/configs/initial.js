@@ -25,7 +25,7 @@ export const logoSize = {
 export const paymentType = {
   1: "Наличными",
   2: "Картой",
-  3: "На сайте"
+  3: "Пейбокс"
 }
 export const orderType = {
   1: "Доставка",

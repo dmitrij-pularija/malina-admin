@@ -12,7 +12,8 @@ import { useDispatch } from 'react-redux'
 
 const defaultValues = {
   name: '',
-  type: ''
+  type: '',
+  available: ''
 }
 
 const typeOptions = [
@@ -20,7 +21,7 @@ const typeOptions = [
   { value: 2, label: 'Beauty' }
 ]
 
-const requiredFields = ["name", "name"]
+const requiredFields = ["name", "type"]
 
 // const checkIsValid = data => {
 //   return Object.values(data).every(field => (typeof field === 'object' ? field.value !== "" : field.length > 0))
@@ -66,8 +67,9 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
 
   const values = item ? {
     name: item.name,
-    type: selectedSubCategory ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(item.category))] : typeOptions[typeOptions.findIndex(i => parseInt(i.value) === parseInt(item.category_type))]
-   } : selectedId ? {name: '', type: categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedId))]} : {}
+    type: selectedSubCategory ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(item.category))] : typeOptions[typeOptions.findIndex(i => parseInt(i.value) === parseInt(item.category_type))],
+    available: typeof item.available === 'boolean' ? item.available : ''
+   } : selectedId ? {name: '', type: categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedId))], available: ''} : {}
 
   const {
     reset,
@@ -117,13 +119,13 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
   }
 
   const onSubmit = data => {
-    // setData(data)
     if (checkIsValid(data, requiredFields)) {
       reset()  
       toggleSidebar()
       const formData = new FormData();
       formData.append('name', data.name)
       if (!selectedId) formData.append('category_type', data.type.value)
+      if (!selectedId && data.available !== '') formData.append('available', data.available)
       if (selectedId) formData.append('category', data.type.value)
       if (avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
@@ -202,7 +204,7 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
               <Input id='name' placeholder='Введите название' invalid={errors.name && true} {...field} />
             )}
           />
-          {errors && errors.name && (<FormFeedback>Пожалуйста название</FormFeedback>)}
+          {errors && errors.name && (<FormFeedback>Пожалуйста введите название</FormFeedback>)}
         </div>  
         <div className='mb-1'>
           <Label className='form-label' for='type'>
@@ -228,6 +230,20 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
           />
         {errors && errors.type && (<FormFeedback>{`Пожалуйста выберите ${selectedId ? "Категорию" : "Тип"}`}</FormFeedback>)}
         </div>
+        {(selectedCategory || !selectedId) && 
+        <div className='form-check form-check-success mb-3 mt-2'>
+          <Controller
+            name='available'
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input id='available'  type='checkbox' checked={field.value} {...field} />
+            )}
+          />
+          <Label className='form-label' for='available'>
+          Активна
+          </Label>
+        </div> }
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
         </Button>
