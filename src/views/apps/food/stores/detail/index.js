@@ -13,7 +13,8 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 const Details = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
-  const store = useSelector((state) => state.stores.selectedStore)
+  const { selectedStore, loading} = useSelector((state) => state.stores)
+  // const store = useSelector((state) => state.stores.selectedStore)
   const categories = useSelector((state) => state.categories.allCategories)
   const subcategories = useSelector((state) => state.categories.subcategories)
 
@@ -24,7 +25,7 @@ const Details = () => {
   }, [])
 
   return (
-    <>
+    loading ? <Loading /> : (
     <Fragment>
       <BreadCrumbs
         title="Информация о заведении"
@@ -37,11 +38,11 @@ const Details = () => {
       <div className="app-ecommerce-details">
         <Card>
           <CardBody>
-            {store && categories.length && subcategories.length ? (
+            {selectedStore && categories.length && subcategories.length ? (
               <StoreDetails
                 categories={categories}
                 subcategories={subcategories}
-                selectedStore={store}
+                selectedStore={selectedStore}
               />
             ) : (
               <Alert color="danger">
@@ -57,9 +58,7 @@ const Details = () => {
         </Card>
       </div>
     </Fragment>
-    <Loading />
-    </>
-  )
+  ))
 }
 
 export default Details

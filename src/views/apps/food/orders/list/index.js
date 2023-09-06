@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import Breadcrumbs from '@components/breadcrumbs'
 import { getAllOrders } from '../store'
@@ -32,6 +33,8 @@ import '@styles/react/apps/app-users.scss'
 
 const OrdersList = () => {
   const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const handleAdd = () => navigate('/apps/food/orders/add/') 
   const { allOrders, count: { totalOrder, totalPrice,  avgPrice,  avgRait } } = useSelector(state => state.orders)
  
   useEffect(() => {
@@ -48,7 +51,7 @@ const OrdersList = () => {
 
   return (
     <div className='app-user-list'>
-<Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} /> 
+{/* <Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} onClick={handleAdd} />  */}
       <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal

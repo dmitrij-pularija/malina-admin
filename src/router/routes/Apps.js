@@ -4,6 +4,7 @@ import { Navigate } from 'react-router-dom'
 
 const Orders = lazy(() => import('../../views/apps/food/orders/list'))
 const OrdersPreview = lazy(() => import('../../views/apps/food/orders/preview'))
+const OrdersAdd = lazy(() => import('../../views/apps/food/orders/add'))
 const OrdersEdit = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersHistory = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersOnMap = lazy(() => import('../../views/apps/food/orders/edit'))
@@ -53,6 +54,10 @@ const AppRoutes = [
   {
     element: <OrdersPreview />,
     path: '/apps/food/orders/preview/:id'
+  },
+  {
+    element: <OrdersAdd />,
+    path: '/apps/food/orders/add'
   },
   {
     element: <OrdersEdit />,
