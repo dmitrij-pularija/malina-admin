@@ -1,8 +1,8 @@
 import axios from 'axios'
 import jwtDefaultConfig from './jwtDefaultConfig'
 import { BASE_URL } from '../../../configs/initial'
-import errorMessage from "../../../../src/@core/components/errorMessage"
-
+// const { BASE_URL } = process.env
+// const BASE_URL = 'http://167.99.246.103'
 axios.defaults.baseURL = `${BASE_URL}/api/v2/malina/`
 
 export default class JwtService {
@@ -27,7 +27,7 @@ export default class JwtService {
         // ** If token is present add it to request's Authorization Header
         if (accessToken) {
           // ** eslint-disable-next-line no-param-reassign
-          config.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken.replace(/^"|"$/g, "")}`
+          config.headers.Authorization = `${this.jwtConfig.tokenType} ${accessToken}`
         }
         return config
       },
@@ -44,13 +44,16 @@ export default class JwtService {
 
         // ** if (status === 401) {
         if (response && response.status === 401) {
-          errorMessage(error.response.data.detail)
           if (!this.isAlreadyFetchingAccessToken) {
             this.isAlreadyFetchingAccessToken = true
             this.refreshToken().then(r => {
               this.isAlreadyFetchingAccessToken = false
 
               // ** Update accessToken in localStorage
+              // this.setToken(r.data.accessToken)
+              // this.setRefreshToken(r.data.refreshToken)
+
+              // this.onAccessTokenFetched(r.data.accessToken)
               this.setToken(r.data.access)
               this.setRefreshToken(r.data.refresh)
 
@@ -86,7 +89,7 @@ export default class JwtService {
   }
 
   getRefreshToken() {
-    return localStorage.getItem(this.jwtConfig.storageRefreshTokenKeyName)
+    return localStorage.getItem(this.jwtConfig.storageRefreshTokenKeyName).replace(/^"|"$/g, "")
   }
 
   setToken(value) {
@@ -107,7 +110,7 @@ export default class JwtService {
 
   refreshToken() {
     return axios.post(this.jwtConfig.refreshEndpoint, {
-      refreshToken: this.getRefreshToken()
+      refresh: this.getRefreshToken()
     })
   }
 }

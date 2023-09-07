@@ -62,7 +62,7 @@ const ToastContent = ({ t, name, role }) => {
           <h6>{name}</h6>
           <X size={12} className='cursor-pointer' onClick={() => toast.dismiss(t.id)} />
         </div>
-        <span>Вы успешно вошли как {role} в CRM</span>
+        <span>Вы успешно вошли в CRM как {role}</span>
       </div>
     </div>
   )
