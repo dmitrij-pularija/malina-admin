@@ -1,6 +1,6 @@
 export const roles = {
-  1: "user",
-  2: "admin",
+  1: "admin",
+  2: "user",
   3: "superadmin"
 }
 export const statusObj = {

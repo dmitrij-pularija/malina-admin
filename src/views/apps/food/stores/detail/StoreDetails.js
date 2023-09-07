@@ -7,8 +7,10 @@ import InputPassword from "@components/input-password-toggle"
 import Avatar from "@components/avatar"
 import Select from "react-select"
 import { useForm, Controller } from "react-hook-form"
-import { selectThemeColors, formatTime } from "@utils"
+import { selectThemeColors, formatTime, dataURLtoBlob, checkIsValid } from "@utils"
 import { addStore, editStore } from "../store"
+import ModalPassword from "./ModalPassword"
+import ModalІShifts from "./ModalІShifts"
 import classnames from "classnames"
 import { Plus, Minus } from "react-feather"
 import {
@@ -77,20 +79,20 @@ const requiredFields = [
   "type",
   "category"
 ]
-const checkIsValid = (data) => {
-  return Object.keys(data).every((key) => {
-    const field = data[key]
-    if (requiredFields.includes(key)) {
-      if (typeof field === "object") {
-        return field.value !== ""
-      } else {
-        return field.length > 0
-      }
-    } else {
-      return true
-    }
-  })
-}
+// const checkIsValid = (data) => {
+//   return Object.keys(data).every((key) => {
+//     const field = data[key]
+//     if (requiredFields.includes(key)) {
+//       if (typeof field === "object") {
+//         return field.value !== ""
+//       } else {
+//         return field.length > 0
+//       }
+//     } else {
+//       return true
+//     }
+//   })
+// }
 
 const renderLogo = (avatar, name) => {
   if (avatar) {
@@ -176,6 +178,7 @@ const Store = (props) => {
   const [categoryOptions, setCategoryOptions] = useState(initCategoryOptions())
   const [subcategoryOptions, setSubcategoryOptions] = useState(initSubcategoryOptions())
   const [modalShow, setModalShow] = useState(false)
+  const [modalShiftsShow, setModalShiftsShow] = useState(false)
   const [passwords, setPasswords] = useState({ newPassword: "", confirmPassword: "" })
   const [passwordsMatch, setPasswordsMatch] = useState(true)
   const values = {}
@@ -245,6 +248,7 @@ const Store = (props) => {
 
   const handleImgReset = () => setAvatar("")
   const toggleModal = () => setModalShow(!modalShow)
+  const toggleModalShifts = () => setModalShiftsShow(!modalShiftsShow)
   const handleClose = () => navigate("/apps/food/stores/list/")
   const handleChengPassword = (event) => {
     event.preventDefault()
@@ -278,19 +282,19 @@ const Store = (props) => {
     reader.readAsDataURL(files[0])
   }
 
-  const dataURLtoBlob = (dataURL) => {
-    const arr = dataURL.split(",")
-    const mime = arr[0].match(/:(.*?);/)[1]
-    const bstr = atob(arr[1])
-    let n = bstr.length
-    const u8arr = new Uint8Array(n)
+  // const dataURLtoBlob = (dataURL) => {
+  //   const arr = dataURL.split(",")
+  //   const mime = arr[0].match(/:(.*?);/)[1]
+  //   const bstr = atob(arr[1])
+  //   let n = bstr.length
+  //   const u8arr = new Uint8Array(n)
 
-    while (n--) {
-      u8arr[n] = bstr.charCodeAt(n)
-    }
+  //   while (n--) {
+  //     u8arr[n] = bstr.charCodeAt(n)
+  //   }
 
-    return new Blob([u8arr], { type: mime })
-  }
+  //   return new Blob([u8arr], { type: mime })
+  // }
 
   const {
     reset,
@@ -332,7 +336,7 @@ const Store = (props) => {
   }
 
   const onSubmit = (data) => {
-    if (checkIsValid(data)) {
+    if (checkIsValid(data, requiredFields)) {
       if (!passwords.newPassword && !selectedStore) return toggleModal()
       const formData = new FormData()
       formData.append("login", data.login)
@@ -1091,17 +1095,22 @@ const Store = (props) => {
               <FormFeedback>Пожалуйста введите описание</FormFeedback>
             )}
           </Col>
-          <Col className="d-flex justify-content-center mt-2" sm="12">
-            <Button type="submit" className="me-1" color="primary">
+          <Col className="d-flex justify-content-center mt-2 gap-10" sm="12">
+            <Button type="submit" color="primary">
               Сохранить
             </Button>
             <Button color="secondary" outline onClick={handleClose}>
               Отменить
             </Button>
+            {/* <Button color="secondary" outline onClick={toggleModalShifts}>
+              Управление сменами
+            </Button> */}
           </Col>
         </Row>
       </Form>
-      <Modal
+      <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} />
+      <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} />
+      {/* <Modal
         isOpen={modalShow}
         toggle={toggleModal}
         className="modal-dialog-centered"
@@ -1154,7 +1163,7 @@ const Store = (props) => {
             </Button>
           </Form>
         </ModalBody>
-      </Modal>
+      </Modal> */}
     </>
   )
 }

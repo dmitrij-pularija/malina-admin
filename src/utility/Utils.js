@@ -64,7 +64,8 @@ export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
  */
 export const getHomeRouteForLoggedInUser = userRole => {
   if (userRole === 'superadmin') return DefaultRoute
-  if (userRole === 'admin') return '/access-control'
+  if (userRole === 'admin') return DefaultRoute
+  if (userRole === 'user') return '/access-control'
   return '/login'
 }
 
@@ -85,13 +86,19 @@ export const formatData = (value) => {
   return value ? new Date(value).toLocaleDateString('ru-Ru') : ""
 }
 
-export const formatTime = (value) => {
-  // return new Date(value).toLocaleTimeString('ru-Ru')
+export const formatTimeSave = (value) => {
   const date = new Date(value)
   const hours = String(date.getHours()).padStart(2, '0')
   const minutes = String(date.getMinutes()).padStart(2, '0')
   return `${hours}:${minutes}`
 }
+export const formatTime = (value) => {
+  if (value) {
+  const time = value.toString()
+  return time.slice(0, -3)
+  } else return ''
+}
+
 export const formatDataSave = (value) => {
 const valueData = new Date(value)  
 const year = valueData.getFullYear()

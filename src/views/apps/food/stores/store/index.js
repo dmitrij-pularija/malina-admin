@@ -3,6 +3,47 @@ import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
+export const getShifts = async () => {
+  try {
+  const { data: { results }} = await axios.get('/users/waiter-shifts/')
+  return results
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
+}
+
+export const addShifts = async (shifts) => {
+  try {
+  const { data: { results }} = await axios.post('/users/waiter-shifts/', shifts)
+  return results
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
+}
+
+export const editShifts = async (id, formData) => {
+  try {
+  const { data: { results }} = await axios.put(`/users/waiter-shifts/${id}/`, formData)
+  return results
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
+}
+
+export const delShifts = async (id) => {
+  try {
+  await axios.delete(`/users/waiter-shifts/${id}/`)
+  return id
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
+}
+
+
 export const getAllStores = createAsyncThunk('appStores/getAllStores', async () => {
   try {
   let isFinished = false
