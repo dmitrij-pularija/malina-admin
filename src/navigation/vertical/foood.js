@@ -1,5 +1,5 @@
 // ** Icons Import
-import { Grid, Server, GitBranch, BookOpen, Award, Circle, ShoppingCart, Users, Shield } from 'react-feather'
+import { Grid, Clipboard, GitBranch, BookOpen, Award, Circle, ShoppingCart, Users, Shield } from 'react-feather'
 
 export default [
   {
@@ -11,6 +11,25 @@ export default [
     icon: <ShoppingCart size={20} />,
     navLink: '/apps/food/orders/list'
   },
+  {
+    id: 'products',
+    title: 'Products',
+    icon: <Clipboard size={20}/>,
+    children: [
+      {
+        id: 'productCategories',
+        title: 'Categories',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/products/categories/list'
+      },
+      {
+        id: 'products',
+        title: 'Products',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/products/products/list'
+      }
+    ]
+  },    
   {
     id: 'structure',
     title: 'Structure',

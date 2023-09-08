@@ -1,7 +1,7 @@
 export const roles = {
-  1: "admin",
-  2: "user",
-  3: "superadmin"
+  1: "user",
+  2: "business",
+  3: "admin"
 }
 export const statusObj = {
   1: { label: 'Новый',  colorName: 'light-warning' },

@@ -116,7 +116,7 @@ const Login = () => {
           const data = { ...res.data.user, role: roles[res.data.user.type], ability: newAbility, name: res.data.user.name ? res.data.user.name : res.data.user.login.split('@')[0], accessToken: res.data.access, refreshToken: res.data.refresh}
           dispatch(handleLogin(data))
           ability.update(newAbility)
-
+ 
           navigate(getHomeRouteForLoggedInUser(data.role))
           toast(t => (
             <ToastContent t={t} role={data.role || 'user'} name={data.name || 'User'} />

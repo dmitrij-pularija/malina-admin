@@ -63,7 +63,8 @@ export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
  * @param {String} userRole Role of user
  */
 export const getHomeRouteForLoggedInUser = userRole => {
-  if (userRole === 'superadmin') return DefaultRoute
+  console.log(userRole)
+  if (userRole === 'business') return DefaultRoute
   if (userRole === 'admin') return DefaultRoute
   if (userRole === 'user') return '/access-control'
   return '/login'
