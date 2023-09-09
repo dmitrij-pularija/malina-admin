@@ -11,6 +11,9 @@ const OrdersOnMap = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersReview = lazy(() => import('../../views/apps/food/orders/edit'))
 const ProductsCategories = lazy(() => import('../../views/apps/food/products/categories/list'))
 const Products = lazy(() => import('../../views/apps/food/products/products/list'))
+const ProductsAdd = lazy(() => import('../../views/apps/food/products/products/add'))
+const ProductsEdit = lazy(() => import('../../views/apps/food/products/products/edit'))
+
 
 const Stores = lazy(() => import('../../views/apps/food/stores/list'))
 const StoreDetail = lazy(() => import('../../views/apps/food/stores/detail'))
@@ -129,6 +132,14 @@ const AppRoutes = [
   {
     element: <Products/>,
     path: '/apps/food/products/products/list'
+  },
+  {
+    element: <ProductsAdd />,
+    path: '/apps/food/products/products/add'
+  },
+  {
+    element: <ProductsEdit />,
+    path: '/apps/food/products/products/edit/:id'
   },
   {
     element: <Email />,

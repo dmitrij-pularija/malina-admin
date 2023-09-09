@@ -86,7 +86,7 @@ return [
     minWidth: '138px',
     sortable: true,
     sortField: 'supplier',
-    selector: row => row.category_type,
+    selector: row => row,
     cell: row => renderStoore(parseInt(row.supplier))
   },
   {

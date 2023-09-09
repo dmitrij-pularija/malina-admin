@@ -1,10 +1,10 @@
 import { useEffect, useState } from 'react'
 import Breadcrumbs from '@components/breadcrumbs'
 import { useParams, Link } from 'react-router-dom'
-import { getUser } from '../store'
+// import { getUser } from '../store'
 import { useSelector, useDispatch } from 'react-redux'
 import { Row, Col, Alert } from 'reactstrap'
-import UserTabs from './Tabs'
+import ProductTabs from './Tabs'
 import UserInfoCard from './UserInfoCard'
 import '@styles/react/apps/app-users.scss'
 
@@ -13,9 +13,9 @@ const UserView = () => {
   const { selectedUser } = useSelector(state => state.users)
   const { id } = useParams()
 
-  useEffect(() => {
-    dispatch(getUser(parseInt(id)))
-  }, [])
+  // useEffect(() => {
+  //   dispatch(getUser(parseInt(id)))
+  // }, [])
 
   const [active, setActive] = useState('1')
 

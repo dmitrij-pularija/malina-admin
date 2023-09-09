@@ -1,5 +1,8 @@
-import { useSelector } from 'react-redux'
-// import Table from './Table'
+// import { useEffect } from 'react'
+// import { useDispatch, useSelector } from "react-redux"
+import { useNavigate } from 'react-router-dom'
+import Table from './Table'
+// import { getAllStores } from '../../../stores/store'
 import Loading from '../../../../../../@core/components/spinner/Loading'
 import Breadcrumbs from '@components/breadcrumbs'
 // import { Row, Col } from 'reactstrap'
@@ -8,16 +11,24 @@ import Breadcrumbs from '@components/breadcrumbs'
 // import { formatNumberInt } from '@utils'
 import '@styles/react/apps/app-users.scss'
 
-const UsersList = () => {
-  // const { totalCount, totalUsers, totalCustomers, totalGuests } = useSelector(state => state.users.count)
+const ProductsList = () => {
+  // const dispatch = useDispatch()
+  const navigate = useNavigate()
+  // const stores = useSelector(state => state.stores.allStores)
+
+  // useEffect(() => {
+  //   if (!stores.length) dispatch(getAllStores())
+  // }, [])
+
+  const handleAdd = () => navigate('/apps/food/products/products/add/') 
 
   return (
     <div className='app-user-list'>
-      <Breadcrumbs title='Меню' data={[{ title: 'Меню' }]} />
-      {/* <Table /> */}
+      <Breadcrumbs title='Меню' data={[{ title: 'Меню' }]} onClick={handleAdd} />
+      <Table />
       <Loading />  
     </div>
   )
 }
 
-export default UsersList
+export default ProductsList

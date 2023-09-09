@@ -3,14 +3,14 @@ import { handlePending, handleFulfilled, handleRejected, dataURLtoBlob } from "@
 import errorMessage from "../../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
-export const getAllUsers = createAsyncThunk('appProducts/getAllUsers', async () => {
+export const getAllProducts = createAsyncThunk('appProducts/getAllProducts', async () => {
   try {
     let isFinished = false
     let page = 1
     const acc = []
-    const { data: { count } } = await axios.get('/users/user')
+    const { data: { count } } = await axios.get('/products/product')
     while (!isFinished) {
-      const { data: { results } } = await axios.get('/users/user', { params: { perPage: 100, page }})
+      const { data: { results } } = await axios.get('/products/product', { params: { perPage: 100, page }})
       acc.push(...results)
       if (acc.length === count) isFinished = true
       page += 1
@@ -22,27 +22,9 @@ export const getAllUsers = createAsyncThunk('appProducts/getAllUsers', async () 
   }
 })
 
-export const getAllCount = createAsyncThunk('appProducts/getAllCount', async () => {
-  try {
-  const all = await axios.get('/users/user')
-  const users = await axios.get('/users/user', { params: { user_type: 'user' } })
-  const customers = await axios.get('/users/user', { params: { user_type: 'customer' } })
-  const guests = await axios.get('/users/user', { params: { user_type: 'guest' }})
-  return {
-    totalCount: all.data.count,
-    totalUsers: users.data.count,
-    totalCustomers: customers.data.count,
-    totalGuests: guests.data.count
-  }
-} catch (error) {
-  errorMessage(error.response.data.detail)
-  return thunkAPI.rejectWithValue(error)
-}
-})
-
 export const getData = createAsyncThunk('appProducts/getData', async params => {
   try {
-  const response = await axios.get('/users/user', { params })
+  const response = await axios.get('/products/product', { params })
   return {
     params,
     data: response.data.results,
@@ -54,9 +36,9 @@ export const getData = createAsyncThunk('appProducts/getData', async params => {
 }
 })
 
-export const getUser = createAsyncThunk('appProducts/getUser', async id => {
+export const getProduct = createAsyncThunk('appProducts/getProduct', async id => {
   try {
-  const response = await axios.get(`/users/user/${id}/`)
+  const response = await axios.get(`/products/product/${id}/`)
   return response.data
 } catch (error) {
   errorMessage(error.response.data.detail)
@@ -64,20 +46,37 @@ export const getUser = createAsyncThunk('appProducts/getUser', async id => {
 }
 })
 
-export const addUser = createAsyncThunk('appProducts/addUser', async ({ formData, avatar }, { dispatch, getState }) => {
-  if (avatar && avatar.startsWith('data:image')) {
+export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ formData, galery }, { dispatch, getState }) => {
+  // if (images && images.startsWith('data:image')) {
+  //   const formDataImage = new FormData()
+  //   try {  
+  //     const avatarBlob = dataURLtoBlob(images)
+  //     formDataImage.append('image', avatarBlob, 'product.jpg')
+  //     const { data: { image } } = await axios.post(`/products/product-images/`, formDataImage)
+  //     formData.append('avatar', image)
+  //   } catch (error) {
+  //     errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  //   }
+  //   }
+  try {
+  const { data: { id } } = await axios.post('/products/product/', formData)
+
+  if (galery && galery.length && galery[0].image.startsWith('data:image')) {
     const formDataImage = new FormData()
-    try {  
-      const avatarBlob = dataURLtoBlob(avatar)
-      formDataImage.append('image', avatarBlob, 'avatar.jpg')
-      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-      formData.append('avatar', image)
+    const formDataProductImage = new FormData()
+    const avatarBlob = dataURLtoBlob(galery[0].image)
+    formDataImage.append('image', avatarBlob, 'product.jpg')
+    try {
+    const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+    formDataProductImage.append('product', id)
+    formDataProductImage.append('image', image)
+      await axios.post(`/products/product-images/`, formDataProductImage)
     } catch (error) {
       errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
     }
     }
-  try {
-  await axios.post('/users/user/', formData)
+
+
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   // return user
@@ -87,9 +86,9 @@ export const addUser = createAsyncThunk('appProducts/addUser', async ({ formData
 }
 })
 
-export const deleteUser = createAsyncThunk('appProducts/deleteUser', async (id, { dispatch, getState }) => {
+export const deleteProduct = createAsyncThunk('appProducts/deleteProduct', async (id, { dispatch, getState }) => {
   try {
-  await axios.delete(`/users/user/${id}/`)
+  await axios.delete(`/products/product/${id}/`)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return id
@@ -99,20 +98,23 @@ export const deleteUser = createAsyncThunk('appProducts/deleteUser', async (id, 
 }
 })
 
-export const editUser = createAsyncThunk('appProducts/editUser', async ({ id, formData, avatar }, { dispatch, getState }) => {
-    if (avatar && avatar.startsWith('data:image')) {
+export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ id, formData, galery }, { dispatch, getState }) => {
+    if (galery && galery.length && galery[0].image.startsWith('data:image')) {
       const formDataImage = new FormData()
-      try {  
-        const avatarBlob = dataURLtoBlob(avatar)
-        formDataImage.append('image', avatarBlob, 'avatar.jpg')
-        const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-        formData.append('avatar', image)
+      const formDataProductImage = new FormData()
+      const avatarBlob = dataURLtoBlob(galery[0].image)
+      formDataImage.append('image', avatarBlob, 'product.jpg')
+      try {
+      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+      formDataProductImage.append('product', id)
+      formDataProductImage.append('image', image)
+        await axios.post(`/products/product-images/`, formDataProductImage)
       } catch (error) {
         errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
       }
       }
   try {
-  await axios.patch(`/users/user/${id}/`, formData)
+  await axios.patch(`/products/product/${id}/`, formData)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   // return id
@@ -126,13 +128,12 @@ export const appProductsSlice = createSlice({
   name: 'appProducts',
   initialState: {
     data: [],
-    allUsers: [],
-    total: 1,
-    count: { totalCount: 0, totalUsers: 0,  totalCustomers: 0,  totalGuests: 0 },
+    allProducts: [],
+    total: 0,
     params: {},
     loading: false,
     error: null,
-    selectedUser: null
+    selectedProduct: null
   },
   reducers: {},
   extraReducers: builder => {
@@ -144,38 +145,31 @@ export const appProductsSlice = createSlice({
         state.loading = false
         state.error = null
       })
-      .addCase(getAllCount.fulfilled, (state, { payload }) => {
-        state.count = payload
+      .addCase(getProduct.fulfilled, (state, action) => {
+        state.selectedProduct = action.payload
         state.loading = false
         state.error = null
       })
-      .addCase(getUser.fulfilled, (state, action) => {
-        state.selectedUser = action.payload
-        state.loading = false
-        state.error = null
-      })
-      .addCase(getAllUsers.fulfilled, (state, action) => {
-        state.allUsers = action.payload
+      .addCase(getAllProducts.fulfilled, (state, action) => {
+        state.allProducts = action.payload
         state.loading = false
         state.error = null
       })
       .addCase(getData.pending, handlePending)
-      .addCase(getAllUsers.pending, handlePending)
-      .addCase(getAllCount.pending, handlePending)
-      .addCase(getUser.pending, handlePending)
-      .addCase(addUser.pending, handlePending)
-      .addCase(deleteUser.pending, handlePending)
-      .addCase(editUser.pending, handlePending)
+      .addCase(getAllProducts.pending, handlePending)
+      .addCase(getProduct.pending, handlePending)
+      .addCase(addProduct.pending, handlePending)
+      .addCase(deleteProduct.pending, handlePending)
+      .addCase(editProduct.pending, handlePending)
       .addCase(getData.rejected, handleRejected)
-      .addCase(getAllUsers.rejected, handleRejected)
-      .addCase(getAllCount.rejected, handleRejected)
-      .addCase(getUser.rejected, handleRejected)
-      .addCase(addUser.rejected, handleRejected)
-      .addCase(deleteUser.rejected, handleRejected)
-      .addCase(editUser.rejected, handleRejected)  
-      .addCase(addUser.fulfilled, handleFulfilled)
-      .addCase(deleteUser.fulfilled, handleFulfilled)
-      .addCase(editUser.fulfilled, handleFulfilled)
+      .addCase(getAllProducts.rejected, handleRejected)
+      .addCase(getProduct.rejected, handleRejected)
+      .addCase(addProduct.rejected, handleRejected)
+      .addCase(deleteProduct.rejected, handleRejected)
+      .addCase(editProduct.rejected, handleRejected)  
+      .addCase(addProduct.fulfilled, handleFulfilled)
+      .addCase(deleteProduct.fulfilled, handleFulfilled)
+      .addCase(editProduct.fulfilled, handleFulfilled)
   }
 })
 

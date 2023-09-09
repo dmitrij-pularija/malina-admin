@@ -626,7 +626,7 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="email"
-                      placeholder="Введите название email"
+                      placeholder="Введите email"
                       invalid={errors.email && true}
                       {...field}
                     />

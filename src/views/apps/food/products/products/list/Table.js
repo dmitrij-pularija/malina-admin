@@ -1,9 +1,11 @@
 import { Fragment, useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 // import Sidebar from './Sidebar'
-import UsersListModal from './Modal'
+// import UsersListModal from './Modal'
 
 import { columns } from './columns'
-import { getData, getAllCount, deleteUser } from '../store'
+import { getData, deleteProduct } from '../store'
+import { getAllStores } from '../../../stores/store'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
@@ -147,9 +149,9 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
               </DropdownMenu>
             </UncontrolledDropdown>
 
-            <Button className='add-new-user' color='primary' onClick={toggleModal}>
+            {/* <Button className='add-new-user' color='primary' onClick={toggleModal}>
               Добавить
-            </Button>
+            </Button> */}
           </div>
         </Col>
       </Row>
@@ -159,7 +161,9 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
 
 const UsersList = () => {
   const dispatch = useDispatch()
-  const { data, total } = useSelector(state => state.users)
+  const navigate = useNavigate()
+  const stores = useSelector(state => state.stores.allStores)
+  const { data, total } = useSelector(state => state.products)
 
   // ** States
   const [sort, setSort] = useState('+')
@@ -167,36 +171,41 @@ const UsersList = () => {
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(20)
-  const [modalOpen, setModalOpen] = useState(false)
-  const [selectedUser, setSelectedUser] = useState('')
+  // const [modalOpen, setModalOpen] = useState(false)
+  const [selectedProduct, setSelectedProduct] = useState('')
   // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Выберите роль' })
-  const [currentType, setCurrentType] = useState({ value: '', label: 'Выберите тип' })
+  const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
   // const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирете статус' })
-
+// console.log(stores)
   // ** Function to toggle sidebar
-  const toggleModal = () => setModalOpen(!modalOpen)
+  // const toggleModal = () => setModalOpen(!modalOpen)
 // console.log(data)
   // ** Get data on mount
   useEffect(() => {
-    dispatch(getAllCount())
+    if (!stores.length) dispatch(getAllStores())
     dispatch(
       getData({
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        user_type: currentType.value
+        supplier_id: currentStore.value
       })
     )
   }, [])
 
+  const storeOptions = stores.map((store) => ({
+    value: String(store.id),
+    label: store.name
+  }))
+  storeOptions.unshift({ value: '', label: 'Показать все' }) 
   // ** User filter options
-   const typeOptions = [
-    { value: '', label: 'Показать все' },
-    { value: 'user', label: 'Пользователь' },
-    { value: 'customer', label: 'Клиент' },
-    { value: 'guest', label: 'Гость' }
-  ] 
+  //  const typeOptions = [
+  //   { value: '', label: 'Показать все' },
+  //   { value: 'user', label: 'Пользователь' },
+  //   { value: 'customer', label: 'Клиент' },
+  //   { value: 'guest', label: 'Гость' }
+  // ] 
   // const roleOptions = [
   //   { value: '', label: 'Select Role' },
   //   { value: 'admin', label: 'Admin' },
@@ -221,14 +230,14 @@ const UsersList = () => {
   //   { value: 'inactive', label: 'Inactive', number: 3 }
   // ]
 
-  const handleDelUser = (event, id) => {
+  const handleDelProduct = (event, id) => {
     event.preventDefault()
-    dispatch(deleteUser(id))
+    dispatch(deleteProduct(id))
   }
-  const handleEditUser = (event, row) => {
+  const handleEditProduct = (event, row) => {
     event.preventDefault()
-    setSelectedUser(row)
-    toggleModal()
+    // setSelectedProduct(row)
+    navigate(`/apps/food/products/products/edit/${row.id}/`)
   }
 
   const handlePagination = page => {
@@ -238,7 +247,7 @@ const UsersList = () => {
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        user_type: currentType.value
+        supplier_id: currentStore.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -253,7 +262,7 @@ const UsersList = () => {
         search: searchTerm,
         perPage: value,
         page: 1,
-        user_type: currentType.value
+        supplier_id: currentStore.value
       })
     )
     setRowsPerPage(value)
@@ -268,7 +277,7 @@ const UsersList = () => {
         ordering: `${sort}${sortColumn}`,
         page: 1,
         perPage: rowsPerPage,
-        user_type: currentType.value
+        supplier_id: currentStore.value
       })
     )
   }
@@ -299,7 +308,7 @@ const UsersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      user_type: currentType.value,
+      supplier_id: currentStore.value,
       search: searchTerm
     }
 
@@ -326,7 +335,7 @@ const UsersList = () => {
         search: searchTerm,
         page: 1,
         perPage: rowsPerPage,
-        user_type: currentType.value
+        supplier_id: currentStore.value
       })
     )
   }
@@ -337,16 +346,16 @@ const UsersList = () => {
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
-              <Label for='plan-select'>Тип</Label>
+              <Label for='plan-select'>Заведение</Label>
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
                 className='react-select'
                 classNamePrefix='select'
-                options={typeOptions}
-                value={currentType}
+                options={storeOptions}
+                value={currentStore}
                 onChange={data => {
-                  setCurrentType(data)
+                  setCurrentStore(data)
                   setCurrentPage(1)
                   dispatch(
                     getData({
@@ -354,7 +363,7 @@ const UsersList = () => {
                       search: searchTerm,
                       page: 1,
                       perPage: rowsPerPage,
-                      user_type: data.value
+                      supplier_id: data.value
                     })
                   )
                 }}
@@ -373,7 +382,7 @@ const UsersList = () => {
             pagination
             responsive
             paginationServer
-            columns={columns(handleEditUser, handleDelUser)}
+            columns={columns(stores, handleEditProduct, handleDelProduct)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -387,13 +396,12 @@ const UsersList = () => {
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                toggleModal={toggleModal}
               />
             }
           />
         </div>
       </Card>
-      <UsersListModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} />
+      {/* <UsersListModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} /> */}
     </Fragment>
   )
 }
