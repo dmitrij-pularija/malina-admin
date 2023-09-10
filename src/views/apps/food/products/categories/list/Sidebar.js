@@ -126,7 +126,7 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedCategory, set
       const formData = new FormData();
       formData.append('name', data.name)
       if (data.supplier) formData.append('supplier', data.supplier.value)
-      if (avatar.startsWith('data:image')) {
+      if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
         formData.append('icon', avatarBlob, 'category.jpg')
       }

@@ -150,9 +150,9 @@ export const checkIsValid = (data, requiredFields) => {
     const field = data[key]
     if (requiredFields.includes(key)) {
       if (typeof field === "object") {
-        return field.value !== ""
+        return field.value !== "" || field.value > 0
       } else {
-        return field.length > 0
+        return field.length > 0 || field > 0
       }
     } else {
       return true

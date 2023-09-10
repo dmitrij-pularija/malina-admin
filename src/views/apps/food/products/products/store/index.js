@@ -3,6 +3,15 @@ import { handlePending, handleFulfilled, handleRejected, dataURLtoBlob } from "@
 import errorMessage from "../../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
+export const delImages = async id => {
+  try {
+  await axios.delete(`/products/product-images/${id}/`)
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
+}
+
 export const getAllProducts = createAsyncThunk('appProducts/getAllProducts', async () => {
   try {
     let isFinished = false
@@ -47,25 +56,15 @@ export const getProduct = createAsyncThunk('appProducts/getProduct', async id =>
 })
 
 export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ formData, galery }, { dispatch, getState }) => {
-  // if (images && images.startsWith('data:image')) {
-  //   const formDataImage = new FormData()
-  //   try {  
-  //     const avatarBlob = dataURLtoBlob(images)
-  //     formDataImage.append('image', avatarBlob, 'product.jpg')
-  //     const { data: { image } } = await axios.post(`/products/product-images/`, formDataImage)
-  //     formData.append('avatar', image)
-  //   } catch (error) {
-  //     errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
-  //   }
-  //   }
+  const count = galery ? galery.length : 0
   try {
   const { data: { id } } = await axios.post('/products/product/', formData)
-
-  if (galery && galery.length && galery[0].image.startsWith('data:image')) {
+  for (let i = 0; i < count; i += 1) {
+  if (galery && galery.length && galery[i].image.startsWith('data:image')) {
     const formDataImage = new FormData()
     const formDataProductImage = new FormData()
-    const avatarBlob = dataURLtoBlob(galery[0].image)
-    formDataImage.append('image', avatarBlob, 'product.jpg')
+    const imageBlob = dataURLtoBlob(galery[i].image)
+    formDataImage.append('image', imageBlob, 'product.jpg')
     try {
     const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
     formDataProductImage.append('product', id)
@@ -75,7 +74,7 @@ export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ fo
       errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
     }
     }
-
+  }
 
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
@@ -99,20 +98,23 @@ export const deleteProduct = createAsyncThunk('appProducts/deleteProduct', async
 })
 
 export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ id, formData, galery }, { dispatch, getState }) => {
-    if (galery && galery.length && galery[0].image.startsWith('data:image')) {
-      const formDataImage = new FormData()
-      const formDataProductImage = new FormData()
-      const avatarBlob = dataURLtoBlob(galery[0].image)
-      formDataImage.append('image', avatarBlob, 'product.jpg')
+  const count = galery ? galery.length : 0
+  for (let i = 0; i < count; i += 1) {
+    const formDataImage = new FormData()
+    const formDataProductImage = new FormData()
+    if (galery && galery.length && galery[i].image.startsWith('data:image')) {
+      const imageBlob = dataURLtoBlob(galery[i].image)
+      formDataImage.append('image', imageBlob, 'product.jpg')
+      }
       try {
-      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-      formDataProductImage.append('product', id)
-      formDataProductImage.append('image', image)
-        await axios.post(`/products/product-images/`, formDataProductImage)
-      } catch (error) {
-        errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
-      }
-      }
+        const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+        formDataProductImage.append('product', id)
+        formDataProductImage.append('image', image)
+          await axios.post(`/products/product-images/`, formDataProductImage)
+        } catch (error) {
+          errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+        }  
+    }
   try {
   await axios.patch(`/products/product/${id}/`, formData)
   await dispatch(getData(getState().users.params))

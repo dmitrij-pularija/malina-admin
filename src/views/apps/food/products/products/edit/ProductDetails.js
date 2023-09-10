@@ -5,7 +5,7 @@ import SwiperImages from "./swiper"
 import InputNumber from "rc-input-number"
 import Flatpickr from "react-flatpickr"
 import { getAllCategories } from "../../categories/store"
-import { getAllStores } from "../../../stores/store"
+import { delImages } from "../store"
 // import InputPassword from "@components/input-password-toggle"
 import Avatar from "@components/avatar"
 import Select from "react-select"
@@ -78,11 +78,8 @@ const defaultValues = {
   containerPrice: ""
 }
 
-const requiredFields = [
-  "name",
-  "cost",
-  "supplier"
-]
+const requiredFields = ["name", "cost", "supplier"]
+
 
 const renderLogo = (avatar, name) => {
   if (avatar) {
@@ -281,7 +278,10 @@ const supplierOptions = stores.map((store) => ({
   //   if (name === "confirmPassword") setPasswordsMatch(passwords.newPassword === value)
   // }
 
-  const handleImgReset = () => setGalery([])
+  const handleImgReset = () => {
+    if (selectedProduct && galery.length) galery.map(image => delImages(parseInt(image.id)))
+    setGalery([])
+  }
   // const toggleModal = () => setModalShow(!modalShow)
   // const toggleModalShifts = () => setModalShiftsShow(!modalShiftsShow)
   // const handleClose = () => navigate("/apps/food/products/products/list/")
@@ -373,9 +373,9 @@ const supplierOptions = stores.map((store) => ({
   }
 
   const onSubmit = (data) => {
-    // console.log(data)
-    // if (checkIsValid(data, requiredFields)) {
-    if (true) {
+    // console.log(checkIsValid(data, requiredFields))
+    if (checkIsValid(data, requiredFields)) {
+    // if (true) {
 
       const formData = new FormData()
       formData.append("name", data.name)

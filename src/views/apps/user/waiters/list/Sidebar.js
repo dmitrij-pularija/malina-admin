@@ -163,14 +163,13 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
     }
 
   const onSubmit = data => {
-    // console.log(data)
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData()
       formData.append('full_name', data.fullName)
       formData.append('business_id', data.businessId.value)
       if (data.shift) formData.append('shift', data.shift.value)
       if (data.telegram) formData.append('telegram', data.telegram)
-      if (avatar.startsWith('data:image')) {
+      if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
         formData.append('profile_picture', avatarBlob, 'avatar.jpg')
       }
