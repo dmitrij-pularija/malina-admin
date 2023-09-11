@@ -12,8 +12,8 @@ export default [
     navLink: '/apps/food/orders/list'
   },
   {
-    id: 'products',
-    title: 'Products',
+    id: 'menu',
+    title: 'Menu',
     icon: <Clipboard size={20}/>,
     children: [
       {
@@ -21,6 +21,12 @@ export default [
         title: 'Categories',
         icon: <Circle size={12} />,
         navLink: '/apps/food/products/categories/list'
+      },
+      {
+        id: 'addons',
+        title: 'Addons',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/products/addons/list'
       },
       {
         id: 'products',

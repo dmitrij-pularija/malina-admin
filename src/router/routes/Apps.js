@@ -13,7 +13,7 @@ const ProductsCategories = lazy(() => import('../../views/apps/food/products/cat
 const Products = lazy(() => import('../../views/apps/food/products/products/list'))
 const ProductsAdd = lazy(() => import('../../views/apps/food/products/products/add'))
 const ProductsEdit = lazy(() => import('../../views/apps/food/products/products/edit'))
-
+const Addons = lazy(() => import('../../views/apps/food/products/addons/list'))
 
 const Stores = lazy(() => import('../../views/apps/food/stores/list'))
 const StoreDetail = lazy(() => import('../../views/apps/food/stores/detail'))
@@ -140,6 +140,10 @@ const AppRoutes = [
   {
     element: <ProductsEdit />,
     path: '/apps/food/products/products/edit/:id'
+  },
+  {
+    element: <Addons />,
+    path: '/apps/food/products/addons/list'
   },
   {
     element: <Email />,

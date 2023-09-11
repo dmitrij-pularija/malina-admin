@@ -1,5 +1,6 @@
 import { useEffect, useState, Fragment } from "react"
-import ProductTabs from "../view/Tabs"
+// import ProductTabs from "../view/Tabs"
+import ProductDetails from "../edit/ProductDetails"
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from "../../../../../../@core/components/spinner/Loading"
 import { Row, Col, Card, CardBody } from "reactstrap"
@@ -39,7 +40,8 @@ const addProduct = () => {
           <Card>
             <CardBody>
               <Row>
-                <Col className="d-flex flex-column align-items-center justify-content-center width">
+              <ProductDetails categories={categories} stores={stores} selectedProduct={null} />  
+                {/* <Col className="d-flex flex-column align-items-center justify-content-center width">
                   <ProductTabs
                     categories={categories}
                     stores={stores}
@@ -47,7 +49,7 @@ const addProduct = () => {
                     active={active}
                     toggleTab={toggleTab}
                   />
-                </Col>
+                </Col> */}
               </Row>
             </CardBody>
           </Card>

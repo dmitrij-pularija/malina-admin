@@ -60,8 +60,9 @@ const StoreList = props => {
       buttonsStyling: false
       
     }).then(function (result) {
+      console.log(result)
       if (result.value) {
-        dispatch(deleteStore(id)).then(() => {
+        dispatch(deleteStore(id)).then(response => response.meta.requestStatus === 'fulfilled' && 
           MySwal.fire({
             icon: 'success',
             title: 'Удаление заведения',
@@ -70,7 +71,7 @@ const StoreList = props => {
               confirmButton: 'btn btn-success'
             }
           })
-        })
+        )
       } else if (result.dismiss === MySwal.DismissReason.cancel) {
         MySwal.fire({
           title: 'Отмена удаления',

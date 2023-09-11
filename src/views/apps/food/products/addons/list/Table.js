@@ -1,21 +1,13 @@
 import { Fragment, useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
-// import Sidebar from './Sidebar'
-// import UsersListModal from './Modal'
-
-import { columns } from './columns'
-import { getData, deleteProduct } from '../store'
-import { getAllStores } from '../../../stores/store'
-import { useDispatch, useSelector } from 'react-redux'
+import Sidebar from './Sidebar'
+import  { columns } from './columns'
 import Select from 'react-select'
+import { selectThemeColors } from '@utils'
+import { getAddons, deleteAddon } from '../store'
+import { useDispatch, useSelector } from 'react-redux'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
-import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
-
-// ** Utils
-import { selectThemeColors } from '@utils'
-
-// ** Reactstrap Imports
+import { ChevronDown, Share, Printer, FileText, File, Grid, Copy, Plus} from 'react-feather'
 import {
   Row,
   Col,
@@ -24,21 +16,15 @@ import {
   Label,
   Button,
   CardBody,
-  CardTitle,
-  CardHeader,
   DropdownMenu,
   DropdownItem,
   DropdownToggle,
   UncontrolledDropdown
 } from 'reactstrap'
-
-// ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-// ** Table Header
-const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
-  // ** Converts table to CSV
+const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
   function convertArrayOfObjectsToCSV(array) {
     let result
 
@@ -65,7 +51,6 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
     return result
   }
 
-  // ** Downloads CSV
   function downloadCSV(array) {
     const link = document.createElement('a')
     let csv = convertArrayOfObjectsToCSV(array)
@@ -81,6 +66,7 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
     link.setAttribute('download', filename)
     link.click()
   }
+
   return (
     <div className='invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75'>
       <Row>
@@ -148,10 +134,6 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-
-            {/* <Button className='add-new-user' color='primary' onClick={toggleModal}>
-              Добавить
-            </Button> */}
           </div>
         </Col>
       </Row>
@@ -159,133 +141,94 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
   )
 }
 
-const UsersList = () => {
+const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
-  const navigate = useNavigate()
-  const stores = useSelector(state => state.stores.allStores)
-  const { data, total } = useSelector(state => state.products)
-
-  // ** States
+  const { data, total } = useSelector(state => state.addons)
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [sortColumn, setSortColumn] = useState('id')
   const [rowsPerPage, setRowsPerPage] = useState(20)
-  // const [modalOpen, setModalOpen] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState('')
-  // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Выберите роль' })
+  const [selectedAddon, setSelectedAddon] = useState('')
+  const [sortColumn, setSortColumn] = useState('name')
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
-  // const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирете статус' })
-// console.log(stores)
-  // ** Function to toggle sidebar
-  // const toggleModal = () => setModalOpen(!modalOpen)
-// console.log(data)
-  // ** Get data on mount
-  useEffect(() => {
-    if (!stores.length) dispatch(getAllStores())
-    dispatch(
-      getData({
-        ordering: `${sort}${sortColumn}`,
-        search: searchTerm,
-        page: currentPage,
-        perPage: rowsPerPage,
-        supplier_id: currentStore.value
-      })
-    )
-  }, [])
 
   const storeOptions = stores.map((store) => ({
     value: String(store.id),
     label: store.name
   }))
-  storeOptions.unshift({ value: '', label: 'Показать все' }) 
-  // ** User filter options
-  //  const typeOptions = [
-  //   { value: '', label: 'Показать все' },
-  //   { value: 'user', label: 'Пользователь' },
-  //   { value: 'customer', label: 'Клиент' },
-  //   { value: 'guest', label: 'Гость' }
-  // ] 
-  // const roleOptions = [
-  //   { value: '', label: 'Select Role' },
-  //   { value: 'admin', label: 'Admin' },
-  //   { value: 'author', label: 'Author' },
-  //   { value: 'editor', label: 'Editor' },
-  //   { value: 'maintainer', label: 'Maintainer' },
-  //   { value: 'subscriber', label: 'Subscriber' }
-  // ]
+  storeOptions.unshift({ value: '', label: 'Показать все' })
 
-  // const planOptions = [
-  //   { value: '', label: 'Select Plan' },
-  //   { value: 'basic', label: 'Basic' },
-  //   { value: 'company', label: 'Company' },
-  //   { value: 'enterprise', label: 'Enterprise' },
-  //   { value: 'team', label: 'Team' }
-  // ]
-
-  // const statusOptions = [
-  //   { value: '', label: 'Select Status', number: 0 },
-  //   { value: 'pending', label: 'Pending', number: 1 },
-  //   { value: 'active', label: 'Active', number: 2 },
-  //   { value: 'inactive', label: 'Inactive', number: 3 }
-  // ]
-
-  const handleDelProduct = (event, id) => {
+  const handleClose = () => {
+    setSelectedAddon('')
+    setSidebarOpen(false)
+   }
+   const handleDelAddon = (event, id) => {
     event.preventDefault()
-    dispatch(deleteProduct(id))
+    dispatch(deleteAddon(id))
   }
-  const handleEditProduct = (event, row) => {
+
+  // const handleDelSubCategory = (event, id) => {
+  //   event.preventDefault()
+  //   dispatch(deleteSubCategory(id))
+  // }
+  const handleEditAddon = (event, row) => {
     event.preventDefault()
-    // setSelectedProduct(row)
-    navigate(`/apps/food/products/products/edit/${row.id}/`)
+    setSelectedAddon(row)
+    toggleSidebar()
   }
+
+  // const handleEditSubCategory = (event, row) => {
+  //   event.preventDefault()
+  //   setSelectedSubCategory(row)
+  //   toggleSidebar()
+  // }
+
+  useEffect(() => {
+    dispatch(getAddons({
+      ordering: `${sort}${sortColumn}`,
+      supplier__id: currentStore.value,
+      search: searchTerm,
+      page: currentPage,
+      perPage: rowsPerPage
+    }))
+  }, [])
 
   const handlePagination = page => {
-    dispatch(
-      getData({
-        ordering: `${sort}${sortColumn}`,
-        search: searchTerm,
-        perPage: rowsPerPage,
-        page: page.selected + 1,
-        supplier_id: currentStore.value
-      })
-    )
+    dispatch(getAddons({
+      ordering: `${sort}${sortColumn}`,
+      supplier__id: currentStore.value,
+      search: searchTerm,
+      page: page.selected + 1,
+      perPage: rowsPerPage
+    }))
     setCurrentPage(page.selected + 1)
   }
 
-  // ** Function in get data on rows per page
   const handlePerPage = e => {
     const value = parseInt(e.currentTarget.value)
-    dispatch(
-      getData({
-        ordering: `${sort}${sortColumn}`,
-        search: searchTerm,
-        perPage: value,
-        page: 1,
-        supplier_id: currentStore.value
-      })
-    )
     setRowsPerPage(value)
+    dispatch(getAddons({
+      ordering: `${sort}${sortColumn}`,
+      supplier__id: currentStore.value,
+      search: searchTerm,
+      page: 1,
+      perPage: rowsPerPage
+    }))
   }
 
-  // ** Function in get data on search query change
   const handleFilter = val => {
     setSearchTerm(val)
-    dispatch(
-      getData({
-        search: val,
-        ordering: `${sort}${sortColumn}`,
-        page: 1,
-        perPage: rowsPerPage,
-        supplier_id: currentStore.value
-      })
-    )
+    dispatch(getAddons({
+      ordering: `${sort}${sortColumn}`,
+      supplier__id: currentStore.value,
+      search: val,
+      page: 1,
+      perPage: rowsPerPage
+    }))
   }
 
-  // ** Custom Pagination
   const CustomPagination = () => {
     const count = Number(Math.ceil(total / rowsPerPage))
-// console.log(count, total)
     return (
       <ReactPaginate
         previousLabel={''}
@@ -305,10 +248,9 @@ const UsersList = () => {
     )
   }
 
-  // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      supplier_id: currentStore.value,
+      supplier__id: currentStore.value,
       search: searchTerm
     }
 
@@ -322,27 +264,24 @@ const UsersList = () => {
       return []
     } else {
       return []
-      // return store.allData.slice(0, rowsPerPage)
     }
   }
 
   const handleSort = (column, sortDirection) => {
     setSort(sortDirection === "asc" ? "+" : "-")
     setSortColumn(column.sortField)
-    dispatch(
-      getData({
-        ordering: `${sortDirection === "asc" ? "+" : "-"}${column.sortField}`,
-        search: searchTerm,
-        page: 1,
-        perPage: rowsPerPage,
-        supplier_id: currentStore.value
-      })
-    )
+    dispatch(getAddons({
+      ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
+      supplier__id: currentStore.value,
+      search: searchTerm,
+      page: 1,
+      perPage: rowsPerPage
+    }))
   }
- 
+
   return (
     <Fragment>
-      <Card>
+          <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -356,39 +295,38 @@ const UsersList = () => {
                 value={currentStore}
                 onChange={data => {
                   setCurrentStore(data)
-                  setCurrentPage(1)
-                  dispatch(
-                    getData({
-                      ordering: `${sort}${sortColumn}`,
-                      search: searchTerm,
-                      page: 1,
-                      perPage: rowsPerPage,
-                      supplier_id: data.value
-                    })
-                  )
+                  dispatch(getAddons({
+                    ordering: `${sort}${sortColumn}`,
+                    supplier__id: data.value,
+                    search: searchTerm,
+                    page: 1,
+                    perPage: rowsPerPage
+                  }))
                 }}
               />
             </Col>
           </Row>
         </CardBody>
-      </Card>
-
+      </Card>  
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
-          <DataTable
+        <DataTable
+            dataKey="id"
             noHeader
             subHeader
             sortServer
             pagination
             responsive
             paginationServer
-            columns={columns(stores, handleEditProduct, handleDelProduct)}
+            columns={columns(stores, handleEditAddon, handleDelAddon)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
             paginationComponent={CustomPagination}
+            // expandableRowsComponent={ExpandableTable}
+            // onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
             data={dataToRender()}
-            noDataComponent={<h6 className='text-capitalize'>Информация не найдена</h6>}
+            noDataComponent={<h6 className='text-capitalize'>Категории не найдены</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={data}
@@ -396,13 +334,16 @@ const UsersList = () => {
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
+                toggleSidebar={toggleSidebar}
               />
             }
           />
+         
         </div>
       </Card>
+      <Sidebar open={sidebarOpen} toggleSidebar={handleClose} selectedAddon={selectedAddon} setSelectedAddon={setSelectedAddon} />
     </Fragment>
   )
 }
 
-export default UsersList
+export default CategoriesList

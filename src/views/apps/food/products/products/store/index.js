@@ -12,6 +12,23 @@ export const delImages = async id => {
 }
 }
 
+// export const delAddon = async id => {
+//   try {
+//   await axios.delete(`/products/product-addon/${id}/`)
+// } catch (error) {
+//   errorMessage(error.response.data.detail)
+//   return thunkAPI.rejectWithValue(error)
+// }
+// }
+// export const addAddon = async addon => {
+//   try {
+//   await axios.post(`/products/product-addon/`, addon)
+// } catch (error) {
+//   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+//   return thunkAPI.rejectWithValue(error)
+// }
+// }
+
 export const getAllProducts = createAsyncThunk('appProducts/getAllProducts', async () => {
   try {
     let isFinished = false
@@ -71,7 +88,7 @@ export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ fo
     formDataProductImage.append('image', image)
       await axios.post(`/products/product-images/`, formDataProductImage)
     } catch (error) {
-      errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+      errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
     }
     }
   }
@@ -80,7 +97,7 @@ export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ fo
   // await dispatch(getAllData())
   // return user
 } catch (error) {
-  errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
@@ -112,7 +129,7 @@ export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ 
         formDataProductImage.append('image', image)
           await axios.post(`/products/product-images/`, formDataProductImage)
         } catch (error) {
-          errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+          errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
         }  
     }
   try {
@@ -120,6 +137,17 @@ export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ 
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   // return id
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
+})
+
+export const updateProduct = createAsyncThunk('appProducts/updateProduct', async ({ id, product }, { dispatch, getState }) => {
+  
+  try {
+  await axios.patch(`/products/product/${id}/`, { ...product })
+  await dispatch(getProduct(id))
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
@@ -163,6 +191,8 @@ export const appProductsSlice = createSlice({
       .addCase(addProduct.pending, handlePending)
       .addCase(deleteProduct.pending, handlePending)
       .addCase(editProduct.pending, handlePending)
+      .addCase(updateProduct.pending, handlePending)
+      .addCase(updateProduct.rejected, handleRejected)
       .addCase(getData.rejected, handleRejected)
       .addCase(getAllProducts.rejected, handleRejected)
       .addCase(getProduct.rejected, handleRejected)
@@ -172,6 +202,7 @@ export const appProductsSlice = createSlice({
       .addCase(addProduct.fulfilled, handleFulfilled)
       .addCase(deleteProduct.fulfilled, handleFulfilled)
       .addCase(editProduct.fulfilled, handleFulfilled)
+      .addCase(updateProduct.fulfilled, handleFulfilled)
   }
 })
 

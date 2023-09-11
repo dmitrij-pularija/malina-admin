@@ -3,7 +3,8 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap'
 import { FileText, Copy, FilePlus } from 'react-feather'
 import ProductDetails from '../edit/ProductDetails'
 // import SecurityTab from './SecurityTab'
-// import Rewards from './Rewards'
+import Addons from './Addons'
+import RelatesProducts from './RelatesProducts'
 // import UserOrdersList from './UserOrdersList'
 
 const ProductTabs = ({ categories, stores, selectedProduct, active, toggleTab }) => {
@@ -35,10 +36,10 @@ const ProductTabs = ({ categories, stores, selectedProduct, active, toggleTab })
           <ProductDetails categories={categories} stores={stores} selectedProduct={selectedProduct} />
         </TabPane>
         <TabPane tabId='2'>
-          {/* <Rewards score={score} /> */}
+          <Addons selectedProduct={selectedProduct} />
         </TabPane>
         <TabPane tabId='3'>
-          {/* <SecurityTab /> */}
+          <RelatesProducts selectedProduct={selectedProduct} />
         </TabPane>
       </TabContent>
     </Fragment>

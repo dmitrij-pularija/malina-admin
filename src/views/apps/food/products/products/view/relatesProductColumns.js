@@ -1,7 +1,7 @@
 // ** React Imports
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-import { formatNumber } from '@utils'
+import { formatNumber, formatNumberInt } from '@utils'
 // ** Custom Components
 import Avatar from '@components/avatar'
 
@@ -11,22 +11,22 @@ import { Button, UncontrolledTooltip } from 'reactstrap'
 // ** Third Party Components
 import { Trash2 } from 'react-feather'
 
-const renderClient = row => {
-  if (row.icon) {
-    return <Avatar className='me-1' img={row.icon} width='32' height='32' />
+const renderClient = (image, name) => {
+  if (image) {
+    return <Avatar className='me-1' img={image} width='32' height='32' />
   } else {
     return (
       <Avatar
         initials
         className='me-1'
         color={'light-primary'}
-        content={row.name ? row.name : 'Добавка'}
+        content={name}
       />
     )
   }
 }
 
-export const columns = (handleDelAddon) => {
+export const relatesProductColumns = (handleDelAddon) => {
 
   return [
   {
@@ -37,27 +37,39 @@ export const columns = (handleDelAddon) => {
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Добавка',
+    name: 'Блюдо',
     sortable: true,
-    minWidth: '300px',
+    minWidth: '230px',
     sortField: 'name',
-    selector: row => row.name,
+    selector: row => row,
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row)}
-        <div className='d-flex flex-column'>
+        {renderClient(row.images.length ? row.images[0].image : '', row.name ? row.name : "Блюдо")}
+          <Link
+            to={`/apps/food/products/products/edit/${row.id}`}
+            className='user_name text-truncate text-body d-flex flex-column'
+            onClick={() => store.dispatch(getData(row.id))}
+          >
             <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-        </div>
+          </Link>
       </div>
     )
   },
   {
     name: 'Цена',
+    minWidth: '80px',
     sortable: true,
-    minWidth: '70px',
-    sortField: 'price',
-    selector: row => row.price,
-    cell: row => formatNumber(row.price)
+    sortField: 'cost',
+    selector: row => row,
+    cell: row => formatNumber(row.cost)
+  },
+  {
+    name: 'Скидка',
+    minWidth: '130px',
+    sortable: true,
+    sortField: 'prime_cost',
+    selector: row => row,
+    cell: row => `${formatNumberInt(row.prime_cost)} %`
   },
   {
     name: 'Действия',
