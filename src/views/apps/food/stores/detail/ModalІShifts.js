@@ -42,7 +42,7 @@ const update = () => getShifts().then(response => { setShifts(response) })
     update()
   }, []) 
 
-console.log(shifts)
+// console.log(shifts)
   const values = {}
 
   const {
