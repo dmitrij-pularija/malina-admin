@@ -83,6 +83,12 @@ export default [
         title: 'Waiters',
         icon: <Circle size={12} />,
         navLink: '/apps/user/waiters/list'
+      },
+      {
+        id: 'chefs',
+        title: 'Chefs',
+        icon: <Circle size={12} />,
+        navLink: '/apps/user/chefs/list'
       }
     ]
   },

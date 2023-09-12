@@ -13,6 +13,7 @@ import ratingStores from '@src/views/apps/food/rating/stores/store'
 import products from '@src/views/apps/food/products/products/store'
 import productsCategories from '@src/views/apps/food/products/categories/store'
 import addons from '@src/views/apps/food/products/addons/store'
+import chefs from '@src/views/apps/user/chefs/store'
 import navbar from './navbar'
 import layout from './layout'
 import todo from '@src/views/apps/todo/store'
@@ -40,6 +41,7 @@ const rootReducer = {
   products,
   productsCategories,
   addons,
+  chefs,
   navbar,
   layout,
   todo,
