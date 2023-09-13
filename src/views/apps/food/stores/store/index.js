@@ -15,8 +15,7 @@ export const getShifts = async () => {
 
 export const addShifts = async (shifts) => {
   try {
-  const { data: { results }} = await axios.post('/users/waiter-shifts/', shifts)
-  return results
+  await axios.post('/users/waiter-shifts/', shifts)
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
@@ -25,8 +24,7 @@ export const addShifts = async (shifts) => {
 
 export const editShifts = async (id, formData) => {
   try {
-  const { data: { results }} = await axios.put(`/users/waiter-shifts/${id}/`, formData)
-  return results
+  await axios.put(`/users/waiter-shifts/${id}/`, formData)
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
@@ -36,7 +34,6 @@ export const editShifts = async (id, formData) => {
 export const delShifts = async (id) => {
   try {
   await axios.delete(`/users/waiter-shifts/${id}/`)
-  return id
 } catch (error) {
   errorMessage(error.response.data.detail)
   return thunkAPI.rejectWithValue(error)

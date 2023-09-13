@@ -1102,9 +1102,9 @@ const Store = (props) => {
             <Button color="secondary" outline onClick={handleClose}>
               Отменить
             </Button>
-            {/* <Button color="secondary" outline onClick={toggleModalShifts}>
+            <Button color="secondary" outline onClick={toggleModalShifts}>
               Управление сменами
-            </Button> */}
+            </Button>
           </Col>
         </Row>
       </Form>

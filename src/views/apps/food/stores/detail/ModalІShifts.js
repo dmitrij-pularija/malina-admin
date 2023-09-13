@@ -12,13 +12,14 @@ import {
   ModalBody,
   ModalHeader,
   FormFeedback,
+  UncontrolledTooltip
 } from "reactstrap"
 import Flatpickr from "react-flatpickr"
 import { getShifts, addShifts, editShifts, delShifts } from "../store"
 import { useForm, Controller } from "react-hook-form"
 import { checkIsValid, formatTime, formatTimeSave } from "@utils"
 import classnames from "classnames"
-import { Minus, ChevronDown } from "react-feather"
+import { Minus, ChevronDown, Edit, Trash2 } from "react-feather"
 import "@styles/react/apps/app-users.scss"
 import "@styles/react/libs/flatpickr/flatpickr.scss"
 import "@styles/react/pages/page-authentication.scss"
@@ -35,15 +36,19 @@ const requiredFields = ["timeBeg", "timeEnd"]
 const ModalІShifts = ({isOpen, toggle }) => {
   // const dispatch = useDispatch()
   const [shifts, setShifts] = useState([])
-  const [selectedShifts, setSelectedShifts] = useState(null)
-const update = () => getShifts().then(response => { setShifts(response) })
+  const [selectedShifts, setSelectedShifts] = useState('')
+  const update = () => getShifts().then(response => setShifts(response))
 
   useEffect(() => {
     update()
   }, []) 
 
 // console.log(shifts)
-  const values = {}
+  const values = selectedShifts ? {
+    timeBeg: selectedShifts.start_time ? selectedShifts.start_time : "",
+    timeEnd: selectedShifts.end_time ? selectedShifts.end_time : "",
+    description: selectedShifts.description ? selectedShifts.description : ""  
+  } : {}
 
   const {
     reset,
@@ -55,14 +60,33 @@ const update = () => getShifts().then(response => { setShifts(response) })
     formState: { errors }
   } = useForm({ defaultValues, values })
 
+
+  const handleDel = (event, id) => {
+    event.preventDefault()
+    delShifts(id)
+    update()
+  }
+
+  const handleEdit = (event, row) => {
+    event.preventDefault()
+    setSelectedShifts(row)
+  }
+
+  const handleClear = () => {
+    for (const key in defaultValues) {
+      setValue(key, '')
+    }
+      setSelectedShifts('')
+      reset({...defaultValues})
+  } 
+
   const closeModal = () => {
-    setSelectedShifts(null)
-    reset()
-    // toggle()
+    handleClear()
+    toggle()
   }
 
   const onSubmit = (data) => {
-    console.log(data)
+    // console.log(data)
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData()
       formData.append(
@@ -76,11 +100,11 @@ const update = () => getShifts().then(response => { setShifts(response) })
       if (data.description) formData.append("description", data.description)
       
       if (selectedShifts) {
-        editShifts(selectedShifts.id, formData).then(update())
+        editShifts(selectedShifts.id, formData).then(handleClear())
       } else {
-        addShifts(formData).then(update())
+        addShifts(formData).then(handleClear())
       }
-      closeModal()
+      update()
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -97,7 +121,7 @@ const update = () => getShifts().then(response => { setShifts(response) })
     {
       name: '№',
       sortable: false,
-      minWidth: '30px',
+      minWidth: '10px',
       selector: row => row,
       cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
     },
@@ -119,23 +143,51 @@ const update = () => getShifts().then(response => { setShifts(response) })
     },
     {
       name: 'Описание',
-      minWidth: '100px',
+      minWidth: '150px',
       sortable: true,
       sortField: 'description',
       selector: row => row.description,
       cell: row => <span className='text-capitalize'>{row.description}</span>
+    },
+    {
+      name: 'Действия',
+      minWidth: '80px',
+      cell: row => (
+        <div className='column-action d-flex align-items-center p-0'>
+          <Button.Ripple 
+          className='btn-icon cursor-pointer p-0' 
+          color='transparent' 
+          id={`edit-tooltip-${row.id}`}  
+          onClick={event => handleEdit(event, row)}>
+          <Edit size={17} className='mx-1' />
+          </Button.Ripple>
+          <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
+            Редактировать
+          </UncontrolledTooltip>
+          <Button.Ripple 
+          className='btn-icon cursor-pointer p-0' 
+          color='transparent' 
+          id={`del-tooltip-${row.id}`} 
+          onClick={event => handleDel(event, row.id)}>
+            <Trash2 size={17} className='mx-1' />
+          </Button.Ripple>
+          <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
+            Удалить
+          </UncontrolledTooltip>
+        </div>
+      )
     }
   ]
 
   return (
     <Modal
     isOpen={isOpen}
-    toggle={toggle}
+    toggle={closeModal}
     className="modal-dialog-centered w-700"
   >
     <ModalHeader
       className="bg-transparent"
-      toggle={toggle}
+      toggle={closeModal}
     ></ModalHeader>
     <ModalBody className="px-sm-5 mx-50 pb-4">
       <Form onSubmit={handleSubmit(onSubmit)}>
@@ -199,6 +251,7 @@ const update = () => getShifts().then(response => { setShifts(response) })
                       )}
                     />
                   </div>
+                  {(errors && errors.timeBeg) && (<FormFeedback id='ffb'>Пожалуйста введите время работы</FormFeedback>)}
                 </div>
               </Col>
               <Col md={4} >
@@ -224,13 +277,15 @@ const update = () => getShifts().then(response => { setShifts(response) })
               </Col>
               <Col md={3} className="d-flex justify-content-center align-items-end">
               <Button type="submit" color="primary" >
-              Добавить
+              {selectedShifts ? "Изменить" : "Добавить"}
               </Button>
               </Col>
           </Row>
       </Form>
       <div className='react-dataTable user-view-account-projects mt-2'>
         <DataTable
+          id='dts'
+          dataKey="id"
           noHeader
           responsive
           size={'small'}
