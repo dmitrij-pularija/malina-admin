@@ -3,13 +3,50 @@ import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
+export const getDelivery = async () => {
+  try {
+  const { data: { results }} = await axios.get('/users/deliverytariffs/')
+  return results
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  // return thunkAPI.rejectWithValue(error)
+}
+}
+
+export const addDelivery = async (deliverytariffs) => {
+  try {
+  await axios.post('/users/deliverytariffs/', deliverytariffs)
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  // return thunkAPI.rejectWithValue(error)
+}
+}
+
+export const editDelivery = async (id, formData) => {
+  try {
+  await axios.put(`/users/deliverytariffs/${id}/`, formData)
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  // return thunkAPI.rejectWithValue(error)
+}
+}
+
+export const delDelivery = async (id) => {
+  try {
+  await axios.delete(`/users/deliverytariffs/${id}/`)
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  // return thunkAPI.rejectWithValue(error)
+}
+}
+
 export const getShifts = async () => {
   try {
   const { data: { results }} = await axios.get('/users/waiter-shifts/')
   return results
 } catch (error) {
   errorMessage(error.response.data.detail)
-  return thunkAPI.rejectWithValue(error)
+  // return thunkAPI.rejectWithValue(error)
 }
 }
 
@@ -18,7 +55,7 @@ export const addShifts = async (shifts) => {
   await axios.post('/users/waiter-shifts/', shifts)
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
-  return thunkAPI.rejectWithValue(error)
+  // return thunkAPI.rejectWithValue(error)
 }
 }
 
@@ -27,7 +64,7 @@ export const editShifts = async (id, formData) => {
   await axios.put(`/users/waiter-shifts/${id}/`, formData)
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
-  return thunkAPI.rejectWithValue(error)
+  // return thunkAPI.rejectWithValue(error)
 }
 }
 
@@ -36,7 +73,7 @@ export const delShifts = async (id) => {
   await axios.delete(`/users/waiter-shifts/${id}/`)
 } catch (error) {
   errorMessage(error.response.data.detail)
-  return thunkAPI.rejectWithValue(error)
+  // return thunkAPI.rejectWithValue(error)
 }
 }
 

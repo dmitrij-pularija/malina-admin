@@ -11,6 +11,7 @@ import { selectThemeColors, formatTime, dataURLtoBlob, checkIsValid } from "@uti
 import { addStore, editStore } from "../store"
 import ModalPassword from "./ModalPassword"
 import ModalІShifts from "./ModalІShifts"
+import ModalІDelivery from "./ModalІDelivery"
 import classnames from "classnames"
 import { Plus, Minus } from "react-feather"
 import {
@@ -179,6 +180,7 @@ const Store = (props) => {
   const [subcategoryOptions, setSubcategoryOptions] = useState(initSubcategoryOptions())
   const [modalShow, setModalShow] = useState(false)
   const [modalShiftsShow, setModalShiftsShow] = useState(false)
+  const [modalDeliveryShow, setModalDeliveryShow] = useState(false)
   const [passwords, setPasswords] = useState({ newPassword: "", confirmPassword: "" })
   const [passwordsMatch, setPasswordsMatch] = useState(true)
   const values = {}
@@ -249,6 +251,7 @@ const Store = (props) => {
   const handleImgReset = () => setAvatar("")
   const toggleModal = () => setModalShow(!modalShow)
   const toggleModalShifts = () => setModalShiftsShow(!modalShiftsShow)
+  const toggleModalDelivery = () => setModalDeliveryShow(!modalDeliveryShow)
   const handleClose = () => navigate("/apps/food/stores/list/")
   const handleChengPassword = (event) => {
     event.preventDefault()
@@ -1103,67 +1106,18 @@ const Store = (props) => {
               Отменить
             </Button>
             <Button color="secondary" outline onClick={toggleModalShifts}>
-              Управление сменами
+              Смены
             </Button>
+            {selectedStore && <Button color="secondary" outline onClick={toggleModalDelivery}>
+              Тарифы доставки
+            </Button>
+            }
           </Col>
         </Row>
       </Form>
       <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} />
       <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} />
-      {/* <Modal
-        isOpen={modalShow}
-        toggle={toggleModal}
-        className="modal-dialog-centered"
-      >
-        <ModalHeader
-          className="bg-transparent"
-          toggle={toggleModal}
-        ></ModalHeader>
-        <ModalBody className="px-sm-5 mx-50 pb-4">
-          <Form
-            className="auth-reset-password-form"
-            onSubmit={(event) => handleChengPassword(event)}
-          >
-            <div className="mb-1">
-              <Label className="form-label" for="new-password">
-                Новый пароль
-              </Label>
-              <InputPassword
-                className="input-group-merge"
-                id="new-password"
-                name="newPassword"
-                autoFocus
-                value={passwords.newPassword}
-                onChange={handlePasswordChange}
-              />
-            </div>
-            <div className="mb-3">
-              <Label
-                className="form-label"
-                for="confirmPassword"
-                name="confirmPassword"
-              >
-                Подтвердите пароль
-              </Label>
-              <InputPassword
-                className="input-group-merge"
-                id="confirmPassword"
-                name="confirmPassword"
-                value={passwords.confirmPassword}
-                onChange={handlePasswordChange}
-                invalid={!passwordsMatch && true}
-              />
-              {!passwordsMatch && (
-                <FormFeedback>Введенные пароли не совпадают</FormFeedback>
-              )}
-            </div>
-
-            <Button color="primary" block>
-              Установить новый пароль
-            </Button>
-          </Form>
-        </ModalBody>
-      </Modal> */}
+      <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : null}/>
     </>
   )
 }
