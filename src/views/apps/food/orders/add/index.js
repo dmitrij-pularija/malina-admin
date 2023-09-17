@@ -5,58 +5,100 @@ import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import { Card, CardBody } from "reactstrap"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllStores } from "../../stores/store"
+import { getAllProducts } from "../../products/products/store"
 import { getAllUsers } from "../../../user/store"
+import { getAllTables } from "../../../food/tables/store"
+import { getAllWaiters } from "../../../user/waiters/store"
 import { FileText, User, MapPin, Link } from 'react-feather'
 import Wizard from '@components/wizard'
 import Address from '../edit/steps/Address'
-import SocialLinks from '../edit/steps/SocialLinks'
+import Payment from '../edit/steps/Payment'
 import Details from '../edit/steps/Details'
-import AccountDetails from '../edit/steps/AccountDetails'
+import Cart from '../edit/steps/Cart'
 import "@styles/react/apps/app-users.scss"
 import "@styles/base/pages/app-ecommerce-details.scss"
 
+// const defaultValues = {
+// user: '',
+// store: '',
+// table: '',
+// paymentType: '',
+// orderType: '',
+// timeDelivery: '',
+// usedPoints: '',
+// address: '',
+// tips: '',
+// appliances: '',
+// comment: '',
+// orderCart: '',
+// waiter: '',
+// rdt: ''
+// }
+
+//  user_id	
+//  business_id
+//  table	
+//  payment_type	
+//  order_type	
+//  time_delivery	
+//  used_points	
+//  delivery_address	
+//  tips	
+//  quantity_appliances	
+//  comment	
+//  order_cart
+//  waiter	
+//  requested_delivery_time	
+
 const AddOrder = () => {
+  const ref = useRef(null)
   const dispatch = useDispatch()
+  const [stepper, setStepper] = useState(null)
+  const [data, setData] = useState(null)
   const stores = useSelector((state) => state.stores.allStores)
   const users = useSelector((state) => state.users.allUsers)
-
+  const waiters = useSelector(state => state.waiters.allWaiters)
+  const tables = useSelector(state => state.tables.allTables)
+  const products = useSelector(state => state.products.allProducts)
+ 
   useEffect(() => {
     if (!stores.length) dispatch(getAllStores())
     if (!users.length) dispatch(getAllUsers())
+    if (!waiters.length) dispatch(getAllWaiters())
+    if (!tables.length) dispatch(getAllTables())
+    if (!products.length) dispatch(getAllProducts())
   }, [])
-  const ref = useRef(null)
-
-  // ** State
-  const [stepper, setStepper] = useState(null)
-
+  
+const updateData = newData => setData(prevState => ({...prevState, ...newData}))
+  
   const steps = [
     {
-      id: 'personal-info',
+      id: 'step-details',
       title: 'Реквизиты',
-      subtitle: 'Добввьте реквизиты заказа',
+      // subtitle: 'Добввьте реквизиты заказа',
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users}/>
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} />
     },
     {
       id: 'step-address',
       title: 'Адрес',
-      subtitle: 'введите адрес доставки',
+      // subtitle: 'введите адрес доставки',
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' />
+      content: <Address stepper={stepper} type='modern-vertical' address={[]} handleUpdate={updateData} orderData={data} />
     },
     {
-      id: 'account-details',
+      id: 'order-details',
       title: 'Состав',
-      subtitle: 'Выберите состав заказа',
+      // subtitle: 'Выберите состав заказа',
       icon: <FileText size={18} />,
-      content: <AccountDetails stepper={stepper} type='modern-vertical' />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} handleUpdate={updateData} orderData={data} />
     },
     {
-      id: 'social-links',
+      id: 'step-payment',
       title: 'Оплата',
-      subtitle: 'Добавьте способ оплаты',
+      // subtitle: 'Добавьте способ оплаты',
       icon: <Link size={18} />,
-      content: <SocialLinks stepper={stepper} type='modern-vertical' />
+      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={null} />
     }
   ]
 

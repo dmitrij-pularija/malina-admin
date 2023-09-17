@@ -95,6 +95,7 @@ const renderTable = carts => {
 }
 
 const PreviewCard = ({ data }) => {
+  console.log(data)
   if (!data) return 
   const carts = data.order_cart[0].products_list
 
@@ -146,7 +147,7 @@ const PreviewCard = ({ data }) => {
         <Row className='invoice-spacing'>
           <Col className='p-0' xl='8'>
             <h6 className='mb-2'>Адрес:</h6>
-            <CardText className='mb-1'><span className='invoice-date'>{data.delivery_address ? data.delivery_address : "В нутри заведения"}</span></CardText>
+            <CardText className='mb-1'><span className='invoice-date'>{data.delivery_address ? data.delivery_address.name : "В нутри заведения"}</span></CardText>
             <div className='order-comments'>
               {data.time_delivery ? <p className='invoice-date-title'>Время доставки:</p> : ''}
               <p className='invoice-date'>{data.time_delivery ? formatTime(data.time_delivery) : ""}</p>

@@ -3,19 +3,69 @@ import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
+// export const getProductList = async () => {
+//   try {
+//   const { data: { results }} = await axios.get('/products/ordered-product/')
+//   return results
+// } catch (error) {
+//   errorMessage(error.response.data.detail)
+// }
+// }
+
+export const createProductCart = async (list, cart) => {
+  try {
+  const { data } = await axios.post('/products/ordered-product/', list)
+  const { data: { id }} = await axios.post('/products/cart/', {...cart, products_list: [parseInt(data.id)]})
+  // await axios.post('/products/confirm-cart/', { cart: id.toString() })
+  // const { data: { results }} = await axios.post('/products/add-product-to-cart/', list)
+  console.log(id)
+  return { order_cart: [id.toString()]  }
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+}
+}
+
+export const addProductList = async list => {
+  console.log(list)
+  try {
+  const { data: { results }} = await axios.post('/products/ordered-product/', list)
+  return results
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+}
+}
+
+export const editProductList = async ({ id, list }) => {
+  try {
+  const { data: { results }} = await axios.put(`/products/ordered-product/${id}/`, list)
+  return results
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+}
+}
+
+export const addCartToOrder = async cart => {
+  try {
+  const { data: { results }} = await axios.post('/products/add-cart-to-order/', cart)
+  return results
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+}
+}
+
+export const AddProductToCart = async list => {
+  try {
+  const { data: { results }} = await axios.post('/products/add-product-to-cart/', list)
+  return results
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+}
+}
 
 export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async () => {
   const response = await axios.get('/products/user-order/get_status/')
-  // console.log(response.data)
   return response.data
 })
-
-// export const getAllData = createAsyncThunk('appOrders/getAllData', async () => {
-//   const response = await axios.get('/products/user-order')
-// // console.log(response.data.results)
-//   // const response = await axios.get('/api/users/list/all-data')
-//   return response.data.results
-// })
 
 export const getAllOrders = createAsyncThunk('appUsers/getAllOrders', async () => {
   try {
@@ -65,24 +115,38 @@ export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
 }
 })
 
-// export const getUser = createAsyncThunk('appUsers/getUser', async id => {
-//   const response = await axios.get('/api/users/user', { id })
-//   return response.data.user
-// })
+export const addOrder = createAsyncThunk('appOrders/addOrder', async (order, { dispatch, getState }) => {
+  try {
+    await axios.post('/products/user-order/', order)
+    await dispatch(getData(getState().orderes.params))
+    return order
+  } catch (error) {
+    errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    return thunkAPI.rejectWithValue(error)
+  }
+})
 
-// export const addUser = createAsyncThunk('appUsers/addUser', async (user, { dispatch, getState }) => {
-//   await axios.post('/apps/users/add-user', user)
-//   await dispatch(getData(getState().users.params))
-//   await dispatch(getAllData())
-//   return user
-// })
+export const editOrder = createAsyncThunk('appOrders/editOrder', async ({ id, order }, { dispatch, getState }) => {
+  try {
+    await axios.put(`/products/user-order/${id}/`, order)
+    await dispatch(getData(getState().orderes.params))
+    return { id, ...order }
+  } catch (error) {
+    errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    return thunkAPI.rejectWithValue(error)
+  }
+})
 
-// export const deleteUser = createAsyncThunk('appUsers/deleteUser', async (id, { dispatch, getState }) => {
-//   await axios.delete('/apps/users/delete', { id })
-//   await dispatch(getData(getState().users.params))
-//   await dispatch(getAllData())
-//   return id
-// })
+export const deleteOrder = createAsyncThunk('appOrders/deleteOrder', async (id, { dispatch, getState }) => {
+  try {
+  await axios.delete(`/products/user-order/${id}/`)
+  await dispatch(getData(getState().orderes.params))
+  return id
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
+})
 
 export const appOrdersSlice = createSlice({
   name: 'appOrders',
@@ -127,10 +191,20 @@ export const appOrdersSlice = createSlice({
       .addCase(getAllOrders.pending, handlePending)
       .addCase(getOrder.pending, handlePending)
       .addCase(getOrderStatus.pending, handlePending)
+      .addCase(addOrder.pending, handlePending)
+      .addCase(editOrder.pending, handlePending)
+      .addCase(deleteOrder.pending, handlePending)
       .addCase(getData.rejected, handleRejected)
+      .addCase(addOrder.rejected, handleRejected)
+      .addCase(editOrder.rejected, handleRejected)
+      .addCase(deleteOrder.rejected, handleRejected)
       .addCase(getAllOrders.rejected, handleRejected)
       .addCase(getOrder.rejected, handleRejected)
       .addCase(getOrderStatus.rejected, handleRejected)
+      .addCase(addOrder.fulfilled, handleRejected)
+      .addCase(editOrder.fulfilled, handleRejected)
+      .addCase(deleteOrder.fulfilled, handleRejected)
+
   }
 })
 

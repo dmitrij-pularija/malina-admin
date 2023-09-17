@@ -163,7 +163,7 @@ export const columns = [
     sortable: true,
     sortField: 'delivery_address',
     selector: row => row.delivery_address,
-    cell: row => <span className='text-capitalize'>{row.delivery_address ? delivery_address : "Внутри заведения"}</span>
+    cell: row => <span className='text-capitalize'>{row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "Внутри заведения"}</span>
   },
   {
     name: 'Клиент',

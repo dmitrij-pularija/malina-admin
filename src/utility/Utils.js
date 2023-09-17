@@ -173,3 +173,7 @@ export const dataURLtoBlob = dataURL => {
 
   return new Blob([u8arr], { type: mime })
 }
+
+export const initSelect = (option, value) => {
+  return option[option.findIndex(i => parseInt(i.value) === parseInt(value))] || ''
+}

@@ -1105,13 +1105,13 @@ const Store = (props) => {
             <Button color="secondary" outline onClick={handleClose}>
               Отменить
             </Button>
-            <Button color="secondary" outline onClick={toggleModalShifts}>
+            {selectedStore && <><Button color="secondary" outline onClick={toggleModalShifts}>
               Смены
             </Button>
-            {selectedStore && <Button color="secondary" outline onClick={toggleModalDelivery}>
+            <Button color="secondary" outline onClick={toggleModalDelivery}>
               Тарифы доставки
             </Button>
-            }
+            </>}
           </Col>
         </Row>
       </Form>

@@ -1,150 +1,301 @@
 // ** React Imports
-import { Fragment } from 'react'
-
+import { Fragment, useState, useEffect } from 'react'
+import { useForm, Controller } from "react-hook-form"
 // ** Third Party Components
 import Select from 'react-select'
+import classnames from "classnames"
+
 import { ArrowLeft, ArrowRight } from 'react-feather'
 import { businessType, orderType, paymentType } from '../../../../../../configs/initial'
 // ** Utils
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, checkIsValid, initSelect } from '@utils'
 
 // ** Reactstrap Imports
-import { Label, Row, Col, Form, Input, Button } from 'reactstrap'
+import { Label, Row, Col, Form, Input, Button, FormFeedback } from 'reactstrap'
 
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
 
-const Details = ({ stepper, type, stores, users }) => {
-  
+const defaultValues = {
+  user: '',
+  store: '',
+  table: '',
+  orderType: '',
+  waiter: ''
+  }
+const requiredFields = ["user", "store"]
+
+const Details = ({ stepper, orderData, handleUpdate,  stores, users, waiters, tables }) => {
+
+  const initWaiterOptions = () => {
+    const filteredWaiters = orderData && orderData.waiter ? waiters.filter(
+      waiter => parseInt(waiter.business_id.id) === parseInt(orderData.business_id)
+    ) : waiters
+    return filteredWaiters.map(waiter => ({
+    value: String(waiter.id),
+    label: waiter.full_name ? waiter.full_name : waiter.telegram
+  }))
+}
+
+const initTableOptions = () => {
+  const filteredTables = orderData && orderData.table ? tables.filter(
+    table => parseInt(table.business_id.id) === parseInt(orderData.business_id)
+  ) : tables
+  return filteredTables.map(table => ({
+  value: String(table.id),
+  label: table.number
+}))
+}
+
+
   const storeOptions = stores.map((store) => ({
     value: String(store.id),
     label: store.name
   }))
+
+  // const waiterOptions = waiters.map((waiter) => ({
+  //   value: String(waiter.id),
+  //   label: waiter.full_name ? waiter.full_name : waiter.telegram
+  // }))
+
+  // const tableOptions = tables.map((table) => ({
+  //   value: String(table.id),
+  //   label: table.number
+  // }))
 
   const userOptions = users.map((user) => ({
     value: String(user.id),
     label: user.name ? user.name : user.login
   }))
 
-  const orderTypeOptions = orderType.map((item, key) => ({
-    value: String(key),
-    label: item
+  const orderTypeOptions = Object.keys(orderType).map((key) => ({
+    value: key,
+    label: orderType[key]
   }))
-  
-  const countryOptions = [
-    { value: 'UK', label: 'UK' },
-    { value: 'USA', label: 'USA' },
-    { value: 'Spain', label: 'Spain' },
-    { value: 'France', label: 'France' },
-    { value: 'Italy', label: 'Italy' },
-    { value: 'Australia', label: 'Australia' }
-  ]
+  const [waiterOptions, setWaiterOptions] = useState(initWaiterOptions())
+  const [tableOptions, setTableOptions] = useState(initTableOptions()) 
 
-  const languageOptions = [
-    { value: 'English', label: 'English' },
-    { value: 'French', label: 'French' },
-    { value: 'Spanish', label: 'Spanish' },
-    { value: 'Italian', label: 'Italian' },
-    { value: 'Japanese', label: 'Japanese' }
-  ]
+
+  const values = orderData ? {
+    user: orderData.user_id ? initSelect(userOptions, orderData.user_id) : '',
+    store: orderData.business_id ? initSelect(storeOptions, orderData.business_id) : '',
+    table: orderData.table ? initSelect(tableOptions, orderData.table) : '',
+    orderType: orderData.order_type ? initSelect(orderTypeOptions, orderData.order_type) : '',
+    waiter: orderData.waiter ? initSelect(waiterOptions, orderData.waiter) : ''
+  } : {}
+  
+  const {
+    reset,
+    control,
+    setError,
+    setValue,
+    getValues,
+    handleSubmit,
+    formState: { errors }
+  } = useForm({ defaultValues, values })
+
+  const handleStoreChange = (selectedOption) => {
+    setValue("table", { value: "", label: "Выбирите номер стола" })
+    setValue("waiter", { value: "", label: "Выбирите официанта" })
+    const filteredWaiters = waiters.filter(
+      waiter => parseInt(waiter.business_id.id) === parseInt(selectedOption.value)
+    )
+    setWaiterOptions(
+      filteredWaiters.map(waiter => ({
+        value: String(waiter.id),
+        label: waiter.full_name ? waiter.full_name : waiter.telegram
+      }))
+    )
+    const filteredTables = tables.filter(
+      table => parseInt(table.business_id.id) === parseInt(selectedOption.value)
+    )
+    setTableOptions(
+      filteredTables.map(table => ({
+        value: String(table.id),
+        label: table.number
+      }))
+    )
+
+    setValue("store", selectedOption)
+  }
+  const handleNext = () => stepper.next()
+
+  const onSubmit = (data) => {
+    const newData = {}
+    if (checkIsValid(data, requiredFields)) {
+      if (data.user) newData.user_id = data.user.value
+      if (data.store) newData.business_id = data.store.value
+      if (data.table.value) newData.table = parseInt(data.table.value)
+      if (data.orderType) newData.order_type = data.orderType.value
+      if (data.waiter.value) newData.waiter = parseInt(data.waiter.value)
+      if (newData) handleUpdate(newData)
+      handleNext()
+    } else {
+      for (const key in data) {
+        if (data[key].length === 0) {
+          setError(key, {
+            type: "manual"
+          })
+        }
+      }
+    }  
+  }
 
   return (
     <Fragment>
-      <div className='content-header'>
+      <div className='content-header mb-1'>
         <h5 className='mb-0'>Реквизиты</h5>
         <small>Добввьте реквизиты заказа</small>
       </div>
-      <Form onSubmit={e => e.preventDefault()}>
+      <Form onSubmit={handleSubmit(onSubmit)} >
         <Row>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='store'>
           Завдение<span className='text-danger'>*</span>
           </Label>
+          <Controller
+                  name="store"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
             <Select
               theme={selectThemeColors}
               isClearable={false}
               id='store'
-              className='react-select'
+              value={field.value}
+              className={classnames("react-select", {
+                "is-invalid": errors.store && true
+              })}
               classNamePrefix='select'
               options={storeOptions}
               placeholder='Выбирите заведение'
-              // defaultValue={countryOptions[0]}
+              onChange={handleStoreChange}
             />
+            )}
+            />
+            {errors && errors.store && (
+              <FormFeedback>Пожалуйста выбирите заведение</FormFeedback>
+            )}  
           </Col>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='user'>
           Клиент<span className='text-danger'>*</span>
           </Label>
+          <Controller
+                  name="user"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
             <Select
               theme={selectThemeColors}
               isClearable={false}
               id='user'
-              className='react-select'
+              className={classnames("react-select", {
+                "is-invalid": errors.user && true
+              })}
               classNamePrefix='select'
               options={userOptions}
               placeholder='Выбирите клиента'
-              // defaultValue={countryOptions[0]}
+              {...field}
             />
+            )}
+            />
+            {errors && errors.user && (
+              <FormFeedback>Пожалуйста выбирите клиента</FormFeedback>
+            )} 
           </Col>
           <Col md='6' className='mb-1'>
-          <Label className='form-label' for='user'>
+          <Label className='form-label' for='waiter'>
+          Официант
+          </Label>
+          <Controller
+                  name="waiter"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+            <Select
+              theme={selectThemeColors}
+              isClearable={false}
+              isDisabled={!getValues("store").value}
+              id='waiter'
+              className={classnames("react-select", {
+                "is-invalid": errors.waiter && true
+              })}
+              classNamePrefix='select'
+              options={waiterOptions}
+              placeholder='Выбирите официанта'
+              {...field}
+            />
+            )}
+            />
+            {errors && errors.waiter && (
+              <FormFeedback>Пожалуйста выберите официанта</FormFeedback>
+            )}
+          </Col>
+          <Col md='6' className='mb-1'>
+          <Label className='form-label' for='table'>
+          Стол
+          </Label>
+          <Controller
+                  name="table"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+            <Select
+              theme={selectThemeColors}
+              isClearable={false}
+              isDisabled={!getValues("store").value}
+              id='table'
+              // value={field.value}
+              className={classnames("react-select", {
+                "is-invalid": errors.table && true
+              })}
+              classNamePrefix='select'
+              options={tableOptions}
+              placeholder='Выбирите номер стола'
+              {...field}
+            />
+            )}
+            />
+            {errors && errors.table && (
+              <FormFeedback>Пожалуйста выберите стол</FormFeedback>
+            )}
+          </Col>
+          <Col md='6' className='mb-1'>
+          <Label className='form-label' for='orderType'>
           Тип заказа
           </Label>
+          <Controller
+                  name="orderType"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
             <Select
               theme={selectThemeColors}
               isClearable={false}
-              id='user'
-              className='react-select'
+              id='orderType'
+              className={classnames("react-select", {
+                "is-invalid": errors.orderType && true
+              })}
               classNamePrefix='select'
               options={orderTypeOptions}
-              placeholder='Выбирите nип заказа'
-              // defaultValue={countryOptions[0]}
+              placeholder='Выбирите тип заказа'
+              {...field}
             />
-          </Col>
-          <Col md='6' className='mb-1'>
-            <Label className='form-label' for={`last-name-${type}`}>
-              Last Name
-            </Label>
-            <Input type='text' name='last-name' id={`last-name-${type}`} placeholder='Doe' />
+            )}
+            />
+            {errors && errors.orderType && (
+              <FormFeedback>Пожалуйста выберите тип заказа</FormFeedback>
+            )}
           </Col>
         </Row>
-        <Row>
-          <Col md='6' className='mb-1'>
-            <Label className='form-label' for={`country-${type}`}>
-              Country
-            </Label>
-            <Select
-              theme={selectThemeColors}
-              isClearable={false}
-              id={`country-${type}`}
-              className='react-select'
-              classNamePrefix='select'
-              options={countryOptions}
-              defaultValue={countryOptions[0]}
-            />
-          </Col>
-          <Col md='6' className='mb-1'>
-            <Label className='form-label' for={`language-${type}`}>
-              Language
-            </Label>
-            <Select
-              isMulti
-              isClearable={false}
-              theme={selectThemeColors}
-              id={`language-${type}`}
-              options={languageOptions}
-              className='react-select'
-              classNamePrefix='select'
-            />
-          </Col>
-        </Row>
-        <div className='d-flex justify-content-between'>
-          <Button color='primary' className='btn-prev' onClick={() => stepper.previous()}>
+        <div className='d-flex justify-content-between mt-1'>
+          <Button color='secondary' className='btn-prev' outline disabled>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
-            <span className='align-middle d-sm-inline-block d-none'>Previous</span>
+            <span className='align-middle d-sm-inline-block d-none'>Назад</span>
           </Button>
-          <Button color='primary' className='btn-next' onClick={() => stepper.next()}>
-            <span className='align-middle d-sm-inline-block d-none'>Next</span>
+          <Button type='submit' color='primary' className='btn-next' >
+            <span className='align-middle d-sm-inline-block d-none'>Далее</span>
             <ArrowRight size={14} className='align-middle ms-sm-25 ms-0'></ArrowRight>
           </Button>
         </div>
