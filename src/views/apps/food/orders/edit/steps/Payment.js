@@ -60,7 +60,10 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
       if (selectedOrder) {
         dispatch(editOrder({ id: selectedOrder.id, order: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleNext())
       } else {
-        dispatch(addOrder(newData)).then(response => response.meta.requestStatus === 'fulfilled' && handleNext())
+        dispatch(addOrder(newData)).then(response => {
+          console.log(response)
+          if (response.meta.requestStatus === 'fulfilled') handleNext()
+        })
       }
     } else {
       for (const key in data) {

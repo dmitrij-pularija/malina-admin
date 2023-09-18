@@ -1,20 +1,23 @@
 import { Fragment, useState, forwardRef } from 'react'
 // import { useDispatch, useSelector } from "react-redux"
 import { useForm, Controller } from "react-hook-form"
-import  { columns, addonСolumns } from './columns'
+import  { columns } from './columns'
+import  ExpandableTable from './expandableTable'
 import { createProductCart, addProductList, editProductList } from "../../store"
 import Select from 'react-select'
 import { selectThemeColors, checkIsValid, initSelect } from '@utils'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy, Plus, ArrowLeft, ArrowRight } from 'react-feather'
-import { Label, Row, Col, Input, Form, Button } from 'reactstrap'
+import { Label, Row, Col, Input, Form, Button, FormFeedback } from 'reactstrap'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 const defaultValues = {
   orderCart: ''
   }
-const requiredFields = ["orderCart"]  
+const requiredFields = ["orderCart"]
+
+const price = row => row.cost * (1 - (row.prime_cost / 100))
 
 const BootstrapCheckbox = forwardRef((props, ref) => (
   <div className='form-check'>
@@ -76,14 +79,16 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
 const Cart = ({ stepper, orderData, handleUpdate, products }) => {
 
   const [productList, setProductList] = useState([])
+  const [selectedRows, setSelectedRows] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
-  const [selectedId, setSelectedId] = useState('')
+  // const [selectedId, setSelectedId] = useState('')
   const [filteredData, setFilteredData] = useState([])
 
 console.log(productList)
-
+// console.log("selectedRows")
+// console.log(selectedRows)
   const values = orderData ? {
     orderCart: orderData.order_cart ? orderData.order_cart : ''
   } : {}
@@ -127,6 +132,15 @@ console.log(productList)
 
   const handleFilter = val => setSearchTerm(val)
 
+  // const handleChangeAddons = (selectedRows, id) => {
+  // const productListFiltred = productList.filter(product => product.product !== id)
+  // const selectedProduct = productList.find(product => product.product === id)
+  // const newProduct = products.find(product => product.id === id)
+  // const addons = selectedRows.map(row => row.id)
+  // const newproductList = selectedProduct ? { ...selectedProduct, product_addons: addons } : { product: newProduct.id, quantity: 1, total_price: price(newProduct), is_visible: true, product_addons: addons }
+  // setProductList([...productListFiltred, newproductList])
+  // }
+
   const CustomPagination = () => {
     const data = dataToRender()
     const total = data.length ? data.length : 0
@@ -149,24 +163,38 @@ console.log(productList)
       />
     )
   }
+  const selectedProductIds = productList.map(product => product.product)
+  const rowSelectCritera = row => selectedProductIds.includes(row.id)
+  // const getSelected = id => {
+  //   const productListIds = productList.map((row) => row.product)
+  //   return productListIds.includes(id)
+  // }
   const handleNext = () => stepper.next()
 
   const onSubmit = (data) => {
     const newData = {}
+    // const requestBody = {}
     const cart = {}
     // if (checkIsValid(data, requiredFields)) {
       if (true) {
+      //   const requestBody = { data: productList };
+      // console.log(requestBody)
+      // const productListIds = productList.map((row) => parseInt(row.product))
       cart.products_list = []  
       cart.business_id = orderData.business_id
       cart.is_visible = true
       if (orderData.table_id) cart.table_id = orderData.table_id
-        createProductCart(productList[0], cart).then(response => {
-          handleUpdate(response) 
-          handleNext()
-        })
-        // .then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
-      // handleUpdate(newData)
-      // handleNext()
+      createProductCart(productList, cart).then(response => {
+        handleUpdate(response) 
+        handleNext()
+      })
+
+      // if (orderData.table_id) cart.table_id = orderData.table_id
+      //   createProductCart(productList[0], cart).then(response => {
+      //     handleUpdate(response) 
+      //     handleNext()
+      //   })
+
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -178,33 +206,28 @@ console.log(productList)
     }  
   }
 
-  const ExpandableTable = ({data: { id }}) => {
-    const filtredProducts = products.filter(product => product.id === id)
-// console.log(filtredProducts)
-
-    return <DataTable 
-    responsive
-    selectableRows
-    // title={
-    //   <Button size='sm' color='flat-secondary' onClick={toggleSidebar}>
-    //   <Plus size={14} className='me-25' />
-    //   <span className='align-middle'>Добавить cубкатегорию</span>
-    //   </Button>}
-    noDataComponent={<h6 className='text-capitalize'>Добавки отсутствуют</h6>}
-    noTableHead={true}
-    data={filtredProducts[0].addons}
-    columns={addonСolumns}
-    sortIcon={<ChevronDown />}
-    className='react-dataTable ml-50 justify-content-start'
-    selectableRowsComponent={BootstrapCheckbox}
-    />
-  }
+  // const ExpandableTable = ({data: { id }}) => {
+  //   const filtredProducts = products.filter(product => product.id === id)
+  //   return <DataTable 
+  //   dataKey="id"
+  //   responsive
+  //   selectableRows
+  //   noDataComponent={<h6 className='text-capitalize'>Добавки отсутствуют</h6>}
+  //   noTableHead={true}
+  //   data={filtredProducts[0].addons}
+  //   columns={addonСolumns}
+  //   sortIcon={<ChevronDown />}
+  //   className='react-dataTable ml-50 justify-content-start'
+  //   selectableRowsComponent={BootstrapCheckbox}
+  //   onSelectedRowsChange={({ selectedRows }) => handleChangeAddons(selectedRows, id)}
+  //   />
+  // }
 
   return (
     <Fragment>
       <div className='content-header'>
         <h5 className='mb-0'>Состав заказа</h5>
-        <small className='text-muted'>Выберите блюда.</small>
+        {errors && errors.orderCart ? <small className='text-danger'>Пожалуйста выбирите блюда</small> : <small className='text-muted'>Выберите блюда.</small> } 
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
@@ -219,23 +242,24 @@ console.log(productList)
             expandableRows
             expandOnRowClicked
             paginationServer
-            columns={columns}
+            columns={columns(productList, setProductList, setSelectedRows)}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
+            selectedRows={selectedRows}
             paginationComponent={CustomPagination}
-            expandableRowsComponent={ExpandableTable}
+            expandableRowsComponent={(data) => ExpandableTable(data, products, productList, setProductList)}
             selectableRowsComponent={BootstrapCheckbox}
-            onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
+            // onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
             data={dataToRender()}
             onSelectedRowsChange={({ selectedRows }) => {
-              const price = row => row.cost * (1 - (row.prime_cost / 100)) * 1
-              console.log(selectedRows)
-              // const selectedProductIds = selectedRows.map((row) => row.id)
-              // setProductList((prevProductList) => [...prevProductList, ...dataToRender().filter((product) => selectedProductIds.includes(product.id))])
-              // setProductList((prevProductList) => prevProductList.filter((product) => selectedProductIds.includes(product.id)))
-              const selectedProducts = selectedRows.map((row) => ({ product: row.id, quantity: 1, total_price: price(row), is_visible: true, product_addons: [] }))
-              setProductList(selectedProducts)
+              const selectedProductIds = selectedRows.map((row) => row.id)
+              const productListIds = productList.map((row) => row.product)
+              const productListFiltred = productList.filter(product => selectedProductIds.includes(product.product))
+              const newRows = selectedRows.filter(product => !productListIds.includes(product.id))
+              const newproductList = newRows.map((row) => ({ product: row.id, quantity: 1, total_price: price(row), is_visible: true, product_addons: [] }))
+              setProductList([...productListFiltred, ...newproductList])
             }}
+            // selectableRowSelected={rowSelectCritera}
             noDataComponent={<h6 className='text-capitalize'>Категории не найдены</h6>}
             subHeaderComponent={
               <CustomHeader

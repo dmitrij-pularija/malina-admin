@@ -51,7 +51,7 @@ const OrdersList = () => {
 
   return (
     <div className='app-user-list'>
-{/* <Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} onClick={handleAdd} />  */}
+<Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} onClick={handleAdd} /> 
       <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal

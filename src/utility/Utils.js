@@ -93,10 +93,20 @@ export const formatTimeSave = (value) => {
   const minutes = String(date.getMinutes()).padStart(2, '0')
   return `${hours}:${minutes}`
 }
+// export const formatTime = (value) => {
+//   if (value) {
+//   const time = value.toString()
+//   return time.slice(0, -3)
+//   } else return ''
+// }
+
 export const formatTime = (value) => {
   if (value) {
-  const time = value.toString()
-  return time.slice(0, -3)
+  const data = value.toString()
+  const time = data.split("T")[1]
+  const response = time.slice(0, 5)
+  
+  return response
   } else return ''
 }
 

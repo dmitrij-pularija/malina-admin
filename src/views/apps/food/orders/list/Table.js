@@ -8,8 +8,8 @@ import Sidebar from './Sidebar'
 import { columns } from './columns'
 
 // ** Store & Actions
-import { getData, getOrderStatus } from '../store'
-import { getWaiters } from '../../../user/waiters/store'
+import { getData, getOrderStatus, deleteOrder } from '../store'
+// import { getWaiters } from '../../../user/waiters/store'
 import { getAllStores } from '../../stores/store'
 
 import { useDispatch, useSelector } from 'react-redux'
@@ -210,7 +210,7 @@ const OrdersList = () => {
     //     business_id: currentStore.value
     //   })
     // )
-  }, [])
+  }, [dispatch])
 // console.log(store.data)
   // ** User filter options
   // const roleOptions = [
@@ -252,7 +252,11 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
   //   { value: 'inactive', label: 'Inactive', number: 3 }
   // ]
 
-  // ** Function in get data on page change
+  const handleDel = (event, id) => {
+    event.preventDefault()
+    dispatch(deleteOrder(id))
+  }
+  
   const handlePagination = page => {
     dispatch(
       getData({
@@ -420,13 +424,14 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
           <DataTable
+            dataKey="id"
             noHeader
             subHeader
             sortServer
             pagination
             responsive
             paginationServer
-            columns={columns}
+            columns={columns(handleDel)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'

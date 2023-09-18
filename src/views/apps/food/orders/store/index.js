@@ -13,12 +13,17 @@ import axios from 'axios'
 // }
 
 export const createProductCart = async (list, cart) => {
+  const products_list = []
   try {
-  const { data } = await axios.post('/products/ordered-product/', list)
-  const { data: { id }} = await axios.post('/products/cart/', {...cart, products_list: [parseInt(data.id)]})
-  // await axios.post('/products/confirm-cart/', { cart: id.toString() })
-  // const { data: { results }} = await axios.post('/products/add-product-to-cart/', list)
-  console.log(id)
+    for (const item of list) {
+    const { data } = await axios.post('/products/ordered-product/', item)
+    products_list.push(parseInt(data.id))
+    }
+    const { data: { id }} = await axios.post('/products/cart/', {...cart, products_list})  
+  // const { data: { id }} = await axios.post('/products/cart/', {...cart, products_list: [parseInt(data.id)]})
+  // // await axios.post('/products/confirm-cart/', { cart: id.toString() })
+  // // const { data: { results }} = await axios.post('/products/add-product-to-cart/', list)
+  // console.log(id)
   return { order_cart: [id.toString()]  }
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
@@ -117,9 +122,9 @@ export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
 
 export const addOrder = createAsyncThunk('appOrders/addOrder', async (order, { dispatch, getState }) => {
   try {
-    await axios.post('/products/user-order/', order)
-    await dispatch(getData(getState().orderes.params))
-    return order
+    const { data } = await axios.post('/products/user-order/', order)
+    // await dispatch(getData(getState().orderes.params))
+    return { data }
   } catch (error) {
     errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
     return thunkAPI.rejectWithValue(error)

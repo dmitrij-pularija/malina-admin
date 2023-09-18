@@ -37,7 +37,32 @@ const renderClient = (image, name) => {
     return parsed
   }
 
-export const columns = [
+  const price = (row, quantity) => row.cost * (1 - (row.prime_cost / 100)) * quantity
+
+export const columns = (productList, setProductList, setSelectedRows) => {
+  const getQuantity = id => {
+    const selectedProduct = productList.find(product => product.product === id)
+    return selectedProduct ? selectedProduct.quantity : 0
+    }
+
+  // const productListIds = productList.map((row) => row.product)
+
+  const handleChangeQuantity = (value, row) => {
+    const productListFiltred = productList.filter(list => list.product !== row.id)
+    const selectedProduct = productList.find(list => list.product === row.id)
+    const mewProduct = selectedProduct ? { ...selectedProduct, quantity: value, total_price: price(row, value) } : { product: row.id, quantity: value, total_price: price(row, value), is_visible: true, product_addons: [] }
+    setProductList([...productListFiltred, mewProduct])
+    setSelectedRows(prevSelectedRows => [...prevSelectedRows, row])
+}
+
+  return [
+    // {
+    //   name: 'selected',
+    //   sortable: true,
+    //   omit: true,
+    //   selector: row => row.id,
+    //   cell: row => productListIds.includes(row.id)
+    // },   
   {
     name: 'Блюдо',
     sortable: true,
@@ -91,59 +116,60 @@ export const columns = [
     id={`quantity-${row.id}`}
     name="quantity"
     placeholder=""
-    defaultValue={0}
+    // defaultValue={getQuantity(row.id)}
+    value={getQuantity(row.id)}
     upHandler={<Plus />}
     downHandler={<Minus />}
     max={100}
     min={0}
-    onChange={(value) => {
-      const updatedData  = { ...row, quantity: value }
-      row = updatedData
-    }}
+    onChange={(value) => handleChangeQuantity(value, row)}
   />)
   }
 ]
+}
 
-export const addonСolumns = [ 
-    {
-        name: 'Добавка',
-        sortable: true,
-        minWidth: '220px',
-        sortField: 'name',
-        selector: row => row.name,
-        cell: row => (
-          <div className='d-flex justify-content-left align-items-center'>
-            {renderClient(row.icon ? row.icon : '', row.name ? row.name : "Добавка")}
-            <div className='d-flex flex-column'>
-                <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-            </div>
-          </div>
-        )
-      },
-      {
-        name: 'Цена',
-        sortable: true,
-        minWidth: '70px',
-        sortField: 'price',
-        selector: row => row.price,
-        cell: row => (<span dangerouslySetInnerHTML={{ __html: `${formatNumber(row.price)} &#x0441;&#x332;` }} />)
-      },
-      {
-        name: 'Количество',
-        sortable: false,
-        minWidth: '70px',
-        sortField: 'count',
-        cell:  row => (<InputNumber
-        id="percentService"
-        name="percentService"
-        placeholder=""
-        defaultValue={0}
-        // parser={parser}
-        // formatter={format}
-        upHandler={<Plus />}
-        downHandler={<Minus />}
-        max={100}
-        min={0}
-      />)
-      }
-]
+// export const addonСolumns = [
+
+//     {
+//         name: 'Добавка',
+//         sortable: true,
+//         minWidth: '220px',
+//         sortField: 'name',
+//         selector: row => row.name,
+//         cell: row => (
+//           <div className='d-flex justify-content-left align-items-center'>
+//             {renderClient(row.icon ? row.icon : '', row.name ? row.name : "Добавка")}
+//             <div className='d-flex flex-column'>
+//                 <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
+//             </div>
+//           </div>
+//         )
+//       },
+//       {
+//         name: 'Цена',
+//         sortable: true,
+//         minWidth: '70px',
+//         sortField: 'price',
+//         selector: row => row.price,
+//         cell: row => (<span dangerouslySetInnerHTML={{ __html: `${formatNumber(row.price)} &#x0441;&#x332;` }} />)
+//       },
+//       {
+//         name: 'Количество',
+//         sortable: false,
+//         minWidth: '70px',
+//         sortField: 'count',
+//         cell:  row => (<InputNumber
+//         id="percentService"
+//         name="percentService"
+//         placeholder=""
+//         defaultValue={0}
+//         // defaultValue={getQuantity(row.id)}
+//         // parser={parser}
+//         // formatter={format}
+//         upHandler={<Plus />}
+//         downHandler={<Minus />}
+//         max={100}
+//         min={0}
+//       />)
+//       }
+// ]

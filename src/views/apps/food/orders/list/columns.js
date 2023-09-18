@@ -101,7 +101,9 @@ const renderClient = (name, avatar) => {
 //   10: { label: 'Выполнен', colorName: 'light-success' }
 // }
 
-export const columns = [
+export const columns = (handleDel) => {
+
+  return [ 
   {
     name: '№',
     sortable: true,
@@ -250,10 +252,7 @@ export const columns = [
               tag='a'
               href='/'
               className='w-100'
-              onClick={e => {
-                e.preventDefault()
-                // store.dispatch(deleteUser(row.id))
-              }}
+              onClick={event => handleDel(event, row.id)}
             >
               <Trash2 size={14} className='me-50' />
               <span className='align-middle'>Удалить</span>
@@ -264,3 +263,4 @@ export const columns = [
     )
   }
 ]
+}
