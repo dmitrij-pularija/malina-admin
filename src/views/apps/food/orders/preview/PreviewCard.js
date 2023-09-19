@@ -1,8 +1,7 @@
 // ** Reactstrap Imports
 import { Card, CardBody, CardText, Row, Col, Table, Badge } from 'reactstrap'
-import { formatData, formatTime, formatNumber } from '../../../../../utility/Utils'
 import { statusObj, paymentType, orderType } from '../../../../../configs/initial'
-
+import { formatData, formatTime, formatNumber, formatStringTime } from '@utils'
 import Avatar from '@components/avatar'
 import Logo2 from '@components/logo2'
 
@@ -147,10 +146,14 @@ const PreviewCard = ({ data }) => {
         <Row className='invoice-spacing'>
           <Col className='p-0' xl='8'>
             <h6 className='mb-2'>Адрес:</h6>
-            <CardText className='mb-1'><span className='invoice-date'>{data.delivery_address ? data.delivery_address.name : "В нутри заведения"}</span></CardText>
+            <CardText className='mb-1'><span className='invoice-date'>{data.delivery_address ? data.delivery_address.location ? data.delivery_address.location : data.delivery_address.name : "В нутри заведения" }</span></CardText>
             <div className='order-comments'>
-              {data.time_delivery ? <p className='invoice-date-title'>Время доставки:</p> : ''}
-              <p className='invoice-date'>{data.time_delivery ? data.time_delivery : ""}</p>
+              {data.time_delivery ? <p className='invoice-date-title'>Доставка в течении:</p> : ''}
+              <p className='invoice-date'>{data.time_delivery ? `${data.time_delivery} минут` : ""}</p>
+            </div>
+            <div className='order-comments'>
+              {data.requested_delivery_time ? <p className='invoice-date-title'>Желаемое время доставки:</p> : ''}
+              <p className='invoice-date'>{data.requested_delivery_time ? formatStringTime(data.requested_delivery_time) : ""}</p>
             </div>
             <div className='order-comments'>
               {data.comment ? <p className='invoice-date-title'>Комментарий:</p> : ''}

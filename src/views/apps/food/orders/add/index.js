@@ -19,20 +19,20 @@ import "@styles/react/apps/app-users.scss"
 import "@styles/base/pages/app-ecommerce-details.scss"
 
 // const defaultValues = {
-// user: '',
-// store: '',
-// table: '',
-// paymentType: '',
-// orderType: '',
-// timeDelivery: '',
-// usedPoints: '',
-// address: '',
-// tips: '',
-// appliances: '',
-// comment: '',
-// orderCart: '',
-// waiter: '',
-// rdt: ''
+   // name: '',
+   // city: '',
+   // street: '',
+   // houseNumber: '',
+   // entrance: '',
+   // floor: '',
+   // phoneNumber: '',
+  // deliveryPrice: '',
+   // location: '',
+   // longitude: '',
+   // latitude: '',
+  // timeDelivery: '',
+  // rdt: '',
+  // comment: ''
 // }
 
 //  user_id	
@@ -84,7 +84,7 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
       title: 'Адрес',
       // subtitle: 'введите адрес доставки',
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' address={[]} handleUpdate={updateData} orderData={data} />
+      content: <Address stepper={stepper} type='modern-vertical' address={[]} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
     },
     {
       id: 'order-details',

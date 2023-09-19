@@ -86,7 +86,7 @@ const Cart = ({ stepper, orderData, handleUpdate, products }) => {
   // const [selectedId, setSelectedId] = useState('')
   const [filteredData, setFilteredData] = useState([])
 
-console.log(productList)
+// console.log(productList)
 // console.log("selectedRows")
 // console.log(selectedRows)
   const values = orderData ? {

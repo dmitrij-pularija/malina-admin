@@ -93,12 +93,12 @@ export const formatTimeSave = (value) => {
   const minutes = String(date.getMinutes()).padStart(2, '0')
   return `${hours}:${minutes}`
 }
-// export const formatTime = (value) => {
-//   if (value) {
-//   const time = value.toString()
-//   return time.slice(0, -3)
-//   } else return ''
-// }
+export const formatStringTime = (value) => {
+  if (value) {
+  const time = value.toString()
+  return time.slice(0, -3)
+  } else return ''
+}
 
 export const formatTime = (value) => {
   if (value) {
