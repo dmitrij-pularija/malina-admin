@@ -184,9 +184,11 @@ const Cart = ({ stepper, orderData, handleUpdate, products }) => {
       cart.business_id = orderData.business_id
       cart.is_visible = true
       if (orderData.table_id) cart.table_id = orderData.table_id
-      createProductCart(productList, cart).then(response => {
-        handleUpdate(response) 
-        handleNext()
+      createProductCart(productList, cart).then(({order_cart,  status})  => {
+        if (status === 201) {
+          handleUpdate({ order_cart }) 
+          handleNext()
+        }
       })
 
       // if (orderData.table_id) cart.table_id = orderData.table_id

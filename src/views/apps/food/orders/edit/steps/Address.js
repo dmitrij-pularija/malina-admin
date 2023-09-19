@@ -2,6 +2,7 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useForm, Controller } from "react-hook-form"
 import { useDispatch } from "react-redux"
+import { getAddressList, addAddress } from "../../store"
 import classnames from "classnames"
 import Select from 'react-select'
 import { ArrowLeft, ArrowRight } from 'react-feather'
@@ -10,6 +11,7 @@ import { selectThemeColors, checkIsValid, initSelect, formatTimeSave } from '@ut
 import { Label, Row, Col, Input, Form, Button, FormFeedback } from 'reactstrap'
 import "@styles/react/libs/flatpickr/flatpickr.scss"
 import '@styles/react/libs/react-select/_react-select.scss'
+import { data } from 'jquery'
 
 const defaultValues = {
   name: '',
@@ -29,13 +31,29 @@ const defaultValues = {
   }
   const requiredFields = ["name", "phone"]
 
-const Address = ({ stepper, orderData, selectedOrder, handleUpdate, address }) => {
-  const dispatch = useDispatch()
+  const initUserAddressOptions = (list) => {
+    if (list && list.length) {
+    return list.map((item) => ({
+      value: String(item.id),
+      label: item.name
+    }))
+  } else return []
+  }
 
-  const userAddressOptions = address.map((item) => ({
-    value: String(item.id),
-    label: item.name
-  }))
+const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
+  // const dispatch = useDispatch()
+  const [addressList, setAddressList] = useState([])
+  const [userAddressOptions, setUserAddressOptions] = useState(null)
+  
+  useEffect(() => {
+    getAddressList().then(result => {
+      if (result) {
+      setAddressList(result)
+      setUserAddressOptions(initUserAddressOptions(result))
+    }
+    })
+  }, [])  
+
   const values = selectedOrder ? {
     name: selectedOrder.name ? initSelect(userAddressOptions, selectedOrder.name) : '',
     city: selectedOrder.city ? selectedOrder.city : '',
@@ -76,6 +94,56 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, address }) =
   if (name === 'street') address = `${city ? city : ''}${`, ${value}`}${houseNumber ? `, ${houseNumber}` : ''}`
   if (name === 'houseNumber') address = `${city ? city : ''}${street ? `, ${street}` : ''}${`, ${value}`}`
   setValue('location', address)
+  }
+
+  const handleAddressSave = () => {
+    // console.log(getValues())
+    const address = {}
+    if (checkIsValid(getValues(), requiredFields)) {  
+      if (getValues('name')) address.name = getValues('name')
+      if (getValues('city')) address.city = getValues('city')
+      if (getValues('street')) address.street = getValues('street')
+      if (getValues('houseNumber')) address.house_number = getValues('houseNumber')
+      if (getValues('entrance')) address.entrance = getValues('entrance')
+      if (getValues('floor')) address.floor = getValues('floor')
+      if (getValues('phoneNumber')) address.phone_number = getValues('phoneNumber')
+      if (getValues('location')) address.location = getValues('location')
+      if (getValues('longitude')) address.longitude = getValues('longitude')
+      if (getValues('latitude')) address.latitude = getValues('latitude')
+      addAddress(address).then(result => {
+    setAddressList(result)
+    getAddressList().then(result => {
+      setAddressList(result)
+      setUserAddressOptions(initUserAddressOptions(result))
+    })
+  })
+    } else {
+      for (const key in data) {
+        if (data[key].length === 0) {
+          setError(key, {
+            type: "manual"
+          })
+        }
+      }
+    }  
+  }
+
+  const handleAddressSelect = data => {
+    if (!data) return
+    const address = addressList.find(item => parseInt(item.id) === parseInt(data.value))
+    // console.log(address)
+    if (address) {
+    if (address.name) setValue('name', address.name)
+    if (address.city) setValue('city', address.city)
+    if (address.street) setValue('street', address.street)
+    if (address.house_number) setValue('houseNumber', address.house_number)
+    if (address.entrance) setValue('entrance', address.entrance)
+    if (address.floor) setValue('floor', address.floor)
+    if (address.phone_number) setValue('phoneNumber', address.phone_number)
+    if (address.location) setValue('location', address.location)
+    if (address.longitude) setValue('longitude', address.longitude)
+    if (address.latitude) setValue('latitude', address.latitude)
+    }
   }
   
   const onSubmit = (data) => {
@@ -137,24 +205,24 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, address }) =
           </Label>
             <Select
               theme={selectThemeColors}
-              isClearable={true}
+              isClearable={false}
               id='userAddress'
               name='userAddress'
               className='react-select'
               classNamePrefix='select'
               options={userAddressOptions}
               placeholder='Выбирите адрес клиента'
-              // defaultValue={countryOptions[0]}
+              onChange={data => handleAddressSelect(data)}
             />
           </Col> 
-          {/* <Col md='6' className="d-flex justify-content-start align-items-end gap-30"> 
-          <Button color='primary' onClick={() => {}}>
-                <span className='align-middle d-sm-inline-block d-none'>Применить</span>
+          <Col md='6' className="d-flex justify-content-start align-items-end gap-30"> 
+          <Button color='primary' onClick={handleAddressSave}>
+                <span className='align-middle d-sm-inline-block d-none'>Сохранить адрес</span>
           </Button> 
-          <Button color='warning' onClick={() => {}}>
+          {/* <Button color='warning' onClick={() => {}}>
                 <span className='align-middle d-sm-inline-block d-none'>Выбрать на карте</span>
-          </Button> 
-          </Col>   */}
+          </Button>  */}
+          </Col>  
         </Row>
         <Row>
         <Col md='6'>

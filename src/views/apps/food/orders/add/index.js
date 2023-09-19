@@ -1,4 +1,4 @@
-import { useEffect, useRef, useState , Fragment } from "react"
+import { useEffect, useRef, useState, Fragment } from "react"
 // import StoreDetails from "../detail/StoreDetails"
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from '../../../../../../src/@core/components/spinner/Loading'
@@ -84,7 +84,7 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
       title: 'Адрес',
       // subtitle: 'введите адрес доставки',
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' address={[]} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
+      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null}/>
     },
     {
       id: 'order-details',

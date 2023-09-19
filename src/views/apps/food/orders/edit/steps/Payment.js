@@ -61,7 +61,7 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
         dispatch(editOrder({ id: selectedOrder.id, order: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleNext())
       } else {
         dispatch(addOrder(newData)).then(response => {
-          console.log(response)
+          // console.log(response)
           if (response.meta.requestStatus === 'fulfilled') handleNext()
         })
       }

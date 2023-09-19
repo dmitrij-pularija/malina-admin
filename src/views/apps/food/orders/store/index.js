@@ -3,6 +3,25 @@ import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
+export const getAddressList = async () => {
+  try {
+  const { data: { results }} = await axios.get('/users/address/')
+  return results
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return []
+}
+}
+
+export const addAddress = async (address) => {
+  try {
+  const { data: { results }} = await axios.post('/users/address/', address)
+  return results
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+}
+}
+
 // export const getProductList = async () => {
 //   try {
 //   const { data: { results }} = await axios.get('/products/ordered-product/')
@@ -19,19 +38,19 @@ export const createProductCart = async (list, cart) => {
     const { data } = await axios.post('/products/ordered-product/', item)
     products_list.push(parseInt(data.id))
     }
-    const { data: { id }} = await axios.post('/products/cart/', {...cart, products_list})  
+    const { data: { id }, status } = await axios.post('/products/cart/', {...cart, products_list})  
   // const { data: { id }} = await axios.post('/products/cart/', {...cart, products_list: [parseInt(data.id)]})
   // // await axios.post('/products/confirm-cart/', { cart: id.toString() })
   // // const { data: { results }} = await axios.post('/products/add-product-to-cart/', list)
   // console.log(id)
-  return { order_cart: [id.toString()]  }
+  // return {id, status}
+  return { order_cart: [id.toString()],  status }
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
 }
 }
 
 export const addProductList = async list => {
-  console.log(list)
   try {
   const { data: { results }} = await axios.post('/products/ordered-product/', list)
   return results
