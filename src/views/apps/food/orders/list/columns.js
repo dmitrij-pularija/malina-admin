@@ -126,7 +126,7 @@ export const columns = (handleDel) => {
     name: 'Дата',
     minWidth: '120px',
     sortable: true,
-    sortField: 'date',
+    sortField: 'order_date',
     selector: row => row.order_date,
     cell: row => <span className='text-capitalize'>{formatData(row.order_date)}</span>
   },
@@ -143,7 +143,7 @@ export const columns = (handleDel) => {
     sortable: true,
     minWidth: '250px',
     sortField: 'business_id.id',
-    selector: row => row.business_id,
+    selector: row => row.business_id.id,
      cell: row => (
       <Link
             to={row.business_id ? `/apps/food/stores/store-detail/${row.business_id.id}` : `/apps/food/stores/list/`}
@@ -162,7 +162,7 @@ export const columns = (handleDel) => {
   {
     name: 'Адрес заказа',
     minWidth: '180px',
-    sortable: true,
+    sortable: false,
     sortField: 'delivery_address',
     selector: row => row.delivery_address,
     cell: row => <span className='text-capitalize'>{row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "Внутри заведения"}</span>
@@ -172,7 +172,7 @@ export const columns = (handleDel) => {
     sortable: true,
     minWidth: '200px',
     sortField: 'user_id.id',
-    selector: row => row.user_id,
+    selector: row => row.user_id.id,
     cell: row => (
       // <div className='d-flex justify-content-left align-items-center'>
           <Link

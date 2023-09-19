@@ -84,7 +84,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, address }) =
     
     if (checkIsValid(data, requiredFields) || orderData.order_type !== "1" ) {
       if (data.comment) newData.comment = data.comment
-      if (orderData.order_type !== "1") handleNext()
+      if (orderData.order_type !== "1") return handleNext()
       if (data) newData.delivery_address = {}
       if (data.name) newData.delivery_address.name = data.name
       if (data.city) newData.delivery_address.city = data.city

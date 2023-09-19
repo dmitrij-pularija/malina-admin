@@ -193,7 +193,17 @@ const OrdersList = () => {
 
   // ** Get data on mount
   useEffect(() => {
-    dispatch(getData())
+    dispatch(
+      getData({
+        ordering: `${sort}${sortColumn}`,
+        search: searchTerm,
+        perPage: rowsPerPage,
+        page: currentPage,
+        status: currentStatus.value,
+        business_id: currentStore.value
+      })
+    )
+    // dispatch(getData())
     // dispatch(getAllData())
     if (!stores.length) dispatch(getAllStores())
     if (!status.length) dispatch(getOrderStatus())  
@@ -279,7 +289,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
-        page: currentPage,
+        page: 1,
         status: currentStatus.value,
         business_id: currentStore.value
       })
@@ -294,7 +304,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
       getData({
         search: val,
         ordering: `${sort}${sortColumn}`,
-        page: currentPage,
+        page: 1,
         perPage: rowsPerPage,
         status: currentStatus.value,
         business_id: currentStore.value
@@ -351,9 +361,9 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
     setSortColumn(column.sortField)
     dispatch(
       getData({
-        ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
+        ordering: `${sortDirection === "asc" ? "+" : "-"}${column.sortField}`,
         search: searchTerm,
-        page: currentPage,
+        page: 1,
         perPage: rowsPerPage,
         status: currentStatus.value,
         business_id: currentStore.value
@@ -384,7 +394,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
                     getData({
                       ordering: `${sort}${sortColumn}`,
                       search: searchTerm,
-                      page: currentPage,
+                      page: 1,
                       perPage: rowsPerPage,
                       status: data.value,
                       business_id: currentStore.value
@@ -408,7 +418,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
                     getData({
                       ordering: `${sort}${sortColumn}`,
                       search: searchTerm,
-                      page: currentPage,
+                      page: 1,
                       perPage: rowsPerPage,
                       status: currentStatus.value,
                       business_id: data.value
