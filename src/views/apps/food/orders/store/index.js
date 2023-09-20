@@ -87,9 +87,23 @@ export const AddProductToCart = async list => {
 }
 
 export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async () => {
+  try {
   const response = await axios.get('/products/user-order/get_status/')
   return response.data
+} catch (error) {
+  errorMessage(error.response.data.detail)
+  return thunkAPI.rejectWithValue(error)
+}
 })
+
+export const changeStatatus = async list => {
+  try {
+  // const { data: { results }} = await axios.post('/products/add-product-to-cart/', list)
+  return results
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+}
+}
 
 export const getAllOrders = createAsyncThunk('appUsers/getAllOrders', async () => {
   try {
@@ -153,7 +167,7 @@ export const addOrder = createAsyncThunk('appOrders/addOrder', async (order, { d
 export const editOrder = createAsyncThunk('appOrders/editOrder', async ({ id, order }, { dispatch, getState }) => {
   try {
     await axios.put(`/products/user-order/${id}/`, order)
-    await dispatch(getData(getState().orderes.params))
+    // await dispatch(getData(getState().orderes.params))
     return { id, ...order }
   } catch (error) {
     errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
@@ -164,7 +178,7 @@ export const editOrder = createAsyncThunk('appOrders/editOrder', async ({ id, or
 export const deleteOrder = createAsyncThunk('appOrders/deleteOrder', async (id, { dispatch, getState }) => {
   try {
   await axios.delete(`/products/user-order/${id}/`)
-  await dispatch(getData(getState().orderes.params))
+  // await dispatch(getData(getState().orderes.params))
   return id
 } catch (error) {
   errorMessage(error.response.data.detail)

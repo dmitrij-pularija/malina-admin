@@ -1,34 +1,82 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
-import { useParams, Link } from 'react-router-dom'
-import { getOrder } from '../store'
+import { useParams, Link, useNavigate } from 'react-router-dom'
+import { getOrder, getOrderStatus, deleteOrder } from '../store'
 import { Row, Col, Alert } from 'reactstrap'
+import Swal from 'sweetalert2'
+import withReactContent from 'sweetalert2-react-content'
 import Loading from '../../../../../@core/components/spinner/Loading'
+// import handleDel from '../../../../../@core/components/delete/handleDel'
 import PreviewCard from './PreviewCard'
 import PreviewActions from './PreviewActions'
 
-import AddPaymentSidebar from '../shared-sidebar/SidebarAddPayment'
-import SendInvoiceSidebar from '../shared-sidebar/SidebarSendInvoice'
+// import AddPaymentSidebar from '../shared-sidebar/SidebarAddPayment'
+import SidebarChangeStatatus from '../shared-sidebar/SidebarChangeStatatus'
 import '@styles/base/pages/app-invoice.scss'
 
-const InvoicePreview = () => {
+const MySwal = withReactContent(Swal)
+
+const OrderPreview = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
-  const { selectedOrder } = useSelector(state => state.orders)
-  const [sendSidebarOpen, setSendSidebarOpen] = useState(false)
-  const [addPaymentOpen, setAddPaymentOpen] = useState(false)
+  const navigate = useNavigate()
+  const { selectedOrder, status } = useSelector(state => state.orders)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
+  // const [addPaymentOpen, setAddPaymentOpen] = useState(false)
 
   // ** Functions to toggle add & send sidebar
-  const toggleSendSidebar = () => setSendSidebarOpen(!sendSidebarOpen)
-  const toggleAddSidebar = () => setAddPaymentOpen(!addPaymentOpen)
+  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  const handleNavigate = () => navigate("/apps/food/orders/list/")
 
-  // ** Get invoice on mount based on id
-  useEffect(() => {
+   useEffect(() => {
+    if (!status.length) dispatch(getOrderStatus())
     dispatch(getOrder(id))
   }, [])
 
-// console.log(selectedOrder)
+const handleDelOrder = (id) => {
+      return MySwal.fire({
+        title: 'Удаление',
+        text: `Вы не сможете востановить заказ !`,
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'удалить',
+        customClass: {
+          confirmButton: 'btn btn-primary',
+          cancelButton: 'btn btn-outline-danger ms-1'
+        },
+        buttonsStyling: false
+        
+      }).then(function (result) {
+        if (result.value) {
+          dispatch(deleteOrder(id)).then(response => {
+            if (response.meta.requestStatus === 'fulfilled') { 
+            MySwal.fire({
+              icon: 'success',
+              title: 'Удаление',
+              text: `Заказ id: ${id} успешно удален`,
+              customClass: {
+                confirmButton: 'btn btn-success'
+              }
+            })
+            handleNavigate()
+          }
+          }
+          )
+        } else if (result.dismiss === MySwal.DismissReason.cancel) {
+          MySwal.fire({
+            title: 'Отмена удаления',
+            text: 'Удаление отменено',
+            icon: 'error',
+            customClass: {
+              confirmButton: 'btn btn-success'
+            }
+          })
+        }
+      })
+    } 
+
+
   return selectedOrder !== null && selectedOrder !== undefined ? (
     <div className='invoice-preview-wrapper'>
       <Row className='invoice-preview'>
@@ -36,11 +84,10 @@ const InvoicePreview = () => {
           <PreviewCard data={selectedOrder} />
         </Col>
         <Col xl={3} md={4} sm={12}>
-          <PreviewActions id={id} setSendSidebarOpen={setSendSidebarOpen} setAddPaymentOpen={setAddPaymentOpen} />
+          <PreviewActions id={id} toggleSidebar={toggleSidebar} handleDelOrder={handleDelOrder} />
         </Col>
       </Row>
-      <SendInvoiceSidebar toggleSidebar={toggleSendSidebar} open={sendSidebarOpen} />
-      <AddPaymentSidebar toggleSidebar={toggleAddSidebar} open={addPaymentOpen} />
+      <SidebarChangeStatatus toggleSidebar={toggleSidebar} open={sidebarOpen} statuses={status} selectedOrder={selectedOrder}/>
     </div>
   ) : (
     <Alert color='danger'>
@@ -54,4 +101,4 @@ const InvoicePreview = () => {
   )
 }
 
-export default InvoicePreview
+export default OrderPreview
