@@ -12,8 +12,8 @@ import { Alert, Row, Col } from 'reactstrap'
 // ** Invoice Edit Components
 import EditCard from './EditCard'
 import EditActions from './EditActions'
-import SendInvoiceSidebar from '../shared-sidebar/SidebarSendInvoice'
-import AddPaymentSidebar from '../shared-sidebar/SidebarAddPayment'
+// import SendInvoiceSidebar from '../shared-sidebar/SidebarSendInvoice'
+// import AddPaymentSidebar from '../shared-sidebar/SidebarAddPayment'
 
 const InvoiceEdit = () => {
   // ** Hooks
@@ -32,7 +32,7 @@ const InvoiceEdit = () => {
   useEffect(() => {
     dispatch(getOrder(id))
   }, [])
-  console.log(selectedOrder)
+  // console.log(selectedOrder)
 
   return selectedOrder !== null && selectedOrder !== undefined ? (
     <div className='invoice-edit-wrapper'>
@@ -44,8 +44,8 @@ const InvoiceEdit = () => {
           <EditActions id={id} status={selectedOrder ? selectedOrder.status : 1} setSendSidebarOpen={setSendSidebarOpen} setAddPaymentOpen={setAddPaymentOpen} />
         </Col>
       </Row>
-      <SendInvoiceSidebar toggleSidebar={toggleSendSidebar} open={sendSidebarOpen} />
-      <AddPaymentSidebar toggleSidebar={toggleAddSidebar} open={addPaymentOpen} />
+      {/* <SendInvoiceSidebar toggleSidebar={toggleSendSidebar} open={sendSidebarOpen} /> */}
+      {/* <AddPaymentSidebar toggleSidebar={toggleAddSidebar} open={addPaymentOpen} /> */}
     </div>
   ) : (
     <Alert color='danger'>
