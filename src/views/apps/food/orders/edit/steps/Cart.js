@@ -76,7 +76,7 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
   )
 }
 
-const Cart = ({ stepper, orderData, handleUpdate, products }) => {
+const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => {
 
   const [productList, setProductList] = useState([])
   const [selectedRows, setSelectedRows] = useState([])
@@ -163,8 +163,11 @@ const Cart = ({ stepper, orderData, handleUpdate, products }) => {
       />
     )
   }
-  const selectedProductIds = productList.map(product => product.product)
-  const rowSelectCritera = row => selectedProductIds.includes(row.id)
+  // const selectedProductIds = productList.map(product => product.product)
+  const rowSelectCritera = row => orderData.order_cart.includes(row.id)
+
+  // const rowSelectCritera = row => selectedProductIds.includes(row.id)
+
   // const getSelected = id => {
   //   const productListIds = productList.map((row) => row.product)
   //   return productListIds.includes(id)
@@ -172,7 +175,8 @@ const Cart = ({ stepper, orderData, handleUpdate, products }) => {
   const handleNext = () => stepper.next()
 
   const onSubmit = (data) => {
-    const newData = {}
+    // const newDataIDs = productList.map(product => parseInt(product.product))
+    if (selectedOrder) return handleNext()
     // const requestBody = {}
     const cart = {}
     // if (checkIsValid(data, requiredFields)) {
@@ -261,7 +265,7 @@ const Cart = ({ stepper, orderData, handleUpdate, products }) => {
               const newproductList = newRows.map((row) => ({ product: row.id, quantity: 1, total_price: price(row), is_visible: true, product_addons: [] }))
               setProductList([...productListFiltred, ...newproductList])
             }}
-            // selectableRowSelected={rowSelectCritera}
+            // selectableRowSelected={row => row.id === 98}
             noDataComponent={<h6 className='text-capitalize'>Категории не найдены</h6>}
             subHeaderComponent={
               <CustomHeader

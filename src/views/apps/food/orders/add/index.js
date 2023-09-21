@@ -9,7 +9,7 @@ import { getAllProducts } from "../../products/products/store"
 import { getAllUsers } from "../../../user/store"
 import { getAllTables } from "../../../food/tables/store"
 import { getAllWaiters } from "../../../user/waiters/store"
-import { FileText, User, MapPin, Link } from 'react-feather'
+import { FileText, User, MapPin, Copy } from 'react-feather'
 import Wizard from '@components/wizard'
 import Address from '../edit/steps/Address'
 import Payment from '../edit/steps/Payment'
@@ -77,27 +77,27 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
       title: 'Реквизиты',
       // subtitle: 'Добввьте реквизиты заказа',
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} />
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
     },
     {
       id: 'step-address',
       title: 'Адрес',
       // subtitle: 'введите адрес доставки',
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null}/>
+      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null} />
     },
     {
       id: 'order-details',
       title: 'Состав',
       // subtitle: 'Выберите состав заказа',
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} handleUpdate={updateData} orderData={data} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} handleUpdate={updateData} orderData={data}  selectedOrder={null} />
     },
     {
       id: 'step-payment',
       title: 'Оплата',
       // subtitle: 'Добавьте способ оплаты',
-      icon: <Link size={18} />,
+      icon: <Copy size={18} />,
       content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={null} />
     }
   ]

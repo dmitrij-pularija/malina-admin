@@ -1,17 +1,18 @@
 // ** React Imports
 import { Fragment, useState, useEffect } from 'react'
 import { useForm, Controller } from "react-hook-form"
+import { useNavigate } from "react-router-dom"
 // ** Third Party Components
 import Select from 'react-select'
 import classnames from "classnames"
 
 import { ArrowLeft, ArrowRight } from 'react-feather'
-import { businessType, orderType, paymentType } from '../../../../../../configs/initial'
+import { orderType } from '../../../../../../configs/initial'
 // ** Utils
 import { selectThemeColors, checkIsValid, initSelect } from '@utils'
 
 // ** Reactstrap Imports
-import { Label, Row, Col, Form, Input, Button, FormFeedback } from 'reactstrap'
+import { Label, Row, Col, Form, Button, FormFeedback } from 'reactstrap'
 
 // ** Styles
 import '@styles/react/libs/react-select/_react-select.scss'
@@ -25,27 +26,13 @@ const defaultValues = {
   }
 const requiredFields = ["user", "store"]
 
-const Details = ({ stepper, orderData, handleUpdate,  stores, users, waiters, tables }) => {
+const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiters, tables }) => {
+  // if (!stores.length || !users.length || !waiters.length || !tables.length) return
+  const navigate = useNavigate()
+  const handleBack = () => navigate("/apps/food/orders/list/")
+  const handleNext = () => stepper.next()
 
-  const initWaiterOptions = () => {
-    const filteredWaiters = orderData && orderData.waiter ? waiters.filter(
-      waiter => parseInt(waiter.business_id.id) === parseInt(orderData.business_id)
-    ) : waiters
-    return filteredWaiters.map(waiter => ({
-    value: String(waiter.id),
-    label: waiter.full_name ? waiter.full_name : waiter.telegram
-  }))
-}
 
-const initTableOptions = () => {
-  const filteredTables = orderData && orderData.table ? tables.filter(
-    table => parseInt(table.business_id.id) === parseInt(orderData.business_id)
-  ) : tables
-  return filteredTables.map(table => ({
-  value: String(table.id),
-  label: table.number
-}))
-}
 
 
   const storeOptions = stores.map((store) => ({
@@ -72,9 +59,34 @@ const initTableOptions = () => {
     value: key,
     label: orderType[key]
   }))
-  const [waiterOptions, setWaiterOptions] = useState(initWaiterOptions())
-  const [tableOptions, setTableOptions] = useState(initTableOptions()) 
+  const [waiterOptions, setWaiterOptions] = useState(null)
+  const [tableOptions, setTableOptions] = useState(null) 
 
+  const initWaiterOptions = () => {
+    const filteredWaiters = orderData && orderData.business_id ? waiters.filter(
+      waiter => parseInt(waiter.business_id.id) === parseInt(orderData.business_id)
+    ) : waiters
+    setWaiterOptions(filteredWaiters.map(waiter => ({
+    value: String(waiter.id),
+    label: waiter.full_name ? waiter.full_name : waiter.telegram
+    }))
+    )
+}
+
+const initTableOptions = () => {
+  const filteredTables = orderData && orderData.business_id ? tables.filter(
+    table => parseInt(table.business_id.id) === parseInt(orderData.business_id)
+  ) : tables
+  setTableOptions(filteredTables.map(table => ({
+  value: String(table.id),
+  label: table.number
+}))
+)
+}
+  useEffect(() => {
+    initTableOptions()
+    initWaiterOptions()
+  }, [tables, waiters])
 
   const values = orderData ? {
     user: orderData.user_id ? initSelect(userOptions, orderData.user_id) : '',
@@ -118,7 +130,7 @@ const initTableOptions = () => {
 
     setValue("store", selectedOption)
   }
-  const handleNext = () => stepper.next()
+  
 
   const onSubmit = (data) => {
     const newData = {}
@@ -290,7 +302,7 @@ const initTableOptions = () => {
           </Col>
         </Row>
         <div className='d-flex justify-content-between mt-1'>
-          <Button color='secondary' className='btn-prev' outline disabled>
+          <Button color='primary' className='btn-prev' outline onClick={() => handleBack()}>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
             <span className='align-middle d-sm-inline-block d-none'>Назад</span>
           </Button>
