@@ -5,7 +5,7 @@ import  { columns } from './columns'
 import  ExpandableTable from './expandableTable'
 import { createProductCart, addProductList, editProductList } from "../../store"
 import Select from 'react-select'
-import { selectThemeColors, checkIsValid, initSelect } from '@utils'
+import { selectThemeColors, checkIsValid, initSelect, arraysAreEqual } from '@utils'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy, Plus, ArrowLeft, ArrowRight } from 'react-feather'
@@ -78,13 +78,23 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
 
 const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => {
 
-  const [productList, setProductList] = useState([])
+  // { product: row.id, quantity: value, total_price: price(row, value), is_visible: true, product_addons: [] }
+
+  const initProductList = () => {
+    return selectedOrder ? selectedOrder.order_cart[0].products_list.map(product => ({ product: product.product.id, quantity: product.quantity, total_price: product.total_price, is_visible: true, product_addons: [] })) : []
+  }
+
+  const [productList, setProductList] = useState(initProductList())
   const [selectedRows, setSelectedRows] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [selectedId, setSelectedId] = useState('')
   const [filteredData, setFilteredData] = useState([])
+
+  // useEffect(() => {
+  //   initProductList()
+  // }, [selectedOrder])
 
 // console.log(productList)
 // console.log("selectedRows")
@@ -175,12 +185,17 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
   const handleNext = () => stepper.next()
 
   const onSubmit = (data) => {
-    // const newDataIDs = productList.map(product => parseInt(product.product))
-    if (selectedOrder) return handleNext()
+    if (selectedOrder) {
+    const newDataIDs = productList.map(product => parseInt(product.product))
+    const orderCartIDs = selectedOrder.order_cart[0].products_list.map(product => parseInt(product.product.id))
+    if (arraysAreEqual(newDataIDs, orderCartIDs)) return handleNext()
+    } else {
+    if (orderData.order_cart && orderData.order_cart.length) return handleNext()
+    }
     // const requestBody = {}
     const cart = {}
     // if (checkIsValid(data, requiredFields)) {
-      if (true) {
+      if (productList.length) {
       //   const requestBody = { data: productList };
       // console.log(requestBody)
       // const productListIds = productList.map((row) => parseInt(row.product))
@@ -202,13 +217,16 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
       //   })
 
     } else {
-      for (const key in data) {
-        if (data[key].length === 0) {
-          setError(key, {
+             setError('orderCart', {
             type: "manual"
           })
-        }
-      }
+      // for (const key in data) {
+      //   if (data[key].length === 0) {
+      //     setError(key, {
+      //       type: "manual"
+      //     })
+      //   }
+      // }
     }  
   }
 

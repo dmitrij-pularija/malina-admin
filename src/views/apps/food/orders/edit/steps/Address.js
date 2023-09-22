@@ -7,7 +7,7 @@ import classnames from "classnames"
 import Select from 'react-select'
 import { ArrowLeft, ArrowRight } from 'react-feather'
 import Flatpickr from "react-flatpickr"
-import { selectThemeColors, checkIsValid, initSelect, formatTimeSave } from '@utils'
+import { selectThemeColors, checkIsValid, initSelect, formatTimeSave, formatStringTime } from '@utils'
 import { Label, Row, Col, Input, Form, Button, FormFeedback } from 'reactstrap'
 import "@styles/react/libs/flatpickr/flatpickr.scss"
 import '@styles/react/libs/react-select/_react-select.scss'
@@ -67,7 +67,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
     longitude: selectedOrder.longitude ? selectedOrder.longitude : '',
     latitude: selectedOrder.latitude ? selectedOrder.latitude : '',
     timeDelivery: selectedOrder.time_delivery ? selectedOrder.time_delivery : '',
-    rdt: selectedOrder.requested_delivery_time ? selectedOrder.requested_delivery_time : '',
+    rdt: selectedOrder.requested_delivery_time ? formatStringTime(selectedOrder.requested_delivery_time) : '',
     comment: selectedOrder.comment ? selectedOrder.comment : ''
   } : {}
 
@@ -97,7 +97,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
   }
 
   const handleAddressSave = () => {
-    // console.log(getValues())
+    // console.log(getValues('rdt'))
     const address = {}
     if (checkIsValid(getValues(), requiredFields)) {  
       if (getValues('name')) address.name = getValues('name')
@@ -150,9 +150,10 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
     // console.log(data)
     const newData = {}
     
-    if (checkIsValid(data, requiredFields) || orderData.order_type !== "1" ) {
+    if (checkIsValid(data, requiredFields) || orderData.order_type !== 1) {
+      // console.log(data.rdt)
       if (data.comment) newData.comment = data.comment
-      if (orderData.order_type !== "1") return handleNext()
+      if (orderData.order_type !== 1) return handleNext()
       if (data) newData.delivery_address = {}
       if (data.name) newData.delivery_address.name = data.name
       if (data.city) newData.delivery_address.city = data.city
@@ -166,7 +167,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
       if (data.latitude) newData.delivery_address.latitude = data.latitude
       if (data.comment) newData.comment = data.comment
       // if (data.deliveryPrice) newData.delivery_price = data.deliveryPrice
-      if (data.rdt) newData.requested_delivery_time = formatTimeSave(data.rdt)
+      if (data.rdt && data.rdt !== formatStringTime(selectedOrder.requested_delivery_time)) newData.requested_delivery_time = formatTimeSave(data.rdt)
       if (data.timeDelivery) newData.time_delivery = parseInt(data.timeDelivery)
       if (newData) handleUpdate(newData)
       handleNext()
@@ -194,10 +195,10 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
     <Fragment>
       <div className='content-header'>
         <h5 className='mb-0'>Адрес</h5>
-        <small>{orderData && orderData.order_type === "1" ? "Выберите адрес доставки или создайте новый." : "В нутри заведения"}</small>
+        <small>{orderData && orderData.order_type === 1 ? "Выберите адрес доставки или создайте новый." : "В нутри заведения"}</small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
-       {orderData && orderData.order_type === "1" && <>
+       {orderData && orderData.order_type === 1 && <>
         <Row className='mb-1'>
         <Col md='6'>
           <Label className='form-label' for='userAddress'>
@@ -561,6 +562,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
                           id="rdt"
                           name="rdt"
                           placeholder="желаемое"
+                          value={field.value}
                           invalid={errors.rdt && true}
                           options={{
                             enableTime: true,

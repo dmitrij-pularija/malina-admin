@@ -187,3 +187,12 @@ export const dataURLtoBlob = dataURL => {
 export const initSelect = (option, value) => {
   return option[option.findIndex(i => parseInt(i.value) === parseInt(value))] || ''
 }
+
+export const arraysAreEqual = (arr1, arr2) => {
+  // console.log(arr1, arr2)
+  if (arr1.length !== arr2.length) return false
+
+  return arr1.reduce((isEqual, currentValue, index) => {
+    return isEqual && currentValue === arr2[index]
+  }, true)
+}

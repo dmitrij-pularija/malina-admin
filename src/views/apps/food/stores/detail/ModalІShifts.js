@@ -17,7 +17,7 @@ import {
 import Flatpickr from "react-flatpickr"
 import { getShifts, addShifts, editShifts, delShifts } from "../store"
 import { useForm, Controller } from "react-hook-form"
-import { checkIsValid, formatTime, formatTimeSave } from "@utils"
+import { checkIsValid, formatStringTime, formatTimeSave } from "@utils"
 import classnames from "classnames"
 import { Minus, ChevronDown, Edit, Trash2 } from "react-feather"
 import "@styles/react/apps/app-users.scss"
@@ -131,7 +131,7 @@ const ModalІShifts = ({isOpen, toggle }) => {
       sortable: true,
       sortField: 'start_time',
       selector: row => row.start_time,
-      cell: row => <span className='text-capitalize'>{formatTime(row.start_time)}</span>
+      cell: row => <span className='text-capitalize'>{formatStringTime(row.start_time)}</span>
     },
     {
       name: 'Конец',
@@ -139,7 +139,7 @@ const ModalІShifts = ({isOpen, toggle }) => {
       sortable: true,
       sortField: 'end_time',
       selector: row => row.start_time,
-      cell: row => <span className='text-capitalize'>{formatTime(row.end_time)}</span>
+      cell: row => <span className='text-capitalize'>{formatStringTime(row.end_time)}</span>
     },
     {
       name: 'Описание',

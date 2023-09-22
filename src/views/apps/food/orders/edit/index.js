@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from '../../../../../@core/components/spinner/Loading'
-// ** Third Party Components
+import { formatStringTime } from '@utils'
 // import axios from 'axios'
 
 import { getOrder } from '../store'
@@ -55,7 +55,7 @@ const EditOrder = () => {
   useEffect(() => {
     if (selectedOrder) {
     const cart = selectedOrder.order_cart.map(cart => parseInt(cart.id))
-    setData({...selectedOrder, user_id: selectedOrder.user_id.id, business_id: selectedOrder.business_id.id, order_cart: cart})
+    setData({...selectedOrder, user_id: selectedOrder.user_id.id, business_id: selectedOrder.business_id.id, order_cart: cart, requested_delivery_time: formatStringTime(selectedOrder.requested_delivery_time)})
     }
   }, [selectedOrder])
 
@@ -68,7 +68,7 @@ const EditOrder = () => {
       id: 'step-details',
       title: 'Реквизиты',
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} />
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
     },
     {
       id: 'step-address',

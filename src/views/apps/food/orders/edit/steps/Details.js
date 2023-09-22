@@ -138,7 +138,7 @@ const initTableOptions = () => {
       if (data.user) newData.user_id = data.user.value
       if (data.store) newData.business_id = data.store.value
       if (data.table.value) newData.table = parseInt(data.table.value)
-      if (data.orderType) newData.order_type = data.orderType.value
+      if (data.orderType) newData.order_type = parseInt(data.orderType.value)
       if (data.waiter.value) newData.waiter = parseInt(data.waiter.value)
       if (newData) handleUpdate(newData)
       handleNext()
