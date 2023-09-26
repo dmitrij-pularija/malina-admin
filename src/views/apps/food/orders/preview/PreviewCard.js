@@ -3,7 +3,7 @@ import { Card, CardBody, CardText, Row, Col, Table, Badge } from 'reactstrap'
 import { statusObj, paymentType, orderType } from '../../../../../configs/initial'
 import { formatData, formatTime, formatNumber, formatStringTime } from '@utils'
 import Avatar from '@components/avatar'
-import Logo2 from '@components/logo2'
+import TableCards from './TableCards'
 
 // const renderClient = () => {
 //   if (client.avatar) {
@@ -55,43 +55,43 @@ const renderImg = (avatar, name) => {
 }
 
 
-const renderTable = carts => {
- let i = 0
-    return (
-      <Table responsive hover>
-      <thead>
-        <tr>
-          <th>№</th>
-          <th>Блюдо</th>
-          <th>Цена</th>
-          <th>цена со скидкой</th>
-          <th>Количество</th>
-          <th>Добавки</th>
-          <th>Стоимость добавок</th>
-          <th>Итого</th>
-        </tr>
-      </thead>
-      <tbody> 
-      {carts.map(({ id, product, quantity, total_price, product_addons, total_addon_price }) => (
-        <tr key={id}>
-        <td className='center'>{++i}</td>
-          <td className='text-nowrap'>
-            {product.images.length ? <img className='me-75' src={product.images[0].image} alt={product.name} height='40' width='40' /> : ''}
-            <span className='align-middle fw-bold order-dish-name'>{product.name}</span>
-          </td>
-          <td className='right'>{product.cost}</td>
-          <td className='right'>{product.sale_cost}</td>
-          <td className='center'>{quantity}</td>
-          <td className='center'>{product_addons.length}</td>
-          <td className='right'>{total_addon_price}</td>
-          <td className='right'>{total_price}</td>
-        </tr>
-      ))}
-      </tbody>
-    </Table>
-    )
+// const renderTable = carts => {
+//  let i = 0
+//     return (
+//       <Table responsive hover>
+//       <thead>
+//         <tr>
+//           <th>№</th>
+//           <th>Блюдо</th>
+//           <th>Цена</th>
+//           <th>цена со скидкой</th>
+//           <th>Количество</th>
+//           <th>Добавки</th>
+//           <th>Стоимость добавок</th>
+//           <th>Итого</th>
+//         </tr>
+//       </thead>
+//       <tbody> 
+//       {carts.map(({ id, product, quantity, total_price, product_addons, total_addon_price }) => (
+//         <tr key={id}>
+//         <td className='center'>{++i}</td>
+//           <td className='text-nowrap'>
+//             {product.images.length ? <img className='me-75' src={product.images[0].image} alt={product.name} height='40' width='40' /> : ''}
+//             <span className='align-middle fw-bold order-dish-name'>{product.name}</span>
+//           </td>
+//           <td className='right'>{product.cost}</td>
+//           <td className='right'>{product.sale_cost}</td>
+//           <td className='center'>{quantity}</td>
+//           <td className='center'>{product_addons.length}</td>
+//           <td className='right'>{total_addon_price}</td>
+//           <td className='right'>{total_price}</td>
+//         </tr>
+//       ))}
+//       </tbody>
+//     </Table>
+//     )
   
-}
+// }
 
 const PreviewCard = ({ data }) => {
   // console.log(data)
@@ -196,7 +196,8 @@ const PreviewCard = ({ data }) => {
         </Row>
       <Row className='invoice-sales-total-wrapper'>
       <h6 className='mb-2'>Состав заказа:</h6>
-     {renderTable(carts)}
+     {/* {renderTable(carts)} */}
+     <TableCards data={carts} />
      </Row>
     </CardBody>
       <hr className='invoice-spacing' />

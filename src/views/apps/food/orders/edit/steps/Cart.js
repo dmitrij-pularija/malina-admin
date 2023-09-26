@@ -258,15 +258,17 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
     // const requestBody = {}
     const cart = {}
       if (isSelected) {
-      const makeAddons = array => {
+      const makeAddons = (array, id) => {
         if (array && array.length) {
           const selectedAddons = array.filter(addon => addon.selected && addon)
           return selectedAddons.map(addon => addon.id)
-          // return selectedAddons.map(addon => ({addon: addon.id, quantity: addon.quantity}))
+          // return selectedAddons.map(addon => ({ addon: parseInt(addon.id), quantity: parseInt(addon.quantity), product: id }))
+          // return selectedAddons.map(addon => ({ addon: parseInt(addon.id), quantity: parseInt(addon.quantity)}))
         } else return []
       }
       const selectedDatd = tableData.filter(product => product.selected && product)
-      const productList = selectedDatd.map(product => ({ product: product.id, quantity: product.quantity, total_price: product.total_price, is_visible: true, product_addons: makeAddons(product.product_addons) }))
+      const productList = selectedDatd.map(product => ({ product: product.id, quantity: product.quantity, total_price: product.total_price, is_visible: true, product_addons: makeAddons(product.product_addons, product.id) }))
+      // console.log(productList)
       cart.products_list = []  
       cart.business_id = orderData.business_id
       cart.is_visible = true
