@@ -18,50 +18,66 @@ const renderClient = (image, name) => {
     }
   }
 
-  const numberWithCommas = (x) => {
-    return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
-  }
+  // const numberWithCommas = (x) => {
+  //   return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
+  // }
 
-  const format = (num) => {
-    return `${numberWithCommas(num)} %`
-  }
+  // const format = (num) => {
+  //   return `${numberWithCommas(num)} %`
+  // }
 
-  const parser = (num) => {
-    const cells = num.toString().split(" ")
-    if (!cells[1]) {
-      return num
-    }
+  // const parser = (num) => {
+  //   const cells = num.toString().split(" ")
+  //   if (!cells[1]) {
+  //     return num
+  //   }
 
-    const parsed = cells[1].replace(/,*/g, "")
+  //   const parsed = cells[1].replace(/,*/g, "")
 
-    return parsed
-  }
+  //   return parsed
+  // }
 
   const price = (row, quantity) => row.cost * (1 - (row.prime_cost / 100)) * quantity
 
-export const columns = (productList, setProductList, setSelectedRows) => {
-  const getQuantity = id => {
-    const selectedProduct = productList.find(product => product.product === id)
-    return selectedProduct ? selectedProduct.quantity : 0
-    }
+export const columns = (tableData, setTableData) => {
+  // const getQuantity = id => {
+  //   const selectedProduct = productList.find(product => product.product === id)
+  //   return selectedProduct ? selectedProduct.quantity : 0
+  //   }
 
   // const productListIds = productList.map((row) => row.product)
 
   const handleChangeQuantity = (value, row) => {
-    const productListFiltred = productList.filter(list => list.product !== row.id)
-    const selectedProduct = productList.find(list => list.product === row.id)
-    const mewProduct = selectedProduct ? { ...selectedProduct, quantity: value, total_price: price(row, value) } : { product: row.id, quantity: value, total_price: price(row, value), is_visible: true, product_addons: [] }
-    setProductList([...productListFiltred, mewProduct])
-    setSelectedRows(prevSelectedRows => [...prevSelectedRows, row])
+    // const productListFiltred = productList.filter(list => list.product !== row.id)
+    // const selectedProduct = productList.find(list => list.product === row.id)
+    // const mewProduct = selectedProduct ? { ...selectedProduct, quantity: value, total_price: price(row, value) } : { product: row.id, quantity: value, total_price: price(row, value), is_visible: true, product_addons: [] }
+    // setProductList([...productListFiltred, mewProduct])
+    // setSelectedRows(prevSelectedRows => [...prevSelectedRows, row])
+    
+    // const productListFiltred = tableData.filter(list => list.id !== row.id)
+    // setTableData([...productListFiltred, {...row, quantity: value, total_price: price(row, value)}])
+
+    const updatedData = tableData.map(rowData => {
+      return { ...rowData, selected: rowData.id === row.id ? (value > 0) : rowData.selected, quantity: rowData.id === row.id ? value : rowData.quantity, total_price: price(row, value)}
+    })
+
+    const selectedData = updatedData.filter(row => row.selected && row)
+    const unselectedData = updatedData.filter(row => !row.selected && row)
+    setTableData([...selectedData, ...unselectedData])
+    
+    // const findedRow = selectedRows.find(item => item.id === row.id)
+    // if (findedRow) setSelectedRows(prevSelectedRows => [...prevSelectedRows, row])
 }
 
   return [
     // {
     //   name: 'selected',
     //   sortable: true,
-    //   omit: true,
-    //   selector: row => row.id,
-    //   cell: row => productListIds.includes(row.id)
+    //   omit: false,
+    //   sortField: 'selected',
+    //   sort: 'asc',
+    //   selector: row => row.selected,
+    //   cell: row => row.selected
     // },   
   {
     name: 'Блюдо',
@@ -111,13 +127,13 @@ export const columns = (productList, setProductList, setSelectedRows) => {
     name: 'Кол-во',
     sortable: false,
     minWidth: '80px',
-    sortField: 'count',
+    sortField: 'quantity',
     cell: row => (<InputNumber
     id={`quantity-${row.id}`}
     name="quantity"
     placeholder=""
-    // defaultValue={getQuantity(row.id)}
-    value={getQuantity(row.id)}
+    defaultValue={row.quantity}
+    value={row.quantity}
     upHandler={<Plus />}
     downHandler={<Minus />}
     max={100}

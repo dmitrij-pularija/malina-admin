@@ -1,4 +1,4 @@
-import { Fragment, useState, forwardRef } from 'react'
+import { Fragment, useState, useEffect, forwardRef } from 'react'
 // import { useDispatch, useSelector } from "react-redux"
 import { useForm, Controller } from "react-hook-form"
 import  { columns } from './columns'
@@ -19,11 +19,17 @@ const requiredFields = ["orderCart"]
 
 const price = row => row.cost * (1 - (row.prime_cost / 100))
 
-const BootstrapCheckbox = forwardRef((props, ref) => (
-  <div className='form-check'>
-    <Input type='checkbox' ref={ref} {...props} />
-  </div>
-))
+// const BootstrapCheckbox = forwardRef((props, ref) => (
+//   <div className='form-check'>
+//     <Input 
+//     type='checkbox' 
+//     ref={ref}
+//     {...props} 
+//     />
+//   </div>
+// ))
+
+
 
 const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
   
@@ -79,26 +85,80 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
 const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => {
 
   // { product: row.id, quantity: value, total_price: price(row, value), is_visible: true, product_addons: [] }
+  // const [selectedRows, setSelectedRows] = useState([])
+  const [tableData, setTableData] = useState([])
 
-  const initProductList = () => {
-    return selectedOrder ? selectedOrder.order_cart[0].products_list.map(product => ({ product: product.product.id, quantity: product.quantity, total_price: product.total_price, is_visible: true, product_addons: [] })) : []
-  }
+//   const initProductList = () => {
+// if (selectedOrder) { 
+//   const prevList = selectedOrder.order_cart[0].products_list.map(product => ({ product: product.product.id, quantity: product.quantity, total_price: product.total_price, is_visible: true, product_addons: [] }))
+//   const prevListIds = prevList.map(product => product.product)
+//   const prevSelectedList = products.filter(product => prevListIds.includes(product.id))
+// if (prevSelectedList && prevSelectedList.length && !selectedRows.length) setSelectedRows(prevSelectedList)
+//     return prevList
+//   } else return []
+//   // return selectedOrder ? selectedOrder.order_cart[0].products_list.map(product => ({ product: product.product.id, quantity: product.quantity, total_price: product.total_price, is_visible: true, product_addons: [] })) : []
+//   }
 
-  const [productList, setProductList] = useState(initProductList())
-  const [selectedRows, setSelectedRows] = useState([])
+  // const [productList, setProductList] = useState(initProductList())
+  
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [selectedId, setSelectedId] = useState('')
   const [filteredData, setFilteredData] = useState([])
 
-  // useEffect(() => {
-  //   initProductList()
-  // }, [selectedOrder])
+  const getAddonsQuantity = (addonId, productId) => {
+    if (selectedOrder) {
+      const findProduct = selectedOrder.order_cart[0].products_list.find(product => product.product.id === productId)
+      if (!findProduct) return 0
+      const findAddon = findProduct.product_addons.find(addon => addon.addon.id === addonId)
+      return findAddon ? findAddon.quantity : 0
+    } else return 0
+  }
+
+  const initAddons = (array, ids, productId) => {
+    // let selectedIds = []
+    const idsFiltred = ids.find(product => product.id === productId)
+    // console.log(idsFiltred)
+    const selectedIds = idsFiltred ? idsFiltred.addons : []
+    // if (idsFiltred) selectedIds = idsFiltred.addons
+    if (array && array.length) {
+    const productAddons = array.map(addon => ({...addon, selected: selectedOrder ? selectedIds.includes(addon.id) : false, quantity: getAddonsQuantity(addon.id, productId)}))
+    const selectedProductAddons = productAddons.filter(row => row.selected && row)
+    const unselectProductAddons = productAddons.filter(row => !row.selected && row)
+    return [...selectedProductAddons, ...unselectProductAddons]
+    } else return []
+  }
+  const getQuantity = id => {
+    if (selectedOrder) {
+      const findQuantity = selectedOrder.order_cart[0].products_list.find(product => product.product.id === id)
+      return findQuantity ? findQuantity.quantity : 0
+    } else return 0
+  }
+  const initTableData = (array) => {
+    let selectedProductsIds = []
+    let selectedAddonsIds = []
+
+    if (selectedOrder) {
+      selectedProductsIds = selectedOrder.order_cart[0].products_list.map(product => product.product.id)
+      selectedAddonsIds = selectedOrder.order_cart[0].products_list.map(product => ({id: product.product.id, addons: product.product_addons.length ? product.product_addons.map(addon => addon.addon.id) : []}))
+      // console.log(selectedAddonsIds)
+    }
+    const initdata = array.map(row => ({...row, selected: selectedOrder ? selectedProductsIds.includes(row.id) : false, quantity: getQuantity(row.id), product_addons: initAddons(row.addons, selectedAddonsIds, row.id) }))
+    const selectedProducts = initdata.filter(row => row.selected && row)
+    const unselectProducts = initdata.filter(row => !row.selected && row)
+    setTableData([...selectedProducts, ...unselectProducts])
+  }
+
+
+  useEffect(() => {
+    if (products.length) initTableData(products)
+  }, [products])
 
 // console.log(productList)
-// console.log("selectedRows")
 // console.log(selectedRows)
+// console.log(selectedOrder)
+// console.log(tableData)
   const values = orderData ? {
     orderCart: orderData.order_cart ? orderData.order_cart : ''
   } : {}
@@ -174,7 +234,7 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
     )
   }
   // const selectedProductIds = productList.map(product => product.product)
-  const rowSelectCritera = row => orderData.order_cart.includes(row.id)
+  // const rowSelectCritera = row => orderData.order_cart.includes(row.id)
 
   // const rowSelectCritera = row => selectedProductIds.includes(row.id)
 
@@ -185,20 +245,28 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
   const handleNext = () => stepper.next()
 
   const onSubmit = (data) => {
+    const isSelected = tableData.filter(row => row.selected && row.selected).length > 0
     if (selectedOrder) {
-    const newDataIDs = productList.map(product => parseInt(product.product))
+    const newDataFiltred = tableData.filter(product => product.selected && product)
+    const newDataIDs = newDataFiltred.map(product => parseInt(product.id))
     const orderCartIDs = selectedOrder.order_cart[0].products_list.map(product => parseInt(product.product.id))
     if (arraysAreEqual(newDataIDs, orderCartIDs)) return handleNext()
     } else {
+      
     if (orderData.order_cart && orderData.order_cart.length) return handleNext()
     }
     // const requestBody = {}
     const cart = {}
-    // if (checkIsValid(data, requiredFields)) {
-      if (productList.length) {
-      //   const requestBody = { data: productList };
-      // console.log(requestBody)
-      // const productListIds = productList.map((row) => parseInt(row.product))
+      if (isSelected) {
+      const makeAddons = array => {
+        if (array && array.length) {
+          const selectedAddons = array.filter(addon => addon.selected && addon)
+          return selectedAddons.map(addon => addon.id)
+          // return selectedAddons.map(addon => ({addon: addon.id, quantity: addon.quantity}))
+        } else return []
+      }
+      const selectedDatd = tableData.filter(product => product.selected && product)
+      const productList = selectedDatd.map(product => ({ product: product.id, quantity: product.quantity, total_price: product.total_price, is_visible: true, product_addons: makeAddons(product.product_addons) }))
       cart.products_list = []  
       cart.business_id = orderData.business_id
       cart.is_visible = true
@@ -247,6 +315,68 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
   //   />
   // }
 
+  // const customSort = (rows, field, direction) => {
+  //   const selectedRows = rows.filter(row => row.selected)
+  //   const unselectedRows = rows.filter(row => !row.selected)
+  //   const sortedRows = [...selectedRows, ...unselectedRows]
+  //   return direction === 'asc' ? sortedRows : sortedRows.reverse()
+  // }
+
+  const handleRowSelected = (id, newStatus) => {
+        const updatedData = tableData.map((rowData) => {
+          if (rowData.id === id) {
+            return { ...rowData, selected: newStatus, quantity: newStatus ? rowData.quantity === 0 ? 1 : rowData.quantity : 0}
+          } else return rowData
+        })
+     
+    const selectedData = updatedData.filter(row => row.selected && row)
+    const unselectedData = updatedData.filter(row => !row.selected && row)
+    setTableData([...selectedData, ...unselectedData])
+
+    // console.log(selectedRows)
+      // const selectedProductIds = selectedRows.map((row) => row.id)
+      // const productListIds = productList.map((row) => row.product)
+      // const productListFiltred = productList.filter(product => selectedProductIds.includes(product.product))
+      // const newRows = selectedRows.filter(product => !productListIds.includes(product.id))
+      // const newproductList = newRows.map((row) => ({ product: row.id, quantity: 1, total_price: price(row), is_visible: true, product_addons: [] }))
+      // setProductList([...productListFiltred, ...newproductList])
+      // setSelectedRows(selectedRows)
+
+      // setSelectedRows(selectedRows)
+
+    // const updatedData = tableData.map(rowData => {
+    //   const isSelected = selectedRows.find(row => row.id === rowData.id)
+    //   return { ...rowData, selected: !!isSelected, quantity: !!isSelected && rowData.quantity > 0  ? rowData.quantity : 1, total_price: price(rowData)}
+    // })
+
+    // const selectedData = updatedData.filter(row => row.selected && row)
+    // const unselectedData = updatedData.filter(row => !row.selected && row)
+    // setTableData([...selectedData, ...unselectedData])
+
+  }
+
+  // const selectedRows = tableData.reduce((acc, row) => {
+  //   if (row.selected) {
+  //     acc[row.id] = true
+  //   }
+  //   return acc
+  // }, {})
+
+  const BootstrapCheckbox = forwardRef(({ onChange, ...rest }, ref) => (
+    <div className='form-check'>
+      <Input
+        type='checkbox' 
+        ref={ref}
+        {...rest}
+        onChange={(e) => {
+          const id = parseInt(e.target.name.replace('select-row-', ''))
+          handleRowSelected(id, e.target.checked)
+          onChange(e.target.checked)
+        }}
+      />
+    </div>
+  ))
+
   return (
     <Fragment>
       <div className='content-header'>
@@ -262,29 +392,61 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
             subHeader
             pagination
             responsive
+            highlightOnHover
             selectableRows
             expandableRows
             expandOnRowClicked
             paginationServer
-            columns={columns(productList, setProductList, setSelectedRows)}
+            // defaultSortFieldId={"selected"}
+            // sortFunction={customSort}
+            // selectableRowsVisibleOnly={false}
+            columns={columns(tableData, setTableData)}
+            // selectedRows
             sortIcon={<ChevronDown />}
             className='react-dataTable'
-            selectedRows={selectedRows}
+            // selectedRows={selectedRows}
             paginationComponent={CustomPagination}
-            expandableRowsComponent={(data) => ExpandableTable(data, products, productList, setProductList)}
+            expandableRowsComponent={(data) => ExpandableTable(data, tableData, setTableData)}
             selectableRowsComponent={BootstrapCheckbox}
             // onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
-            data={dataToRender()}
-            onSelectedRowsChange={({ selectedRows }) => {
-              const selectedProductIds = selectedRows.map((row) => row.id)
-              const productListIds = productList.map((row) => row.product)
-              const productListFiltred = productList.filter(product => selectedProductIds.includes(product.product))
-              const newRows = selectedRows.filter(product => !productListIds.includes(product.id))
-              const newproductList = newRows.map((row) => ({ product: row.id, quantity: 1, total_price: price(row), is_visible: true, product_addons: [] }))
-              setProductList([...productListFiltred, ...newproductList])
-            }}
+            data={tableData}
+            // onRowClicked={handleRowSelected}
+            // onSelectedRowsChange={handleRowSelected}
+            selectableRowSelected={row => row.selected}
+            // selectableRowsComponentProps={{ onChange: (newValue, id) => {
+            //   console.log(newValue, id)
+            // //   const updatedData = tableData.map((rowData) => {
+            // //     if (parseInt(rowData.id) === parseInt(id)) {
+            // //       return { ...rowData, selected: newValue }
+            // //     }
+            // //     return rowData
+            // //   })
+            // // setTableData(updatedData)
+            // } }}
+
+            // selectableRowsComponentProps={{ onChange: (newValue, context) => {
+              
+            //   const updatedData = tableData.map((rowData) => {
+            //     if (rowData.id === context.id) {
+            //       return { ...rowData, selected: newValue }
+            //     }
+            //     return rowData
+            //   })
+      
+            //   setTableData(updatedData)
+            // } }}
+            // onSelectedRowsChange={({ selectedRows }) => {
+            //   const selectedProductIds = selectedRows.map((row) => row.id)
+            //   const productListIds = productList.map((row) => row.product)
+            //   const productListFiltred = productList.filter(product => selectedProductIds.includes(product.product))
+            //   const newRows = selectedRows.filter(product => !productListIds.includes(product.id))
+            //   const newproductList = newRows.map((row) => ({ product: row.id, quantity: 1, total_price: price(row), is_visible: true, product_addons: [] }))
+            //   setProductList([...productListFiltred, ...newproductList])
+            //   setSelectedRows([...selectedRows])
+            // }}
             // selectableRowSelected={row => row.id === 98}
-            noDataComponent={<h6 className='text-capitalize'>Категории не найдены</h6>}
+            // selectableRowSelected={selectedRows}
+            noDataComponent={<h6 className='text-capitalize'>Блюда не найдены</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={products}

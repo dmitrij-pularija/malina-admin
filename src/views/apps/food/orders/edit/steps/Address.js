@@ -167,7 +167,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
       if (data.latitude) newData.delivery_address.latitude = data.latitude
       if (data.comment) newData.comment = data.comment
       // if (data.deliveryPrice) newData.delivery_price = data.deliveryPrice
-      if (data.rdt && data.rdt !== formatStringTime(selectedOrder.requested_delivery_time)) newData.requested_delivery_time = formatTimeSave(data.rdt)
+      if (data.rdt && data.rdt !== formatStringTime(orderData.requested_delivery_time)) newData.requested_delivery_time = formatTimeSave(data.rdt)
       if (data.timeDelivery) newData.time_delivery = parseInt(data.timeDelivery)
       if (newData) handleUpdate(newData)
       handleNext()
@@ -518,7 +518,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
         </Row>
         </>}
         <Row>
-          {orderData && orderData.order_type === "1" && <Col md='4' className='mb-1' >
+          {orderData && orderData.order_type === 1 && <Col md='4' className='mb-1' >
             <Label className="form-label" for="timeDelivery">
               Время доставки, мин
             </Label>
