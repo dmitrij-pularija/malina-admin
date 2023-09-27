@@ -100,7 +100,7 @@ const PreviewCard = ({ data }) => {
 
   return data !== null ? (
     <Card className='invoice-preview-card'>
-      <CardBody className='invoice-padding pb-0'>
+      <CardBody className='invoice-padding mt-1 mb-1'>
         <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
           <div>
             <div className='logo-wrapper gap-10'>

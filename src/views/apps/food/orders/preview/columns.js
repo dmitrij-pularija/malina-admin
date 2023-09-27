@@ -18,16 +18,16 @@ const renderClient = (image, name) => {
   }
 
 export const columns = [
-    {
-        name: '№',
-        sortable: false,
-        minWidth: '30px',
-        cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
-    },
+    // {
+    //     name: '№',
+    //     sortable: false,
+    //     width: '8%',
+    //     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
+    // },
     {
         name: 'Блюдо',
-        sortable: true,
-        minWidth: '230px',
+        // sortable: true,
+        width: '25%',
         sortField: 'name',
         cell: row => (
           <div className='d-flex justify-content-left align-items-center'>
@@ -38,54 +38,55 @@ export const columns = [
       },
       {
         name: 'Цена',
-        minWidth: '80px',
-        sortable: true,
+        width: '12%',
+        // sortable: true,
         sortField: 'cost',
-        cell: row => formatNumber(row.product.cost)
+        cell: row => <span className='right width'>{formatNumber(row.product.cost)}</span>
       },
       {
         name: 'Скидка',
-        minWidth: '130px',
-        sortable: true,
+        width: '12%',
+        // sortable: true,
         sortField: 'prime_cost',
-        cell: row => `${formatNumberInt(row.product.prime_cost)} %`
+        cell: row => <span className='center width'>{`${formatNumberInt(row.product.prime_cost)} %`}</span>
       },
       {
         name: 'К-во',
-        minWidth: '130px',
-        sortable: true,
+        width: '10%',
+        // sortable: true,
         sortField: 'quantity',
-        cell: row => `${formatNumberInt(row.quantity)}`
+        cell: row => <span className='center width'>{`${formatNumberInt(row.quantity)}`}</span>
       },
       {
-        name: 'Стоимость добавок',
-        minWidth: '130px',
-        sortable: true,
+        name: 'добавки',
+        width: '13%',
+        // sortable: true,
         sortField: 'total_addon_price',
-        cell: row => `${formatNumber(row.total_addon_price)}`
+        cell: row => <span className='right width'>{`${formatNumber(row.total_addon_price)}`}</span>
       },
       {
-        name: 'К-во добавок',
-        minWidth: '130px',
-        sortable: true,
+        name: 'К-во',
+        width: '10%',
+        // sortable: true,
         sortField: 'product_addons',
-        cell: row => `${formatNumberInt(row.product_addons.length)}`
+        cell: row => <span className='center width'>{`${formatNumberInt(row.product_addons.length)}`}</span>
       },
       {
         name: 'Итого',
-        minWidth: '130px',
-        sortable: true,
+        width: '12%',
+        // sortable: true,
         sortField: 'total_price',
-        cell: row => `${formatNumber(row.total_price)}`
+        cell: row => <span className='right width'>{`${formatNumber(row.total_price)}`}</span>
       }
 ]
 
 export const columnsAddons = [
     {
         name: 'Добавка',
-        sortable: true,
-        minWidth: '220px',
-        sortField: 'name',
+        // sortable: true,
+        // minWidth: '220px',
+        width: '25%',
+        // sortField: 'name',
         cell: row => (
           <div className='d-flex justify-content-left align-items-center'>
             {renderClient(row.addon.icon ? row.addon.icon : '', row.addon.name ? row.addon.name : "Добавка")}
@@ -97,16 +98,18 @@ export const columnsAddons = [
       },
     {
         name: 'Цена',
-        sortable: true,
-        minWidth: '70px',
-        sortField: 'price',
+        width: '12%',
+        // sortable: true,
+        // minWidth: '70px',
+        // sortField: 'price',
         cell: row => (<span dangerouslySetInnerHTML={{ __html: `${formatNumber(row.addon.price)} &#x0441;&#x332;` }} />)
       },
       {
         name: 'К-во',
-        minWidth: '130px',
-        sortable: true,
-        sortField: 'quantity',
+        width: '10%',
+        // minWidth: '130px',
+        // sortable: true,
+        // sortField: 'quantity',
         cell: row => `${formatNumberInt(row.quantity)}`
       }    
 ]

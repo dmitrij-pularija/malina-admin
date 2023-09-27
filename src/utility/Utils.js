@@ -185,6 +185,8 @@ export const dataURLtoBlob = dataURL => {
 }
 
 export const initSelect = (option, value) => {
+  if (!option && !value) return ''
+  if (!option && value) return value
   return option[option.findIndex(i => parseInt(i.value) === parseInt(value))] || ''
 }
 

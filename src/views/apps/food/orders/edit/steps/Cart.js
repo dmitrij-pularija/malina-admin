@@ -394,8 +394,10 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
             subHeader
             pagination
             responsive
+            fixedHeader={true}
             highlightOnHover
             selectableRows
+            selectableRowsNoSelectAll
             expandableRows
             expandOnRowClicked
             paginationServer

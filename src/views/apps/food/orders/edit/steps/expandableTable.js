@@ -79,7 +79,7 @@ const addonСolumns = [
       minWidth: '70px',
       sortField: 'price',
       selector: row => row.price,
-      cell: row => (<span dangerouslySetInnerHTML={{ __html: `${formatNumber(row.price)} &#x0441;&#x332;` }} />)
+      cell: row => (<span className='width right' dangerouslySetInnerHTML={{ __html: `${formatNumber(row.price)} &#x0441;&#x332;` }} />)
     },
     {
       name: 'Кол',

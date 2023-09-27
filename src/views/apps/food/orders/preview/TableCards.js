@@ -21,11 +21,12 @@ const ExpandableTable = ({ data }) => {
      
     return <DataTable 
     responsive
+    fixedHeader={true}
     noDataComponent={<h6 className='text-capitalize'>Добавки отсутствуют</h6>}
     noTableHead={true}
     data={data.product_addons}
     columns={columnsAddons}
-    className='react-dataTable ml-50'
+    className='react-dataTable'
     />
   }
 
@@ -36,6 +37,7 @@ return (
     <DataTable
         dataKey="id"
         responsive
+        fixedHeader={true}
         expandableRows
         expandOnRowClicked
         columns={columns}
@@ -47,7 +49,7 @@ return (
         noDataComponent={<h6 className='text-capitalize'>Блюда не найдены</h6>}
       />
      
-    </div>    
+     </div>    
 )
 }
 

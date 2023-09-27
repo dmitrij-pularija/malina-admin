@@ -47,25 +47,26 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
   
   useEffect(() => {
     getAddressList().then(result => {
-      if (result) {
+      
+      if (result && result.length) {
       setAddressList(result)
       setUserAddressOptions(initUserAddressOptions(result))
     }
     })
   }, [])  
-
+  
   const values = selectedOrder ? {
-    name: selectedOrder.name ? initSelect(userAddressOptions, selectedOrder.name) : '',
-    city: selectedOrder.city ? selectedOrder.city : '',
-    street: selectedOrder.street ? selectedOrder.street : '',
-    houseNumber: selectedOrder.house_number ? selectedOrder.house_number : '',
-    entrance: selectedOrder.entrance ? selectedOrder.entrance : '',
+    name: selectedOrder.delivery_address.name ? selectedOrder.delivery_address.name : '',
+    city: selectedOrder.delivery_address.city ? selectedOrder.delivery_address.city : '',
+    street: selectedOrder.delivery_address.street ? selectedOrder.delivery_address.street : '',
+    houseNumber: selectedOrder.delivery_address.house_number ? selectedOrder.delivery_address.house_number : '',
+    entrance: selectedOrder.delivery_address.entrance ? selectedOrder.delivery_address.entrance : '',
     floor: selectedOrder.floor ? selectedOrder.floor : '',
-    phoneNumber: selectedOrder.phone_number ? selectedOrder.phone_number : '',
-    deliveryPrice: selectedOrder.delivery_price ? selectedOrder.delivery_price : '',
-    location: selectedOrder.location ? selectedOrder.location : '',
-    longitude: selectedOrder.longitude ? selectedOrder.longitude : '',
-    latitude: selectedOrder.latitude ? selectedOrder.latitude : '',
+    phoneNumber: selectedOrder.delivery_address.phone_number ? selectedOrder.delivery_address.phone_number : '',
+    deliveryPrice: selectedOrder.delivery_address.delivery_price ? selectedOrder.delivery_address.delivery_price : '',
+    location: selectedOrder.delivery_address.location ? selectedOrder.delivery_address.location : '',
+    longitude: selectedOrder.delivery_address.longitude ? selectedOrder.delivery_address.longitude : '',
+    latitude: selectedOrder.delivery_address.latitude ? selectedOrder.delivery_address.latitude : '',
     timeDelivery: selectedOrder.time_delivery ? selectedOrder.time_delivery : '',
     rdt: selectedOrder.requested_delivery_time ? formatStringTime(selectedOrder.requested_delivery_time) : '',
     comment: selectedOrder.comment ? selectedOrder.comment : ''
@@ -167,7 +168,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
       if (data.latitude) newData.delivery_address.latitude = data.latitude
       if (data.comment) newData.comment = data.comment
       // if (data.deliveryPrice) newData.delivery_price = data.deliveryPrice
-      if (data.rdt && data.rdt !== formatStringTime(orderData.requested_delivery_time)) newData.requested_delivery_time = formatTimeSave(data.rdt)
+      if (data.rdt) newData.requested_delivery_time = selectedOrder && selectedOrder.requested_delivery_time ? data.rdt : formatTimeSave(data.rdt)
       if (data.timeDelivery) newData.time_delivery = parseInt(data.timeDelivery)
       if (newData) handleUpdate(newData)
       handleNext()
@@ -205,6 +206,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
           Сохраненные адреса
           </Label>
             <Select
+              isDisabled={!userAddressOptions}
               theme={selectThemeColors}
               isClearable={false}
               id='userAddress'

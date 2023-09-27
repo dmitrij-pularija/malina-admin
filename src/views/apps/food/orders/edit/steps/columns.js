@@ -69,20 +69,11 @@ export const columns = (tableData, setTableData) => {
     // if (findedRow) setSelectedRows(prevSelectedRows => [...prevSelectedRows, row])
 }
 
-  return [
-    // {
-    //   name: 'selected',
-    //   sortable: true,
-    //   omit: false,
-    //   sortField: 'selected',
-    //   sort: 'asc',
-    //   selector: row => row.selected,
-    //   cell: row => row.selected
-    // },   
+  return [  
   {
     name: 'Блюдо',
     sortable: true,
-    minWidth: '230px',
+    width: '25%',
     sortField: 'name',
     selector: row => row.name,
     cell: row => (
@@ -95,7 +86,7 @@ export const columns = (tableData, setTableData) => {
   {
     name: 'Категория',
     sortable: true,
-    minWidth: '200px',
+    width: '20%',
     sortField: 'category.id',
     selector: row => row.category.id,
     cell: row => (
@@ -109,24 +100,24 @@ export const columns = (tableData, setTableData) => {
   },
   {
     name: 'Цена',
-    minWidth: '80px',
+    width: '15%',
     sortable: true,
     sortField: 'cost',
     selector: row => row.cost,
-    cell: row => formatNumber(row.cost)
+    cell: row => <span className='width right'>{formatNumber(row.cost)}</span>
   },
   {
     name: 'Скидка',
-    minWidth: '130px',
+    width: '15%',
     sortable: true,
     sortField: 'prime_cost',
     selector: row => row.prime_cost,
-    cell: row => `${formatNumberInt(row.prime_cost)} %`
+    cell: row => <span className='width center'>{`${formatNumberInt(row.prime_cost)} %`}</span>
   },
   {
     name: 'Кол-во',
     sortable: false,
-    minWidth: '80px',
+    width: '13%',
     sortField: 'quantity',
     cell: row => (<InputNumber
     id={`quantity-${row.id}`}
