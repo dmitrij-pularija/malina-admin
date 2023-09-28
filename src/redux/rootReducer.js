@@ -10,6 +10,7 @@ import stores from '@src/views/apps/food/stores/store'
 import ratingWaiters from '@src/views/apps/food/rating/waiters/store'
 import ratingOrders from '@src/views/apps/food/rating/orders/store'
 import ratingStores from '@src/views/apps/food/rating/stores/store'
+import productComplaints from '@src/views/apps/food/rating/complaints/store'
 import products from '@src/views/apps/food/products/products/store'
 import productsCategories from '@src/views/apps/food/products/categories/store'
 import addons from '@src/views/apps/food/products/addons/store'
@@ -38,6 +39,7 @@ const rootReducer = {
   ratingWaiters,
   ratingOrders,
   ratingStores,
+  productComplaints,
   products,
   productsCategories,
   addons,

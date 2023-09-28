@@ -27,7 +27,7 @@ const UserDropdown = () => {
 
   // ** State
   const [userData, setUserData] = useState(null)
-
+// console.log(userData)
   //** ComponentDidMount
   useEffect(() => {
     if (isUserLoggedIn() !== null) {
@@ -37,7 +37,6 @@ const UserDropdown = () => {
 
   //** Vars
   const userAvatar = (userData && userData.avatar && userData.avatar.includes("http")) || defaultAvatar
-
   return (
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
       <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>
@@ -48,7 +47,7 @@ const UserDropdown = () => {
         <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
       </DropdownToggle>
       <DropdownMenu end>
-        <DropdownItem tag={Link} to='/pages/profile'>
+        <DropdownItem tag={Link} to={`/apps/user/view/${userData && userData.id}`} >
           <User size={14} className='me-75' />
           <span className='align-middle'>Профиль</span>
         </DropdownItem>

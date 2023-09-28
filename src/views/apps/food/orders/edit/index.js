@@ -121,19 +121,13 @@ const EditOrder = () => {
     <Loading />
     </>
   ) : (
-    <>
-    { loading ? (
-    <Loading />
-    ) : ( 
-    <Alert color='danger'>
+    loading ? <Loading /> : <Alert color='danger'>
       <h4 className='alert-heading'>Заказ не найден</h4>
       <div className='alert-body'>
       Информация о заказе с id: {id} не доступка. Проверьте список заказов:{' '}
         <Link to='/apps/food/orders/list'>Список заказов</Link>
       </div>
     </Alert>
-    )}
-  </>  
   )
 }
 

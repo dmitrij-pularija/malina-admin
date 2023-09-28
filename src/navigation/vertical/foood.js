@@ -114,6 +114,12 @@ export default [
         title: 'Staff rating',
         icon: <Circle size={12} />,
         navLink: '/apps/food/rating/waiters/list'
+      },
+      {
+        id: 'productComplaints',
+        title: 'Complaints',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/rating/complaints/list'
       }
     ]
   }

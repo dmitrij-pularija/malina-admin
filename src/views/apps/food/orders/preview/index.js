@@ -21,7 +21,7 @@ const OrderPreview = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { selectedOrder, status } = useSelector(state => state.orders)
+  const { selectedOrder, status, loading } = useSelector(state => state.orders)
   const [sidebarOpen, setSidebarOpen] = useState(false)
   // const [addPaymentOpen, setAddPaymentOpen] = useState(false)
 
@@ -90,13 +90,12 @@ const handleDelOrder = (id) => {
       <SidebarChangeStatatus toggleSidebar={toggleSidebar} open={sidebarOpen} statuses={status} selectedOrder={selectedOrder}/>
     </div>
   ) : (
-    <Alert color='danger'>
+    loading ? <Loading /> : <Alert color='danger'>
       <h4 className='alert-heading'>Заказ не найден</h4>
       <div className='alert-body'>
       Информация о заказе с id: {id} не доступка. Проверьте список заказов:{' '}
         <Link to='/apps/food/orders/list'>Список заказов</Link>
-      </div>
-    <Loading />  
+      </div> 
     </Alert>
   )
 }

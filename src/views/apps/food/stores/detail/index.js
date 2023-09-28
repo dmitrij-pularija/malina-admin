@@ -25,7 +25,6 @@ const Details = () => {
   }, [])
 
   return (
-    loading ? <Loading /> : (
     <Fragment>
       <BreadCrumbs
         title="Информация о заведении"
@@ -39,13 +38,16 @@ const Details = () => {
         <Card>
           <CardBody>
             {selectedStore && categories.length && subcategories.length ? (
+              <>
               <StoreDetails
                 categories={categories}
                 subcategories={subcategories}
                 selectedStore={selectedStore}
               />
+              <Loading />
+              </>
             ) : (
-              <Alert color="danger">
+              loading ? <Loading /> : <Alert color="danger">
                 <h4 className="alert-heading">Заведение не найдено</h4>
                 <div className="alert-body">
                   Информация о заведении с id: {id} не доступка. Проверьте
@@ -58,7 +60,7 @@ const Details = () => {
         </Card>
       </div>
     </Fragment>
-  ))
+  )
 }
 
 export default Details

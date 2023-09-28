@@ -56,17 +56,17 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
   }, [])  
   
   const values = selectedOrder ? {
-    name: selectedOrder.delivery_address.name ? selectedOrder.delivery_address.name : '',
-    city: selectedOrder.delivery_address.city ? selectedOrder.delivery_address.city : '',
-    street: selectedOrder.delivery_address.street ? selectedOrder.delivery_address.street : '',
-    houseNumber: selectedOrder.delivery_address.house_number ? selectedOrder.delivery_address.house_number : '',
-    entrance: selectedOrder.delivery_address.entrance ? selectedOrder.delivery_address.entrance : '',
-    floor: selectedOrder.floor ? selectedOrder.floor : '',
-    phoneNumber: selectedOrder.delivery_address.phone_number ? selectedOrder.delivery_address.phone_number : '',
-    deliveryPrice: selectedOrder.delivery_address.delivery_price ? selectedOrder.delivery_address.delivery_price : '',
-    location: selectedOrder.delivery_address.location ? selectedOrder.delivery_address.location : '',
-    longitude: selectedOrder.delivery_address.longitude ? selectedOrder.delivery_address.longitude : '',
-    latitude: selectedOrder.delivery_address.latitude ? selectedOrder.delivery_address.latitude : '',
+    name: selectedOrder.delivery_address && selectedOrder.delivery_address.name ? selectedOrder.delivery_address.name : '',
+    city: selectedOrder.delivery_address && selectedOrder.delivery_address.city ? selectedOrder.delivery_address.city : '',
+    street: selectedOrder.delivery_address && selectedOrder.delivery_address.street ? selectedOrder.delivery_address.street : '',
+    houseNumber: selectedOrder.delivery_address && selectedOrder.delivery_address.house_number ? selectedOrder.delivery_address.house_number : '',
+    entrance: selectedOrder.delivery_address && selectedOrder.delivery_address.entrance ? selectedOrder.delivery_address.entrance : '',
+    floor: selectedOrder.delivery_address && selectedOrder.floor ? selectedOrder.floor : '',
+    phoneNumber: selectedOrder.delivery_address && selectedOrder.delivery_address.phone_number ? selectedOrder.delivery_address.phone_number : '',
+    deliveryPrice: selectedOrder.delivery_price ? selectedOrder.delivery_price : '',
+    location: selectedOrder.delivery_address && selectedOrder.delivery_address.location ? selectedOrder.delivery_address.location : '',
+    longitude: selectedOrder.delivery_address && selectedOrder.delivery_address.longitude ? selectedOrder.delivery_address.longitude : '',
+    latitude: selectedOrder.delivery_address && selectedOrder.delivery_address.latitude ? selectedOrder.delivery_address.latitude : '',
     timeDelivery: selectedOrder.time_delivery ? selectedOrder.time_delivery : '',
     rdt: selectedOrder.requested_delivery_time ? formatStringTime(selectedOrder.requested_delivery_time) : '',
     comment: selectedOrder.comment ? selectedOrder.comment : ''
