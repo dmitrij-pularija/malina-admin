@@ -155,10 +155,10 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const RatingStoresList = ({users, stores}) => {
+const ProductComplaintsList = () => {
   // ** Store Vars
   const dispatch = useDispatch()
-  const { data, total} = useSelector(state => state.ratingStores)
+  const { data, total} = useSelector(state => state.productComplaints)
 
   // ** States
   const [sort, setSort] = useState('+')
@@ -166,7 +166,7 @@ const RatingStoresList = ({users, stores}) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('date')
   const [rowsPerPage, setRowsPerPage] = useState(20)
-  const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
+  // const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
   // ** Function to toggle sidebar
 
   // ** Get data on mount
@@ -176,17 +176,16 @@ const RatingStoresList = ({users, stores}) => {
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
-        perPage: rowsPerPage,
-        business_id: currentStore.value
+        perPage: rowsPerPage
       })
     )
   }, [dispatch, data.length, sort, sortColumn, currentPage])
 
-  const storeOptions = stores.map((store) => ({
-    value: String(store.id),
-    label: store.name
-  }))
-  storeOptions.unshift({ value: '', label: 'Показать все' })
+  // const storeOptions = stores.map((store) => ({
+  //   value: String(store.id),
+  //   label: store.name
+  // }))
+  // storeOptions.unshift({ value: '', label: 'Показать все' })
 
   // ** Function in get data on page change
   const handlePagination = page => {
@@ -195,8 +194,7 @@ const RatingStoresList = ({users, stores}) => {
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: rowsPerPage,
-        page: page.selected + 1,
-        business_id: currentStore.value
+        page: page.selected + 1
       })
     )
     setCurrentPage(page.selected + 1)
@@ -210,8 +208,7 @@ const RatingStoresList = ({users, stores}) => {
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         perPage: value,
-        page: currentPage,
-        business_id: currentStore.value
+        page: 1
       })
     )
     setRowsPerPage(value)
@@ -223,9 +220,9 @@ const RatingStoresList = ({users, stores}) => {
     dispatch(
       getData({
         ordering: `${sort}${sortColumn}`,
+        search: searchTerm,
         page: currentPage,
-        perPage: rowsPerPage,
-        business_id: currentStore.value
+        perPage: 1
       })
     )
   }
@@ -256,7 +253,6 @@ const RatingStoresList = ({users, stores}) => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      business_id: currentStore.value,
       search: searchTerm
     }
 
@@ -281,15 +277,14 @@ const RatingStoresList = ({users, stores}) => {
         ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
-        perPage: rowsPerPage,
-        business_id: currentStore.value
+        perPage: 1
       })
     )
   }
 
   return (
     <Fragment>
-      <Card>
+      {/* <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -317,7 +312,7 @@ const RatingStoresList = ({users, stores}) => {
             </Col>
           </Row>
         </CardBody>
-      </Card>
+      </Card> */}
 
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
@@ -328,13 +323,13 @@ const RatingStoresList = ({users, stores}) => {
             pagination
             responsive
             paginationServer
-            columns={columns(users, stores)}
+            columns={columns}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
             paginationComponent={CustomPagination}
             data={dataToRender()}
-            noDataComponent={<h6 className='text-capitalize'>Отзывы не найдены</h6>}
+            noDataComponent={<h6 className='text-capitalize'>Жалобы не найдены</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={data}
@@ -351,4 +346,4 @@ const RatingStoresList = ({users, stores}) => {
   )
 }
 
-export default RatingStoresList
+export default ProductComplaintsList

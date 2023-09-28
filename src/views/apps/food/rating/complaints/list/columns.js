@@ -26,54 +26,48 @@ import { formatData } from '@utils'
   }
   }
 
-// ** Renders Client Columns
-
-
-export const columns = (users, stores) => {
-
   const getUserInfo = id => {
-      const foundUser = users.find(item => item.id === id)
-      if (!foundUser) return {name: "User", avatar: "", login: ""}
-      return {name: `${foundUser.name ? foundUser.name : ''} ${foundUser.surname ? foundUser.surname : ''}`, avatar: foundUser.avatar, login: foundUser.login }
-    }
-
-  const renderClient = (id, type) => {
-    let data = {}
-    if (type === "user") data = getUserInfo(id)
-   
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(data)}
-      <div className='d-flex flex-column'>
-        <Link
-          to={`/apps/user/view/${id}`}
-          className='user_name text-truncate text-body d-flex flex-column'
-          onClick={() => store.dispatch(getUser(id))}
-        >
-          <span className='fw-bolder'>{ data.name }</span>
-        <small className='text-truncate text-muted mb-0'>{data.login}</small>
-        </Link>
-      </div>
-    </div>    
-    )
+    const foundUser = users.find(item => item.id === id)
+    if (!foundUser) return {name: "User", avatar: "", login: ""}
+    return {name: `${foundUser.name ? foundUser.name : ''} ${foundUser.surname ? foundUser.surname : ''}`, avatar: foundUser.avatar, login: foundUser.login }
   }
 
-  const renderStoore = (id) => {
-    if (!stores.length) return null
-    const foundStore = stores.find(item => item.id === id)
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(foundStore)}   
-      {/* <Logo2 src={foundStore.image} size={"s"}/> */}
-    <div className='d-flex flex-column ml3'>
-        <span className='fw-bolder'>{foundStore.name}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+const renderClient = (user) => {
+ 
+  return (
+    <div className='d-flex justify-content-left align-items-center'>
+    {getAvatar(user.avatar)}
+    <div className='d-flex flex-column'>
+      <Link
+        to={`/apps/user/view/${user.id}`}
+        className='user_name text-truncate text-body d-flex flex-column'
+        onClick={() => store.dispatch(getUser(user.id))}
+      >
+        <span className='fw-bolder'>{ user.name ? `${user.name} ${user.surname ? user.surname : ''}` : '' }</span>
+      <small className='text-truncate text-muted mb-0'>{user.login}</small>
+      </Link>
     </div>
-  </div>
-    )
-  }
+  </div>    
+  )
+}
 
-  return [
+// const renderStoore = (id) => {
+//   if (!stores.length) return null
+//   const foundStore = stores.find(item => item.id === id)
+//   return (
+//     <div className='d-flex justify-content-left align-items-center'>
+//     {getAvatar(foundStore)}   
+//     {/* <Logo2 src={foundStore.image} size={"s"}/> */}
+//   <div className='d-flex flex-column ml3'>
+//       <span className='fw-bolder'>{foundStore.name}</span>
+//     <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+//   </div>
+// </div>
+//   )
+// }
+
+
+export const columns = [
   {
     name: '№',
     sortable: false,
@@ -85,25 +79,25 @@ export const columns = (users, stores) => {
     name: 'Клиент',
     minWidth: '200px',
     sortable: true,
-    sortField: 'user',
+    sortField: 'user_id.login',
     selector: row => row.user,
-    cell: row => renderClient(row.user, "user")
+    cell: row => renderClient(row.user_id)
   },
   {
-    name: 'Рейтинг',
-    minWidth: '142px',
+    name: 'Блюдо ',
+    minWidth: '200px',
     sortable: true,
-    sortField: 'star.value',
-    selector: row => row.star.value,
-    cell: row => (
-      <Rating
-        readonly
-        fractions={2}
-        direction={'ltr'}
-        initialRating={row.star.value}
-        emptySymbol={<Star size={20} fill='#babfc7' stroke='#babfc7' />}
-        fullSymbol={<Star size={20} fill='#ff9f43' stroke='#ff9f43' />}
-      />)
+    sortField: 'product.rproduct.name',
+    selector: row => row.product,
+    cell: row => row.rproduct.name
+  },
+  {
+    name: 'Артикль ',
+    minWidth: '200px',
+    sortable: true,
+    sortField: 'article.title',
+    selector: row => row.article,
+    cell: row => row.article.title
   },
   {
     name: 'Отзыв',
@@ -118,16 +112,8 @@ export const columns = (users, stores) => {
     name: 'Дата',
     minWidth: '120px',
     sortable: true,
-    sortField: 'date',
-    selector: row => row.date,
-    cell: row => <span className='text-capitalize'>{formatData(row.date)}</span>
-  },
-  {
-    name: 'Заведение',
-    minWidth: '250px',
-    sortable: false,
-    selector: row => row.store,
-    cell: row => renderStoore(row.business)
+    sortField: 'created_at',
+    selector: row => row.created_at,
+    cell: row => <span className='text-capitalize'>{formatData(row.created_at)}</span>
   }
 ]
-}

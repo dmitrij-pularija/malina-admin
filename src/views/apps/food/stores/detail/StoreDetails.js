@@ -7,7 +7,7 @@ import InputPassword from "@components/input-password-toggle"
 import Avatar from "@components/avatar"
 import Select from "react-select"
 import { useForm, Controller } from "react-hook-form"
-import { selectThemeColors, formatTime, dataURLtoBlob, checkIsValid } from "@utils"
+import { selectThemeColors, formatTime, formatTimeSave, formatStringTime, dataURLtoBlob, checkIsValid } from "@utils"
 import { addStore, editStore } from "../store"
 import ModalPassword from "./ModalPassword"
 import ModalІShifts from "./ModalІShifts"
@@ -56,7 +56,6 @@ const defaultValues = {
   whatsapp: "",
   percentage: 0,
   percentService: 0,
-  deliverycost: 0,
   avgcheck: 0,
   slogan: "",
   description: "",
@@ -77,7 +76,6 @@ const requiredFields = [
   "longitude",
   "latitude",
   "business",
-  "type",
   "category"
 ]
 // const checkIsValid = (data) => {
@@ -204,7 +202,6 @@ const Store = (props) => {
       values.whatsapp = selectedStore.whatsapp ? selectedStore.whatsapp : defaultValues.whatsapp
       values.percentage = selectedStore.percentage ? selectedStore.percentage : defaultValues.percentage
       values.percentService = selectedStore.service_charge ? selectedStore.service_charge : defaultValues.percentService
-      values.deliverycost = 0
       values.avgcheck = selectedStore.average_check ? selectedStore.average_check : defaultValues.avgcheck
       values.slogan = selectedStore.slogan ? selectedStore.slogan : defaultValues.slogan
       values.description = selectedStore.description ? selectedStore.description : defaultValues.description
@@ -233,8 +230,8 @@ const Store = (props) => {
               (i) => parseInt(i.value) === parseInt(selectedStore.price_level)
             )
           ] : defaultValues.priceLevel
-      values.timeBeg = selectedStore.work_time_start ? selectedStore.work_time_start.toString() : ""
-      values.timeEnd = selectedStore.work_time_end ? selectedStore.work_time_end.toString() : ""
+      values.timeBeg = selectedStore.work_time_start ? formatStringTime(selectedStore.work_time_start) : ""
+      values.timeEnd = selectedStore.work_time_end ? formatStringTime(selectedStore.work_time_end) : ""
     }
   }, [selectedStore])
 
@@ -252,7 +249,7 @@ const Store = (props) => {
   const toggleModal = () => setModalShow(!modalShow)
   const toggleModalShifts = () => setModalShiftsShow(!modalShiftsShow)
   const toggleModalDelivery = () => setModalDeliveryShow(!modalDeliveryShow)
-  const handleClose = () => navigate("/apps/food/stores/list/")
+
   const handleChengPassword = (event) => {
     event.preventDefault()
     if (passwordsMatch) toggleModal()
@@ -309,6 +306,12 @@ const Store = (props) => {
     formState: { errors }
   } = useForm({ defaultValues, values })
 
+  const handleClose = () => {
+    setAvatar("")
+    reset()
+    navigate("/apps/food/stores/list/")
+  }
+
   const handleBusinessChange = (selectedOption) => {
     setValue("category", { value: "", label: "Выбирите категорию" })
     setValue("subcategory", { value: "", label: "Выбирите подкатегорию" })
@@ -339,6 +342,7 @@ const Store = (props) => {
   }
 
   const onSubmit = (data) => {
+    // console.log(data)
     if (checkIsValid(data, requiredFields)) {
       if (!passwords.newPassword && !selectedStore) return toggleModal()
       const formData = new FormData()
@@ -357,11 +361,11 @@ const Store = (props) => {
       if (data.percentService) formData.append("service_charge", data.percentService)
       if (data.timeBeg) formData.append(
           "work_time_start",
-          !selectedStore ? formatTime(data.timeBeg) : data.timeBeg
+          data.timeBeg
         )
       if (data.timeEnd) formData.append(
           "work_time_end",
-          !selectedStore ? formatTime(data.timeEnd) : data.timeEnd
+          data.timeEnd
         )
       if (data.telegram) formData.append("telegram", data.telegram)
       if (data.instagram) formData.append("instagram", data.instagram)
@@ -380,13 +384,13 @@ const Store = (props) => {
         formData.append("image", avatarBlob, "logo.jpg")
       }
       if (selectedStore) {
-        dispatch(editStore({ id: selectedStore.id, formData }))
+        dispatch(editStore({ id: selectedStore.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
-        dispatch(addStore(formData))
+        dispatch(addStore(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
-      setAvatar("")
-      reset()
-      navigate("/apps/food/stores/list/")
+      // setAvatar("")
+      // reset()
+      // navigate("/apps/food/stores/list/")
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -524,7 +528,7 @@ const Store = (props) => {
                   )}
                 />
               </Col>
-              <Col>
+              {/* <Col>
                 <Label className="form-label" for="type">
                   Тип заведения <span className="text-danger">*</span>
                 </Label>
@@ -552,7 +556,7 @@ const Store = (props) => {
                 {errors && errors.type && (
                   <FormFeedback>Пожалуйста выберите тип заведения</FormFeedback>
                 )}
-              </Col>
+              </Col> */}
               <Col>
                 <Label className="form-label" for="merchantId">
                   Id Merchant
@@ -870,11 +874,11 @@ const Store = (props) => {
                   <FormFeedback>Пожалуйста введите широту</FormFeedback>
                 )}
               </Col>
-              <Col className="mt-2">
+              {/* <Col className="mt-2">
                 <Button color="info" block>
                   Выбрать на карте
                 </Button>
-              </Col>
+              </Col> */}
               <Col className="mt-2">
                 <Label className="form-label" for="timeBeg">
                   Время работы
@@ -898,7 +902,7 @@ const Store = (props) => {
                             dateFormat: "H:i",
                             time_24hr: true
                           }}
-                          onChange={(date) => setValue("timeBeg", date)}
+                          onChange={(date) => setValue("timeBeg", formatTimeSave(date))}
                         />
                       )}
                     />
@@ -921,7 +925,7 @@ const Store = (props) => {
                             dateFormat: "H:i",
                             time_24hr: true
                           }}
-                          onChange={(date) => setValue("timeEnd", date)}
+                          onChange={(date) => setValue("timeEnd", formatTimeSave(date))}
                         />
                       )}
                     />
@@ -979,7 +983,7 @@ const Store = (props) => {
                 </div>
               </Col>
               <Col className="d-flex justify-content-between gap-30">
-                <div>
+                {/* <div>
                   <Label className="form-label" for="deliverycost">
                     Доставка, &#x0441;&#x332;
                   </Label>
@@ -1003,7 +1007,7 @@ const Store = (props) => {
                       Пожалуйста введите cтоимость доставки
                     </FormFeedback>
                   )}
-                </div>
+                </div> */}
                 <div>
                   <Label className="form-label" for="avgcheck">
                     Средний чек, &#x0441;&#x332;
