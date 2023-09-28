@@ -159,7 +159,7 @@ const RatingWaitersList = ({stores}) => {
   // ** Store Vars
   const dispatch = useDispatch()
   const { data, total} = useSelector(state => state.ratingOrders)
-
+ 
   // ** States
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')

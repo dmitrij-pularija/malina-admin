@@ -15,16 +15,16 @@ import { getOrder } from '../../../orders/store'
 import { getUser } from '../../../../user/store'
 
 
-const renderClient = row => {
-  if (row.user.avatar) {
-    return <Avatar className='me-1' img={row.user.avatar} width='32' height='32' />
+const renderClient = (avatar, name) => {
+  if (avatar) {
+    return <Avatar className='me-1' img={avatar} width='32' height='32' />
   } else {
     return (
       <Avatar
         initials
         className='me-1'
         color={'light-primary'}
-        content={row.user.name ? `${row.user.name} ${row.user.surname}` : 'User'}
+        content={name}
       />
     )
   }
@@ -34,7 +34,7 @@ export const columns = [
   {
     name: '№',
     sortable: false,
-    minWidth: '30px',
+    width: '50px',
     selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
@@ -42,7 +42,7 @@ export const columns = [
     name: 'Заказ',
     sortable: true,
     minWidth: '110px',
-    sortField: 'row.order.id',
+    sortField: 'order.id',
     selector: row => row,
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
@@ -52,7 +52,7 @@ export const columns = [
             onClick={() => store.dispatch(getOrder(row.order.id))}
           >
             <span className='fw-bolder'>{row.order.id}</span>
-            <span className='text-capitalize'>{formatData(row.order.date)}</span>
+            <span className='text-capitalize'>{formatData(row.order.order_date)}</span>
           </Link>
       </div>
     )
@@ -61,11 +61,11 @@ export const columns = [
     name: 'Клиент',
     sortable: true,
     minWidth: '200px',
-    sortField: 'login',
+    sortField: 'user.login',
     selector: row => row,
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row)}
+        {renderClient(row.user.avatar, row.user.name ? `${row.user.name} ${row.user.surname}` : 'User')}
         <div className='d-flex flex-column'>
           <Link
             to={`/apps/user/view/${row.user.id}`}
@@ -115,14 +115,15 @@ export const columns = [
     name: 'Заведение',
     sortable: true,
     minWidth: '250px',
-    sortField: 'storeId',
+    sortField: 'business.name',
     selector: row => row,
      cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
-          <Logo2 src={row.store.image} size={"s"}/>
+          {/* <Logo2 src={row.business.image} size={"s"}/> */}
+          {renderClient(row.business.image, row.business.name ? row.business.name : "Заведение")}
         <div className='d-flex flex-column ml3'>
-            <span className='fw-bolder'>{row.store.name}</span>
-          <small className='text-truncate text-muted mb-0'>{row.store.storeaddress.name}</small>
+            <span className='fw-bolder'>{row.business.name}</span>
+          <small className='text-truncate text-muted mb-0'>{row.business.business_address.name}</small>
         </div>
       </div>
     )

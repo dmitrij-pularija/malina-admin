@@ -93,6 +93,9 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .gap-30 {
   gap: 30px;
 }
+// .w-100 {
+//   max-width: 100px;
+// }
 .p-25 {
   padding: 25px;
 }
@@ -149,7 +152,9 @@ background: #f8f8f821;
   .width-70 {
     width: 70px;
   }
-
+  .width-120 {
+    width: 120px;
+  }
   // #timeEnd_time {
   //   position: absolute;
   //   width: 100px;
@@ -163,4 +168,14 @@ background: #f8f8f821;
 
   // #timeEnd .flatpickr-calendar {
   //   max-width: 100px;
+  // }
+  // .igt {
+  //   padding: 0.571rem 1rem;
+  //   text-align: center;
+  //   background-color: #fff;
+  //   border: 1px solid #d8d6de;
+  //   border-radius: 0.357rem;
+  // }
+  // .pl {
+  //   padding-left: 0px;
   // }

@@ -68,6 +68,8 @@ const defaultValues = {
   timeEnd: ""
 }
 
+
+
 const requiredFields = [
   "name",
   "login",
@@ -664,7 +666,7 @@ const Store = (props) => {
                   <FormFeedback>Пожалуйста введите Логин</FormFeedback>
                 )}
               </Col>
-              <Col className="mb-2">
+              <Col>
                 <Label className="form-label" for="login">
                   Логин<span className="text-danger">*</span>
                 </Label>
@@ -685,13 +687,13 @@ const Store = (props) => {
                   <FormFeedback>Пожалуйста введите Логин</FormFeedback>
                 )}
               </Col>
-              <Col className="mt-2">
+              <Col className="mt-3 pb-0">
                 <Button color="warning" block onClick={toggleModal}>
                   Установить новый пароль<span className="text-danger">*</span>
                 </Button>
               </Col>
 
-              <Col className="mt-2">
+              <Col>
                 <Label className="form-label" for="secretKey">
                   Secret Key
                 </Label>
@@ -719,7 +721,7 @@ const Store = (props) => {
                 <InputGroup className="input-group-merge">
                   <InputGroupText>
                     <img
-                      className="img-fluid bg-transparent"
+                      className={classnames("img-fluid", "bg-transparent")}
                       src={instagramIcon}
                       alt={"Инстаграм"}
                       height="18"
@@ -747,7 +749,7 @@ const Store = (props) => {
                 <InputGroup className="input-group-merge">
                   <InputGroupText>
                     <img
-                      className="img-fluid bg-transparent"
+                      className={classnames("img-fluid", "bg-transparent")}
                       src={whatsappIcon}
                       alt={"WhatsApp"}
                       height="18"
@@ -771,7 +773,7 @@ const Store = (props) => {
                 <InputGroup className="input-group-merge">
                   <InputGroupText>
                     <img
-                      className="img-fluid bg-transparent"
+                      className={classnames("img-fluid", "bg-transparent")}
                       src={telegramIcon}
                       alt={"Telegram"}
                       height="18"
@@ -853,7 +855,7 @@ const Store = (props) => {
                   <FormFeedback>Пожалуйста введите долготу</FormFeedback>
                 )}
               </Col>
-              <Col className="mb-2">
+              <Col className="mb-5">
                 <Label className="form-label" for="latitude">
                   Широта<span className="text-danger">*</span>
                 </Label>
@@ -879,7 +881,7 @@ const Store = (props) => {
                   Выбрать на карте
                 </Button>
               </Col> */}
-              <Col className="mt-2">
+              <Col className="mt-5">
                 <Label className="form-label" for="timeBeg">
                   Время работы
                 </Label>
@@ -932,7 +934,7 @@ const Store = (props) => {
                   </div>
                 </div>
               </Col>
-              <Col className="d-flex justify-content-center gap-30">
+              <Col className="d-flex justify-content-center gap-30 mt-1">
                 <div>
                   <Label className="form-label" for="percentage">
                     Скидка
@@ -982,7 +984,7 @@ const Store = (props) => {
                   />
                 </div>
               </Col>
-              <Col className="d-flex justify-content-between gap-30">
+              <Col className="d-flex justify-content-between gap-30 mt-1">
                 {/* <div>
                   <Label className="form-label" for="deliverycost">
                     Доставка, &#x0441;&#x332;
@@ -1008,7 +1010,30 @@ const Store = (props) => {
                     </FormFeedback>
                   )}
                 </div> */}
-                <div>
+                 <div>
+                <Label className="form-label" for="priceLevel">
+                  Уровень цен
+                </Label>
+                <Controller
+                  name="priceLevel"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Select
+                      isClearable={false}
+                      classNamePrefix="select"
+                      options={priceLevelOptions}
+                      theme={selectThemeColors}
+                      placeholder="Уровень цен"
+                      className={classnames("react-select", {
+                        "is-invalid": errors.priceLevel && true
+                      })}
+                      {...field}
+                    />
+                  )}
+                />
+                </div>
+                <div className="width-120" >
                   <Label className="form-label" for="avgcheck">
                     Средний чек, &#x0441;&#x332;
                   </Label>
@@ -1031,29 +1056,9 @@ const Store = (props) => {
                     <FormFeedback>Пожалуйста введите cредний чек</FormFeedback>
                   )}
                 </div>
-              </Col>
-              <Col>
-                <Label className="form-label" for="priceLevel">
-                  Уровень цен
-                </Label>
-                <Controller
-                  name="priceLevel"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-                    <Select
-                      isClearable={false}
-                      classNamePrefix="select"
-                      options={priceLevelOptions}
-                      theme={selectThemeColors}
-                      placeholder="Выбирите уровень цен"
-                      className={classnames("react-select", {
-                        "is-invalid": errors.priceLevel && true
-                      })}
-                      {...field}
-                    />
-                  )}
-                />
+              {/* </Col>
+              <Col> */}
+             
               </Col>
             </Col>
           </Col>

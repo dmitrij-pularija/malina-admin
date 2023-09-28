@@ -27,7 +27,7 @@ export const columns = [
     {
         name: 'Блюдо',
         // sortable: true,
-        width: '25%',
+        minWidth: '30%',
         sortField: 'name',
         cell: row => (
           <div className='d-flex justify-content-left align-items-center'>
@@ -38,42 +38,42 @@ export const columns = [
       },
       {
         name: 'Цена',
-        width: '12%',
+        minWidth: '13%',
         // sortable: true,
         sortField: 'cost',
         cell: row => <span className='right width'>{formatNumber(row.product.cost)}</span>
       },
       {
         name: 'Скидка',
-        width: '12%',
+        minWidth: '14%',
         // sortable: true,
         sortField: 'prime_cost',
         cell: row => <span className='center width'>{`${formatNumberInt(row.product.prime_cost)} %`}</span>
       },
       {
         name: 'К-во',
-        width: '10%',
+        minWidth: '11%',
         // sortable: true,
         sortField: 'quantity',
         cell: row => <span className='center width'>{`${formatNumberInt(row.quantity)}`}</span>
       },
       {
         name: 'добавки',
-        width: '13%',
+        minWidth: '15%',
         // sortable: true,
         sortField: 'total_addon_price',
         cell: row => <span className='right width'>{`${formatNumber(row.total_addon_price)}`}</span>
       },
       {
         name: 'К-во',
-        width: '10%',
+        minWidth: '11%',
         // sortable: true,
         sortField: 'product_addons',
         cell: row => <span className='center width'>{`${formatNumberInt(row.product_addons.length)}`}</span>
       },
       {
         name: 'Итого',
-        width: '12%',
+        minWidth: '13%',
         // sortable: true,
         sortField: 'total_price',
         cell: row => <span className='right width'>{`${formatNumber(row.total_price)}`}</span>
@@ -85,7 +85,7 @@ export const columnsAddons = [
         name: 'Добавка',
         // sortable: true,
         // minWidth: '220px',
-        width: '25%',
+        minWidth: '25%',
         // sortField: 'name',
         cell: row => (
           <div className='d-flex justify-content-left align-items-center'>
@@ -98,7 +98,7 @@ export const columnsAddons = [
       },
     {
         name: 'Цена',
-        width: '12%',
+        minWidth: '12%',
         // sortable: true,
         // minWidth: '70px',
         // sortField: 'price',
@@ -106,7 +106,7 @@ export const columnsAddons = [
       },
       {
         name: 'К-во',
-        width: '10%',
+        minWidth: '10%',
         // minWidth: '130px',
         // sortable: true,
         // sortField: 'quantity',
