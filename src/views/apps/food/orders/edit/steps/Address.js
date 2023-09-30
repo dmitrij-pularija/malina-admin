@@ -11,7 +11,7 @@ import { selectThemeColors, checkIsValid, initSelect, formatTimeSave, formatStri
 import { Label, Row, Col, Input, Form, Button, FormFeedback } from 'reactstrap'
 import "@styles/react/libs/flatpickr/flatpickr.scss"
 import '@styles/react/libs/react-select/_react-select.scss'
-import { data } from 'jquery'
+// import { data } from 'jquery'
 
 const defaultValues = {
   name: '',

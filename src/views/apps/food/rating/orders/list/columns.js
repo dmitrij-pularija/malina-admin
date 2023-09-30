@@ -35,7 +35,6 @@ export const columns = [
     name: '№',
     sortable: false,
     width: '50px',
-    selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
@@ -43,16 +42,15 @@ export const columns = [
     sortable: true,
     minWidth: '110px',
     sortField: 'order.id',
-    selector: row => row,
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
           <Link
-            to={`/apps/food/orders/preview/${row.order.id}`}
+            to={`/apps/food/orders/preview/${row.order ? row.order.id : ''}`}
             className='user_name text-truncate text-body d-flex flex-column'
             onClick={() => store.dispatch(getOrder(row.order.id))}
           >
-            <span className='fw-bolder'>{row.order.id}</span>
-            <span className='text-capitalize'>{formatData(row.order.order_date)}</span>
+            <span className='fw-bolder'>{row.order ? row.order.id : ''}</span>
+            <span className='text-capitalize'>{formatData(row.order ? row.order.order_date : '')}</span>
           </Link>
       </div>
     )
@@ -123,7 +121,7 @@ export const columns = [
           {renderClient(row.business.image, row.business.name ? row.business.name : "Заведение")}
         <div className='d-flex flex-column ml3'>
             <span className='fw-bolder'>{row.business.name}</span>
-          <small className='text-truncate text-muted mb-0'>{row.business.business_address.name}</small>
+          <small className='text-truncate text-muted mb-0'>{`${row.business.business_address.city} ${row.business.business_address.name}`}</small>
         </div>
       </div>
     )
