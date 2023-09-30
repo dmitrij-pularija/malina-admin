@@ -65,7 +65,9 @@ const defaultValues = {
   subcategory: "",
   priceLevel: "",
   timeBeg: "",
-  timeEnd: ""
+  timeEnd: "",
+  isCardPaymentAllow: false,
+  isStaff: false
 }
 
 
@@ -207,6 +209,9 @@ const Store = (props) => {
       values.avgcheck = selectedStore.average_check ? selectedStore.average_check : defaultValues.avgcheck
       values.slogan = selectedStore.slogan ? selectedStore.slogan : defaultValues.slogan
       values.description = selectedStore.description ? selectedStore.description : defaultValues.description
+      values.isCardPaymentAllow = selectedStore.is_card_payment_allow ? selectedStore.is_card_payment_allow : defaultValues.isCardPaymentAllow
+      values.isStaff = selectedStore.is_staff ? selectedStore.is_staff : defaultValues.isStaff
+      
       values.business = selectedStore.business_type ? businessTypeOptions[
             businessTypeOptions.findIndex(
               (i) => parseInt(i.value) === parseInt(selectedStore.business_type)
@@ -236,6 +241,9 @@ const Store = (props) => {
       values.timeEnd = selectedStore.work_time_end ? formatStringTime(selectedStore.work_time_end) : ""
     }
   }, [selectedStore])
+
+
+ 
 
   const handlePasswordChange = (event) => {
     const { name, value } = event.target
@@ -307,6 +315,28 @@ const Store = (props) => {
     handleSubmit,
     formState: { errors }
   } = useForm({ defaultValues, values })
+
+  useEffect(() => {
+    if (categories.length) {
+    const filteredCategories = selectedStore ? categories.filter(
+      (category) => parseInt(category.category_type) === parseInt(selectedStore.business_type)
+    ) : categories
+    
+    const newOption = filteredCategories.map((category) => ({
+        value: String(category.id),
+        label: category.name
+      }))
+    setCategoryOptions(newOption)
+    setValue("category", 
+    selectedStore ? newOption[
+      newOption.findIndex(
+        (i) => parseInt(i.value) === parseInt(selectedStore.category)
+      )
+    ] : ''
+    )
+  }
+
+}, [categories])
 
   const handleClose = () => {
     setAvatar("")
@@ -381,6 +411,9 @@ const Store = (props) => {
       if (data.priceLevel) formData.append("price_level", parseInt(data.priceLevel.value))
       if (data.merchantId) formData.append("merchant_id", data.merchantId)
       if (data.secretKey) formData.append("pay_secret_key", data.secretKey)
+      if (data.isCardPaymentAllow) formData.append("is_card_payment_allow", data.isCardPaymentAllow)
+      if (data.isStaff) formData.append("is_staff", data.isStaff)
+
       if (avatar && avatar.startsWith("data:image")) {
         const avatarBlob = dataURLtoBlob(avatar)
         formData.append("image", avatarBlob, "logo.jpg")
@@ -881,7 +914,7 @@ const Store = (props) => {
                   Выбрать на карте
                 </Button>
               </Col> */}
-              <Col className="mt-5">
+              <Col className="mt-1">
                 <Label className="form-label" for="timeBeg">
                   Время работы
                 </Label>
@@ -1060,6 +1093,36 @@ const Store = (props) => {
               <Col> */}
              
               </Col>
+          <Col className="mt-1">
+          <div className='form-check form-check-primary'>
+          <Controller
+            name='isCardPaymentAllow'
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input id='isCardPaymentAllow'  type='checkbox' checked={field.value} {...field} />
+            )}
+          />
+          <Label className='form-label' for='isCardPaymentAllow'>
+          Оплата картой разрешена
+          </Label>
+        </div>
+              </Col> 
+          <Col className="mt-1">
+          <div className='form-check form-check-primary'>
+          <Controller
+            name='isStaff'
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input id='isStaff'  type='checkbox' checked={field.value} {...field} />
+            )}
+          />
+          <Label className='form-label' for='isStaff'>
+          Персонал
+          </Label>
+        </div>
+              </Col>         
             </Col>
           </Col>
         </Row>

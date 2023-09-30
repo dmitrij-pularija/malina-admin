@@ -37,7 +37,7 @@ const Details = () => {
       <div className="app-ecommerce-details">
         <Card>
           <CardBody>
-            {selectedStore && categories.length && subcategories.length ? (
+            {selectedStore ? (
               <>
               <StoreDetails
                 categories={categories}
