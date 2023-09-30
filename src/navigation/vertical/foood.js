@@ -1,5 +1,5 @@
 // ** Icons Import
-import { Grid, Clipboard, GitBranch, BookOpen, Award, Circle, ShoppingCart, Users, Shield } from 'react-feather'
+import { Grid, Clipboard, FileText, BookOpen, Award, Circle, ShoppingCart, Users, Shield } from 'react-feather'
 
 export default [
   {
@@ -122,5 +122,11 @@ export default [
         navLink: '/apps/food/rating/complaints/list'
       }
     ]
-  }
+  },
+  {
+    id: 'feeds',
+    title: 'Feeds',
+    icon: <FileText size={20} />,
+    navLink: '/apps/feed/list'
+  },
 ]
