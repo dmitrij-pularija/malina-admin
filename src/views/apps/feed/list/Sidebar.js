@@ -1,13 +1,13 @@
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import Sidebar from '@components/sidebar'
-import { selectThemeColors, checkIsValid, dataURLtoBlob } from '@utils'
+import { selectThemeColors, checkIsValid, dataURLtoBlob, initSelect } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
 import { Button, Label, FormFeedback, Form, Input } from 'reactstrap'
 import Avatar from '@components/avatar'
-import { addFeed, editFeed } from '../store'
+import { getFeeds, addFeed, editFeed } from '../store'
 import { feedsType } from "../../../../configs/initial"
 
 const defaultValues = {
@@ -31,7 +31,16 @@ const requiredFields = ["title", "business", "type"]
 
 const renderAvatar = data => {
   if (data.avatar) {
-    return <Avatar className='rounded me-1' img={data.avatar} style={{ height: "150px", width: "150px" }} />
+    return <img
+    height='150'
+    width='150'
+    alt='Feed picture'
+    src={data.avatar}
+    className='img-fluid rounded'
+    style={{ height: "150px", width: "150px" }}
+  />
+
+    // return <Avatar className='rounded me-1' img={data.avatar} style={{ height: "150px", width: "150px" }} />
   } else {
     return (
       <Avatar
@@ -51,7 +60,7 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSelectedСhef }) => {
+const SidebarFeed = ({ stores, open, toggleSidebar, selectedFeed, setSelectedFeed }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
 
@@ -65,10 +74,13 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
     label: feedsType[key]
   }))
 
-  const values = selectedСhef ? {
-    title: selectedСhef.name ? selectedСhef.name : '',
-    telegramId: selectedСhef.telegram_id ? selectedСhef.telegram_id : '',
-    business: storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedСhef.business))]} : {}
+  const values = selectedFeed ? {
+    title: selectedFeed.title ? selectedFeed.title : '',
+    subtitle: selectedFeed.subtitle ? selectedFeed.subtitle : '',
+    text: selectedFeed.text ? selectedFeed.text : '',
+    business: initSelect(storeOptions, selectedFeed.business.id),
+    type: initSelect(feedsTypeOptions, selectedFeed.type)
+    } : {}
 
   const {
     reset,
@@ -95,8 +107,9 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
     }
       setAvatar('')
       toggleSidebar()
-      setSelectedСhef('')
+      setSelectedFeed('')
       reset({...defaultValues})
+      dispatch(getFeeds())
   }
 
   const handleImgReset = () => {
@@ -106,15 +119,18 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
   const onSubmit = data => {
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData();
-      formData.append('telegram_id', data.telegramId)
+      formData.append('title', data.title)
       formData.append('business', data.business.value)
-      if (data.name) formData.append('name', data.name)
+      formData.append('type', data.type.value)
+      if (data.subtitle) formData.append('subtitle', data.subtitle)
+      if (data.text) formData.append('text', data.text)
+
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
-        formData.append('icon', avatarBlob, 'category.jpg')
+        formData.append('image', avatarBlob, 'feed.jpg')
       }
-      if (selectedСhef) {
-          dispatch(editFeed({ id: selectedСhef.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+      if (selectedFeed) {
+          dispatch(editFeed({ id: selectedFeed.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
         } else {
           dispatch(addFeed(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
         } 
@@ -133,7 +149,7 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
     <Sidebar
       size='lg'
       open={open}
-      title={selectedСhef ? 'Редактирование публикации' : 'Создание новой публикации'}
+      title={selectedFeed ? 'Редактирование публикации' : 'Создание новой публикации'}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
@@ -141,7 +157,7 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
       <Form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-1'>
         <div className='d-flex align-items-center justify-content-center'>
-        {renderAvatar({avatar, name: selectedСhef.name})}
+        {renderAvatar({avatar, name: selectedFeed.title})}
         </div>
         <div className='d-flex align-items-center justify-content-center mt-75'>
               <div>
@@ -255,4 +271,4 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
   )
 }
 
-export default SidebarNewCategory
+export default SidebarFeed

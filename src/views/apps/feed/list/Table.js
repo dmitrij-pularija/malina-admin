@@ -143,18 +143,18 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
 
 const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
-  const { data, total } = useSelector(state => state.chefs)
+  const { data, total } = useSelector(state => state.feeds)
   const [sort, setSort] = useState('+')
   // const [selectedId, setSelectedId] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [selectedСhef, setSelectedСhef] = useState('')
+  const [selectedFeed, setSelectedFeed] = useState('')
   // const [selectedSubCategory, setSelectedSubCategory] = useState('')
   const [sortColumn, setSortColumn] = useState('name')
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
-
+// console.log(data)
   // const typeOptions = [
   //   { value: '', label: 'Показать все' },
   //   { value: '1', label: 'Food' },
@@ -168,17 +168,17 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   storeOptions.unshift({ value: '', label: 'Показать все' })
 
   const handleClose = () => {
-    setSelectedСhef('')
+    setSelectedFeed('')
     setSidebarOpen(false)
    }
-   const handleDelСhef = (event, id) => {
+   const handleDel = (event, id) => {
     event.preventDefault()
     dispatch(deleteFeed(id))
   }
 
-  const handleEditСhef = (event, row) => {
+  const handleEdit = (event, row) => {
     event.preventDefault()
-    setSelectedСhef(row)
+    setSelectedFeed(row)
     toggleSidebar()
   }
 
@@ -317,7 +317,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
             pagination
             responsive
             paginationServer
-            columns={columns(stores, handleEditСhef, handleDelСhef)}
+            columns={columns(handleEdit, handleDel)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -338,7 +338,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
          
         </div>
       </Card>
-      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedСhef={selectedСhef} setSelectedСhef={setSelectedСhef} />
+      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedFeed={selectedFeed} setSelectedFeed={setSelectedFeed} />
     </Fragment>
   )
 }

@@ -1,9 +1,11 @@
 import Avatar from '@components/avatar'
 import { Edit, Trash2 } from 'react-feather'
+import { formatData } from '@utils'
+import { feedsType } from "../../../../configs/initial"
 import { Badge, UncontrolledTooltip, Button, DropdownMenu, DropdownItem } from 'reactstrap'
 
 const getAvatar = data => {
-  if (data && data.avatar && data.avatar.includes("http")) {
+  if (data && data.avatar) {
     return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
   } else {
     return (
@@ -11,7 +13,7 @@ const getAvatar = data => {
         initials
         className='me-1'
         color={'light-primary'}
-        content={data && data.name ? data.name : 'Malina'}
+        content={data && data.title ? data.title : 'Malina'}
       />
     )
   }
@@ -19,15 +21,15 @@ const getAvatar = data => {
 
 
 const renderClient = row => {
-  if (row.icon) {
-    return <Avatar className='me-1' img={row.icon} width='32' height='32' />
+  if (row && row.images.length) {
+    return <Avatar className='rounded me-1' img={row.images[0].image} width='32' height='32' />
   } else {
     return (
       <Avatar
         initials
-        className='me-1'
+        className='rounded me-1'
         color={'light-primary'}
-        content={row.name ? row.name : 'Повар'}
+        content={row.name ? row.name : 'Публикация'}
       />
     )
   }
@@ -42,16 +44,15 @@ const renderClient = row => {
 // }
 
 
-export const columns = (stores, handleEditСhef, handleDelСhef) => {
-  const renderStoore = (id) => {
-    if (!stores.length) return
-    const foundStore = stores.find(item => item.id === id)
+export const columns = (handleEdit, handleDel) => {
+  const renderStoore = (row) => {
+ 
     return (
       <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(foundStore)}  
+      {getAvatar(row.business)}  
     <div className='d-flex flex-column ml3'>
-        <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+        <span className='fw-bolder'>{row.business && row.business.name ? row.business.name : ''}</span>
+      <small className='text-truncate text-muted mb-0'>{row.business && row.business.business_address ? `${row.business.business_address.city} ${row.business.business_address.name}` : ""}</small>
     </div>
   </div>
     )
@@ -61,44 +62,56 @@ return [
   {
     name: '№',
     sortable: false,
-    minWidth: '30px',
+    width: '50px',
     selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Повар',
+    name: 'Пубдикация',
     sortable: true,
-    minWidth: '300px',
-    sortField: 'name',
-    selector: row => row.name,
+    width: '300px',
+    sortField: 'title',
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
         {renderClient(row)}
         <div className='d-flex flex-column'>
-            <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-            <span className='fw-bolder'>{ row.telegram_id ? row.telegram_id : "" }</span>
+            <span className='fw-bolder'>{ row.title ? row.title : "" }</span>
+            <span className='fw-bolder'>{ row.subtitle ? row.subtitle : "" }</span>
         </div>
       </div>
     )
   },
   {
+    name: 'Дата',
+    sortable: false,
+    width: '120px',
+    sortField: 'date',
+    cell: row => <span className='text-capitalize'>{formatData(row.date)}</span>
+  },
+  {
+    name: 'Тип',
+    sortable: false,
+    width: '100px',
+    sortField: 'type',
+    cell: row => <span className='text-capitalize'>{feedsType[row.type]}</span>
+  },
+  {
     name: 'Заведение',
-    minWidth: '138px',
+    width: '300px',
     sortable: true,
-    sortField: 'supplier',
-    selector: row => row,
-    cell: row => renderStoore(parseInt(row.business))
+    sortField: 'business.id',
+    cell: row => renderStoore(row)
   },
   {
     name: 'Действия',
-    minWidth: '100px',
+    width: '120px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
         <Button.Ripple 
         className='btn-icon cursor-pointer' 
         color='transparent' 
         id={`edit-tooltip-${row.id}`}  
-        onClick={event => handleEditСhef(event, row)}>
+        onClick={event => handleEdit(event, row)}>
         <Edit size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
@@ -108,7 +121,7 @@ return [
         className='btn-icon cursor-pointer' 
         color='transparent' 
         id={`del-tooltip-${row.id}`} 
-        onClick={event => handleDelСhef(event, row.id)}>
+        onClick={event => handleDel(event, row.id)}>
           <Trash2 size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>

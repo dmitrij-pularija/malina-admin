@@ -20,7 +20,7 @@ export const getFeeds = createAsyncThunk('appFeeds/getFeeds', async params => {
 export const editFeed = createAsyncThunk('appFeeds/editFeed', async ({ id, formData }, { dispatch, getState }) => {
   try {
   await axios.put(`/feed/article/${id}/`, formData)
-  await dispatch(getFeeds(getState().feeds.params))
+  // await dispatch(getFeeds(getState().feeds.params))
   return { id, formData }
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
@@ -31,7 +31,7 @@ export const editFeed = createAsyncThunk('appFeeds/editFeed', async ({ id, formD
 export const addFeed = createAsyncThunk('appFeeds/addFeed', async (feed, { dispatch, getState }) => {
   try {
   await axios.post('/feed/article/', feed)
-  await dispatch(getFeeds(getState().feeds.params))
+  // await dispatch(getFeeds(getState().feeds.params))
   return feed
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
