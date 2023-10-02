@@ -7,7 +7,7 @@ import classnames from 'classnames'
 import CreatableSelect from 'react-select/creatable';
 import { useForm, Controller } from 'react-hook-form'
 import { Button, Label, Form, Input, FormFeedback } from 'reactstrap'
-import { addWaiter, editWaiter } from '../store'
+import { addMaster, editMaster } from '../store'
 import { useDispatch } from 'react-redux'
 
 const defaultValues = {
@@ -72,7 +72,7 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
+const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedMaster, setSelectedMaster }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
   // const values = {}
@@ -174,9 +174,9 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
         formData.append('profile_picture', avatarBlob, 'avatar.jpg')
       }
       if (selectedWaiter) {
-        dispatch(editWaiter({ id: selectedWaiter.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(editMaster({ id: selectedWaiter.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
-        dispatch(addWaiter(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(addMaster(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
       // setSelectedWaiter('')
       // toggleSidebar()
