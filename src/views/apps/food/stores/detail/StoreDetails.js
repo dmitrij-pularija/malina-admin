@@ -710,14 +710,14 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="login"
-                      placeholder="Введите Логин"
+                      placeholder="Введите логин"
                       invalid={errors.login && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.login && (
-                  <FormFeedback>Пожалуйста введите Логин</FormFeedback>
+                  <FormFeedback>Пожалуйста введите логин</FormFeedback>
                 )}
               </Col>
               <Col className="mt-3 pb-0">
