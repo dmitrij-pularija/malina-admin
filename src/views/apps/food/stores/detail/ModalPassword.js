@@ -31,7 +31,7 @@ const ModalPassword = ({isOpen, toggle, onChange, chengPassword, passwords, pass
       >
         <div className="mb-1">
           <Label className="form-label" for="new-password">
-            Новый пароль
+            Пароль
           </Label>
           <InputPassword
             className="input-group-merge"
