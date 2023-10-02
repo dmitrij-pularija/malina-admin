@@ -722,7 +722,7 @@ const Store = (props) => {
               </Col>
               <Col className="mt-3 pb-0">
                 <Button color="warning" block onClick={toggleModal}>
-                  Установить новый пароль<span className="text-danger">*</span>
+                Введите пароль<span className="text-danger">*</span>
                 </Button>
               </Col>
 

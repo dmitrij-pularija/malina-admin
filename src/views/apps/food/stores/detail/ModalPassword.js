@@ -64,7 +64,7 @@ const ModalPassword = ({isOpen, toggle, onChange, chengPassword, passwords, pass
         </div>
 
         <Button color="primary" block>
-          Установить новый пароль
+          Сохранить пароль
         </Button>
       </Form>
     </ModalBody>

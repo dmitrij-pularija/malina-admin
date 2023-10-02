@@ -7,6 +7,7 @@ import { getCategories, getSubCategories, deleteCategory, deleteSubCategory } fr
 import { useDispatch, useSelector } from 'react-redux'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
+import { businessType } from "../../../../../configs/initial"
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy, Plus} from 'react-feather'
 import {
   Row,
@@ -158,12 +159,18 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const [selectedSubCategory, setSelectedSubCategory] = useState('')
   const [sortColumn, setSortColumn] = useState('name')
   const [currentType, setCurrentType] = useState({ value: '', label: 'Выбирите тип' })
+  
+  // const typeOptions = [
+  //   { value: '', label: 'Показать все' },
+  //   { value: '1', label: 'Food' },
+  //   { value: '2', label: 'Beauty' }
+  // ]
 
-  const typeOptions = [
-    { value: '', label: 'Показать все' },
-    { value: '1', label: 'Food' },
-    { value: '2', label: 'Beauty' }
-  ]
+  const typeOptions = Object.keys(businessType).map((key) => ({
+    value: parseInt(key),
+    label: businessType[key]
+  }))
+  typeOptions.unshift({ value: '', label: 'Показать все' })
 
   // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const handleClose = () => {

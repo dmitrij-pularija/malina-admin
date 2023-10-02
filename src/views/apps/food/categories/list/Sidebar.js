@@ -9,6 +9,7 @@ import { Button, Label, FormFeedback, Form, Input } from 'reactstrap'
 import Avatar from '@components/avatar'
 import { addCategory, addSubCategory, editCategory, editSubCategory } from '../store'
 import { useDispatch } from 'react-redux'
+import { businessType } from "../../../../../configs/initial"
 
 const defaultValues = {
   name: '',
@@ -16,10 +17,15 @@ const defaultValues = {
   available: ''
 }
 
-const typeOptions = [
-  { value: 1, label: 'Food' },
-  { value: 2, label: 'Beauty' }
-]
+// const typeOptions = [
+//   { value: 1, label: 'Food' },
+//   { value: 2, label: 'Beauty' }
+// ]
+
+const businessOptions = Object.keys(businessType).map((key) => ({
+  value: parseInt(key),
+  label: businessType[key]
+}))
 
 const requiredFields = ["name", "type"]
 
@@ -67,7 +73,7 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
 
   const values = item ? {
     name: item.name,
-    type: selectedSubCategory ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(item.category))] : typeOptions[typeOptions.findIndex(i => parseInt(i.value) === parseInt(item.category_type))],
+    type: selectedSubCategory ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(item.category))] : businessOptions[businessOptions.findIndex(i => parseInt(i.value) === parseInt(item.category_type))],
     available: typeof item.available === 'boolean' ? item.available : ''
    } : selectedId ? {name: '', type: categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedId))], available: ''} : {}
 
@@ -220,7 +226,7 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
                 id='type'
                 isClearable={false}
                 classNamePrefix='select'
-                options={selectedId ? categoryOptions : typeOptions}
+                options={selectedId ? categoryOptions : businessOptions}
                 theme={selectThemeColors}
                 placeholder={selectedId ? "Выберите категорию" : "Выберите тип"}
                 className={classnames('react-select', { 'is-invalid': errors.type && true })}
