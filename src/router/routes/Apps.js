@@ -53,7 +53,10 @@ const Permissions = lazy(() => import('../../views/apps/roles-permissions/permis
 const WaitersList = lazy(() => import('../../views/apps/user/waiters/list'))
 const WaitersView = lazy(() => import('../../views/apps/user/waiters/view'))
 const Сhefs = lazy(() => import('../../views/apps/user/chefs/list'))
+const Masters = lazy(() => import('../../views/apps/user/masters/list'))
+
 const Feeds = lazy(() => import('../../views/apps/feed/list'))
+const Specialties = lazy(() => import('../../views/apps/beauty/specialties/list'))
 
 const AppRoutes = [
   {
@@ -158,9 +161,18 @@ const AppRoutes = [
     path: '/apps/user/chefs/list'
   },
   {
+    element: <Masters />,
+    path: '/apps/user/masters/list'
+  },
+  {
     element: <Feeds />,
     path: '/apps/feed/list'
   },
+  {
+    element: <Specialties />,
+    path: '/apps/beauty/specialties/list'
+  },
+
   {
     element: <Email />,
     path: '/apps/email',

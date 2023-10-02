@@ -16,6 +16,8 @@ import productsCategories from '@src/views/apps/food/products/categories/store'
 import addons from '@src/views/apps/food/products/addons/store'
 import chefs from '@src/views/apps/user/chefs/store'
 import feeds from '@src/views/apps/feed/store'
+import specialties from '@src/views/apps/beauty/specialties/store'
+import masters from '@src/views/apps/user/masters/store'
 import navbar from './navbar'
 import layout from './layout'
 import todo from '@src/views/apps/todo/store'
@@ -36,7 +38,9 @@ const rootReducer = {
   stores,
   tables,
   users,
+  chefs,
   waiters,
+  masters,
   ratingWaiters,
   ratingOrders,
   ratingStores,
@@ -44,8 +48,8 @@ const rootReducer = {
   products,
   productsCategories,
   addons,
-  chefs,
   feeds,
+  specialties,
   navbar,
   layout,
   todo,

@@ -56,7 +56,7 @@ const defaultValues = {
   whatsapp: "",
   percentage: 0,
   percentService: 0,
-  avgcheck: 0,
+  avgcheck: "",
   slogan: "",
   description: "",
   business: "",
@@ -689,14 +689,14 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="phone"
-                      placeholder="Введите Логин"
+                      placeholder="Введите телефон"
                       invalid={errors.phone && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.phone && (
-                  <FormFeedback>Пожалуйста введите Логин</FormFeedback>
+                  <FormFeedback>Пожалуйста введите телефон</FormFeedback>
                 )}
               </Col>
               <Col>
@@ -1079,7 +1079,7 @@ const Store = (props) => {
                         name="avgcheck"
                         id="avgcheck"
                         type="number"
-                        placeholder=""
+                        placeholder="0"
                         invalid={errors.avgcheck && true}
                         {...field}
                       />

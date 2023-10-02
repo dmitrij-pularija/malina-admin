@@ -1,5 +1,6 @@
 // ** Navigation imports
 import foood from './foood'
+import beauty from './beauty'
 import apps from './apps'
 import pages from './pages'
 import forms from './forms'
@@ -12,4 +13,6 @@ import uiElements from './ui-elements'
 // ** Merge & Export
 
 // export default [...dashboards, ...foood, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...charts, ...others]
+// export default [...beauty, ...foood]
 export default [...foood]
+

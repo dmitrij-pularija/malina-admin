@@ -89,7 +89,13 @@ export default [
         title: 'Chefs',
         icon: <Circle size={12} />,
         navLink: '/apps/user/chefs/list'
-      }
+      },
+      // {
+      //   id: 'masters',
+      //   title: 'Masters',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/apps/user/masters/list'
+      // }
     ]
   },
   {
