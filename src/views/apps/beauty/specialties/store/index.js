@@ -92,7 +92,7 @@ export const appSpecialtiesSlice = createSlice({
         state.error = null
       })
       .addCase(getAllSpecialties.fulfilled, (state, action) => {
-        state.allCategories = action.payload
+        state.allSpecialties = action.payload
         state.loading = false
         state.error = null
       })

@@ -15,4 +15,3 @@ import uiElements from './ui-elements'
 // export default [...dashboards, ...foood, ...apps, ...pages, ...uiElements, ...forms, ...tables, ...charts, ...others]
 // export default [...beauty, ...foood]
 export default [...foood]
-

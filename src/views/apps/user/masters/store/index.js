@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { handlePending, handleFulfilled, handleRejected } from "@utils"
+import { handlePending, handleFulfilled, handleRejected, dataURLtoBlob } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
  
@@ -57,11 +57,22 @@ try {
 }
 })
 
-export const addMaster = createAsyncThunk('appMasters/addMaster', async (waiter, { dispatch, getState }) => {
+export const addMaster = createAsyncThunk('appMasters/addMaster', async ({ formData, avatar }, { dispatch, getState }) => {
+  if (avatar && avatar.startsWith('data:image')) {
+    const formDataImage = new FormData()
+    try {  
+      const avatarBlob = dataURLtoBlob(avatar)
+      formDataImage.append('image', avatarBlob, 'avatar.jpg')
+      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+      formData.append('master_profile_picture', image)
+    } catch (error) {
+      errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    }
+    }
 try {
-  await axios.post('/beauty/masters/', waiter)
+  await axios.post('/beauty/masters/', formData)
   await dispatch(getMasters(getState().masters.params))
-  return waiter
+  return { formData }
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
@@ -79,7 +90,18 @@ try {
 }
 })
 
-export const editMaster = createAsyncThunk('appMasters/editMaster', async ({ id, formData }, { dispatch, getState }) => {
+export const editMaster = createAsyncThunk('appMasters/editMaster', async ({ id, formData, avatar }, { dispatch, getState }) => {
+  if (avatar && avatar.startsWith('data:image')) {
+    const formDataImage = new FormData()
+    try {  
+      const avatarBlob = dataURLtoBlob(avatar)
+      formDataImage.append('image', avatarBlob, 'avatar.jpg')
+      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+      formData.append('master_profile_picture', image)
+    } catch (error) {
+      errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    }
+    }  
  try {
   await axios.patch(`/beauty/masters/${id}/`, formData)
   await dispatch(getMasters(getState().masters.params))

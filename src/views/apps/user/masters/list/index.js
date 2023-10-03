@@ -5,13 +5,13 @@ import Breadcrumbs from '@components/breadcrumbs'
 import '@styles/react/apps/app-users.scss'
 
 const WaitersList = () => {
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => setModalOpen(!modalOpen)
 
   return (
     <div className='app-user-list'>
-      <Breadcrumbs title='Специалисты' data={[{ title: 'Пользователи' }, { title: 'Специалисты' }]}  onClick={toggleSidebar} />
-      <Table sidebarOpen={sidebarOpen} toggleSidebar={toggleSidebar} />
+      <Breadcrumbs title='Специалисты' data={[{ title: 'Пользователи' }, { title: 'Специалисты' }]}  onClick={toggleModal} />
+      <Table modalOpen={modalOpen} toggleModal={toggleModal} />
       <Loading />  
     </div>
   )

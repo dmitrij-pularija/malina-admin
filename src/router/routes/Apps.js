@@ -54,7 +54,7 @@ const WaitersList = lazy(() => import('../../views/apps/user/waiters/list'))
 const WaitersView = lazy(() => import('../../views/apps/user/waiters/view'))
 const Сhefs = lazy(() => import('../../views/apps/user/chefs/list'))
 const Masters = lazy(() => import('../../views/apps/user/masters/list'))
-
+const MasterView = lazy(() => import('../../views/apps/user/masters/view'))
 const Feeds = lazy(() => import('../../views/apps/feed/list'))
 const Specialties = lazy(() => import('../../views/apps/beauty/specialties/list'))
 
@@ -163,6 +163,10 @@ const AppRoutes = [
   {
     element: <Masters />,
     path: '/apps/user/masters/list'
+  },
+  {
+    element: <MasterView />,
+    path: '/apps/user/masters/view/:id'
   },
   {
     element: <Feeds />,

@@ -10,6 +10,7 @@ import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
 import { selectThemeColors } from '@utils'
+import MasterModal from '../view/Modal'
 import {
   Row,
   Col,
@@ -142,7 +143,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const MastersList = ({ sidebarOpen, toggleSidebar }) => {
+const MastersList = ({ modalOpen, toggleModal }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.masters)
   const stores = useSelector(state => state.stores.allStores)
@@ -151,7 +152,7 @@ const MastersList = ({ sidebarOpen, toggleSidebar }) => {
   const [searchTerm, setSearchTerm] = useState('')
   // const [shifts, setShifts] = useState([])
   const [currentPage, setCurrentPage] = useState(1)
-  const [sortColumn, setSortColumn] = useState('full_name')
+  const [sortColumn, setSortColumn] = useState('master_name')
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedMaster, setSelectedMaster] = useState('')
@@ -162,6 +163,7 @@ const MastersList = ({ sidebarOpen, toggleSidebar }) => {
   //   setSelectedWaiter('')
   //   setSidebarOpen(false)
   //  }
+// console.log(specialties)
 
    useEffect(() => {
     if (!stores.length) dispatch(getAllStores())
@@ -209,7 +211,7 @@ const handleDel = (event, id) => {
 const handleEdit = (event, row) => {
   event.preventDefault()
   setSelectedMaster(row)
-  toggleSidebar()
+  toggleModal()
 }
 
   const handlePagination = page => {
@@ -386,7 +388,7 @@ const handleEdit = (event, row) => {
             className='react-dataTable'
             paginationComponent={CustomPagination}
             data={dataToRender()}
-            noDataComponent={<h6 className='text-capitalize'>Официанты не найдены</h6>}
+            noDataComponent={<h6 className='text-capitalize'>Специалисты не найдены</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={data}
@@ -394,14 +396,14 @@ const handleEdit = (event, row) => {
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                toggleSidebar={toggleSidebar}
               />
             }
           />
         </div>
       </Card>
 
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} selectedMaster={selectedMaster} setSelectedMaster={setSelectedMaster} stores={stores} specialties={specialties} />
+      {/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} selectedMaster={selectedMaster} setSelectedMaster={setSelectedMaster} stores={stores} specialties={specialties} /> */}
+      <MasterModal specialties={specialties} stores={stores} open={modalOpen} toggleModal={toggleModal} selectedMaster={selectedMaster} setSelectedMaster={setSelectedMaster} />
     </Fragment>
   )
 }

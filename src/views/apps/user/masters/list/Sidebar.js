@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@components/sidebar'
 import Avatar from '@components/avatar'
-import { selectThemeColors, checkIsValid, dataURLtoBlob } from '@utils'
+import { selectThemeColors, checkIsValid, dataURLtoBlob, initSelect } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import CreatableSelect from 'react-select/creatable';
@@ -11,10 +11,13 @@ import { addMaster, editMaster } from '../store'
 import { useDispatch } from 'react-redux'
 
 const defaultValues = {
-  shift: '',
-  businessId: '',
-  fullName: '',
-  telegram: ''
+  business: '',
+  specialty: '',
+  name: '',
+  surname: '',
+  login: '',
+  password: '',
+  phone: ''
 }
 
 // const CustomCreatableSelect = ({ onCreateOption, ...props }) => {
@@ -38,7 +41,7 @@ const defaultValues = {
 //   )
 // }
 
-const requiredFields = ["fullName", "businessId"]
+const requiredFields = ["login", "business"]
 
 // const checkIsValid = (data) => {
 //   return Object.keys(data).every((key) => {
@@ -66,19 +69,19 @@ const renderAvatar = data => {
         size='xl'
         className='me-1'
         color={'light-primary'}
-        content={data.name ? data.name : "Waiter"}
+        content={data.name ? data.name : "Специалист"}
       />
     )
   }
 }
 
-const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedMaster, setSelectedMaster }) => {
+const SidebarNewMaster = ({ stores, specialties, open, toggleSidebar, selectedMaster, setSelectedMaster }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
   // const values = {}
-  const shiftsOptions = shifts.map((item) => ({
+  const specialtyOptions = specialties.map((item) => ({
     value: String(item.id),
-    label: `${item.start_time.slice(0, -3)} - ${item.end_time.slice(0, -3)} ${item.description} `
+    label: item.specialty_name
   }))
 
   const storeOptions = stores.map((store) => ({
@@ -87,21 +90,24 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedMaster, setSel
 }))
 
   useEffect(() => {
-    if (selectedWaiter) {
-      setAvatar(selectedWaiter.profile_picture)
+    if (selectedMaster) {
+      setAvatar(selectedMaster.master_profile_picture)
       // values.fullName = selectedWaiter.full_name ? selectedWaiter.full_name : ''
       // values.telegram = selectedWaiter.telegram ? selectedWaiter.telegram : ''
       // values.businessId = selectedWaiter.business_id ? storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.business_id.id))] : ''
       // values.shift = selectedWaiter.shift ? shiftsOptions[shiftsOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.shift.id))] : ''
     }
 
-    }, [selectedWaiter])
+    }, [selectedMaster])
 
-  const values = selectedWaiter ? {
-    fullName: selectedWaiter.full_name ? selectedWaiter.full_name : '',
-    telegram: selectedWaiter.telegram ? selectedWaiter.telegram : '',
-    businessId: selectedWaiter.business_id ? storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.business_id.id))] : '',
-    shift: selectedWaiter.shift ? shiftsOptions[shiftsOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.shift.id))] : ''} : {}
+  const values = selectedMaster ? {
+    business: initSelect(storeOptions, selectedMaster.master_business),
+    specialty: initSelect(specialtyOptions, selectedMaster.master_specialty),
+    name: selectedMaster.master_name ? selectedMaster.master_name : '',
+    surname: selectedMaster.surname ? selectedMaster.surname : '',
+    login: selectedMaster.telegram ? selectedMaster.telegram : '',
+    phone: selectedMaster.telegram ? selectedMaster.telegram : ''
+    } : {}
   
     const {
       reset,
@@ -156,7 +162,7 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedMaster, setSel
       // for (const key in values) {
       //   setValue(key, '')
       // }
-        setSelectedWaiter('')
+        setSelectedMaster('')
         toggleSidebar()
         setAvatar('')
         reset({...defaultValues})
@@ -165,23 +171,22 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedMaster, setSel
   const onSubmit = data => {
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData()
-      formData.append('full_name', data.fullName)
-      formData.append('business_id', data.businessId.value)
-      if (data.shift) formData.append('shift', data.shift.value)
-      if (data.telegram) formData.append('telegram', data.telegram)
+      formData.append('master_business', data.business.value)
+      formData.append('login', data.login)
+      if (data.specialty) formData.append('master_specialty', data.specialty.value)
+      if (data.name) formData.append('master_name', data.name)
+      if (data.surname) formData.append('surname', data.surname)
+      if (data.phone) formData.append('phone', data.phone)
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
-        formData.append('profile_picture', avatarBlob, 'avatar.jpg')
+        formData.append('master_profile_picture', avatarBlob, 'avatar.jpg')
       }
-      if (selectedWaiter) {
-        dispatch(editMaster({ id: selectedWaiter.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+      if (selectedMaster) {
+        dispatch(editMaster({ id: selectedMaster.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
         dispatch(addMaster(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
-      // setSelectedWaiter('')
-      // toggleSidebar()
-      // setAvatar('')
-      // reset()
+ 
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -199,16 +204,16 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedMaster, setSel
     <Sidebar
       size='lg'
       open={open}
-      title={selectedWaiter ? 'Редактирование официанта' : 'Новый официант'}
+      title={selectedMaster ? 'Редактирование специалиста' : 'Новый специалист'}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
       // onClosed={handleClose}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
-      <div className='mb-1'>
+      <div>
         <div className='d-flex align-items-center justify-content-center'>
-        {renderAvatar({avatar, name: selectedWaiter.full_name})}
+        {renderAvatar({avatar, name: selectedMaster.master_name})}
         </div>
         <div className='d-flex align-items-center justify-content-center mt-75'>
               <div>
@@ -223,121 +228,106 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedMaster, setSel
         </div>
         </div>
         <div className='mb-1'>
-          <Label className='form-label' for='fullName'>
-            Имя <span className='text-danger'>*</span>
+          <Label className='form-label' for='name'>
+            Имя
           </Label>
           <Controller
-            name='fullName'
+            name='name'
             control={control}
-            rules={{ required: true }}
+            rules={{ required: false }}
             render={({ field }) => (
-              <Input id='fullName' placeholder='John' invalid={errors.fullName && true} {...field} />
+              <Input id='name' placeholder='John' invalid={errors.name && true} {...field} />
             )}
           />
-          {errors && errors.fullName && (<FormFeedback>Пожалуйста заполните имя</FormFeedback>)}  
+          {errors && errors.name && (<FormFeedback>Пожалуйста заполните имя</FormFeedback>)}  
         </div>
         <div className='mb-1'>
-          <Label className='form-label' for='businessId'>
+          <Label className='form-label' for='surname'>
+            Фамилия
+          </Label>
+          <Controller
+            name='surname'
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input id='surname' placeholder='Dou' invalid={errors.surname && true} {...field} />
+            )}
+          />
+          {errors && errors.surname && (<FormFeedback>Пожалуйста заполните фамилию</FormFeedback>)}  
+        </div>
+        <div className='mb-1'>
+          <Label className='form-label' for='business'>
           Заведение <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='businessId'
+            name='business'
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
               <Select
-                id='businessId'
+                id='business'
                 isClearable={false}
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}
                 placeholder="Выберите Заведение"
-                className={classnames('react-select', { 'is-invalid': errors.businessId && true })}
+                className={classnames('react-select', { 'is-invalid': errors.business && true })}
                 {...field}
               />
             )}
           />
-          {errors && errors.businessId && (<FormFeedback>Пожалуйста выберите заведение</FormFeedback>)}  
+          {errors && errors.business && (<FormFeedback>Пожалуйста выберите заведение</FormFeedback>)}  
         </div>
         <div className='mb-1'>
-          <Label className='form-label' for='shift'>
-          Смена
+          <Label className='form-label' for='specialty'>
+          Специальность
           </Label>
           <Controller
-            name='shift'
+            name='specialty'
             control={control}
             rules={{ required: false }}
             render={({ field }) => (
               <Select
-                id='shift'
+                id='specialty'
                 isClearable={false}
                 classNamePrefix='select'
-                options={shiftsOptions}
+                options={specialtyOptions}
                 theme={selectThemeColors}
-                placeholder="Выберите смену"
-                className={classnames('react-select', { 'is-invalid': errors.shift && true })}
+                placeholder="Выберите специальность"
+                className={classnames('react-select', { 'is-invalid': errors.specialty && true })}
                 {...field}
               />
             )}
           />
+          {errors && errors.specialty && (<FormFeedback>Пожалуйста выберите специальность</FormFeedback>)}  
         </div>
-        {/* <div className='mb-3'>
-  <Label className='form-label' htmlFor='shift'>
-    Смена
-  </Label>
-  <Controller
-    name='shift'
-    control={control}
-    rules={{ required: false }}
-    render={({ field }) => (
-      <CreatableSelect
-        id='shift'
-        isClearable={false}
-        options={shiftsOptions}
-        theme={selectThemeColors}
-        onCreateOption={handleCreateOption}
-        formatCreateLabel={formatCreateLabel}
-        placeholder="Выберите смену или добавьте новую"
-        className={classnames('react-select', { 'is-invalid': errors.shift && true })}
-        {...field}
-      />
-    )}
-  />
-</div> */}
-{/* <div className='mb-3'>
-  <Label className='form-label' htmlFor='shift'>
-    Смена
-  </Label>
-  <Controller
-    name='shift'
-    control={control}
-    rules={{ required: false }}
-    render={({ field }) => (
-      <CustomCreatableSelect
-        id='shift'
-        isClearable={false}
-        options={shiftsOptions}
-        theme={selectThemeColors}
-        placeholder="Введите смену в формате ЧЧ:ММ - ЧЧ:ММ"
-        className={classnames('react-select', { 'is-invalid': errors.shift && true })}
-        {...field}
-      />
-    )}
-  />
-</div> */}
-<div className='mb-3'>
-          <Label className='form-label' for='telegram'>
-          ID полученный в Телеграмм - боте <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span>
+        <div className='mb-1'>
+          <Label className='form-label' for='login'>
+          Логин <span className='text-danger'>*</span>
           </Label>
           <Controller
-            name='telegram'
+            name='login'
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <Input id='login' placeholder='Введите логин' invalid={errors.login && true} {...field} />
+            )}
+          />
+          {errors && errors.login && (<FormFeedback>Введите логин</FormFeedback>)}  
+        </div> 
+        <div className='mb-2'>
+          <Label className='form-label' for='phone'>
+          Телефон
+          </Label>
+          <Controller
+            name='phone'
             control={control}
             rules={{ required: false }}
             render={({ field }) => (
-              <Input id='telegram' placeholder='12345' invalid={errors.telegram && true} {...field} />
+              <Input id='phone' placeholder='Введите теоефон' invalid={errors.phone && true} {...field} />
             )}
           />
-          {errors && errors.telegram && (<FormFeedback>Введите Телеграмм ID</FormFeedback>)}  
+          {errors && errors.phone && (<FormFeedback>Введите теоефон</FormFeedback>)}  
         </div>  
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
@@ -350,4 +340,4 @@ const SidebarNewWaiters = ({ stores, open, toggleSidebar, selectedMaster, setSel
   )
 }
 
-export default SidebarNewWaiters
+export default SidebarNewMaster

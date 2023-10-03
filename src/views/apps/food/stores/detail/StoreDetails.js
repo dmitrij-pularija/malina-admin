@@ -185,11 +185,14 @@ const Store = (props) => {
   const [modalDeliveryShow, setModalDeliveryShow] = useState(false)
   const [passwords, setPasswords] = useState({ newPassword: "", confirmPassword: "" })
   const [passwordsMatch, setPasswordsMatch] = useState(true)
+  const [cardPaymentAllow, setCardPaymentAllow] = useState(false)
+  
   const values = {}
 
   useEffect(() => {
     if (selectedStore) {
       setAvatar(selectedStore.image)
+      setCardPaymentAllow(selectedStore.is_card_payment_allow)
       values.name = selectedStore.name ? selectedStore.name : defaultValues.name
       values.login = selectedStore.login ? selectedStore.login : defaultValues.login
       values.email = selectedStore.email ? selectedStore.email : defaultValues.email
@@ -409,9 +412,14 @@ const Store = (props) => {
       if (data.category) formData.append("category", data.category.value)
       if (data.subcategory) formData.append("subcategory", data.subcategory.value)
       if (data.priceLevel) formData.append("price_level", parseInt(data.priceLevel.value))
-      if (data.merchantId) formData.append("merchant_id", data.merchantId)
-      if (data.secretKey) formData.append("pay_secret_key", data.secretKey)
-      if (data.isCardPaymentAllow) formData.append("is_card_payment_allow", data.isCardPaymentAllow)
+      if (data.isCardPaymentAllow) {
+        formData.append("is_card_payment_allow", data.isCardPaymentAllow)
+        if (data.merchantId) formData.append("merchant_id", data.merchantId)
+        if (data.secretKey) formData.append("pay_secret_key", data.secretKey)
+      } else {
+        formData.append("merchant_id", "")
+        formData.append("pay_secret_key", "")
+      }
       if (data.isStaff) formData.append("is_staff", data.isStaff)
 
       if (avatar && avatar.startsWith("data:image")) {
@@ -478,7 +486,7 @@ const Store = (props) => {
                   </div>
                 </div>
               </Col>
-              <Col>
+              <Col className="mt-4">
                 <Label className="form-label" for="business">
                   Направление деятельности<span className="text-danger">*</span>
                 </Label>
@@ -563,6 +571,57 @@ const Store = (props) => {
                   )}
                 />
               </Col>
+              <Col className="d-flex justify-content-between gap-30">
+                 <div>
+                <Label className="form-label" for="priceLevel">
+                  Уровень цен
+                </Label>
+                <Controller
+                  name="priceLevel"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Select
+                      isClearable={false}
+                      classNamePrefix="select"
+                      options={priceLevelOptions}
+                      theme={selectThemeColors}
+                      placeholder="Уровень цен"
+                      className={classnames("react-select", {
+                        "is-invalid": errors.priceLevel && true
+                      })}
+                      {...field}
+                    />
+                  )}
+                />
+                </div>
+                <div className="width-120" >
+                  <Label className="form-label" for="avgcheck">
+                    Средний чек, &#x0441;&#x332;
+                  </Label>
+                  <Controller
+                    name="avgcheck"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => (
+                      <Input
+                        name="avgcheck"
+                        id="avgcheck"
+                        type="number"
+                        placeholder="0"
+                        invalid={errors.avgcheck && true}
+                        {...field}
+                      />
+                    )}
+                  />
+                  {errors && errors.avgcheck && (
+                    <FormFeedback>Пожалуйста введите cредний чек</FormFeedback>
+                  )}
+                </div>
+              {/* </Col>
+              <Col> */}
+             
+              </Col>
               {/* <Col>
                 <Label className="form-label" for="type">
                   Тип заведения <span className="text-danger">*</span>
@@ -592,48 +651,8 @@ const Store = (props) => {
                   <FormFeedback>Пожалуйста выберите тип заведения</FormFeedback>
                 )}
               </Col> */}
-              <Col>
-                <Label className="form-label" for="merchantId">
-                  Id Merchant
-                </Label>
-                <Controller
-                  name="merchantId"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-                    <Input
-                      id="merchantId"
-                      placeholder="Введите Merchant Id магазина"
-                      invalid={errors.merchantId && true}
-                      {...field}
-                    />
-                  )}
-                />
-                {errors && errors.merchantId && (
-                  <FormFeedback>Пожалуйста Merchant Id магазина</FormFeedback>
-                )}
-              </Col>
-              <Col>
-                <Label className="form-label" for="adminTelegram">
-                  Телеграм ID
-                </Label>
-                <Controller
-                  name="adminTelegram"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-                    <Input
-                      id="adminTelegram"
-                      placeholder="Введите Телеграм ID"
-                      invalid={errors.adminTelegram && true}
-                      {...field}
-                    />
-                  )}
-                />
-                {errors && errors.adminTelegram && (
-                  <FormFeedback>Введите пожалуйста Телеграм ID</FormFeedback>
-                )}
-              </Col>
+              
+              
             </Col>
             <Col md={4} className="d-flex flex-column p-1">
               <Col>
@@ -720,34 +739,10 @@ const Store = (props) => {
                   <FormFeedback>Пожалуйста введите логин</FormFeedback>
                 )}
               </Col>
-              <Col className="mt-3 pb-0">
-                <Button color="warning" block onClick={toggleModal}>
+                <Button className="mt-1 mb-1" color="warning" block onClick={toggleModal}>
                 Введите пароль<span className="text-danger">*</span>
                 </Button>
-              </Col>
-
-              <Col>
-                <Label className="form-label" for="secretKey">
-                  Secret Key
-                </Label>
-                <Controller
-                  name="secretKey"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-                    <Input
-                      id="secretKey"
-                      placeholder="Введите Secret Key магазина"
-                      invalid={errors.secretKey && true}
-                      {...field}
-                    />
-                  )}
-                />
-                {errors && errors.secretKey && (
-                  <FormFeedback>Пожалуйста Secret Key магазина</FormFeedback>
-                )}
-              </Col>
-              <Col>
+              <Col className="mt-0">
                 <Label className="form-label" for="instagram">
                   Инстаграм
                 </Label>
@@ -823,6 +818,56 @@ const Store = (props) => {
                   />
                 </InputGroup>
               </Col>
+              <Col className="d-flex justify-content-center gap-30">
+                <div>
+                  <Label className="form-label" for="percentage">
+                    Скидка
+                  </Label>
+                  <Controller
+                    name="percentage"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        id="percentage"
+                        name="percentage"
+                        placeholder=""
+                        parser={parser}
+                        formatter={format}
+                        upHandler={<Plus />}
+                        downHandler={<Minus />}
+                        max={100}
+                        min={0}
+                      />
+                    )}
+                  />
+                </div>
+                <div>
+                  <Label className="form-label" for="percentService">
+                    Обслуживание
+                  </Label>
+                  <Controller
+                    name="percentService"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        id="percentService"
+                        name="percentService"
+                        placeholder=""
+                        parser={parser}
+                        formatter={format}
+                        upHandler={<Plus />}
+                        downHandler={<Minus />}
+                        max={100}
+                        min={0}
+                      />
+                    )}
+                  />
+                </div>
+              </Col>
             </Col>
             <Col md={4} className="d-flex flex-column p-1">
               <Col>
@@ -888,7 +933,7 @@ const Store = (props) => {
                   <FormFeedback>Пожалуйста введите долготу</FormFeedback>
                 )}
               </Col>
-              <Col className="mb-5">
+              <Col>
                 <Label className="form-label" for="latitude">
                   Широта<span className="text-danger">*</span>
                 </Label>
@@ -914,7 +959,7 @@ const Store = (props) => {
                   Выбрать на карте
                 </Button>
               </Col> */}
-              <Col className="mt-1">
+              <Col>
                 <Label className="form-label" for="timeBeg">
                   Время работы
                 </Label>
@@ -967,148 +1012,9 @@ const Store = (props) => {
                   </div>
                 </div>
               </Col>
-              <Col className="d-flex justify-content-center gap-30 mt-1">
-                <div>
-                  <Label className="form-label" for="percentage">
-                    Скидка
-                  </Label>
-                  <Controller
-                    name="percentage"
-                    control={control}
-                    rules={{ required: false }}
-                    render={({ field }) => (
-                      <InputNumber
-                        {...field}
-                        id="percentage"
-                        name="percentage"
-                        placeholder=""
-                        parser={parser}
-                        formatter={format}
-                        upHandler={<Plus />}
-                        downHandler={<Minus />}
-                        max={100}
-                        min={0}
-                      />
-                    )}
-                  />
-                </div>
-                <div>
-                  <Label className="form-label" for="percentService">
-                    Обслуживание
-                  </Label>
-                  <Controller
-                    name="percentService"
-                    control={control}
-                    rules={{ required: false }}
-                    render={({ field }) => (
-                      <InputNumber
-                        {...field}
-                        id="percentService"
-                        name="percentService"
-                        placeholder=""
-                        parser={parser}
-                        formatter={format}
-                        upHandler={<Plus />}
-                        downHandler={<Minus />}
-                        max={100}
-                        min={0}
-                      />
-                    )}
-                  />
-                </div>
-              </Col>
-              <Col className="d-flex justify-content-between gap-30 mt-1">
-                {/* <div>
-                  <Label className="form-label" for="deliverycost">
-                    Доставка, &#x0441;&#x332;
-                  </Label>
-                  <Controller
-                    name="deliverycost"
-                    control={control}
-                    rules={{ required: false }}
-                    render={({ field }) => (
-                      <Input
-                        name="deliverycost"
-                        id="deliverycost"
-                        type="number"
-                        placeholder=""
-                        invalid={errors.deliverycost && true}
-                        {...field}
-                      />
-                    )}
-                  />
-                  {errors && errors.deliverycost && (
-                    <FormFeedback>
-                      Пожалуйста введите cтоимость доставки
-                    </FormFeedback>
-                  )}
-                </div> */}
-                 <div>
-                <Label className="form-label" for="priceLevel">
-                  Уровень цен
-                </Label>
-                <Controller
-                  name="priceLevel"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-                    <Select
-                      isClearable={false}
-                      classNamePrefix="select"
-                      options={priceLevelOptions}
-                      theme={selectThemeColors}
-                      placeholder="Уровень цен"
-                      className={classnames("react-select", {
-                        "is-invalid": errors.priceLevel && true
-                      })}
-                      {...field}
-                    />
-                  )}
-                />
-                </div>
-                <div className="width-120" >
-                  <Label className="form-label" for="avgcheck">
-                    Средний чек, &#x0441;&#x332;
-                  </Label>
-                  <Controller
-                    name="avgcheck"
-                    control={control}
-                    rules={{ required: false }}
-                    render={({ field }) => (
-                      <Input
-                        name="avgcheck"
-                        id="avgcheck"
-                        type="number"
-                        placeholder="0"
-                        invalid={errors.avgcheck && true}
-                        {...field}
-                      />
-                    )}
-                  />
-                  {errors && errors.avgcheck && (
-                    <FormFeedback>Пожалуйста введите cредний чек</FormFeedback>
-                  )}
-                </div>
-              {/* </Col>
-              <Col> */}
+              
              
-              </Col>
-          <Col className="mt-1">
-          <div className='form-check form-check-primary'>
-          <Controller
-            name='isCardPaymentAllow'
-            control={control}
-            rules={{ required: false }}
-            render={({ field }) => (
-              <Input id='isCardPaymentAllow'  type='checkbox' checked={field.value} {...field} />
-            )}
-          />
-          <Label className='form-label' for='isCardPaymentAllow'>
-          Оплата картой разрешена
-          </Label>
-        </div>
-              </Col> 
-          <Col className="mt-1">
+          <Col>
           <div className='form-check form-check-primary'>
           <Controller
             name='isStaff'
@@ -1122,7 +1028,95 @@ const Store = (props) => {
           Персонал
           </Label>
         </div>
-              </Col>         
+          </Col>
+          <Col>
+                <Label className="form-label" for="adminTelegram">
+                  Телеграм ID
+                </Label>
+                <Controller
+                  name="adminTelegram"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Input
+                      id="adminTelegram"
+                      placeholder="Введите Телеграм ID"
+                      invalid={errors.adminTelegram && true}
+                      {...field}
+                    />
+                  )}
+                />
+                {errors && errors.adminTelegram && (
+                  <FormFeedback>Введите пожалуйста Телеграм ID</FormFeedback>
+                )}
+              </Col>
+          <div className="d-flex flex-column justify-content-between h-100">         
+          <Col className="mt-1">
+          <div className='form-check form-check-primary'>
+          <Controller
+            name='isCardPaymentAllow'
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input 
+              id='isCardPaymentAllow'  
+              type='checkbox' 
+              checked={field.value} 
+              onChange={(e) => {
+                field.onChange(e)
+                setCardPaymentAllow(e.target.checked)
+              }}
+              />
+            )}
+          />
+          <Label className='form-label' for='isCardPaymentAllow'>
+          Есть безналичная оплата
+          </Label>
+        </div>
+        </Col>
+        {cardPaymentAllow && <Col>
+                <Label className="form-label" for="merchantId">
+                  Id Merchant
+                </Label>
+                <Controller
+                  name="merchantId"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Input
+                      id="merchantId"
+                      placeholder="Введите Merchant Id магазина"
+                      invalid={errors.merchantId && true}
+                      {...field}
+                    />
+                  )}
+                />
+                {errors && errors.merchantId && (
+                  <FormFeedback>Пожалуйста Merchant Id магазина</FormFeedback>
+                )}
+              </Col>} 
+        {cardPaymentAllow && <Col>
+                <Label className="form-label" for="secretKey">
+                  Secret Key
+                </Label>
+                <Controller
+                  name="secretKey"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Input
+                      id="secretKey"
+                      placeholder="Введите Secret Key магазина"
+                      invalid={errors.secretKey && true}
+                      {...field}
+                    />
+                  )}
+                />
+                {errors && errors.secretKey && (
+                  <FormFeedback>Пожалуйста Secret Key магазина</FormFeedback>
+                )}
+              </Col>}
+              </div>          
             </Col>
           </Col>
         </Row>
