@@ -29,10 +29,10 @@ import { formatData } from '@utils'
 // ** Renders Client Columns
 
 
-export const columns = (users, masters) => {
+export const columns = (users, stores) => {
 
   const getMasterInfo = id => {
-    const foundMaster = masters.find(item => item.id === id)
+    const foundMaster = waiters.find(item => item.id === id)
     if (!foundMaster) return {name: "", avatar: ""}
     return {name: foundMaster.master_name ? `${foundMaster.master_name} ${foundMaster.surname ? foundMaster.surname : ''}` : '', avatar: foundMaster.master_profile_picture}
     }
@@ -58,20 +58,19 @@ export const columns = (users, masters) => {
     )
   }
 
-  // const renderStoore = (id) => {
-  //   if (!stores.length) return
-  //   const foundStore = stores.find(item => item.id === id)
-  //   return (
-  //     <div className='d-flex justify-content-left align-items-center'>
-  //     {getAvatar(foundStore)}  
-  //     {/* <Logo2 src={foundStore.image} size={"s"}/> */}
-  //   <div className='d-flex flex-column ml3'>
-  //       <span className='fw-bolder'>{foundStore.name}</span>
-  //     <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
-  //   </div>
-  // </div>
-  //   )
-  // }
+  const renderStoore = (id) => {
+    if (!stores.length) return
+    const foundStore = stores.find(item => item.id === id)
+    return (
+      <div className='d-flex justify-content-left align-items-center'>
+      {getAvatar(foundStore)}  
+    <div className='d-flex flex-column ml3'>
+        <span className='fw-bolder'>{foundStore.name}</span>
+      <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+    </div>
+  </div>
+    )
+  }
 
   return [
   {
@@ -82,25 +81,25 @@ export const columns = (users, masters) => {
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Специалист',
-    minWidth: '150px',
+    name: 'Заведение',
+    minWidth: '250px',
     sortable: true,
-    sortField: 'master',
-    selector: row => row.master,
-    cell: row => renderClient(row.master, "master")
+    sortField: 'business.id',
+    selector: row => row.business.id,
+    cell: row => renderStoore(row.business.id)
   },
   {
     name: 'Рейтинг',
     width: '142px',
     sortable: true,
-    sortField: 'master_stars',
-    selector: row => row.master_stars,
+    sortField: 'star',
+    selector: row => row.star,
     cell: row => (
       <Rating
         readonly
         fractions={2}
         direction={'ltr'}
-        initialRating={row.master_stars}
+        initialRating={row.star}
         emptySymbol={<Star size={20} fill='#babfc7' stroke='#babfc7' />}
         fullSymbol={<Star size={20} fill='#ff9f43' stroke='#ff9f43' />}
       />)
@@ -109,24 +108,24 @@ export const columns = (users, masters) => {
     name: 'Отзыв',
     minWidth: '300px',
     sortable: true,
-    sortField: 'master_review',
-    selector: row => row.master_review,
-    cell: row => <span className='text-capitalize'>{row.master_review}</span>
+    sortField: 'text',
+    selector: row => row.text,
+    cell: row => <span className='text-capitalize'>{row.text}</span>
   },
   {
     name: 'Клиент',
     minWidth: '150px',
     sortable: true,
-    sortField: 'master_rating_user',
-    selector: row => row.master_rating_user,
-    cell: row => renderClient(row.master_rating_user, "user")
+    sortField: 'user.id',
+    selector: row => row.user,
+    cell: row => renderClient(row.user.id, "user")
   },
   {
     name: 'Дата',
     width: '120px',
     sortable: true,
-    sortField: 'created_at',
-    cell: row => <span className='text-capitalize'>{row.created_at ? formatData(row.created_at) : ''}</span>
+    sortField: 'date',
+    cell: row => <span className='text-capitalize'>{row.date ? formatData(row.date) : ''}</span>
   }
   // {
   //   name: 'Заказ',
@@ -136,13 +135,6 @@ export const columns = (users, masters) => {
   //   selector: row => row.order,
   //   cell: row => <span className='text-capitalize'>{row.order ? row.order : ''}</span>
   // },
-  // {
-  //   name: 'Заведение',
-  //   minWidth: '250px',
-  //   sortable: true,
-  //   sortField: 'row.business_id',
-  //   selector: row => row.business_id,
-  //   cell: row => renderStoore(row.business_id)
-  // }
+
 ]
 }

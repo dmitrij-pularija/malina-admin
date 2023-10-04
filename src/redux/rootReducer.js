@@ -9,6 +9,7 @@ import branches from '@src/views/apps/food/branches/store'
 import stores from '@src/views/apps/food/stores/store'
 import ratingWaiters from '@src/views/apps/food/rating/waiters/store'
 import ratingOrders from '@src/views/apps/food/rating/orders/store'
+import ratingBeautyOrders from '@src/views/apps/beauty/rating/orders/store'
 import ratingStores from '@src/views/apps/food/rating/stores/store'
 import ratingMasters from '@src/views/apps/beauty/rating/masters/store'
 import productComplaints from '@src/views/apps/food/rating/complaints/store'
@@ -45,6 +46,7 @@ const rootReducer = {
   ratingWaiters,
   ratingMasters,
   ratingOrders,
+  ratingBeautyOrders,
   ratingStores,
   productComplaints,
   products,

@@ -68,6 +68,12 @@ export default [
     icon: <Award size={20} />,
     children: [
       {
+        id: 'orderBeautyFeedback',
+        title: 'Order Beauty Feedback',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/rating/orders/list'
+      },
+      {
         id: 'reviewsSpecialties',
         title: 'Reviews about Specialties',
         icon: <Circle size={12} />,
