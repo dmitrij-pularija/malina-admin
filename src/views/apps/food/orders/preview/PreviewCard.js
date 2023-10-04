@@ -96,7 +96,7 @@ const renderImg = (avatar, name) => {
 const PreviewCard = ({ data }) => {
   // console.log(data)
   if (!data) return 
-  const carts = data.order_cart[0].products_list
+  const carts = data.order_cart.length ? data.order_cart[0].products_list : []
 
   return data !== null ? (
     <Card className='invoice-preview-card'>

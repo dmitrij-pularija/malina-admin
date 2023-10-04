@@ -46,7 +46,7 @@ return (
         expandableRowsComponent={ExpandableTable}
         // onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
         data={data}
-        noDataComponent={<h6 className='text-capitalize'>Блюда не найдены</h6>}
+        noDataComponent={<h6 className='text-capitalize'>Блюда не указаны</h6>}
       />
      
      </div>    

@@ -22,6 +22,7 @@ const Categories = lazy(() => import('../../views/apps/food/categories/list'))
 const Branches = lazy(() => import('../../views/apps/food/branches/list'))
 const Tables = lazy(() => import('../../views/apps/food/tables/list'))
 const RatingWaiters = lazy(() => import('../../views/apps/food/rating/waiters/list'))
+const RatingMastars = lazy(() => import('../../views/apps/beauty/rating/masters/list'))
 const RatingOrders = lazy(() => import('../../views/apps/food/rating/orders/list'))
 const RatingStores = lazy(() => import('../../views/apps/food/rating/stores/list'))
 const ProductComplaints = lazy(() => import('../../views/apps/food/rating/complaints/list'))
@@ -123,6 +124,10 @@ const AppRoutes = [
   {
     element: <RatingWaiters />,
     path: '/apps/food/rating/waiters/list'
+  },
+  {
+    element: <RatingMastars />,
+    path: '/apps/beauty/rating/masters/list'
   },
   {
     element: <RatingOrders />,

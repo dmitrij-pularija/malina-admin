@@ -64,13 +64,13 @@ export default [
         title: 'Tables',
         icon: <Circle size={12} />,
         navLink: '/apps/food/tables/list'
-      },
-      {
-        id: 'specialties',
-        title: 'Specialties',
-        icon: <Circle size={12} />,
-        navLink: '/apps/beauty/specialties/list'
       }
+      // {
+      //   id: 'specialties',
+      //   title: 'Specialties',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/apps/beauty/specialties/list'
+      // }
     ]
   },
   {
@@ -95,13 +95,13 @@ export default [
         title: 'Chefs',
         icon: <Circle size={12} />,
         navLink: '/apps/user/chefs/list'
-      },
-      {
-        id: 'masters',
-        title: 'Masters',
-        icon: <Circle size={12} />,
-        navLink: '/apps/user/masters/list'
       }
+      // {
+      //   id: 'masters',
+      //   title: 'Masters',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/apps/user/masters/list'
+      // }
     ]
   },
   {
@@ -140,5 +140,5 @@ export default [
     title: 'Feeds',
     icon: <FileText size={20} />,
     navLink: '/apps/feed/list'
-  },
+  }
 ]
