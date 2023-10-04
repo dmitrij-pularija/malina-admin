@@ -27,8 +27,7 @@ const RatingOrders = lazy(() => import('../../views/apps/food/rating/orders/list
 const RatingBeautyOrders = lazy(() => import('../../views/apps/beauty/rating/orders/list'))
 const RatingStores = lazy(() => import('../../views/apps/food/rating/stores/list'))
 const ProductComplaints = lazy(() => import('../../views/apps/food/rating/complaints/list'))
-
-
+const ProductBeautyComplaints = lazy(() => import('../../views/apps/beauty/rating/complaints/list'))
 
 const Chat = lazy(() => import('../../views/apps/chat'))
 const Todo = lazy(() => import('../../views/apps/todo'))
@@ -145,6 +144,10 @@ const AppRoutes = [
   {
     element: <ProductComplaints />,
     path: '/apps/food/rating/complaints/list'
+  },
+  {
+    element: <ProductBeautyComplaints />,
+    path: '/apps/beauty/rating/complaints/list'
   },
   {
     element: <ProductsCategories />,

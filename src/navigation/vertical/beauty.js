@@ -74,6 +74,12 @@ export default [
         navLink: '/apps/beauty/rating/orders/list'
       },
       {
+        id: 'beautyComplaints',
+        title: 'Beauty Complaints',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/rating/complaints/list'
+      },
+      {
         id: 'reviewsSpecialties',
         title: 'Reviews about Specialties',
         icon: <Circle size={12} />,
