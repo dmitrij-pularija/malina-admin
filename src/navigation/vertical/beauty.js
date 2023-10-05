@@ -1,5 +1,5 @@
 // ** Icons Import
-import { Grid, Clipboard, FileText, BookOpen, Award, Circle, ShoppingCart, Users, Shield } from 'react-feather'
+import { Grid, ShoppingBag, Command, BookOpen, Award, Circle, ShoppingCart, Users, Shield } from 'react-feather'
 
 export default [
   {
@@ -35,7 +35,33 @@ export default [
   //       navLink: '/apps/food/products/products/list'
   //     }
   //   ]
-  // },    
+  // },
+  {
+    id: 'Services',
+    title: 'Services',
+    icon: <Command size={20} />,
+    children: [
+      {
+        id: 'ServicesCategories',
+        title: 'Service Categories',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/services/categories/list'
+      }
+    ]
+  },
+  {
+    id: 'goods',
+    title: 'Goods',
+    icon: <ShoppingBag size={20} />,
+    children: [
+      {
+        id: 'beautyProductsCategories',
+        title: 'Beauty Products Categories',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/products/categories/list'
+      }
+    ]
+  },    
   {
     id: 'structureBeauty',
     title: 'Structure',

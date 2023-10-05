@@ -16,6 +16,8 @@ import productComplaints from '@src/views/apps/food/rating/complaints/store'
 import productBeautyComplaints from '@src/views/apps/beauty/rating/complaints/store'
 import products from '@src/views/apps/food/products/products/store'
 import productsCategories from '@src/views/apps/food/products/categories/store'
+import beautyProductsCategories from '@src/views/apps/beauty/products/categories/store'
+import serviceCategories from '@src/views/apps/beauty/services/categories/store'
 import addons from '@src/views/apps/food/products/addons/store'
 import chefs from '@src/views/apps/user/chefs/store'
 import feeds from '@src/views/apps/feed/store'
@@ -53,6 +55,8 @@ const rootReducer = {
   productBeautyComplaints,
   products,
   productsCategories,
+  beautyProductsCategories,
+  serviceCategories,
   addons,
   feeds,
   specialties,
