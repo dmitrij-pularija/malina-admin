@@ -29,14 +29,14 @@ export const delImages = async id => {
 // }
 // }
 
-export const getAllProducts = createAsyncThunk('appProducts/getAllProducts', async () => {
+export const getAllServices = createAsyncThunk('appServices/getAllServices', async () => {
   try {
     let isFinished = false
     let page = 1
     const acc = []
-    const { data: { count } } = await axios.get('/products/product')
+    const { data: { count } } = await axios.get('/beauty/beauty_services/')
     while (!isFinished) {
-      const { data: { results } } = await axios.get('/products/product', { params: { perPage: 100, page }})
+      const { data: { results } } = await axios.get('/beauty/beauty_services/', { params: { perPage: 100, page }})
       acc.push(...results)
       if (acc.length === count) isFinished = true
       page += 1
@@ -48,9 +48,9 @@ export const getAllProducts = createAsyncThunk('appProducts/getAllProducts', asy
   }
 })
 
-export const getData = createAsyncThunk('appProducts/getData', async params => {
+export const getData = createAsyncThunk('appServices/getData', async params => {
   try {
-  const response = await axios.get('/products/product', { params })
+  const response = await axios.get('/beauty/beauty_services/', { params })
   return {
     params,
     data: response.data.results,
@@ -62,9 +62,9 @@ export const getData = createAsyncThunk('appProducts/getData', async params => {
 }
 })
 
-export const getProduct = createAsyncThunk('appProducts/getProduct', async id => {
+export const getService = createAsyncThunk('appServices/getService', async id => {
   try {
-  const response = await axios.get(`/products/product/${id}/`)
+  const response = await axios.get(`/beauty/beauty_services/${id}/`)
   return response.data
 } catch (error) {
   errorMessage(error.response.data.detail)
@@ -72,10 +72,10 @@ export const getProduct = createAsyncThunk('appProducts/getProduct', async id =>
 }
 })
 
-export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ formData, galery }, { dispatch, getState }) => {
+export const addService = createAsyncThunk('appServices/addService', async ({ formData, galery }, { dispatch, getState }) => {
   const count = galery ? galery.length : 0
   try {
-  const { data: { id } } = await axios.post('/products/product/', formData)
+  const { data: { id } } = await axios.post('/beauty/beauty_services/', formData)
   for (let i = 0; i < count; i += 1) {
   if (galery && galery.length && galery[i].image.startsWith('data:image')) {
     const formDataImage = new FormData()
@@ -86,7 +86,7 @@ export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ fo
     const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
     formDataProductImage.append('product', id)
     formDataProductImage.append('image', image)
-      await axios.post(`/products/product-images/`, formDataProductImage)
+      await axios.post(`/beauty/beauty_services/`, formDataProductImage)
     } catch (error) {
       errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
     }
@@ -102,9 +102,9 @@ export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ fo
 }
 })
 
-export const deleteProduct = createAsyncThunk('appProducts/deleteProduct', async (id, { dispatch, getState }) => {
+export const deleteService = createAsyncThunk('appServices/deleteService', async (id, { dispatch, getState }) => {
   try {
-  await axios.delete(`/products/product/${id}/`)
+  await axios.delete(`/beauty/beauty_services/${id}/`)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   return id
@@ -114,7 +114,7 @@ export const deleteProduct = createAsyncThunk('appProducts/deleteProduct', async
 }
 })
 
-export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ id, formData, galery }, { dispatch, getState }) => {
+export const editService = createAsyncThunk('appServices/editService', async ({ id, formData, galery }, { dispatch, getState }) => {
   const count = galery ? galery.length : 0
   for (let i = 0; i < count; i += 1) {
     const formDataImage = new FormData()
@@ -133,7 +133,7 @@ export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ 
         }  
     }
   try {
-  await axios.patch(`/products/product/${id}/`, formData)
+  await axios.patch(`/beauty/beauty_services/${id}/`, formData)
   await dispatch(getData(getState().users.params))
   // await dispatch(getAllData())
   // return id
@@ -143,10 +143,10 @@ export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ 
 }
 })
 
-export const updateProduct = createAsyncThunk('appProducts/updateProduct', async ({ id, product }, { dispatch, getState }) => {
+export const updateService = createAsyncThunk('appProducts/updateService', async ({ id, product }, { dispatch, getState }) => {
   
   try {
-  await axios.patch(`/products/product/${id}/`, { ...product })
+  await axios.patch(`/beauty/beauty_services/${id}/`, { ...product })
   await dispatch(getProduct(id))
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
@@ -154,16 +154,16 @@ export const updateProduct = createAsyncThunk('appProducts/updateProduct', async
 }
 })
 
-export const appProductsSlice = createSlice({
-  name: 'appProducts',
+export const appServicesSlice = createSlice({
+  name: 'appServices',
   initialState: {
     data: [],
-    allProducts: [],
+    allServices: [],
     total: 0,
     params: {},
     loading: false,
     error: null,
-    selectedProduct: null
+    selectedService: null
   },
   reducers: {},
   extraReducers: builder => {
@@ -175,35 +175,35 @@ export const appProductsSlice = createSlice({
         state.loading = false
         state.error = null
       })
-      .addCase(getProduct.fulfilled, (state, action) => {
-        state.selectedProduct = action.payload
+      .addCase(getService.fulfilled, (state, action) => {
+        state.selectedService = action.payload
         state.loading = false
         state.error = null
       })
-      .addCase(getAllProducts.fulfilled, (state, action) => {
-        state.allProducts = action.payload
+      .addCase(getAllServices.fulfilled, (state, action) => {
+        state.allServices = action.payload
         state.loading = false
         state.error = null
       })
       .addCase(getData.pending, handlePending)
-      .addCase(getAllProducts.pending, handlePending)
-      .addCase(getProduct.pending, handlePending)
-      .addCase(addProduct.pending, handlePending)
-      .addCase(deleteProduct.pending, handlePending)
-      .addCase(editProduct.pending, handlePending)
-      .addCase(updateProduct.pending, handlePending)
-      .addCase(updateProduct.rejected, handleRejected)
+      .addCase(getAllServices.pending, handlePending)
+      .addCase(getService.pending, handlePending)
+      .addCase(addService.pending, handlePending)
+      .addCase(deleteService.pending, handlePending)
+      .addCase(editService.pending, handlePending)
+      .addCase(updateService.pending, handlePending)
+      .addCase(updateService.rejected, handleRejected)
       .addCase(getData.rejected, handleRejected)
-      .addCase(getAllProducts.rejected, handleRejected)
-      .addCase(getProduct.rejected, handleRejected)
-      .addCase(addProduct.rejected, handleRejected)
-      .addCase(deleteProduct.rejected, handleRejected)
-      .addCase(editProduct.rejected, handleRejected)  
-      .addCase(addProduct.fulfilled, handleFulfilled)
-      .addCase(deleteProduct.fulfilled, handleFulfilled)
-      .addCase(editProduct.fulfilled, handleFulfilled)
-      .addCase(updateProduct.fulfilled, handleFulfilled)
+      .addCase(getAllServices.rejected, handleRejected)
+      .addCase(getService.rejected, handleRejected)
+      .addCase(addService.rejected, handleRejected)
+      .addCase(deleteService.rejected, handleRejected)
+      .addCase(editService.rejected, handleRejected)  
+      .addCase(addService.fulfilled, handleFulfilled)
+      .addCase(deleteService.fulfilled, handleFulfilled)
+      .addCase(editService.fulfilled, handleFulfilled)
+      .addCase(updateService.fulfilled, handleFulfilled)
   }
 })
 
-export default appProductsSlice.reducer
+export default appServicesSlice.reducer

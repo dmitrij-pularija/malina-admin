@@ -46,6 +46,12 @@ export default [
         title: 'Service Categories',
         icon: <Circle size={12} />,
         navLink: '/apps/beauty/services/categories/list'
+      },
+      {
+        id: 'ServicesServices',
+        title: 'Services',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/services/services/list'
       }
     ]
   },

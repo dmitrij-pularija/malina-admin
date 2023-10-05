@@ -1,8 +1,10 @@
-// import { useEffect } from 'react'
-// import { useDispatch, useSelector } from "react-redux"
-import { useNavigate } from 'react-router-dom'
+import { useEffect, useState } from 'react'
+import { useDispatch, useSelector } from "react-redux"
+// import { useNavigate } from 'react-router-dom'
 import Table from './Table'
-// import { getAllStores } from '../../../stores/store'
+import { getAllStores } from '../../../../food/stores/store'
+import { getAllMasters } from '../../../../user/masters/store'
+import { getAllCategories } from '../../../services/categories/store'
 import Loading from '../../../../../../@core/components/spinner/Loading'
 import Breadcrumbs from '@components/breadcrumbs'
 // import { Row, Col } from 'reactstrap'
@@ -11,24 +13,31 @@ import Breadcrumbs from '@components/breadcrumbs'
 // import { formatNumberInt } from '@utils'
 import '@styles/react/apps/app-users.scss'
 
-const ProductsList = () => {
-  // const dispatch = useDispatch()
-  const navigate = useNavigate()
-  // const stores = useSelector(state => state.stores.allStores)
+const ServicesList = () => {
+  const dispatch = useDispatch()
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => setModalOpen(!modalOpen)
+  // const navigate = useNavigate()
+  const stores = useSelector(state => state.stores.allStores)
+  const masters = useSelector(state => state.masters.allMasters)
+  const categories = useSelector(state => state.serviceCategories.allCategories)
 
-  // useEffect(() => {
-  //   if (!stores.length) dispatch(getAllStores())
-  // }, [])
 
-  const handleAdd = () => navigate('/apps/food/products/products/add/') 
+  useEffect(() => {
+    if (!stores.length) dispatch(getAllStores())
+    if (!masters.length) dispatch(getAllMasters())
+    if (!categories.length) dispatch(getAllCategories())
+  }, [])
+
+  // const handleAdd = () => navigate('/apps/beauty/products/products/add/') 
 
   return (
     <div className='app-user-list'>
-      <Breadcrumbs title='Меню' data={[{ title: 'Меню' }]} onClick={handleAdd} />
-      <Table />
+      <Breadcrumbs title='Услуги' data={[{ title: 'Услуги' }]} onClick={toggleModal} />
+      <Table stores={stores} masters={masters} categories={categories} modalOpen={modalOpen} toggleModal={toggleModal} />
       <Loading />  
     </div>
   )
 }
 
-export default ProductsList
+export default ServicesList

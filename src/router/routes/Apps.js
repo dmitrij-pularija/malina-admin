@@ -10,6 +10,7 @@ const OrdersHistory = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersOnMap = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersReview = lazy(() => import('../../views/apps/food/orders/edit'))
 const ServicesCategories = lazy(() => import('../../views/apps/beauty/services/categories/list'))
+const Services = lazy(() => import('../../views/apps/beauty/services/services/list'))
 
 const ProductsCategories = lazy(() => import('../../views/apps/food/products/categories/list'))
 const Products = lazy(() => import('../../views/apps/food/products/products/list'))
@@ -155,6 +156,10 @@ const AppRoutes = [
   {
     element: <ServicesCategories />,
     path: '/apps/beauty/services/categories/list'
+  },
+  {
+    element: <Services />,
+    path: '/apps/beauty/services/services/list'
   },
   {
     element: <ProductsCategories />,

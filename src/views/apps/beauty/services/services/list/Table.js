@@ -1,11 +1,11 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+// import ServicesModal from './Modal'
 // import Sidebar from './Sidebar'
 // import UsersListModal from './Modal'
 
 import { columns } from './columns'
-import { getData, deleteProduct } from '../store'
-import { getAllStores } from '../../../stores/store'
+import { getData, deleteService } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
@@ -37,7 +37,7 @@ import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 // ** Table Header
-const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
+const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
   // ** Converts table to CSV
   function convertArrayOfObjectsToCSV(array) {
     let result
@@ -148,10 +148,6 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-
-            {/* <Button className='add-new-user' color='primary' onClick={toggleModal}>
-              Добавить
-            </Button> */}
           </div>
         </Col>
       </Row>
@@ -159,46 +155,61 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
   )
 }
 
-const UsersList = () => {
+const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const stores = useSelector(state => state.stores.allStores)
-  const { data, total } = useSelector(state => state.products)
+  const { data, total } = useSelector(state => state.services)
 
   // ** States
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
-  const [sortColumn, setSortColumn] = useState('id')
+  const [sortColumn, setSortColumn] = useState('beauty_service_name')
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [modalOpen, setModalOpen] = useState(false)
-  const [selectedProduct, setSelectedProduct] = useState('')
+  const [selectedService, setSelectedService] = useState('')
   // const [currentRole, setCurrentRole] = useState({ value: '', label: 'Выберите роль' })
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
+  const [currentSpecialty, setCurrentSpecialty] = useState({ value: '', label: 'Выбирите категорию' })
+  const [currentMaster, setCurrentMaster] = useState({ value: '', label: 'Выбирите специалиста' })
   // const [currentStatus, setCurrentStatus] = useState({ value: '', label: 'Выбирете статус' })
-// console.log(stores)
+// console.log(data)
   // ** Function to toggle sidebar
   // const toggleModal = () => setModalOpen(!modalOpen)
 // console.log(data)
   // ** Get data on mount
   useEffect(() => {
-    if (!stores.length) dispatch(getAllStores())
+    // if (!stores.length) dispatch(getAllStores())
     dispatch(
       getData({
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        supplier_id: currentStore.value
+        business_id: currentStore.value,
+        master_id: currentMaster.value,
+        master_specialty_id: currentSpecialty.value
       })
     )
   }, [])
 
-  const storeOptions = stores.map((store) => ({
+  const storeOptions = stores.map(store => ({
     value: String(store.id),
     label: store.name
   }))
   storeOptions.unshift({ value: '', label: 'Показать все' }) 
+  
+  const masterOptions = masters.map(master => ({
+    value: String(master.id),
+    label: master.master_name ? `${master.master_name} ${master.surname ? master.surname : ''}` : master.login
+  }))
+  masterOptions.unshift({ value: '', label: 'Показать все' }) 
+  
+  const specialtyOptions = categories.map(category => ({
+    value: String(category.id),
+    label: category.category_name
+  }))
+  specialtyOptions.unshift({ value: '', label: 'Показать все' }) 
   // ** User filter options
   //  const typeOptions = [
   //   { value: '', label: 'Показать все' },
@@ -230,14 +241,16 @@ const UsersList = () => {
   //   { value: 'inactive', label: 'Inactive', number: 3 }
   // ]
 
-  const handleDelProduct = (event, id) => {
+  const handleDel = (event, id) => {
     event.preventDefault()
-    dispatch(deleteProduct(id))
+    dispatch(deleteService(id))
   }
-  const handleEditProduct = (event, row) => {
+  const handleEdit = (event, row) => {
     event.preventDefault()
+    setSelectedService(row)
+    toggleModal()
     // setSelectedProduct(row)
-    navigate(`/apps/food/products/products/edit/${row.id}/`)
+    // navigate(`/apps/food/products/products/edit/${row.id}/`)
   }
 
   const handlePagination = page => {
@@ -247,7 +260,9 @@ const UsersList = () => {
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        supplier_id: currentStore.value
+        business_id: currentStore.value,
+        master_id: currentMaster.value,
+        master_specialty_id: currentSpecialty.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -262,7 +277,9 @@ const UsersList = () => {
         search: searchTerm,
         perPage: value,
         page: 1,
-        supplier_id: currentStore.value
+        business_id: currentStore.value,
+        master_id: currentMaster.value,
+        master_specialty_id: currentSpecialty.value
       })
     )
     setRowsPerPage(value)
@@ -277,7 +294,9 @@ const UsersList = () => {
         ordering: `${sort}${sortColumn}`,
         page: 1,
         perPage: rowsPerPage,
-        supplier_id: currentStore.value
+        business_id: currentStore.value,
+        master_id: currentMaster.value,
+        master_specialty_id: currentSpecialty.value
       })
     )
   }
@@ -308,7 +327,9 @@ const UsersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      supplier_id: currentStore.value,
+      business_id: currentStore.value,
+      master_id: currentMaster.value,
+      master_specialty_id: currentSpecialty.value,
       search: searchTerm
     }
 
@@ -335,7 +356,9 @@ const UsersList = () => {
         search: searchTerm,
         page: 1,
         perPage: rowsPerPage,
-        supplier_id: currentStore.value
+        business_id: currentStore.value,
+        master_id: currentMaster.value,
+        master_specialty_id: currentSpecialty.value
       })
     )
   }
@@ -363,7 +386,61 @@ const UsersList = () => {
                       search: searchTerm,
                       page: 1,
                       perPage: rowsPerPage,
-                      supplier_id: data.value
+                      business_id: data.value,
+                      master_id: currentMaster.value,
+                      master_specialty_id: currentSpecialty.value
+                    })
+                  )
+                }}
+              />
+            </Col>
+            <Col className='my-md-0 my-1' md='4'>
+              <Label for='plan-select'>Категория</Label>
+              <Select
+                theme={selectThemeColors}
+                isClearable={false}
+                className='react-select'
+                classNamePrefix='select'
+                options={specialtyOptions}
+                value={currentSpecialty}
+                onChange={data => {
+                  setCurrentSpecialty(data)
+                  setCurrentPage(1)
+                  dispatch(
+                    getData({
+                      ordering: `${sort}${sortColumn}`,
+                      search: searchTerm,
+                      page: 1,
+                      perPage: rowsPerPage,
+                      business_id: currentStore.value,
+                      master_id: currentMaster.value,
+                      master_specialty_id: data.value
+                    })
+                  )
+                }}
+              />
+            </Col>
+            <Col className='my-md-0 my-1' md='4'>
+              <Label for='plan-select'>Специалист</Label>
+              <Select
+                theme={selectThemeColors}
+                isClearable={false}
+                className='react-select'
+                classNamePrefix='select'
+                options={masterOptions}
+                value={currentMaster}
+                onChange={data => {
+                  setCurrentMaster(data)
+                  setCurrentPage(1)
+                  dispatch(
+                    getData({
+                      ordering: `${sort}${sortColumn}`,
+                      search: searchTerm,
+                      page: 1,
+                      perPage: rowsPerPage,
+                      business_id: currentStore.value,
+                      master_id: data.value,
+                      master_specialty_id: currentSpecialty.value
                     })
                   )
                 }}
@@ -382,7 +459,7 @@ const UsersList = () => {
             pagination
             responsive
             paginationServer
-            columns={columns(stores, handleEditProduct, handleDelProduct)}
+            columns={columns(masters, handleEdit, handleDel)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -401,8 +478,9 @@ const UsersList = () => {
           />
         </div>
       </Card>
+      {/* <ServicesModal masters={masters} stores={stores} categories={categories} open={modalOpen} toggleModal={toggleModal} selectedService={selectedService} setSelectedService={setSelectedService} /> */}
     </Fragment>
   )
 }
 
-export default UsersList
+export default ServicesList
