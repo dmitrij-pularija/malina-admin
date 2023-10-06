@@ -72,40 +72,64 @@ export const getService = createAsyncThunk('appServices/getService', async id =>
 }
 })
 
-export const addService = createAsyncThunk('appServices/addService', async ({ formData, galery }, { dispatch, getState }) => {
-  const count = galery ? galery.length : 0
-  try {
-  const { data: { id } } = await axios.post('/beauty/beauty_services/', formData)
-  for (let i = 0; i < count; i += 1) {
-  if (galery && galery.length && galery[i].image.startsWith('data:image')) {
+export const addService = createAsyncThunk('appServices/addService', async ({ sevice, avatar }, { dispatch, getState }) => {
+  if (avatar && avatar.startsWith('data:image')) {
     const formDataImage = new FormData()
-    const formDataProductImage = new FormData()
-    const imageBlob = dataURLtoBlob(galery[i].image)
-    formDataImage.append('image', imageBlob, 'product.jpg')
-    try {
-    const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-    formDataProductImage.append('product', id)
-    formDataProductImage.append('image', image)
-      await axios.post(`/beauty/beauty_services/`, formDataProductImage)
+    try {  
+      const avatarBlob = dataURLtoBlob(avatar)
+      formDataImage.append('image', avatarBlob, 'service.jpg')
+      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+      sevice.beauty_service_image = image
     } catch (error) {
       errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
     }
     }
-  }
 
-  await dispatch(getData(getState().users.params))
+  try {
+  await axios.post('/beauty/beauty_services/', sevice)
+  await dispatch(getData(getState().services.params))
   // await dispatch(getAllData())
-  // return user
+  return sevice
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
 
+// export const addService = createAsyncThunk('appServices/addService', async ({ formData, galery }, { dispatch, getState }) => {
+//   const count = galery ? galery.length : 0
+//   try {
+//   const { data: { id } } = await axios.post('/beauty/beauty_services/', formData)
+//   for (let i = 0; i < count; i += 1) {
+//   if (galery && galery.length && galery[i].image.startsWith('data:image')) {
+//     const formDataImage = new FormData()
+//     const formDataProductImage = new FormData()
+//     const imageBlob = dataURLtoBlob(galery[i].image)
+//     formDataImage.append('image', imageBlob, 'product.jpg')
+//     try {
+//     const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+//     formDataProductImage.append('product', id)
+//     formDataProductImage.append('image', image)
+//       await axios.post(`/beauty/beauty_services/`, formDataProductImage)
+//     } catch (error) {
+//       errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+//     }
+//     }
+//   }
+
+//   await dispatch(getData(getState().users.params))
+//   // await dispatch(getAllData())
+//   // return user
+// } catch (error) {
+//   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+//   return thunkAPI.rejectWithValue(error)
+// }
+// })
+
 export const deleteService = createAsyncThunk('appServices/deleteService', async (id, { dispatch, getState }) => {
   try {
   await axios.delete(`/beauty/beauty_services/${id}/`)
-  await dispatch(getData(getState().users.params))
+  await dispatch(getData(getState().services.params))
   // await dispatch(getAllData())
   return id
 } catch (error) {
@@ -114,45 +138,69 @@ export const deleteService = createAsyncThunk('appServices/deleteService', async
 }
 })
 
-export const editService = createAsyncThunk('appServices/editService', async ({ id, formData, galery }, { dispatch, getState }) => {
-  const count = galery ? galery.length : 0
-  for (let i = 0; i < count; i += 1) {
-    const formDataImage = new FormData()
-    const formDataProductImage = new FormData()
-    if (galery && galery.length && galery[i].image.startsWith('data:image')) {
-      const imageBlob = dataURLtoBlob(galery[i].image)
-      formDataImage.append('image', imageBlob, 'product.jpg')
-      }
-      try {
-        const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-        formDataProductImage.append('product', id)
-        formDataProductImage.append('image', image)
-          await axios.post(`/products/product-images/`, formDataProductImage)
-        } catch (error) {
-          errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
-        }  
-    }
-  try {
-  await axios.patch(`/beauty/beauty_services/${id}/`, formData)
-  await dispatch(getData(getState().users.params))
-  // await dispatch(getAllData())
-  // return id
-} catch (error) {
-  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
-  return thunkAPI.rejectWithValue(error)
-}
-})
 
-export const updateService = createAsyncThunk('appProducts/updateService', async ({ id, product }, { dispatch, getState }) => {
-  
+export const editService = createAsyncThunk('appServices/editService', async ({ id, sevice, avatar }, { dispatch, getState }) => {
+  if (avatar && avatar.startsWith('data:image')) {
+    const formDataImage = new FormData()
+    try {  
+      const avatarBlob = dataURLtoBlob(avatar)
+      formDataImage.append('image', avatarBlob, 'service.jpg')
+      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+      sevice.beauty_service_image = image
+    } catch (error) {
+      errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    }
+    }
+
   try {
-  await axios.patch(`/beauty/beauty_services/${id}/`, { ...product })
-  await dispatch(getProduct(id))
+    await axios.put(`/beauty/beauty_services/${id}/`, sevice)
+  await dispatch(getData(getState().services.params))
+  // await dispatch(getAllData())
+  return sevice
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
+// export const editService = createAsyncThunk('appServices/editService', async ({ id, formData, galery }, { dispatch, getState }) => {
+//   const count = galery ? galery.length : 0
+//   for (let i = 0; i < count; i += 1) {
+//     const formDataImage = new FormData()
+//     const formDataProductImage = new FormData()
+//     if (galery && galery.length && galery[i].image.startsWith('data:image')) {
+//       const imageBlob = dataURLtoBlob(galery[i].image)
+//       formDataImage.append('image', imageBlob, 'product.jpg')
+//       }
+//       try {
+//         const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+//         formDataProductImage.append('product', id)
+//         formDataProductImage.append('image', image)
+//           await axios.post(`/products/product-images/`, formDataProductImage)
+//         } catch (error) {
+//           errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+//         }  
+//     }
+//   try {
+//   await axios.patch(`/beauty/beauty_services/${id}/`, formData)
+//   await dispatch(getData(getState().users.params))
+//   // await dispatch(getAllData())
+//   // return id
+// } catch (error) {
+//   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+//   return thunkAPI.rejectWithValue(error)
+// }
+// })
+
+// export const updateService = createAsyncThunk('appProducts/updateService', async ({ id, product }, { dispatch, getState }) => {
+  
+//   try {
+//   await axios.patch(`/beauty/beauty_services/${id}/`, { ...product })
+//   await dispatch(getProduct(id))
+// } catch (error) {
+//   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+//   return thunkAPI.rejectWithValue(error)
+// }
+// })
 
 export const appServicesSlice = createSlice({
   name: 'appServices',
@@ -191,8 +239,8 @@ export const appServicesSlice = createSlice({
       .addCase(addService.pending, handlePending)
       .addCase(deleteService.pending, handlePending)
       .addCase(editService.pending, handlePending)
-      .addCase(updateService.pending, handlePending)
-      .addCase(updateService.rejected, handleRejected)
+      // .addCase(updateService.pending, handlePending)
+      // .addCase(updateService.rejected, handleRejected)
       .addCase(getData.rejected, handleRejected)
       .addCase(getAllServices.rejected, handleRejected)
       .addCase(getService.rejected, handleRejected)
@@ -202,7 +250,7 @@ export const appServicesSlice = createSlice({
       .addCase(addService.fulfilled, handleFulfilled)
       .addCase(deleteService.fulfilled, handleFulfilled)
       .addCase(editService.fulfilled, handleFulfilled)
-      .addCase(updateService.fulfilled, handleFulfilled)
+      // .addCase(updateService.fulfilled, handleFulfilled)
   }
 })
 

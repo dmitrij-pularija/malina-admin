@@ -1,6 +1,6 @@
 import { Fragment, useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-// import ServicesModal from './Modal'
+import ServicesModal from './Modal'
 // import Sidebar from './Sidebar'
 // import UsersListModal from './Modal'
 
@@ -478,7 +478,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
           />
         </div>
       </Card>
-      {/* <ServicesModal masters={masters} stores={stores} categories={categories} open={modalOpen} toggleModal={toggleModal} selectedService={selectedService} setSelectedService={setSelectedService} /> */}
+      <ServicesModal masters={masters} stores={stores} categories={categories} open={modalOpen} toggleModal={toggleModal} selectedService={selectedService} setSelectedService={setSelectedService} />
     </Fragment>
   )
 }

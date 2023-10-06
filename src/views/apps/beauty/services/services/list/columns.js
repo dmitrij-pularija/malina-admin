@@ -125,7 +125,7 @@ export const columns = (masters, handleEditProduct, handleDelProduct) => {
 
 const renderMasters = masterList => {
   if (masterList && masterList.length) {
-  return masterList.map(master => renderMaster(master.id))
+  return <div className='d-flex flex-column'>{masterList.map(master => renderMaster(master.id))}</div>
   } else return ''
 }
 

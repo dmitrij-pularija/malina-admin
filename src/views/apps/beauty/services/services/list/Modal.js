@@ -64,7 +64,7 @@ const ServicesModal = ({
 }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState("")
-  const mastersList = selectedService && selectedTable.beauty_service_masters.length ? selectedTable.beauty_service_masters.map(master => parseInt(master.id)) : [] 
+  const mastersList = selectedService && selectedService.beauty_service_masters.length ? selectedService.beauty_service_masters.map(master => parseInt(master.id)) : [] 
 
   useEffect(() => {
     if (selectedService && selectedService.beauty_service_image) setAvatar(selectedService.beauty_service_image)
@@ -87,8 +87,8 @@ const ServicesModal = ({
 
   const values = selectedService ? {
       name: selectedService.beauty_service_name ? selectedService.beauty_service_name : '',
-      business: initSelect(storeOptions, selectedService.beauty_service_business.id),
-      category: initSelect(categoryOptions, selectedService.beauty_service_category.id),
+      business: selectedService.beauty_service_business && selectedService.beauty_service_business.id ? initSelect(storeOptions, selectedService.beauty_service_business.id) : '',
+      category: selectedService.beauty_service_category && selectedService.beauty_service_category.id ? initSelect(categoryOptions, selectedService.beauty_service_category.id) : '',
       hasPause: selectedService.has_pause ? selectedService.has_pause : false,
       pauseTime: selectedService.pause_time ? selectedService.pause_time : "",
       price: selectedService.beauty_service_price ? selectedService.beauty_service_price : "",
@@ -162,22 +162,22 @@ const ServicesModal = ({
   const onSubmit = (data) => {
     if (checkIsValid(data, requiredFields)) {
       const sevice = {}
-      body.beauty_service_business = data.business.value
-      body.beauty_service_masters = data.masters.map(master => parseInt(master.value))
-      if (data.name) body.beauty_service_name = data.name
-      if (data.category) body.beauty_service_category = data.category.value
-      if (data.hasPause) body.has_pause = data.hasPause
-      if (data.pauseTime) body.pause_time = data.pauseTime
-      if (data.price) body.beauty_service_price = data.price
-      if (data.duration) body.beauty_service_duration_minutes = data.duration
-      if (data.description) body.beauty_service_description = data.description
+      sevice.beauty_service_business = data.business.value
+      sevice.beauty_service_masters = data.masters.map(master => master.value)
+      if (data.name) sevice.beauty_service_name = data.name
+      if (data.category) sevice.beauty_service_category = data.category.value
+      if (data.hasPause) sevice.has_pause = data.hasPause
+      if (data.pauseTime) sevice.pause_time = data.pauseTime
+      if (data.price) sevice.beauty_service_price = data.price
+      if (data.duration) sevice.beauty_service_duration_minutes = data.duration
+      if (data.description) sevice.beauty_service_description = data.description
 
       if (selectedService) {
-        dispatch(editMaster({ id: selectedService.id, sevice, avatar })).then(
+        dispatch(editService({ id: selectedService.id, sevice, avatar })).then(
           (response) => response.meta.requestStatus === "fulfilled" && handleClose()
         )
       } else {
-        dispatch(addMaster({ sevice, avatar })).then(
+        dispatch(addService({ sevice, avatar })).then(
           (response) => response.meta.requestStatus === "fulfilled" && handleClose()
         )
       }
@@ -214,7 +214,7 @@ const ServicesModal = ({
               <div className="d-flex align-items-center flex-column">
                 {renderUserImg(
                   avatar,
-                  selectedMaster && selectedMaster.beauty_service_name ? selectedMaster.beauty_service_name : "Услуга"
+                  selectedService && selectedService.beauty_service_name ? selectedService.beauty_service_name : "Услуга"
                 )}
                 <div className="d-flex align-items-center gap-10">
                   <Button
@@ -278,7 +278,7 @@ const ServicesModal = ({
                     <Input
                       {...field}
                       id="description"
-                      placeholder="Doe"
+                      placeholder="Введите описание"
                       invalid={errors.description && true}
                     />
                   )}
@@ -356,7 +356,7 @@ const ServicesModal = ({
                 id='masters'
                 isClearable={false}
                 classNamePrefix='select'
-                options={waiterOptions}
+                options={masterOptions}
                 theme={selectThemeColors}
                 placeholder="Выбирите специалиста(ов)"
                 className={classnames('react-select', { 'is-invalid': errors.masters && true })}
@@ -365,42 +365,6 @@ const ServicesModal = ({
             )}
           />
          {errors && errors.masters && (<FormFeedback>Пожалуйста выберите специалиста</FormFeedback>)} 
-            </Col>
-            <Col md={6} xs={12}>
-          <div className='form-check form-check-primary'>
-          <Controller
-            name='hasPause'
-            control={control}
-            rules={{ required: false }}
-            render={({ field }) => (
-              <Input id='hasPause'  type='checkbox' checked={field.value} {...field} />
-            )}
-          />
-          <Label className='form-label' for='hasPause'>
-          Пауза между процедурами
-          </Label>
-        </div>
-          </Col>
-            <Col md={6} xs={12}>
-              <Label className="form-label" for="pauseTime">
-              Время паузы, мин
-              </Label>
-              <Controller
-                name="pauseTime"
-                control={control}
-                rules={{ required: false }}
-                render={({ field }) => (
-                  <Input
-                    id="pauseTime"
-                    placeholder="Введите время паузы"
-                    invalid={errors.pauseTime && true}
-                    {...field}
-                  />
-                )}
-              />
-              {errors && errors.pauseTime && (
-                <FormFeedback>Введите время паузы</FormFeedback>
-              )}
             </Col>
             <Col md={6} xs={12}>
               <Label className="form-label" for="price">
@@ -442,6 +406,42 @@ const ServicesModal = ({
               />
               {errors && errors.duration && (
                 <FormFeedback>Введите продолжительность</FormFeedback>
+              )}
+            </Col>
+            <Col md={6} xs={12}>
+          <div className='form-check form-check-primary'>
+          <Controller
+            name='hasPause'
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input id='hasPause'  type='checkbox' checked={field.value} {...field} />
+            )}
+          />
+          <Label className='form-label' for='hasPause'>
+          Пауза между процедурами
+          </Label>
+        </div>
+          </Col>
+            <Col md={6} xs={12} className="mt-1">
+              <Label className="form-label" for="pauseTime">
+              Время паузы, мин
+              </Label>
+              <Controller
+                name="pauseTime"
+                control={control}
+                rules={{ required: false }}
+                render={({ field }) => (
+                  <Input
+                    id="pauseTime"
+                    placeholder="Введите время паузы"
+                    invalid={errors.pauseTime && true}
+                    {...field}
+                  />
+                )}
+              />
+              {errors && errors.pauseTime && (
+                <FormFeedback>Введите время паузы</FormFeedback>
               )}
             </Col>
             <Col xs={12} className="text-center mt-2 pt-50">
