@@ -1,5 +1,5 @@
 import Sidebar from '@components/sidebar'
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, initSelect, checkIsValid } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
@@ -10,6 +10,7 @@ import { useDispatch } from 'react-redux'
 const defaultValues = {
   number: '',
   landingUrl: '',
+  business: '',
   waiter: ''
 }
 // const checkIsValid = data => {
@@ -20,24 +21,24 @@ const defaultValues = {
 //     if (typeof field === 'number') return field > 0    
 // })
 // }
-const requiredFields = ["number", "waiter"]
+const requiredFields = ["number", "waiter", "business"]
 
-const checkIsValid = (data) => {
-  return Object.keys(data).every((key) => {
-    const field = data[key]
-    if (requiredFields.includes(key)) {
-      if (typeof field === "object") {
-        return field.value !== ""
-      } else {
-        return field.length > 0
-      }
-    } else {
-      return true
-    }
-  })
-} 
+// const checkIsValid = (data) => {
+//   return Object.keys(data).every((key) => {
+//     const field = data[key]
+//     if (requiredFields.includes(key)) {
+//       if (typeof field === "object") {
+//         return field.value !== ""
+//       } else {
+//         return field.length > 0
+//       }
+//     } else {
+//       return true
+//     }
+//   })
+// } 
 
-const SidebarNewTable = ({ open, toggleSidebar, waiters, selectedTable, setSelectedTable }) => {
+const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, setSelectedTable }) => {
   const dispatch = useDispatch()
   const waiterList = selectedTable ? selectedTable.waiter.map(waiter => parseInt(waiter.id)) : [] 
   const waiterOptions = waiters.map((waiter) => ({
@@ -45,8 +46,15 @@ const SidebarNewTable = ({ open, toggleSidebar, waiters, selectedTable, setSelec
     label: waiter.full_name
   }))
 
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)   
+  const storeOptions = filtredStore.map(store => ({
+    value: String(store.id),
+    label: store.name
+  }))
+
   const values = selectedTable ? {
     number: selectedTable.number,
+    business: selectedTable.business_id ? initSelect(storeOptions, selectedTable.business_id) : '',
     landingUrl: selectedTable.landing_url ? selectedTable.landing_url : '',
     waiter: waiterOptions.filter(i => waiterList.includes(parseInt(i.value)))
    } : {}
@@ -60,30 +68,39 @@ const SidebarNewTable = ({ open, toggleSidebar, waiters, selectedTable, setSelec
     formState: { errors }
   } = useForm({ defaultValues, values })
 
+  const handleClose = () => {
+  setSelectedTable('')
+  toggleSidebar()
+  reset({ ...defaultValues }) 
+} 
+
   const onSubmit = data => {
-    if (checkIsValid(data)) {
+    if (checkIsValid(data, requiredFields)) {
       const waiterValues = data.waiter ? data.waiter.map(waiter => parseInt(waiter.value)) : []  
       if (selectedTable) {  
       dispatch(
         editTable({
           id: selectedTable.id, 
           number: parseInt(data.number),
+          business_id: data.business.value,
           landing_url: data.landingUrl ? data.landingUrl : '',
           waiter: waiterValues
         })
+      ).then(
+        (response) => response.meta.requestStatus === "fulfilled" && handleClose()
       )
       } else {
         dispatch(
         addTable({
           number: parseInt(data.number),
+          business_id: data.business.value,
           landing_url: data.landingUrl ? data.landingUrl : '',
           waiter: waiterValues
         })
+      ).then(
+        (response) => response.meta.requestStatus === "fulfilled" && handleClose()
       )
       }
-      setSelectedTable('')
-      toggleSidebar()
-      reset()  
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -126,8 +143,35 @@ const SidebarNewTable = ({ open, toggleSidebar, waiters, selectedTable, setSelec
             )}
           />
         {errors && errors.number && (<FormFeedback>Пожалуйста введите номер стола</FormFeedback>)}    
-        </div>  
+        </div> 
         <div className='mb-1'>
+              <Label className="form-label" for="business">
+                Заведение <span className="text-danger">*</span>
+              </Label>
+              <Controller
+                name="business"
+                control={control}
+                rules={{ required: true }}
+                render={({ field }) => (
+                  <Select
+                    id="business"
+                    isClearable={false}
+                    classNamePrefix="select"
+                    options={storeOptions}
+                    theme={selectThemeColors}
+                    placeholder="Выберите Заведение"
+                    className={classnames("react-select", {
+                      "is-invalid": errors.business && true
+                    })}
+                    {...field}
+                  />
+                )}
+              />
+              {errors && errors.business && (
+                <FormFeedback>Пожалуйста выберите заведение</FormFeedback>
+              )}
+            </div> 
+        {/* <div className='mb-1'>
           <Label className='form-label' for='landingUrl'>
           Landing url
           </Label>
@@ -140,7 +184,7 @@ const SidebarNewTable = ({ open, toggleSidebar, waiters, selectedTable, setSelec
             )}
           />
         {errors && errors.landingUrl && (<FormFeedback>Пожалуйста введите Landing url</FormFeedback>)}    
-        </div> 
+        </div>  */}
         <div className='mb-3'>
           <Label className='form-label' for='waiter'>
           Официант(ы)

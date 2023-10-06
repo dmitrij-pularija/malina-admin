@@ -190,7 +190,8 @@ const TablesList = ({waiters, stores }) => {
     )
   }, [dispatch, data.length, sort, sortColumn, currentPage])
 
-  const storeOptions = stores.map((store) => ({
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1) 
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))
@@ -347,7 +348,7 @@ const TablesList = ({waiters, stores }) => {
             className='react-dataTable'
             paginationComponent={CustomPagination}
             data={dataToRender()}
-            noDataComponent={<h6 className='text-capitalize'>Отзывы не найдены</h6>}
+            noDataComponent={<h6 className='text-capitalize'>Столы не найдены</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={data}
@@ -361,7 +362,7 @@ const TablesList = ({waiters, stores }) => {
           />
         </div>
       </Card>
-      <Sidebar open={sidebarOpen} toggleSidebar={handleClose} waiters={waiters} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
+      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} waiters={waiters} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
       <Modal isOpen={modalShow} toggle={toggleModal} className='modal-dialog-centered'>
       <ModalHeader className='bg-transparent' toggle={toggleModal}></ModalHeader>
         <ModalBody className='px-sm-5 pt-50 pb-5'>

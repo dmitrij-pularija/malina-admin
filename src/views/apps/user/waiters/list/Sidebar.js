@@ -80,8 +80,9 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
     value: String(item.id),
     label: `${item.start_time.slice(0, -3)} - ${item.end_time.slice(0, -3)} ${item.description} `
   }))
-
-  const storeOptions = stores.map((store) => ({
+  
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
 }))
