@@ -15,6 +15,7 @@ import ratingMasters from '@src/views/apps/beauty/rating/masters/store'
 import productComplaints from '@src/views/apps/food/rating/complaints/store'
 import productBeautyComplaints from '@src/views/apps/beauty/rating/complaints/store'
 import products from '@src/views/apps/food/products/products/store'
+import productsBeauty from '@src/views/apps/beauty/products/products/store'
 import productsCategories from '@src/views/apps/food/products/categories/store'
 import beautyProductsCategories from '@src/views/apps/beauty/products/categories/store'
 import serviceCategories from '@src/views/apps/beauty/services/categories/store'
@@ -55,6 +56,7 @@ const rootReducer = {
   productComplaints,
   productBeautyComplaints,
   products,
+  productsBeauty,
   productsCategories,
   beautyProductsCategories,
   serviceCategories,

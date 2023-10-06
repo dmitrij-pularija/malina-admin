@@ -20,11 +20,11 @@ const ProductsList = () => {
   //   if (!stores.length) dispatch(getAllStores())
   // }, [])
 
-  const handleAdd = () => navigate('/apps/food/products/products/add/') 
+  const handleAdd = () => navigate('/apps/beauty/products/products/add/') 
 
   return (
     <div className='app-user-list'>
-      <Breadcrumbs title='Меню' data={[{ title: 'Меню' }]} onClick={handleAdd} />
+      <Breadcrumbs title='Товары' data={[{ title: 'Товары' }]} onClick={handleAdd} />
       <Table />
       <Loading />  
     </div>

@@ -5,7 +5,7 @@ import axios from 'axios'
 
 export const delImages = async id => {
   try {
-  await axios.delete(`/products/product-images/${id}/`)
+  await axios.delete(`/beauty/beauty-product-images/${id}/`)
 } catch (error) {
   errorMessage(error.response.data.detail)
   return thunkAPI.rejectWithValue(error)
@@ -29,14 +29,14 @@ export const delImages = async id => {
 // }
 // }
 
-export const getAllProducts = createAsyncThunk('appProducts/getAllProducts', async () => {
+export const getAllProducts = createAsyncThunk('appBeautyProducts/getAllProducts', async () => {
   try {
     let isFinished = false
     let page = 1
     const acc = []
-    const { data: { count } } = await axios.get('/products/product')
+    const { data: { count } } = await axios.get('/beauty/beauty-products/')
     while (!isFinished) {
-      const { data: { results } } = await axios.get('/products/product', { params: { perPage: 100, page }})
+      const { data: { results } } = await axios.get('/beauty/beauty-products/', { params: { perPage: 100, page }})
       acc.push(...results)
       if (acc.length === count) isFinished = true
       page += 1
@@ -48,9 +48,9 @@ export const getAllProducts = createAsyncThunk('appProducts/getAllProducts', asy
   }
 })
 
-export const getData = createAsyncThunk('appProducts/getData', async params => {
+export const getData = createAsyncThunk('appBeautyProducts/getData', async params => {
   try {
-  const response = await axios.get('/products/product', { params })
+  const response = await axios.get('/beauty/beauty-products/', { params })
   return {
     params,
     data: response.data.results,
@@ -62,9 +62,9 @@ export const getData = createAsyncThunk('appProducts/getData', async params => {
 }
 })
 
-export const getProduct = createAsyncThunk('appProducts/getProduct', async id => {
+export const getProduct = createAsyncThunk('appBeautyProducts/getProduct', async id => {
   try {
-  const response = await axios.get(`/products/product/${id}/`)
+  const response = await axios.get(`/beauty/beauty-products/${id}/`)
   return response.data
 } catch (error) {
   errorMessage(error.response.data.detail)
@@ -72,10 +72,10 @@ export const getProduct = createAsyncThunk('appProducts/getProduct', async id =>
 }
 })
 
-export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ formData, galery }, { dispatch, getState }) => {
+export const addProduct = createAsyncThunk('appBeautyProducts/addProduct', async ({ product, galery }, { dispatch, getState }) => {
   const count = galery ? galery.length : 0
   try {
-  const { data: { id } } = await axios.post('/products/product/', formData)
+  const { data: { id } } = await axios.post('/beauty/beauty-products/', product)
   for (let i = 0; i < count; i += 1) {
   if (galery && galery.length && galery[i].image.startsWith('data:image')) {
     const formDataImage = new FormData()
@@ -84,28 +84,27 @@ export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ fo
     formDataImage.append('image', imageBlob, 'product.jpg')
     try {
     const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-    formDataProductImage.append('product', id)
+    formDataProductImage.append('beauty_product', id)
     formDataProductImage.append('image', image)
-      await axios.post(`/products/product-images/`, formDataProductImage)
+      await axios.post(`/beauty/beauty-product-images/`, formDataProductImage)
     } catch (error) {
       errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
     }
     }
   }
 
-  await dispatch(getData(getState().users.params))
-  // await dispatch(getAllData())
-  // return user
+  await dispatch(getData(getState().productsBeauty.params))
+  return product
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
 
-export const deleteProduct = createAsyncThunk('appProducts/deleteProduct', async (id, { dispatch, getState }) => {
+export const deleteProduct = createAsyncThunk('appBeautyProducts/deleteProduct', async (id, { dispatch, getState }) => {
   try {
-  await axios.delete(`/products/product/${id}/`)
-  await dispatch(getData(getState().users.params))
+  await axios.delete(`/beauty/beauty-products/${id}/`)
+  await dispatch(getData(getState().productsBeauty.params))
   // await dispatch(getAllData())
   return id
 } catch (error) {
@@ -114,7 +113,7 @@ export const deleteProduct = createAsyncThunk('appProducts/deleteProduct', async
 }
 })
 
-export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ id, formData, galery }, { dispatch, getState }) => {
+export const editProduct = createAsyncThunk('appBeautyProducts/editProduct', async ({ id, product, galery }, { dispatch, getState }) => {
   const count = galery ? galery.length : 0
   for (let i = 0; i < count; i += 1) {
     const formDataImage = new FormData()
@@ -125,28 +124,27 @@ export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ 
       }
       try {
         const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-        formDataProductImage.append('product', id)
+        formDataProductImage.append('beauty_product', id)
         formDataProductImage.append('image', image)
-          await axios.post(`/products/product-images/`, formDataProductImage)
+          await axios.post(`/beauty/beauty-product-images/`, formDataProductImage)
         } catch (error) {
           errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
         }  
     }
   try {
-  await axios.patch(`/products/product/${id}/`, formData)
-  await dispatch(getData(getState().users.params))
-  // await dispatch(getAllData())
-  // return id
+  await axios.patch(`/beauty/beauty-products/${id}/`, product)
+  await dispatch(getData(getState().productsBeauty.params))
+  return product
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
 
-export const updateProduct = createAsyncThunk('appProducts/updateProduct', async ({ id, product }, { dispatch, getState }) => {
+export const updateProduct = createAsyncThunk('appBeautyProducts/updateProduct', async ({ id, product }, { dispatch, getState }) => {
   
   try {
-  await axios.patch(`/products/product/${id}/`, { ...product })
+  await axios.patch(`/beauty/beauty-products/${id}/`, { ...product })
   await dispatch(getProduct(id))
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
@@ -154,8 +152,8 @@ export const updateProduct = createAsyncThunk('appProducts/updateProduct', async
 }
 })
 
-export const appProductsSlice = createSlice({
-  name: 'appProducts',
+export const appBeautyProductsSlice = createSlice({
+  name: 'appBeautyProducts',
   initialState: {
     data: [],
     allProducts: [],
@@ -206,4 +204,4 @@ export const appProductsSlice = createSlice({
   }
 })
 
-export default appProductsSlice.reducer
+export default appBeautyProductsSlice.reducer

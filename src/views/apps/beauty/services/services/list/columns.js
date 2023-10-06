@@ -94,7 +94,7 @@ export const columns = (masters, handleEditProduct, handleDelProduct) => {
   const renderStoore = (row) => {
     return (
       <div className='d-flex justify-content-left align-items-center'>
-      {renderClient(row.avatar ? row.avatar : '', row.name ? row.name : "Заведение")}
+      {renderClient(row.image ? row.image : '', row.name ? row.name : "Заведение")}
      <div className='d-flex flex-column ml3'>
         <span className='fw-bolder'>{row.name ? row.name : ''}</span>
       <small className='text-truncate text-muted mb-0'>{row.business_address ? `${row.business_address.city} ${row.business_address.name}` : ""}</small>

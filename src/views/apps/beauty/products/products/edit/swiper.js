@@ -4,13 +4,13 @@ import Avatar from '@components/avatar'
 // ** Reactstrap Imports
 import { Card, CardHeader, CardTitle, CardBody } from 'reactstrap'
 
-// ** Images
-import img1 from '@src/assets/images/banner/banner-35.jpg'
-import img2 from '@src/assets/images/banner/banner-39.jpg'
-import img3 from '@src/assets/images/banner/banner-38.jpg'
-import img4 from '@src/assets/images/banner/banner-37.jpg'
-import img5 from '@src/assets/images/banner/banner-36.jpg'
-import img6 from '@src/assets/images/banner/banner-34.jpg'
+// // ** Images
+// import img1 from '@src/assets/images/banner/banner-35.jpg'
+// import img2 from '@src/assets/images/banner/banner-39.jpg'
+// import img3 from '@src/assets/images/banner/banner-38.jpg'
+// import img4 from '@src/assets/images/banner/banner-37.jpg'
+// import img5 from '@src/assets/images/banner/banner-36.jpg'
+// import img6 from '@src/assets/images/banner/banner-34.jpg'
 
 const params = {
   lazy: true,
@@ -27,7 +27,7 @@ const renderSlide = (image) => {
       return (
         <SwiperSlide key={image.id}>
         <img src={image.image} alt='swiper 1' className='rounded swiper-lazy img-fluid' />
-        <div className='swiper-lazy-preloader swiper-lazy-preloader-white'></div>
+        {/* <div className='swiper-lazy-preloader swiper-lazy-preloader-white'></div> */}
       </SwiperSlide>
       )
     } else {

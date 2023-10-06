@@ -59,6 +59,3 @@ export const BASE_URL = "https://malina-proxy.onrender.com"
 
 // http://167.99.246.103:8080/api/v2/malina/users/user/
 
-// is_card_payment_allow
-// is_staff
-// /feed/article/

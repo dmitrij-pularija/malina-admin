@@ -16,6 +16,9 @@ const ProductsCategories = lazy(() => import('../../views/apps/food/products/cat
 const Products = lazy(() => import('../../views/apps/food/products/products/list'))
 const ProductsAdd = lazy(() => import('../../views/apps/food/products/products/add'))
 const ProductsEdit = lazy(() => import('../../views/apps/food/products/products/edit'))
+const BeautyProducts = lazy(() => import('../../views/apps/beauty/products/products/list'))
+const BeautyProductsAdd = lazy(() => import('../../views/apps/beauty/products/products/add'))
+const BeautyProductsEdit = lazy(() => import('../../views/apps/beauty/products/products/edit'))
 const Addons = lazy(() => import('../../views/apps/food/products/addons/list'))
 const BeautyProductsCategories = lazy(() => import('../../views/apps/beauty/products/categories/list'))
 
@@ -180,6 +183,18 @@ const AppRoutes = [
   {
     element: <ProductsEdit />,
     path: '/apps/food/products/products/edit/:id'
+  },
+  {
+    element: <BeautyProducts/>,
+    path: '/apps/beauty/products/products/list'
+  },
+  {
+    element: <BeautyProductsAdd />,
+    path: '/apps/beauty/products/products/add'
+  },
+  {
+    element: <BeautyProductsEdit />,
+    path: '/apps/beauty/products/products/edit/:id'
   },
   {
     element: <Addons />,

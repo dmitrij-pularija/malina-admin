@@ -3,8 +3,8 @@ import { Edit, Trash2 } from 'react-feather'
 import { Badge, UncontrolledTooltip, Button, DropdownMenu, DropdownItem } from 'reactstrap'
 
 const getAvatar = data => {
-  if (data && data.avatar && data.avatar.includes("http")) {
-    return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
+  if (data && data.image && data.image.includes("http")) {
+    return <Avatar className='me-1' img={data.image} width='32' height='32' />
   } else {
     return (
       <Avatar
