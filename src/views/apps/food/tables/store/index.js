@@ -58,10 +58,11 @@ export const addTable = createAsyncThunk('appTable/addTable', async (table, { di
 }
 })
 
-export const editTable = createAsyncThunk('appBranches/editBranches', async ({ id, number, branch, waiter }, { dispatch, getState }) => {
+export const editTable = createAsyncThunk('appBranches/editBranches', async ({ id, number, branch, business_id, waiter }, { dispatch, getState }) => {
   try {
-  await axios.put(`/products/table/${id}/`, { number, branch, waiter })
+  await axios.put(`/products/table/${id}/`, { number, branch, business_id, waiter })
   await dispatch(getData(getState().tables.params))
+  return { number, branch, business_id, waiter }
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)

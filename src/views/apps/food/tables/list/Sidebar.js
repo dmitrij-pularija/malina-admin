@@ -1,3 +1,4 @@
+import { useState, useEffect } from "react"
 import Sidebar from '@components/sidebar'
 import { selectThemeColors, initSelect, checkIsValid } from '@utils'
 import Select from 'react-select'
@@ -13,38 +14,25 @@ const defaultValues = {
   business: '',
   waiter: ''
 }
-// const checkIsValid = data => {
-//   return Object.values(data).every(field => {
-//     if (typeof field === 'object') return field.value !== ''
-//     if (Array.isArray(field)) return field.length > 0
-//     if (typeof field === 'string') return field.length > 0
-//     if (typeof field === 'number') return field > 0    
-// })
-// }
-const requiredFields = ["number", "waiter", "business"]
 
-// const checkIsValid = (data) => {
-//   return Object.keys(data).every((key) => {
-//     const field = data[key]
-//     if (requiredFields.includes(key)) {
-//       if (typeof field === "object") {
-//         return field.value !== ""
-//       } else {
-//         return field.length > 0
-//       }
-//     } else {
-//       return true
-//     }
-//   })
-// } 
+const requiredFields = ["number", "waiter", "business"]
 
 const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, setSelectedTable }) => {
   const dispatch = useDispatch()
+  const [waiterOptions, setWaiterOptions] = useState([])
+
+  const initWaiterOptions = () => {
+    const filteredWaiters = waiters.filter(waiter => parseInt(waiter.business_id.id) === parseInt(selectedTable.business_id.id))
+    setWaiterOptions(filteredWaiters.map(waiter => ({
+      value: String(waiter.id),
+      label: waiter.full_name
+  })))
+}
   const waiterList = selectedTable ? selectedTable.waiter.map(waiter => parseInt(waiter.id)) : [] 
-  const waiterOptions = waiters.map((waiter) => ({
-    value: String(waiter.id),
-    label: waiter.full_name
-  }))
+
+  useEffect(() => {
+    if (selectedTable) initWaiterOptions()
+  }, [selectedTable])
 
   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)   
   const storeOptions = filtredStore.map(store => ({
@@ -52,9 +40,10 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
     label: store.name
   }))
 
+  
   const values = selectedTable ? {
     number: selectedTable.number,
-    business: selectedTable.business_id ? initSelect(storeOptions, selectedTable.business_id) : '',
+    business: selectedTable.business_id ? initSelect(storeOptions, selectedTable.business_id.id) : '',
     landingUrl: selectedTable.landing_url ? selectedTable.landing_url : '',
     waiter: waiterOptions.filter(i => waiterList.includes(parseInt(i.value)))
    } : {}
@@ -63,6 +52,7 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
     reset,
     control,
     setValue,
+    getValues,
     setError,
     handleSubmit,
     formState: { errors }
@@ -77,7 +67,7 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
   const onSubmit = data => {
     if (checkIsValid(data, requiredFields)) {
       const waiterValues = data.waiter ? data.waiter.map(waiter => parseInt(waiter.value)) : []  
-      if (selectedTable) {  
+      if (selectedTable) { 
       dispatch(
         editTable({
           id: selectedTable.id, 
@@ -112,11 +102,26 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
     }
   }
 
-  const handleSidebarClosed = () => {
-    for (const key in defaultValues) {
-      setValue(key, '')
-    }
-    reset()
+  // const handleSidebarClosed = () => {
+  //   for (const key in defaultValues) {
+  //     setValue(key, '')
+  //   }
+  //   reset()
+  // }
+  const handleWaiterChange = selectedOption => setValue("waiter", selectedOption)
+
+  const handleBusinessChange = selectedOption => {
+    setValue("waiter", "")
+    const filteredWaiters = waiters.filter(
+      waiter => parseInt(waiter.business_id.id) === parseInt(selectedOption.value)
+    )
+    setWaiterOptions(
+      filteredWaiters.map(waiter => ({
+        value: String(waiter.id),
+        label: waiter.full_name
+      }))
+    )
+    setValue("business", selectedOption)
   }
 
   return (
@@ -126,8 +131,8 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
       title={selectedTable ? 'Редактирование стола' : 'Создание нового стола'}
       headerClassName='mb-1'
       contentClassName='pt-0'
-      toggleSidebar={toggleSidebar}
-      onClosed={handleSidebarClosed}
+      toggleSidebar={handleClose}
+      onClosed={handleClose}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <div className='mb-1'>
@@ -157,13 +162,14 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
                     id="business"
                     isClearable={false}
                     classNamePrefix="select"
+                    value={field.value}
                     options={storeOptions}
+                    onChange={handleBusinessChange}
                     theme={selectThemeColors}
                     placeholder="Выберите Заведение"
                     className={classnames("react-select", {
                       "is-invalid": errors.business && true
                     })}
-                    {...field}
                   />
                 )}
               />
@@ -197,13 +203,15 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
               <Select
                 isMulti
                 id='waiter'
+                value={field.value}
+                isDisabled={!getValues("business").value && !selectedTable}
                 isClearable={false}
                 classNamePrefix='select'
                 options={waiterOptions}
+                onChange={handleWaiterChange}
                 theme={selectThemeColors}
                 placeholder="Выбирите официанта(ов)"
                 className={classnames('react-select', { 'is-invalid': errors.waiter && true })}
-                {...field}
               />
             )}
           />
@@ -212,7 +220,7 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
         </Button>
-        <Button type='reset' color='secondary' outline onClick={toggleSidebar}>
+        <Button type='reset' color='secondary' outline onClick={handleClose}>
           Отменить
         </Button>
       </Form>
