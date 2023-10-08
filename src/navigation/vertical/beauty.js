@@ -37,6 +37,12 @@ export default [
   //   ]
   // },
   {
+    id: 'beautyOrders',
+    title: 'Orders',
+    icon: <ShoppingCart size={20} />,
+    navLink: '/apps/beauty/orders/list'
+  },
+  {
     id: 'Services',
     title: 'Services',
     icon: <Command size={20} />,

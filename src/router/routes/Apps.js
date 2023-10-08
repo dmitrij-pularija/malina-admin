@@ -9,9 +9,12 @@ const OrdersEdit = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersHistory = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersOnMap = lazy(() => import('../../views/apps/food/orders/edit'))
 const OrdersReview = lazy(() => import('../../views/apps/food/orders/edit'))
+const BeautyOrders = lazy(() => import('../../views/apps/beauty/orders/list'))
+const BeautyOrdersPreview = lazy(() => import('../../views/apps/beauty/orders/preview'))
+const BeautyOrdersAdd = lazy(() => import('../../views/apps/beauty/orders/add'))
+const BeautyOrdersEdit = lazy(() => import('../../views/apps/beauty/orders/edit'))
 const ServicesCategories = lazy(() => import('../../views/apps/beauty/services/categories/list'))
 const Services = lazy(() => import('../../views/apps/beauty/services/services/list'))
-
 const ProductsCategories = lazy(() => import('../../views/apps/food/products/categories/list'))
 const Products = lazy(() => import('../../views/apps/food/products/products/list'))
 const ProductsAdd = lazy(() => import('../../views/apps/food/products/products/add'))
@@ -94,6 +97,22 @@ const AppRoutes = [
   {
     element: <OrdersReview />,
     path: '/apps/food/orders/rev/:id'
+  },
+  {
+    element: <BeautyOrders />,
+    path: '/apps/beauty/orders/list'
+  },
+  {
+    element: <BeautyOrdersPreview />,
+    path: '/apps/beauty/orders/preview/:id'
+  },
+  {
+    element: <BeautyOrdersAdd />,
+    path: '/apps/beauty/orders/add'
+  },
+  {
+    element: <BeautyOrdersEdit />,
+    path: '/apps/beauty/orders/edit/:id'
   },
   {
     element: <Stores />,

@@ -1,6 +1,7 @@
 // ** Reducers Imports
 import auth from './authentication'
 import orders from '@src/views/apps/food/orders/store'
+import beautyOrders from '@src/views/apps/beauty/orders/store'
 import tables from '@src/views/apps/food/tables/store'
 import users from '@src/views/apps/user/store'
 import waiters from '@src/views/apps/user/waiters/store'
@@ -40,6 +41,7 @@ import permissions from '@src/views/apps/roles-permissions/store'
 const rootReducer = {
   auth,
   orders,
+  beautyOrders,
   branches,
   categories,
   stores,

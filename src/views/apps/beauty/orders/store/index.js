@@ -35,16 +35,16 @@ export const createProductCart = async (list, cart) => {
   const products_list = []
   try {
     for (const item of list) {
-    const { data } = await axios.post('/products/ordered-product/', item)
+    const { data } = await axios.post('/beauty/beauty_ordered_products/', item)
     products_list.push(parseInt(data.id))
     }
-    const { data: { id }, status } = await axios.post('/products/cart/', {...cart, products_list})  
+    const { data: { id }, status } = await axios.post('/beauty/beauty_carts/', {...cart, products_list})  
   // const { data: { id }} = await axios.post('/products/cart/', {...cart, products_list: [parseInt(data.id)]})
   // // await axios.post('/products/confirm-cart/', { cart: id.toString() })
   // // const { data: { results }} = await axios.post('/products/add-product-to-cart/', list)
   // console.log(id)
   // return {id, status}
-  return { order_cart: [id.toString()],  status }
+  return { carts: [id.toString()],  status }
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
 }
@@ -86,15 +86,15 @@ export const AddProductToCart = async list => {
 }
 }
 
-export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async () => {
-  try {
-  const response = await axios.get('/products/user-order/get_status/')
-  return response.data
-} catch (error) {
-  errorMessage(error.response.data.detail)
-  return thunkAPI.rejectWithValue(error)
-}
-})
+// export const getOrderStatus = createAsyncThunk('appOrders/getOrderStatus', async () => {
+//   try {
+//   const response = await axios.get('/products/user-order/get_status/')
+//   return response.data
+// } catch (error) {
+//   errorMessage(error.response.data.detail)
+//   return thunkAPI.rejectWithValue(error)
+// }
+// })
 
 export const changeStatatus = async list => {
   try {
@@ -105,14 +105,14 @@ export const changeStatatus = async list => {
 }
 }
 
-export const getAllOrders = createAsyncThunk('appOrders/getAllOrders', async () => {
+export const getAllOrders = createAsyncThunk('appBeautyOrders/getAllOrders', async () => {
   try {
     let isFinished = false
     let page = 1
     const acc = []
-    const { data: { count } } = await axios.get('/products/user-order')
+    const { data: { count } } = await axios.get('/beauty/beauty_orders/')
     while (!isFinished) {
-      const { data: { results } } = await axios.get('/products/user-order', { params: { perPage: 100, page }})
+      const { data: { results } } = await axios.get('/beauty/beauty_orders/', { params: { perPage: 100, page }})
       acc.push(...results)
       if (acc.length === count) isFinished = true
       page += 1
@@ -129,9 +129,9 @@ export const getAllOrders = createAsyncThunk('appOrders/getAllOrders', async () 
   }
 })
 
-export const getData = createAsyncThunk('appOrders/getData', async params => {
+export const getData = createAsyncThunk('appBeautyOrders/getData', async params => {
   try {
-  const response = await axios.get('/products/user-order', { params })
+  const response = await axios.get('/beauty/beauty_orders/', { params })
   return {
     params,
     data: response.data.results,
@@ -143,9 +143,9 @@ export const getData = createAsyncThunk('appOrders/getData', async params => {
 }
 })
 
-export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
+export const getOrder = createAsyncThunk('appBeautyOrders/getOrder', async id => {
   try {
-  const response = await axios.get(`/products/user-order/${id}/`)
+  const response = await axios.get(`/beauty/beauty_orders/${id}/`)
   return response.data
 } catch (error) {
   errorMessage(error.response.statusText)
@@ -153,9 +153,9 @@ export const getOrder = createAsyncThunk('appOrders/getOrder', async id => {
 }
 })
 
-export const addOrder = createAsyncThunk('appOrders/addOrder', async (order, { dispatch, getState }) => {
+export const addOrder = createAsyncThunk('appBeautyOrders/addOrder', async (order, { dispatch, getState }) => {
   try {
-    const { data } = await axios.post('/products/user-order/', order)
+    const { data } = await axios.post('/beauty/beauty_orders/', order)
     // await dispatch(getData(getState().orderes.params))
     return { data }
   } catch (error) {
@@ -164,9 +164,9 @@ export const addOrder = createAsyncThunk('appOrders/addOrder', async (order, { d
   }
 })
 
-export const editOrder = createAsyncThunk('appOrders/editOrder', async ({ id, order }, { dispatch, getState }) => {
+export const editOrder = createAsyncThunk('appBeautyOrders/editOrder', async ({ id, order }, { dispatch, getState }) => {
   try {
-    await axios.put(`/products/user-order/${id}/`, order)
+    await axios.put(`/beauty/beauty_orders/${id}/`, order)
     // await dispatch(getData(getState().orderes.params))
     return { id, ...order }
   } catch (error) {
@@ -175,9 +175,9 @@ export const editOrder = createAsyncThunk('appOrders/editOrder', async ({ id, or
   }
 })
 
-export const deleteOrder = createAsyncThunk('appOrders/deleteOrder', async (id, { dispatch, getState }) => {
+export const deleteOrder = createAsyncThunk('appBeautyOrders/deleteOrder', async (id, { dispatch, getState }) => {
   try {
-  await axios.delete(`/products/user-order/${id}/`)
+  await axios.delete(`/beauty/beauty_orders/${id}/`)
   // await dispatch(getData(getState().orderes.params))
   return id
 } catch (error) {
@@ -186,15 +186,14 @@ export const deleteOrder = createAsyncThunk('appOrders/deleteOrder', async (id, 
 }
 })
 
-export const appOrdersSlice = createSlice({
-  name: 'appOrders',
+export const appBeautyOrdersSlice = createSlice({
+  name: 'appBeautyOrders',
   initialState: {
     data: [],
     allOrders: [],
     count: { totalOrder: 0, totalPrice: 0,  avgPrice: 0,  avgRait: 0 },
-    total: 1,
+    total: 0,
     params: {},
-    status: [],
     loading: false,
     error: null,
     selectedOrder: null
@@ -220,15 +219,9 @@ export const appOrdersSlice = createSlice({
         state.loading = false
         state.error = null
       })
-      .addCase(getOrderStatus.fulfilled, (state, action) => {
-        state.status = action.payload
-        state.loading = false
-        state.error = null
-      })
       .addCase(getData.pending, handlePending)
       .addCase(getAllOrders.pending, handlePending)
       .addCase(getOrder.pending, handlePending)
-      .addCase(getOrderStatus.pending, handlePending)
       .addCase(addOrder.pending, handlePending)
       .addCase(editOrder.pending, handlePending)
       .addCase(deleteOrder.pending, handlePending)
@@ -238,7 +231,6 @@ export const appOrdersSlice = createSlice({
       .addCase(deleteOrder.rejected, handleRejected)
       .addCase(getAllOrders.rejected, handleRejected)
       .addCase(getOrder.rejected, handleRejected)
-      .addCase(getOrderStatus.rejected, handleRejected)
       .addCase(addOrder.fulfilled, handleRejected)
       .addCase(editOrder.fulfilled, handleRejected)
       .addCase(deleteOrder.fulfilled, handleRejected)
@@ -246,4 +238,4 @@ export const appOrdersSlice = createSlice({
   }
 })
 
-export default appOrdersSlice.reducer
+export default appBeautyOrdersSlice.reducer
