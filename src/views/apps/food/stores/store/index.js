@@ -78,6 +78,27 @@ export const delShifts = async (id) => {
 }
 
 
+export const getBusiness = async login => {
+  try {
+    let isFinished = false
+    let page = 1
+    const acc = []
+    const { data: { count } } = await axios.get('/users/businesses/')
+  
+    while (!isFinished) {
+    const { data: { results } } = await axios.get('/users/businesses', { params: { perPage: 100, page } })
+    acc.push(...results)
+    if (acc.length === count) isFinished = true
+    page += 1
+    }
+    const findedStore = acc.find(store => store.login === login)
+    return findedStore ? findedStore.business_type : 0
+} catch (error) {
+  errorMessage(error.response.data.detail)
+}
+}
+
+
 export const getAllStores = createAsyncThunk('appStores/getAllStores', async () => {
   try {
   let isFinished = false

@@ -38,6 +38,13 @@ const TemplateTitle = '%s - Vuexy React Admin Template'
 // ** Default Route
 // const DefaultRoute = '/dashboard/ecommerce'
 const DefaultRoute = '/apps/food/orders/list'
+const foodRoute = '/apps/food/orders/list'
+const beautyRoute = '/apps/beauty/orders/list'
+const masterRoute = '/apps/food/orders/list'
+const adminRoute = '/apps/beauty/orders/list'
+const userRoute = '/apps/beauty/orders/list'
+
+
 
 // ** Merge Routes
 const Routes = [
@@ -124,4 +131,4 @@ const getRoutes = layout => {
   return AllRoutes
 }
 
-export { DefaultRoute, TemplateTitle, Routes, getRoutes }
+export { DefaultRoute, foodRoute, beautyRoute, masterRoute, adminRoute, userRoute, TemplateTitle, Routes, getRoutes }

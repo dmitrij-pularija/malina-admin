@@ -1,4 +1,4 @@
-import { DefaultRoute } from '../router/routes'
+import { foodRoute, beautyRoute, masterRoute, adminRoute, userRoute } from '../router/routes'
 
 // ** Checks if an object is empty (returns boolean)
 export const isObjEmpty = obj => Object.keys(obj).length === 0
@@ -62,11 +62,13 @@ export const getUserData = () => JSON.parse(localStorage.getItem('userData'))
  * ? NOTE: If you have different pages to navigate based on user ability then this function can be useful. However, you need to update it.
  * @param {String} userRole Role of user
  */
-export const getHomeRouteForLoggedInUser = userRole => {
-  
-  if (userRole === 'business') return DefaultRoute
-  if (userRole === 'admin') return DefaultRoute
-  if (userRole === 'user') return '/access-control'
+export const getHomeRouteForLoggedInUser = (userRole, type) => {
+  if (userRole === 'business' && type === 1) return foodRoute
+  if (userRole === 'business' && type === 2) return beautyRoute
+  if (userRole === 'admin') return adminRoute
+  if (userRole === 'master') return masterRoute
+  if (userRole === 'user') return userRoute
+  // if (userRole === 'user') return '/access-control'
   return '/login'
 }
 

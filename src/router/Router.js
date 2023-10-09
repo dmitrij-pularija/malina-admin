@@ -29,7 +29,7 @@ const Router = () => {
   const getHomeRoute = () => {
     const user = getUserData()
     if (user) {
-      return getHomeRouteForLoggedInUser(user.role)
+      return getHomeRouteForLoggedInUser(user.role, user.business)
     } else {
       return '/login'
     }

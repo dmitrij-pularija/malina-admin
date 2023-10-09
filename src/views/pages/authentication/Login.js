@@ -9,6 +9,7 @@ import useJwt from '@src/auth/jwt/useJwt'
 // ** Third Party Components
 import toast from 'react-hot-toast'
 import { useDispatch } from 'react-redux'
+import { getBusiness } from "../../apps/food/stores/store"
 import { useForm, Controller } from 'react-hook-form'
 import { Facebook, Twitter, Mail, GitHub, AlertTriangle, Coffee, X } from 'react-feather'
 
@@ -113,21 +114,28 @@ const Login = () => {
         .login({ login: data.loginEmail, password: data.password })
         .then(res => {
           const newAbility = [{action: "manage", subject: "all"}]
-          const data = { ...res.data.user, role: roles[res.data.user.type], ability: newAbility, name: res.data.user.name ? res.data.user.name : res.data.user.login.split('@')[0], accessToken: res.data.access, refreshToken: res.data.refresh}
-          dispatch(handleLogin(data))
           ability.update(newAbility)
- 
-          navigate(getHomeRouteForLoggedInUser(data.role))
+
+          // const stores = dispatch(getAllStores())
+          // const findedStore = stores.find(store => store.login === res.data.user.login)
+          // const business = getBusiness(res.data.user.login)
+          // console.log(business)
+          getBusiness(res.data.user.login)
+          .then(response => {
+          const data = { ...res.data.user, role: roles[res.data.user.type], business: response, ability: newAbility, name: res.data.user.name ? res.data.user.name : res.data.user.login.split('@')[0], accessToken: res.data.access, refreshToken: res.data.refresh}
+          dispatch(handleLogin(data))
+          navigate(getHomeRouteForLoggedInUser(data.role, response))
           toast(t => (
             <ToastContent t={t} role={data.role || 'user'} name={data.name || 'User'} />
           ))
+          })
         })
-        .catch(err => {setError('password', {
+        .catch(err => { setError('password', {
             type: 'manual',
-            message: err.response.data.non_field_errors[0]
+            message: err.response ? err.response.data.non_field_errors[0] : err.message
           })
           toast(t => (
-            <ToastError t={t}  message={err.response.data.non_field_errors[0] || 'Не правильное имя пользователя или пароль'} />
+            <ToastError t={t}  message={err.response ? err.response.data.non_field_errors[0] : 'Не правильное имя пользователя или пароль'} />
           ))
         }
         )

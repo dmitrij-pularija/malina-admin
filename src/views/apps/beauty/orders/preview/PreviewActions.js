@@ -1,16 +1,21 @@
-// ** React Imports
 import { Link } from 'react-router-dom'
-
-// ** Reactstrap Imports
+import { useEffect, useState } from 'react'
 import { Card, CardBody, Button } from 'reactstrap'
 
 const PreviewActions = ({ id, toggleSidebar, handleDelOrder}) => {
+  const [userData, setUserData] = useState(null)
+  
+  useEffect(() => {
+      setUserData(JSON.parse(localStorage.getItem('userData')))
+  }, [])
+
   return (
     <Card className='invoice-action-wrapper'>
       <CardBody>
+        {userData && userData.type === 3 && 
         <Button color='primary' block className='mb-75' onClick={toggleSidebar}>
           Изменить статус
-        </Button>
+        </Button>}
         <Button tag={Link} to={`/apps/beauty/orders/edit/${id}`} color='success' block className='mb-75'>
           Редактировать
         </Button>
