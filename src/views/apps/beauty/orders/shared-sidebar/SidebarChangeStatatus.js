@@ -2,17 +2,20 @@
 import Sidebar from '@components/sidebar'
 import { useForm, Controller } from "react-hook-form"
 import { useDispatch } from "react-redux"
-import { editOrder, getOrder } from "../store"
+import { changeStatatus, getOrder } from "../store"
 // ** Icons Imports
 import classnames from "classnames"
 import { Link } from 'react-feather'
 import Select from 'react-select'
 import { selectThemeColors, initSelect } from '@utils'
 // ** Reactstrap Imports
-import { Form, Label, Button, FormFeedback } from 'reactstrap'
+import { Form, Input, Label, Button, FormFeedback } from 'reactstrap'
 
 const defaultValues = {
-  orderStatus: ''
+  orderStatus: '',
+  paymentStatus: '',
+  isCourierDelivery: '',
+  timeDelivery: ''
 }
 
 const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }) => {
@@ -22,9 +25,12 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
     label: item.statusName
   }))
 
-  const values = {
-    orderStatus: selectedOrder ? initSelect(statusOptions, selectedOrder.status.toString()) : ''
-  }
+  const values = selectedOrder ? {
+    orderStatus: initSelect(statusOptions, selectedOrder.status.toString()),
+    paymentStatus: selectedOrder.payment_status,
+    isCourierDelivery: selectedOrder.is_courier_delivery,
+    timeDelivery: selectedOrder.time_delivery ? parseInt(selectedOrder.time_delivery) : 0
+  } : {}
 
   const {
     reset,
@@ -46,17 +52,20 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
   }
 
   const onSubmit = data => {
+    // const order = {}
     // console.log(data.orderStatus.value)
-    if (data.orderStatus.value.toString() !== selectedOrder.status.toString()) {
-      const cart = selectedOrder.carts.map(cart => parseInt(cart.id))
-      dispatch(editOrder({ id: selectedOrder.id, order: {order_business: selectedOrder.order_business.toString(), carts: cart, status: parseInt(data.orderStatus.value)}})).then(response => {
-        if (response.meta.requestStatus === 'fulfilled') handleClose()
+    // if (data.orderStatus.value.toString() !== selectedOrder.status.toString()) {
+      // const cart = selectedOrder.carts.map(cart => parseInt(cart.id))
+      changeStatatus({ id: parseInt(selectedOrder.id), order: { status: parseInt(data.orderStatus.value), is_courier_delivery: data.isCourierDelivery, payment_status: data.paymentStatus, time_delivery: data.timeDelivery }}).then(response => {
+        // changeStatatus({ id: parseInt(selectedOrder.id), order: { status: parseInt(data.orderStatus.value) }}).then(response => {
+          // response.meta.requestStatus === 'fulfilled' || 
+        if (response.status === 200) handleClose()
       })  
     
       //     dispatch(editCategory({ id: selectedCategory.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
-    } else {
-      setError('orderStatus', { type: "manual"})
-    }
+    // } else {
+      // setError('orderStatus', { type: "manual"})
+    // }
   }
 
   return (
@@ -70,7 +79,7 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
       toggleSidebar={handleClose}
     >
       <Form  className='m3-3' onSubmit={handleSubmit(onSubmit)}>
-        <div className='mb-3'>
+        <div className='mb-1'>
           <Label className='form-label' for='orderStatus'>
           Статус заказа
           </Label>
@@ -98,6 +107,55 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
             {errors && errors.orderStatus && (
               <FormFeedback>Текущий статус соответствует выбранному</FormFeedback>
             )}
+        </div>
+        <div className='form-check form-check-primary mb-1'>
+                 <Controller
+                   name='paymentStatus'
+                   control={control}
+                   rules={{ required: false }}
+                   render={({ field }) => (
+                     <Input id='paymentStatus'  type='checkbox' checked={field.value} {...field}/>
+                   )}
+                 />
+                 <Label className='form-label' for='paymentStatus'>
+                 Заказ оплачен
+                 </Label>
+        </div>
+        <div className='mb-1' >
+            <Label className="form-label" for="timeDelivery">
+              Время доставки, мин
+            </Label>
+                  <div>
+                    <Controller
+                      id="timeDelivery"
+                      name="timeDelivery"
+                      control={control}
+                      rules={{ required: false }}
+                      render={({ field }) => (
+                      <Input
+                      // disabled
+                      id="timeDelivery"
+                      placeholder="расчетное"
+                      invalid={errors.timeDelivery && true}
+                      {...field}
+                      />  
+                    )}
+                     />
+                  {(errors && errors.rdt) && (<FormFeedback id='ffb'>Пожалуйста введите время доставки</FormFeedback>)}
+                </div>
+              </div>
+        <div className='form-check form-check-primary mb-3'>
+                 <Controller
+                   name='isCourierDelivery'
+                   control={control}
+                   rules={{ required: false }}
+                   render={({ field }) => (
+                     <Input id='isCourierDelivery'  type='checkbox' checked={field.value} {...field}/>
+                   )}
+                 />
+                 <Label className='form-label' for='isCourierDelivery'>
+                 Доставка курьером
+                 </Label>
         </div>
         <Button type='submit' className='me-1' color='primary'>
           Изменить

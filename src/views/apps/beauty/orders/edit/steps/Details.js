@@ -123,7 +123,7 @@ const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiter
   const onSubmit = (data) => {
     const newData = {}
     if (checkIsValid(data, requiredFields)) {
-      if (data.user) newData.user_account = parseInt(data.user.value)
+      if (data.user) newData.user_account = data.user.value
       if (data.store) newData.order_business = data.store.value
       if (data.orderType) newData.order_type = parseInt(data.orderType.value)
       if (newData) handleUpdate(newData)

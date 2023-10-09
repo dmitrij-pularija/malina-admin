@@ -61,7 +61,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
     entrance: selectedOrder.delivery_address && selectedOrder.delivery_address.entrance ? selectedOrder.delivery_address.entrance : '',
     floor: selectedOrder.delivery_address && selectedOrder.floor ? selectedOrder.floor : '',
     phoneNumber: selectedOrder.delivery_address && selectedOrder.delivery_address.phone_number ? selectedOrder.delivery_address.phone_number : '',
-    deliveryPrice: selectedOrder.delivery_price ? selectedOrder.delivery_price : '',
+    // deliveryPrice: selectedOrder.delivery_price ? selectedOrder.delivery_price : '',
     location: selectedOrder.delivery_address && selectedOrder.delivery_address.location ? selectedOrder.delivery_address.location : '',
     longitude: selectedOrder.delivery_address && selectedOrder.delivery_address.longitude ? selectedOrder.delivery_address.longitude : '',
     latitude: selectedOrder.delivery_address && selectedOrder.delivery_address.latitude ? selectedOrder.delivery_address.latitude : '',

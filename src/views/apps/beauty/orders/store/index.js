@@ -96,10 +96,10 @@ export const AddProductToCart = async list => {
 // }
 // })
 
-export const changeStatatus = async list => {
+export const changeStatatus = async ({ id, order }) => {
   try {
-  // const { data: { results }} = await axios.post('/products/add-product-to-cart/', list)
-  return results
+    const { status } = await axios.put(`/beauty/beauty_order_for_admin/update/${id}/`, order)
+  return { status }
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
 }
