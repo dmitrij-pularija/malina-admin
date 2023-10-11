@@ -11,17 +11,10 @@ export default [
     navLink: '/apps/beauty/orders/list'
   },
   {
-    id: 'structureBeauty',
-    title: 'Structure',
+    id: 'specialties',
+    title: 'Specialties',
     icon: <Grid size={20} />,
-    children: [
-      {
-        id: 'specialties',
-        title: 'Specialties',
-        icon: <Circle size={12} />,
-        navLink: '/apps/beauty/specialties/list'
-      }
-    ]
+    navLink: '/apps/beauty/specialties/list'
   },
   {
     id: 'staffBeauty',
@@ -71,31 +64,6 @@ export default [
     navLink: '/apps/food/orders/list'
   },
   {
-    id: 'structure',
-    title: 'Structure',
-    icon: <Grid size={20} />,
-    children: [
-      {
-        id: 'categories',
-        title: 'Categories',
-        icon: <Circle size={12} />,
-        navLink: '/apps/food/categories/list'
-      },
-      {
-        id: 'store',
-        title: 'Store',
-        icon: <Circle size={12} />,
-        navLink: '/apps/food/stores/list'
-      },
-      {
-        id: 'tables',
-        title: 'Tables',
-        icon: <Circle size={12} />,
-        navLink: '/apps/food/tables/list'
-      }
-    ]
-  },
-  {
     id: 'foodStaff',
     title: 'Staff',
     icon: <Users size={20} />,
@@ -142,6 +110,28 @@ export default [
         title: 'Complaints',
         icon: <Circle size={12} />,
         navLink: '/apps/food/rating/complaints/list'
+      }
+    ]
+  },
+  {
+    header: 'Mix'
+  },
+  {
+    id: 'structure',
+    title: 'Store',
+    icon: <Grid size={20} />,
+    children: [
+      {
+        id: 'categories',
+        title: 'Categories',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/categories/list'
+      },
+      {
+        id: 'store',
+        title: 'Store',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/stores/list'
       }
     ]
   },
