@@ -79,8 +79,8 @@ const ServicesModal = ({
     value: String(category.id),
     label: category.category_name
   }))
-
-  const storeOptions = stores.map(store => ({
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
+  const storeOptions = filtredStore.map(store => ({
     value: String(store.id),
     label: store.name
   }))

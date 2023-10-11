@@ -237,7 +237,9 @@ const OrdersList = () => {
   //   { value: '189', label: 'MALINA ECO FOOD' },
   //   { value: '236', label: 'Chicken Crispy' }
   // ]
-  const storeOptions = stores.map((store) => ({
+
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)  
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
 }))

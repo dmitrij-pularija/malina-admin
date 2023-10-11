@@ -84,8 +84,8 @@ const ProductDetails = (props) => {
     label: category.category_name
   }))
 }
-
-const supplierOptions = stores.map(store => ({
+const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
+const supplierOptions = filtredStore.map(store => ({
   value: String(store.id),
   label: store.name
 }))

@@ -160,8 +160,8 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
   //   { value: '1', label: 'Food' },
   //   { value: '2', label: 'Beauty' }
   // ]
-
-  const storeOptions = stores.map((store) => ({
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))

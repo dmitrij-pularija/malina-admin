@@ -151,8 +151,9 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   const [selectedAddon, setSelectedAddon] = useState('')
   const [sortColumn, setSortColumn] = useState('name')
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
-
-  const storeOptions = stores.map((store) => ({
+  
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))

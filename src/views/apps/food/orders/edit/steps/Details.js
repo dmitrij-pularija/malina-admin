@@ -34,8 +34,8 @@ const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiter
 
 
 
-
-  const storeOptions = stores.map((store) => ({
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))

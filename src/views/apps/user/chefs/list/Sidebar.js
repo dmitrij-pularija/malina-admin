@@ -46,7 +46,8 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
 
-  const storeOptions = stores.map((store) => ({
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))

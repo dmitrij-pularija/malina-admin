@@ -183,8 +183,9 @@ const RatingMastersList = ({users, masters, stores}) => {
       })
     )
   }, [dispatch, data.length, sort, sortColumn, currentPage])
-
-  const storeOptions = stores.map((store) => ({
+  
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))
