@@ -127,7 +127,7 @@ const SidebarFeed = ({ stores, open, toggleSidebar, selectedFeed, setSelectedFee
 
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
-        formData.append('image', avatarBlob, 'feed.jpg')
+        formData.append('link', avatarBlob, 'feed.jpg')
       }
       if (selectedFeed) {
           dispatch(editFeed({ id: selectedFeed.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())

@@ -8,8 +8,8 @@ import "@styles/react/apps/app-users.scss"
 
 const ProductsCategoriesList = () => {
   const dispatch = useDispatch()
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
+  const [modalOpen, setModalOpen] = useState(false)
+  const toggleModal = () => setModalOpen(!modalOpen)
   const stores = useSelector(state => state.stores.allStores)
 
   useEffect(() => {
@@ -19,8 +19,8 @@ const ProductsCategoriesList = () => {
   return (
     <>
     <div className="app-user-list" >
-      <Breadcrumbs title='Публикации' data={[{ title: 'Публикации' }]} onClick={toggleSidebar} /> 
-      <Table stores={stores} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Breadcrumbs title='Публикации' data={[{ title: 'Публикации' }]} onClick={toggleModal} /> 
+      <Table stores={stores} modalOpen={modalOpen} toggleModal={toggleModal} />
     </div>
     <Loading />
     </>

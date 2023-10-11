@@ -1,5 +1,6 @@
 import { Fragment, useState, useEffect } from 'react'
-import Sidebar from './Sidebar'
+// import Sidebar from './Sidebar'
+import FeedModal from './Modal'
 import  { columns } from './columns'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
@@ -141,7 +142,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
+const FeedList = ({ stores, modalOpen, toggleModal }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.feeds)
   const [sort, setSort] = useState('+')
@@ -167,10 +168,10 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   }))
   storeOptions.unshift({ value: '', label: 'Показать все' })
 
-  const handleClose = () => {
-    setSelectedFeed('')
-    setSidebarOpen(false)
-   }
+  // const handleClose = () => {
+  //   setSelectedFeed('')
+  //   setSidebarOpen(false)
+  //  }
    const handleDel = (event, id) => {
     event.preventDefault()
     dispatch(deleteFeed(id))
@@ -179,7 +180,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   const handleEdit = (event, row) => {
     event.preventDefault()
     setSelectedFeed(row)
-    toggleSidebar()
+    toggleModal()
   }
 
   useEffect(() => {
@@ -331,16 +332,16 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}
                 handlePerPage={handlePerPage}
-                toggleSidebar={toggleSidebar}
               />
             }
           />
          
         </div>
       </Card>
-      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedFeed={selectedFeed} setSelectedFeed={setSelectedFeed} />
+      <FeedModal stores={stores} open={modalOpen} toggleModal={toggleModal} selectedFeed={selectedFeed} setSelectedFeed={setSelectedFeed} />
+      {/* <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedFeed={selectedFeed} setSelectedFeed={setSelectedFeed} /> */}
     </Fragment>
   )
 }
 
-export default CategoriesList
+export default FeedList

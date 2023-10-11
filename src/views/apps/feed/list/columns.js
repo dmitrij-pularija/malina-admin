@@ -22,12 +22,12 @@ const getAvatar = data => {
 
 const renderClient = row => {
   if (row && row.images.length) {
-    return <Avatar className='rounded me-1' img={row.images[0].image} width='32' height='32' />
+    return <Avatar className='me-1' img={row.images[0].link} width='32' height='32' />
   } else {
     return (
       <Avatar
         initials
-        className='rounded me-1'
+        className='me-1'
         color={'light-primary'}
         content={row.name ? row.name : 'Публикация'}
       />
