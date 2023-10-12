@@ -5,7 +5,7 @@ import MasterWorksList from './Works'
 // import MasterRewards from './Rewards'
 // import MasterOrdersList from './OrdersList'
 
-const WaiterTabs = ({ works, active, toggleTab }) => {
+const WaiterTabs = ({ id, works, active, toggleTab }) => {
 
   return (
     <Fragment>
@@ -31,7 +31,7 @@ const WaiterTabs = ({ works, active, toggleTab }) => {
       </Nav>
       <TabContent activeTab={active}>
       <TabPane tabId='1'>
-          <MasterWorksList works={works} />
+          <MasterWorksList works={works} id={id}/>
         </TabPane>
         <TabPane tabId='2'>
           {/* <MasterOrdersList /> */}

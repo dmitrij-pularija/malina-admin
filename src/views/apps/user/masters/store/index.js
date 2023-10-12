@@ -3,15 +3,39 @@ import { handlePending, handleFulfilled, handleRejected, dataURLtoBlob } from "@
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
  
-// export const getShifts = async () => {
-//   try {
-//   const { data: { results }} = await axios.get('/users/waiter-shifts/')
-//   return results
-// } catch (error) {
-//   errorMessage(error.response.data.detail)
-//   return thunkAPI.rejectWithValue(error)
-// }
-// }
+export const addMasterWorks = async ({ work, galery }) => {
+  const formDataImage = new FormData()
+  const imageBlob = dataURLtoBlob(galery.image)
+  formDataImage.append('image', imageBlob, 'work.jpg')
+  try {
+    const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+    work.master_work_image = image
+    } catch (error) {
+      errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    }
+  try {
+  const { data } = await axios.post('/beauty/master-works/', work)
+  return data
+} catch (error) {
+  errorMessage(error.response.data.detail)
+}
+}
+
+export const delMasterWorks = async id => {
+  try {
+  await axios.delete(`/beauty/master-works/${id}/`)
+} catch (error) {
+  errorMessage(error.response.data.detail)
+}
+}
+export const getMasterWorks = async id => {
+  try {
+  const { data: { results } } = await axios.get(`/beauty/master-works?master_id=${id}`)
+  return results
+} catch (error) {
+  errorMessage(error.response ? error.response.data.detail : error.message)
+}
+}
 
 export const getAllMasters = createAsyncThunk('appMasters/getAllMasters', async () => {
   try {

@@ -15,6 +15,7 @@ const StoreList = props => {
   const { activeView, setActiveView } = props
   const dispatch = useDispatch()
   const stores = useSelector(state => state.stores)
+  // const { userData } = useSelector(state => state.auth)
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [rowsPerPage, setRowsPerPage] = useState(20)
@@ -60,7 +61,7 @@ const StoreList = props => {
       buttonsStyling: false
       
     }).then(function (result) {
-      console.log(result)
+      // console.log(result)
       if (result.value) {
         dispatch(deleteStore(id)).then(response => response.meta.requestStatus === 'fulfilled' && 
           MySwal.fire({

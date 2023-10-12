@@ -48,7 +48,7 @@ const WaiterView = () => {
           <MasterInfoCard specialties={specialties} stores={stores} selectedMaster={selectedMaster} />
         </Col>
         <Col xl='8' lg='7' xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <MasterTabs works={selectedMaster ? selectedMaster.master_works : []} active={active} toggleTab={toggleTab} ratings={rating}/>
+          <MasterTabs id={selectedMaster ? selectedMaster.id : null} works={selectedMaster ? selectedMaster.master_works : []} active={active} toggleTab={toggleTab} ratings={rating}/>
         </Col>
       </Row>
       ) : (
