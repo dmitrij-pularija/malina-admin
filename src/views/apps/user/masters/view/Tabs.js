@@ -2,10 +2,10 @@ import { Fragment } from 'react'
 import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap'
 import { ShoppingCart, Image, Award } from 'react-feather'
 import MasterWorksList from './Works'
-// import MasterRewards from './Rewards'
+import MasterRewards from './Rewards'
 // import MasterOrdersList from './OrdersList'
 
-const WaiterTabs = ({ id, works, active, toggleTab }) => {
+const WaiterTabs = ({ id, works, ratings, users, active, toggleTab }) => {
 
   return (
     <Fragment>
@@ -19,7 +19,7 @@ const WaiterTabs = ({ id, works, active, toggleTab }) => {
         <NavItem>
           <NavLink active={active === '2'} onClick={() => toggleTab('2')}>
             <ShoppingCart className='font-medium-3 me-50' />
-            <span className='fw-bold'>История заказов</span>
+            <span className='fw-bold'>История записей</span>
           </NavLink>
         </NavItem>
         <NavItem>
@@ -37,7 +37,7 @@ const WaiterTabs = ({ id, works, active, toggleTab }) => {
           {/* <MasterOrdersList /> */}
         </TabPane>
         <TabPane tabId='3'>
-          {/* <MasterRewards ratings={ratings} /> */}
+          <MasterRewards ratings={ratings} users={users} />
         </TabPane>
 
       </TabContent>

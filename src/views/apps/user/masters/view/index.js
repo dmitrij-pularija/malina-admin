@@ -2,7 +2,10 @@ import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
 import { getMaster } from '../store'
 import { getAllStores } from '../../../food/stores/store'
+import { getAllUsers } from "../../store"
 import { getAllSpecialties } from '../../../beauty/specialties/store'
+import { getMasterRating } from '../../../beauty/rating/masters/store'
+
 // import { getData } from '../../../food/rating/waiters/store'
 import { useSelector, useDispatch } from 'react-redux'
 import { Row, Col, Alert } from 'reactstrap'
@@ -15,19 +18,21 @@ import '@styles/react/apps/app-users.scss'
 const WaiterView = () => {
   const dispatch = useDispatch()
   // const [shifts, setShifts] = useState([])
-  // const [rating, setRating] = useState([])
+  const [rating, setRating] = useState([])
   const { selectedMaster, loading } = useSelector(state => state.masters)
   const stores = useSelector(state => state.stores.allStores)
   const specialties = useSelector(state => state.specialties.allSpecialties)
-  const rating = useSelector(state => state.ratingWaiters.data)
+  // const rating = useSelector(state => state.ratingWaiters.data)
+  const users = useSelector(state => state.users.allUsers)
   const { id } = useParams()
  
   useEffect(() => {
+    if (!users.length) dispatch(getAllUsers())
     if (!stores.length) dispatch(getAllStores())
     if (!specialties.length) dispatch(getAllSpecialties())
     // dispatch(getMaster({ waiter: id }))
     // getShifts().then(response => { setShifts(response) })
-    // getWaiterRating(parseInt(id)).then(response => setRating(response))
+    getMasterRating(parseInt(id)).then(response => response && response.length && setRating(response))
     dispatch(getMaster(parseInt(id)))
   }, [])
 
@@ -48,7 +53,7 @@ const WaiterView = () => {
           <MasterInfoCard specialties={specialties} stores={stores} selectedMaster={selectedMaster} />
         </Col>
         <Col xl='8' lg='7' xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <MasterTabs id={selectedMaster ? selectedMaster.id : null} works={selectedMaster ? selectedMaster.master_works : []} active={active} toggleTab={toggleTab} ratings={rating}/>
+          <MasterTabs id={selectedMaster ? selectedMaster.id : null} works={selectedMaster ? selectedMaster.master_works : []} ratings={rating} users={users} active={active} toggleTab={toggleTab} />
         </Col>
       </Row>
       ) : (
