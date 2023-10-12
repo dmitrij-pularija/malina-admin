@@ -109,7 +109,7 @@ const MasterWorksList = ({ id, works }) => {
 
   return (
     <Card>
-      <CardHeader className="d-flex justify-content-center" tag="h4">Работы специалиста</CardHeader>
+      <CardHeader className="d-flex justify-content-center mt-1" tag="h4">Работы специалиста</CardHeader>
       {/* <CardBody className="w-400 mb-2"> */}
       <CardBody className="mb-2">
       <div className="d-flex align-items-center justify-content-center mb-2">
