@@ -140,7 +140,7 @@ const renderLogo = (avatar, name) => {
 const Store = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { selectedStore, categories, subcategories } = props
+  const { userData, selectedStore, categories, subcategories } = props
 
   const businessTypeOptions = Object.keys(businessType).map((key) => ({
     value: parseInt(key),
@@ -344,7 +344,7 @@ const Store = (props) => {
   const handleClose = () => {
     setAvatar("")
     reset()
-    navigate("/apps/food/stores/list/")
+    navigate(userData.type === 2 ? `/apps/food/stores/view/${userData.id}` : "/apps/food/stores/list/")
   }
 
   const handleBusinessChange = (selectedOption) => {

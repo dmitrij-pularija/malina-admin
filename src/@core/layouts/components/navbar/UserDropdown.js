@@ -2,6 +2,7 @@
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
 
+
 // ** Custom Components
 import Avatar from '@components/avatar'
 
@@ -24,7 +25,6 @@ import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 const UserDropdown = () => {
   // ** Store Vars
   const dispatch = useDispatch()
-
   // ** State
   const [userData, setUserData] = useState(null)
 // console.log(userData)
@@ -34,6 +34,16 @@ const UserDropdown = () => {
       setUserData(JSON.parse(localStorage.getItem('userData')))
     }
   }, [])
+  const getLink = () => {
+    let profileLink = ''
+   if (userData) {
+    if (userData.type === 1) profileLink = `/apps/user/view/${userData.id}`
+    if (userData.type === 2) profileLink = `/apps/food/stores/view/${userData.id}`
+    if (userData.type === 3) profileLink = "/apps/beauty/orders/list"
+    if (userData.type === 4) profileLink = `/apps/user/masters/view/${userData.id}`
+   }
+  return profileLink
+  }
 
   //** Vars
   const userAvatar = (userData && userData.avatar && userData.avatar.includes("http")) || defaultAvatar
@@ -47,7 +57,7 @@ const UserDropdown = () => {
         <Avatar img={userAvatar} imgHeight='40' imgWidth='40' status='online' />
       </DropdownToggle>
       <DropdownMenu end>
-        <DropdownItem tag={Link} to={`/apps/user/view/${userData && userData.id}`} >
+        <DropdownItem tag={Link} to={`${getLink()}`}>
           <User size={14} className='me-75' />
           <span className='align-middle'>Профиль</span>
         </DropdownItem>

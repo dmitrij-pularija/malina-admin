@@ -27,6 +27,7 @@ const BeautyProductsCategories = lazy(() => import('../../views/apps/beauty/prod
 
 const Stores = lazy(() => import('../../views/apps/food/stores/list'))
 const StoreDetail = lazy(() => import('../../views/apps/food/stores/detail'))
+const StoreView = lazy(() => import('../../views/apps/food/stores/view'))
 const StoreAdd = lazy(() => import('../../views/apps/food/stores/add'))
 const Categories = lazy(() => import('../../views/apps/food/categories/list'))
 const Branches = lazy(() => import('../../views/apps/food/branches/list'))
@@ -131,6 +132,13 @@ const AppRoutes = [
   {
     path: '/apps/food/stores/add',
     element: <StoreAdd />,
+    meta: {
+      className: 'ecommerce-application'
+    }
+  },
+  {
+    path: '/apps/food/stores/view/:id',
+    element: <StoreView />,
     meta: {
       className: 'ecommerce-application'
     }

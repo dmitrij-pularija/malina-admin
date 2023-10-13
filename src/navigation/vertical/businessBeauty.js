@@ -61,12 +61,6 @@ export default [
     ]
   },
   {
-    id: 'store',
-    title: 'Store',
-    icon: <Grid size={20} />,
-    navLink: '/apps/food/stores/list'
-  },
-  {
     id: 'feedbackBeauty',
     title: 'Feedback',
     icon: <Award size={20} />,

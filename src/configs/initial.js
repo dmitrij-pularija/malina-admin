@@ -44,9 +44,9 @@ export const storeType = {
 }
 
 export const priceLevels = {
-  1: "Cheap",
-  2: "Medium",
-  3: "Expensive"
+  1: "Низкий",
+  2: "Средний",
+  3: "Высокий"
 }
 
 export const feedsType = {

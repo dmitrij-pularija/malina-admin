@@ -36,23 +36,10 @@ export default [
     ]
   },    
   {
-    id: 'structure',
-    title: 'Structure',
+    id: 'tables',
+    title: 'Tables',
     icon: <Grid size={20} />,
-    children: [
-      {
-        id: 'store',
-        title: 'Store',
-        icon: <Circle size={12} />,
-        navLink: '/apps/food/stores/list'
-      },
-      {
-        id: 'tables',
-        title: 'Tables',
-        icon: <Circle size={12} />,
-        navLink: '/apps/food/tables/list'
-      }
-    ]
+    navLink: '/apps/food/tables/list'
   },
   {
     id: 'staff',

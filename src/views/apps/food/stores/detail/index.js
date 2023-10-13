@@ -13,10 +13,11 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 const Details = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
-  const { selectedStore, loading} = useSelector((state) => state.stores)
+  const { selectedStore, loading} = useSelector(state => state.stores)
+  const { userData } = useSelector(state => state.auth)
   // const store = useSelector((state) => state.stores.selectedStore)
-  const categories = useSelector((state) => state.categories.allCategories)
-  const subcategories = useSelector((state) => state.categories.subcategories)
+  const categories = useSelector(state => state.categories.allCategories)
+  const subcategories = useSelector(state => state.categories.subcategories)
 
   useEffect(() => {
     if (!categories.length) dispatch(getAllCategories())
@@ -40,6 +41,7 @@ const Details = () => {
             {selectedStore ? (
               <>
               <StoreDetails
+                userData={userData}
                 categories={categories}
                 subcategories={subcategories}
                 selectedStore={selectedStore}
