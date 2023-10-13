@@ -148,6 +148,7 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
 const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, allCategories, total } = useSelector(state => state.productsCategories)
+  const store = useSelector(state => state.auth.userData.id)
   const [sort, setSort] = useState('+')
   // const [selectedId, setSelectedId] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
@@ -159,11 +160,6 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   const [sortColumn, setSortColumn] = useState('name')
   const [currentType, setCurrentType] = useState({ value: '', label: 'Выбирите тип' })
 
-  // const typeOptions = [
-  //   { value: '', label: 'Показать все' },
-  //   { value: '1', label: 'Food' },
-  //   { value: '2', label: 'Beauty' }
-  // ]
   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
   const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
@@ -200,7 +196,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   useEffect(() => {
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      supplier_id: currentType.value,
+      supplier_id: store,
       search: searchTerm,
       page: currentPage,
       perPage: rowsPerPage
@@ -210,7 +206,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   const handlePagination = page => {
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      supplier_id: currentType.value,
+      supplier_id: store,
       search: searchTerm,
       page: page.selected + 1,
       perPage: rowsPerPage
@@ -223,7 +219,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setRowsPerPage(value)
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      supplier_id: currentType.value,
+      supplier_id: store,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -234,7 +230,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setSearchTerm(val)
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      supplier_id: currentType.value,
+      supplier_id: store,
       search: val,
       page: 1,
       perPage: rowsPerPage
@@ -264,7 +260,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
 
   const dataToRender = () => {
     const filters = {
-      supplier_id: currentType.value,
+      supplier_id: store,
       search: searchTerm
     }
 
@@ -286,7 +282,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setSortColumn(column.sortField)
     dispatch(getCategories({
       ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
-      supplier_id: currentType.value,
+      supplier_id: store,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -313,7 +309,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
 
   return (
     <Fragment>
-          <Card>
+          {/* <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -339,7 +335,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
             </Col>
           </Row>
         </CardBody>
-      </Card>  
+      </Card>   */}
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
         <DataTable
@@ -373,7 +369,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
          
         </div>
       </Card>
-      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+      <Sidebar store={store} open={sidebarOpen} toggleSidebar={handleClose} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
     </Fragment>
   )
 }

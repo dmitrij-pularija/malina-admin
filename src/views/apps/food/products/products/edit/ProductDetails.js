@@ -5,7 +5,7 @@ import SwiperImages from "./swiper"
 import InputNumber from "rc-input-number"
 import Flatpickr from "react-flatpickr"
 import { getAllCategories } from "../../categories/store"
-import { delImages } from "../store"
+// import { delImages } from "../store"
 // import InputPassword from "@components/input-password-toggle"
 import Avatar from "@components/avatar"
 import Select from "react-select"
@@ -23,22 +23,14 @@ import SwiperCore, {
   EffectCoverflow
 } from 'swiper'
 import { selectThemeColors, formatTime, formatTimeSave, dataURLtoBlob, checkIsValid } from "@utils"
-import { addProduct, editProduct } from "../store"
+import { addProduct, editProduct, delImages } from "../store"
 // import ModalPassword from "./ModalPassword"
 // import ModalІShifts from "./ModalІShifts"
 import classnames from "classnames"
 import { Plus, Minus } from "react-feather"
-import {
-  businessType,
-  storeType,
-  priceLevels
-} from "../../../../../../configs/initial"
 import '@styles/react/libs/swiper/swiper.scss'
 import "@styles/react/libs/flatpickr/flatpickr.scss"
 import "@styles/react/pages/page-authentication.scss"
-import telegramIcon from "@src/assets/images/icons/social/telegram.svg"
-import instagramIcon from "@src/assets/images/icons/social/instagram.svg"
-import whatsappIcon from "@src/assets/images/icons/social/whatsapp.svg"
 import {
   Row,
   Col,
@@ -46,12 +38,7 @@ import {
   Form,
   Input,
   Label,
-  InputGroup,
-  Modal,
-  ModalBody,
-  ModalHeader,
-  InputGroupText,
-  FormFeedback,
+  FormFeedback
 } from "reactstrap"
 
 SwiperCore.use([Navigation, Grid, Pagination, EffectFade, EffectCube, EffectCoverflow, Autoplay, Lazy, Virtual])
@@ -78,84 +65,28 @@ const defaultValues = {
   containerPrice: ""
 }
 
-const requiredFields = ["name", "cost", "supplier"]
-
-
-const renderLogo = (avatar, name) => {
-  if (avatar) {
-    return (
-      <img
-        className="img-fluid rounded mt-3 mb-2"
-        src={avatar}
-        alt={name ? name : "Логотип заведения"}
-        height="150px"
-        width="150px"
-        // width="267px"
-        style={{
-          height: "150px",
-          width: "150px"
-          // width: "267px"
-        }}
-      />
-    )
-  } else {
-    return (
-      <Avatar
-        initials
-        color={"light-primary"}
-        className="rounded mt-3 mb-2"
-        content={name ? name : "Malina"}
-        contentStyles={{
-          borderRadius: 0,
-          fontSize: "calc(64px)",
-          width: "100%",
-          height: "100%"
-        }}
-        style={{
-          height: "150px",
-          width: "150px"
-          // width: "267px"
-        }}
-      />
-    )
-  }
-}
+const requiredFields = ["name", "cost"]
 
 const ProductDetails = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [isRtl] = useRTL()
-  const { categories, stores, selectedProduct } = props
-//   const supplierOptions = Object.keys(businessType).map((key) => ({
-//     value: parseInt(key),
-//     label: businessType[key],
-//   }))
-
-//   const storeTypeOptions = Object.keys(storeType).map((key) => ({
-//     value: parseInt(key),
-//     label: storeType[key],
-//   }))
-
-//   const priceLevelOptions = Object.keys(priceLevels).map((key) => ({
-//     value: parseInt(key),
-//     label: priceLevels[key]
-//   }))
-
+  const { categories, store, selectedProduct } = props
 
   const initCategoryOptions = () => {
-    const filteredCategories = selectedProduct && selectedProduct.category ? categories.filter(
-      category => parseInt(category.supplier) === parseInt(selectedProduct.supplier.id)
-    ) : categories
+    const filteredCategories = categories.filter(
+      category => parseInt(category.supplier) === parseInt(store)
+    )
     return filteredCategories.map((category) => ({
     value: String(category.id),
     label: category.name
   }))
 }
-const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-const supplierOptions = filtredStore.map((store) => ({
-  value: String(store.id),
-  label: store.name
-}))
+// const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+// const supplierOptions = filtredStore.map((store) => ({
+//   value: String(store.id),
+//   label: store.name
+// }))
 
 //   const initSubcategoryOptions = () => {
 //     const filteredSubCategories = selectedProduct ? subcategories.filter(
@@ -201,7 +132,8 @@ const supplierOptions = filtredStore.map((store) => ({
   fats: selectedProduct.fats ? selectedProduct.fats : "",
   carbohydrates: selectedProduct.carbohydrates ? selectedProduct.carbohydrates : "",
   primeCost: selectedProduct.prime_cost ? selectedProduct.prime_cost : "",
-  supplier: selectedProduct.supplier ? supplierOptions[supplierOptions.findIndex(i => parseInt(i.value) === parseInt(selectedProduct.supplier.id))] : '',
+  supplier: store,
+  // supplier: selectedProduct.supplier ? supplierOptions[supplierOptions.findIndex(i => parseInt(i.value) === parseInt(selectedProduct.supplier.id))] : '',
   appliancePrice: selectedProduct.appliance_price ? selectedProduct.appliance_price : "",
   containerPrice: selectedProduct.container_price ? selectedProduct.container_price : ""
   } : {}
@@ -268,32 +200,16 @@ const supplierOptions = filtredStore.map((store) => ({
     formState: { errors }
   } = useForm({ defaultValues, values })
  
-  // const handlePasswordChange = (event) => {
-  //   const { name, value } = event.target
-  //   setPasswords((prevPasswords) => ({
-  //     ...prevPasswords,
-  //     [name]: value
-  //   }))
-
-  //   if (name === "confirmPassword") setPasswordsMatch(passwords.newPassword === value)
-  // }
-
   const handleImgReset = () => {
     if (selectedProduct && galery.length) galery.map(image => delImages(parseInt(image.id)))
     setGalery([])
   }
-  // const toggleModal = () => setModalShow(!modalShow)
-  // const toggleModalShifts = () => setModalShiftsShow(!modalShiftsShow)
-  // const handleClose = () => navigate("/apps/food/products/products/list/")
+ 
   const handleClose = () => {
     reset({...defaultValues})
     setGalery([])
     navigate("/apps/food/products/products/list/")
   }
-  // const handleChengPassword = (event) => {
-  //   event.preventDefault()
-  //   if (passwordsMatch) toggleModal()
-  // }
 
   const numberWithCommas = (x) => {
     return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",")
@@ -328,59 +244,31 @@ const supplierOptions = filtredStore.map((store) => ({
     reader.readAsDataURL(files[0])
   }
 
-  // const dataURLtoBlob = (dataURL) => {
-  //   const arr = dataURL.split(",")
-  //   const mime = arr[0].match(/:(.*?);/)[1]
-  //   const bstr = atob(arr[1])
-  //   let n = bstr.length
-  //   const u8arr = new Uint8Array(n)
-
-  //   while (n--) {
-  //     u8arr[n] = bstr.charCodeAt(n)
-  //   }
-
-  //   return new Blob([u8arr], { type: mime })
+  // const handleSupplierChange = (selectedOption) => {
+  //   setValue("category", { value: "", label: "Выбирите категорию" })
+  //   const filteredCategories = categories.filter(
+  //     (category) => parseInt(category.supplier) === parseInt(selectedOption.value)
+  //   )
+  //   setCategoryOptions(
+  //     filteredCategories.map((category) => ({
+  //       value: String(category.id),
+  //       label: category.name
+  //     }))
+  //   )
+  //   setValue("supplier", selectedOption)
   // }
 
-
-
-  const handleSupplierChange = (selectedOption) => {
-    setValue("category", { value: "", label: "Выбирите категорию" })
-    const filteredCategories = categories.filter(
-      (category) => parseInt(category.supplier) === parseInt(selectedOption.value)
-    )
-    setCategoryOptions(
-      filteredCategories.map((category) => ({
-        value: String(category.id),
-        label: category.name
-      }))
-    )
-    setValue("supplier", selectedOption)
-  }
-
-  const handleCategoryChange = (selectedOption) => {
-    // setValue("subcategory", { value: "", label: "Выбирите подкатегорию" })
-    // const filteredSubCategories = subcategories.filter(
-    //   (subcategory) => parseInt(subcategory.category) === parseInt(selectedOption.value)
-    // )
-    // setSubcategoryOptions(
-    //   filteredSubCategories.map((subcategory) => ({
-    //     value: String(subcategory.id),
-    //     label: subcategory.name
-    //   }))
-    // )
-    setValue("category", selectedOption)
-  }
+  const handleCategoryChange = (selectedOption) => setValue("category", selectedOption)
 
   const onSubmit = (data) => {
-    // console.log(checkIsValid(data, requiredFields))
+    // console.log(galery)
     if (checkIsValid(data, requiredFields)) {
-    // if (true) {
-
+      const newGalery = galery && galery.length ? galery.filter(img => img.image.startsWith('data:image')) : []
       const formData = new FormData()
       formData.append("name", data.name)
       formData.append("cost", data.cost)
-      formData.append("supplier", data.supplier.value)
+      // formData.append("supplier", data.supplier.value)
+      formData.append("supplier", store)
       if (data.description) formData.append("description", data.description)
       if (data.category) formData.append("category", data.category.value)
       if (data.isLongCooking !== '') formData.append("is_long_cooking", data.isLongCooking)
@@ -397,18 +285,11 @@ const supplierOptions = filtredStore.map((store) => ({
       if (data.primeCost) formData.append("prime_cost", parseInt(data.primeCost))
       if (data.appliancePrice) formData.append("appliance_price", data.appliancePrice)
       if (data.containerPrice) formData.append("container_price", data.containerPrice)
-      // if (avatar && avatar.startsWith("data:image")) {
-      //   const avatarBlob = dataURLtoBlob(avatar)
-      //   formData.append("image", avatarBlob, "logo.jpg")
-      // }
       if (selectedProduct) {
-        dispatch(editProduct({ id: selectedProduct.id, formData, galery })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(editProduct({ id: selectedProduct.id, formData, galery: newGalery })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
-        dispatch(addProduct({ formData, galery })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(addProduct({ formData, galery: newGalery })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
-      // setAvatar("")
-      // reset()
-      // navigate("/apps/food/products/products/list/")
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -424,17 +305,9 @@ const supplierOptions = filtredStore.map((store) => ({
     <>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row> 
-        {/* <Col sm='4'>
-          <SwiperImages isRtl={isRtl} />
-        </Col> */}
           <Col sm={12} className="d-flex">
             <Col md={6} className="d-flex flex-column">
-              <Col>
-                <div className="d-flex align-items-center justify-content-center mt-1">
-                  {/* {renderLogo(
-                    avatar,
-                    selectedProduct ? selectedProduct.name : "Malina"
-                  )} */}
+                <div className="d-flex align-items-center justify-content-center mt-2 mb-2 ">
                   <SwiperImages images={galery && galery.length ? galery : null} isRtl={isRtl} />
                 </div>
                 <div className="d-flex align-items-center justify-content-center">
@@ -454,7 +327,6 @@ const supplierOptions = filtredStore.map((store) => ({
                       />
                     </Button>
                     <Button
-                      // className="mb-50"
                       color="secondary"
                       size="sm"
                       outline
@@ -464,7 +336,6 @@ const supplierOptions = filtredStore.map((store) => ({
                     </Button>
                   </div>
                 </div>
-              </Col>
              
   
             </Col>
@@ -491,7 +362,7 @@ const supplierOptions = filtredStore.map((store) => ({
                   <FormFeedback>Пожалуйста введите название</FormFeedback>
                 )}
               </Col>
-              <Col className="d-flex flex-column mt-1" sm="12">
+              <Col className="d-flex flex-column mt-1">
             <Label className="form-label" for="composition">
               Состав
             </Label>
@@ -513,7 +384,7 @@ const supplierOptions = filtredStore.map((store) => ({
               <FormFeedback>Пожалуйста введите состав</FormFeedback>
             )}
           </Col>
-              <Col className="d-flex flex-column mt-1" sm="12">
+              <Col className="d-flex flex-column mt-1">
             <Label className="form-label" for="description">
               Описание
             </Label>
@@ -535,155 +406,8 @@ const supplierOptions = filtredStore.map((store) => ({
               <FormFeedback>Пожалуйста введите описание</FormFeedback>
             )}
           </Col>
-            </Col>
-
-          
-          </Col>
-        </Row>
-        <Row>
-        <Col md={4} className="mt-1">
-                <Label className="form-label" for="supplier">
-                  Заведение<span className="text-danger">*</span>
-                </Label>
-                <Controller
-                  name="supplier"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-                    <Select
-                      id="supplier"
-                      name="supplier"
-                      onChange={handleSupplierChange}
-                      isClearable={false}
-                      value={field.value}
-                      classNamePrefix="select"
-                      options={supplierOptions}
-                      theme={selectThemeColors}
-                      placeholder="Выберите заведение"
-                      className={classnames("react-select", {
-                        "is-invalid": errors.supplier && true
-                      })}
-                    />
-                  )}
-                />
-                {errors && errors.supplier && (
-                  <FormFeedback>
-                    Пожалуйста выберите заведение
-                  </FormFeedback>
-                )}
-              </Col>
-              <Col md={4} className="mt-1">
-                <Label className="form-label" for="category">
-                  Категория
-                </Label>
-                <Controller
-                  name="category"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-                    <Select
-                      id="category"
-                      name="category"
-                      isDisabled={!getValues("supplier").value}
-                      isClearable={false}
-                      value={field.value}
-                      classNamePrefix="select"
-                      options={categoryOptions}
-                      theme={selectThemeColors}
-                      onChange={handleCategoryChange}
-                      placeholder="Выберите категорию"
-                      className={classnames("react-select", {
-                        "is-invalid": errors.category && true
-                      })}
-                    />
-                  )}
-                />
-                {errors && errors.category && (
-                  <FormFeedback>Пожалуйста выберите категорию</FormFeedback>
-                )}
-              </Col> 
-
-              <Col md={4} className="d-flex justify-content-between gap-30 mt-1">
-                <div>
-                  <Label className="form-label" for="cost">
-                  Цена, &#x0441;&#x332; <span className="text-danger">*</span>
-                  </Label>
-                  <Controller
-                    name="cost"
-                    control={control}
-                    rules={{ required: true }}
-                    render={({ field }) => (
-                      <Input
-                        name="cost"
-                        id="cost"
-                        type="number"
-                        placeholder=""
-                        invalid={errors.cost && true}
-                        {...field}
-                      />
-                    )}
-                  />
-                  {errors && errors.cost && (
-                    <FormFeedback>
-                      Пожалуйста введите цену
-                    </FormFeedback>
-                  )}
-                </div>
-                <div>
-                  <Label className="form-label" for="primeCost">
-                    Скидка
-                  </Label>
-                  <Controller
-                    name="primeCost"
-                    control={control}
-                    rules={{ required: false }}
-                    render={({ field }) => (
-                      <InputNumber
-                        {...field}
-                        id="primeCost"
-                        name="primeCost"
-                        placeholder=""
-                        parser={parser}
-                        formatter={format}
-                        upHandler={<Plus />}
-                        downHandler={<Minus />}
-                        max={100}
-                        min={0}
-                      />
-                    )}
-                  />
-                  {errors && errors.primeCost && (
-                    <FormFeedback>Пожалуйста введите скидку</FormFeedback>
-                  )}
-                </div>
-              </Col>
-              <Col md={4} className="d-flex justify-content-between gap-30 mt-1">
-                <div>
-                  <Label className="form-label" for="gram">
-                  Вес, г
-                  </Label>
-                  <Controller
-                    name="gram"
-                    control={control}
-                    rules={{ required: false }}
-                    render={({ field }) => (
-                      <Input
-                        name="gram"
-                        id="gram"
-                        type="number"
-                        placeholder=""
-                        invalid={errors.gram && true}
-                        {...field}
-                      />
-                    )}
-                  />
-                  {errors && errors.gram && (
-                    <FormFeedback>
-                      Пожалуйста введите вес
-                    </FormFeedback>
-                  )}
-                </div>
-                <div>
+              <Col className="d-flex justify-content-between gap-30 mt-1">
+              <div>
                   <Label className="form-label" for="kcal">
                   Калорий, кКал
                   </Label>
@@ -705,10 +429,7 @@ const supplierOptions = filtredStore.map((store) => ({
                   {errors && errors.kcal && (
                     <FormFeedback>Пожалуйста введите количество калорий</FormFeedback>
                   )}
-                </div>
-              </Col>
-
-              <Col md={4} className="d-flex justify-content-between gap-30 mt-1">
+                </div> 
               <div>
                   <Label className="form-label" for="proteins">
                   Протеины, г
@@ -781,6 +502,129 @@ const supplierOptions = filtredStore.map((store) => ({
                   )}
                 </div>
               </Col>
+            </Col>
+
+          
+          </Col>
+        </Row>
+        <Row>
+        {/* <Col md={4} className="mt-1">
+                <Label className="form-label" for="supplier">
+                  Заведение<span className="text-danger">*</span>
+                </Label>
+                <Controller
+                  name="supplier"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+                    <Select
+                      id="supplier"
+                      name="supplier"
+                      onChange={handleSupplierChange}
+                      isClearable={false}
+                      value={field.value}
+                      classNamePrefix="select"
+                      options={supplierOptions}
+                      theme={selectThemeColors}
+                      placeholder="Выберите заведение"
+                      className={classnames("react-select", {
+                        "is-invalid": errors.supplier && true
+                      })}
+                    />
+                  )}
+                />
+                {errors && errors.supplier && (
+                  <FormFeedback>
+                    Пожалуйста выберите заведение
+                  </FormFeedback>
+                )}
+              </Col> */}
+              <Col md={4} className="mt-1">
+                <Label className="form-label" for="category">
+                  Категория
+                </Label>
+                <Controller
+                  name="category"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Select
+                      id="category"
+                      name="category"
+                      // isDisabled={!getValues("supplier").value}
+                      isClearable={false}
+                      value={field.value}
+                      classNamePrefix="select"
+                      options={categoryOptions}
+                      theme={selectThemeColors}
+                      onChange={handleCategoryChange}
+                      placeholder="Выберите категорию"
+                      className={classnames("react-select", {
+                        "is-invalid": errors.category && true
+                      })}
+                    />
+                  )}
+                />
+                {errors && errors.category && (
+                  <FormFeedback>Пожалуйста выберите категорию</FormFeedback>
+                )}
+              </Col> 
+
+              <Col md={4} className="d-flex justify-content-between gap-30 mt-1">
+                <div>
+                  <Label className="form-label" for="cost">
+                  Цена, &#x0441;&#x332; <span className="text-danger">*</span>
+                  </Label>
+                  <Controller
+                    name="cost"
+                    control={control}
+                    rules={{ required: true }}
+                    render={({ field }) => (
+                      <Input
+                        name="cost"
+                        id="cost"
+                        type="number"
+                        placeholder=""
+                        invalid={errors.cost && true}
+                        {...field}
+                      />
+                    )}
+                  />
+                  {errors && errors.cost && (
+                    <FormFeedback>
+                      Пожалуйста введите цену
+                    </FormFeedback>
+                  )}
+                </div>
+                <div>
+                  <Label className="form-label" for="primeCost">
+                    Скидка
+                  </Label>
+                  <Controller
+                    name="primeCost"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => (
+                      <InputNumber
+                        {...field}
+                        id="primeCost"
+                        name="primeCost"
+                        placeholder=""
+                        parser={parser}
+                        formatter={format}
+                        upHandler={<Plus />}
+                        downHandler={<Minus />}
+                        max={100}
+                        min={0}
+                      />
+                    )}
+                  />
+                  {errors && errors.primeCost && (
+                    <FormFeedback>Пожалуйста введите скидку</FormFeedback>
+                  )}
+                </div>
+              </Col>
+              
 
               <Col md={4} className="mt-1">
               <div className="d-flex justify-content-center align-items-center gap-30">
@@ -844,6 +688,7 @@ const supplierOptions = filtredStore.map((store) => ({
                   <FormFeedback>Пожалуйста введите сообщение при длительном приготовлении</FormFeedback>
                 )}
               </Col>
+              
               <Col md={2} className="mt-2">
               <div className='form-check form-check-primary mt-2'>
           <Controller
@@ -909,7 +754,34 @@ const supplierOptions = filtredStore.map((store) => ({
                   )}
                 </div>
               </Col>
-              <Col md={2} className="mt-2">
+              <Col md={2} className="mt-1">
+                <div>
+                  <Label className="form-label" for="gram">
+                  Вес, г
+                  </Label>
+                  <Controller
+                    name="gram"
+                    control={control}
+                    rules={{ required: false }}
+                    render={({ field }) => (
+                      <Input
+                        name="gram"
+                        id="gram"
+                        type="number"
+                        placeholder=""
+                        invalid={errors.gram && true}
+                        {...field}
+                      />
+                    )}
+                  />
+                  {errors && errors.gram && (
+                    <FormFeedback>
+                      Пожалуйста введите вес
+                    </FormFeedback>
+                  )}
+                </div>
+              </Col>
+              <Col md={2} className="mt-3">
               <div className='form-check form-check-primary'>
           <Controller
             name='isArchived'

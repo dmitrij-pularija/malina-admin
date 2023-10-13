@@ -42,7 +42,7 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 const MySwal = withReactContent(Swal)
 
-const Addons = ({ selectedProduct }) => {
+const Addons = ({ store, selectedProduct }) => {
   const dispatch = useDispatch()
   const [currentAddon, setCurrentAddon] = useState({ value: '', label: 'Выбирите добавку' })
   const allAddons = useSelector(state => state.addons.allAddons)
@@ -50,10 +50,13 @@ const Addons = ({ selectedProduct }) => {
   useEffect(() => {
     if (!allAddons.length) dispatch(getAllAddons())
   }, [])
-  const addonsOptions = allAddons.map(addon => ({
+
+  const filtredAddons = allAddons.filter(addon => parseInt(addon.supplier.id) === parseInt(store))
+  const addonsOptions = filtredAddons.map(addon => ({
     value: String(addon.id),
     label: addon.name
   }))
+  
   const handleDelAddon = (event, id) => {
     event.preventDefault()
     const filtredAddons = selectedProduct.addons.filter(addon => parseInt(addon.id) !== parseInt(id))

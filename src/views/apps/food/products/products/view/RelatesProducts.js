@@ -41,7 +41,7 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 const MySwal = withReactContent(Swal)
 
-const RelatesProducts = ({ selectedProduct }) => {
+const RelatesProducts = ({ store, selectedProduct }) => {
   const dispatch = useDispatch()
   const [currentRelatesProduct, setCurrentRelatesProduct] = useState({ value: '', label: 'Выбирите блюдо' })
   const allProducts = useSelector(state => state.products.allProducts)
@@ -49,8 +49,9 @@ const RelatesProducts = ({ selectedProduct }) => {
   useEffect(() => {
     if (!allProducts.length) dispatch(getAllProducts())
   }, [])
-
-  const productsOptions = allProducts.map(product => ({
+  
+  const filtredProducts = allProducts.filter(product => parseInt(product.supplier.id) === parseInt(store) &&  parseInt(product.id) !== parseInt(selectedProduct.id))
+  const productsOptions = filtredProducts.map(product => ({
     value: String(product.id),
     label: product.name
   }))

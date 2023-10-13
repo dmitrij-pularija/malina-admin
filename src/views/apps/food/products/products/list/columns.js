@@ -12,7 +12,7 @@ import { getData } from '../store'
 import { Slack, User, Command, Edit, Edit2, MoreVertical, FileText, Trash2, Archive } from 'react-feather'
 
 // ** Reactstrap Imports
-import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
+import { Badge, Button, UncontrolledTooltip, DropdownMenu, DropdownItem } from 'reactstrap'
 
 
 const getAvatar = data => {
@@ -157,14 +157,14 @@ return [
     selector: row => row,
     cell: row => `${formatNumberInt(row.prime_cost)} %`
   },
-  {
-    name: 'Заведение',
-    minWidth: '200px',
-    sortable: true,
-    sortField: 'supplier',
-    selector: row => row,
-    cell: row => renderStoore(parseInt(row.supplier.id))
-  },
+  // {
+  //   name: 'Заведение',
+  //   minWidth: '200px',
+  //   sortable: true,
+  //   sortField: 'supplier',
+  //   selector: row => row,
+  //   cell: row => renderStoore(parseInt(row.supplier.id))
+  // },
   {
     name: 'Статус',
     minWidth: '138px',
@@ -181,36 +181,27 @@ return [
     name: 'Действия',
     minWidth: '120px',
     cell: row => (
-      <div className='column-action'>
-        <UncontrolledDropdown>
-          <DropdownToggle tag='div' className='btn btn-sm'>
-            <MoreVertical size={14} className='cursor-pointer' />
-          </DropdownToggle>
-          <DropdownMenu>
-            {/* <DropdownItem
-              tag={Link}
-              className='w-100'
-              to={`/apps/user/view/${row.id}`}
-              onClick={() => store.dispatch(getUser(row.id))}
-            >
-              <FileText size={14} className='me-50' />
-              <span className='align-middle'>Подробнее</span>
-            </DropdownItem> */}
-            <DropdownItem tag='a' href='/' className='w-100' onClick={event => handleEditProduct(event, row)}>
-              <Edit size={14} className='me-50' />
-              <span className='align-middle'>Редактировать</span>
-            </DropdownItem>
-            <DropdownItem
-              tag='a'
-              href='/'
-              className='w-100'
-              onClick={event => handleDelProduct(event, row.id)}
-            >
-              <Trash2 size={14} className='me-50' />
-              <span className='align-middle'>Удалить</span>
-            </DropdownItem>
-          </DropdownMenu>
-        </UncontrolledDropdown>
+      <div className='column-action d-flex align-items-center'>
+        <Button.Ripple 
+        className='btn-icon cursor-pointer' 
+        color='transparent' 
+        id={`edit-tooltip-${row.id}`}  
+        onClick={event => handleEditProduct(event, row)}>
+        <Edit size={17} className='mx-1' />
+        </Button.Ripple>
+        <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
+          Редактировать
+        </UncontrolledTooltip>
+        <Button.Ripple 
+        className='btn-icon cursor-pointer' 
+        color='transparent' 
+        id={`del-tooltip-${row.id}`} 
+        onClick={event => handleDelProduct(event, row.id)}>
+          <Trash2 size={17} className='mx-1' />
+        </Button.Ripple>
+        <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
+          Удалить
+        </UncontrolledTooltip>
       </div>
     )
   }

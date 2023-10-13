@@ -144,6 +144,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
 const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.addons)
+  const store = useSelector(state => state.auth.userData.id)
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
@@ -187,7 +188,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   useEffect(() => {
     dispatch(getAddons({
       ordering: `${sort}${sortColumn}`,
-      supplier__id: currentStore.value,
+      supplier__id: store,
       search: searchTerm,
       page: currentPage,
       perPage: rowsPerPage
@@ -197,7 +198,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   const handlePagination = page => {
     dispatch(getAddons({
       ordering: `${sort}${sortColumn}`,
-      supplier__id: currentStore.value,
+      supplier__id: store,
       search: searchTerm,
       page: page.selected + 1,
       perPage: rowsPerPage
@@ -210,7 +211,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setRowsPerPage(value)
     dispatch(getAddons({
       ordering: `${sort}${sortColumn}`,
-      supplier__id: currentStore.value,
+      supplier__id: store,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -221,7 +222,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setSearchTerm(val)
     dispatch(getAddons({
       ordering: `${sort}${sortColumn}`,
-      supplier__id: currentStore.value,
+      supplier__id: store,
       search: val,
       page: 1,
       perPage: rowsPerPage
@@ -251,7 +252,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
 
   const dataToRender = () => {
     const filters = {
-      supplier__id: currentStore.value,
+      supplier__id: store,
       search: searchTerm
     }
 
@@ -273,7 +274,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setSortColumn(column.sortField)
     dispatch(getAddons({
       ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
-      supplier__id: currentStore.value,
+      supplier__id: store,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -282,7 +283,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
 
   return (
     <Fragment>
-          <Card>
+          {/* <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -298,7 +299,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
                   setCurrentStore(data)
                   dispatch(getAddons({
                     ordering: `${sort}${sortColumn}`,
-                    supplier__id: data.value,
+                    supplier__id: store,
                     search: searchTerm,
                     page: 1,
                     perPage: rowsPerPage
@@ -308,7 +309,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
             </Col>
           </Row>
         </CardBody>
-      </Card>  
+      </Card>   */}
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
         <DataTable

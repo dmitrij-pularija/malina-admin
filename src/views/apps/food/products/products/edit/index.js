@@ -16,8 +16,9 @@ const Details = () => {
   const dispatch = useDispatch()
   const [active, setActive] = useState("1")
   const { selectedProduct, loading } = useSelector((state) => state.products)
-  const categories = useSelector((state) => state.productsCategories.allCategories)
+  const categories = useSelector(state => state.productsCategories.allCategories)
   const stores = useSelector((state) => state.stores.allStores)
+  const store = useSelector(state => state.auth.userData.id)
 
   useEffect(() => {
     dispatch(getProduct(parseInt(id)))
@@ -51,7 +52,7 @@ const Details = () => {
                 <Col className="d-flex flex-column align-items-center justify-content-center width">
                   <ProductTabs
                     categories={categories}
-                    stores={stores}
+                    store={store}
                     selectedProduct={selectedProduct}
                     active={active}
                     toggleTab={toggleTab}

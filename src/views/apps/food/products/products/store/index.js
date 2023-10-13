@@ -93,9 +93,9 @@ export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ fo
     }
   }
 
-  await dispatch(getData(getState().users.params))
+  await dispatch(getData(getState().products.params))
   // await dispatch(getAllData())
-  // return user
+  // return formData
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
@@ -105,7 +105,7 @@ export const addProduct = createAsyncThunk('appProducts/addProduct', async ({ fo
 export const deleteProduct = createAsyncThunk('appProducts/deleteProduct', async (id, { dispatch, getState }) => {
   try {
   await axios.delete(`/products/product/${id}/`)
-  await dispatch(getData(getState().users.params))
+  await dispatch(getData(getState().products.params))
   // await dispatch(getAllData())
   return id
 } catch (error) {
@@ -134,7 +134,7 @@ export const editProduct = createAsyncThunk('appProducts/editProduct', async ({ 
     }
   try {
   await axios.patch(`/products/product/${id}/`, formData)
-  await dispatch(getData(getState().users.params))
+  await dispatch(getData(getState().products.params))
   // await dispatch(getAllData())
   // return id
 } catch (error) {

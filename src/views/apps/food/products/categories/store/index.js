@@ -40,7 +40,7 @@ export const getCategories = createAsyncThunk('appProductsCategories/getCategori
 export const editCategory = createAsyncThunk('appProductsCategories/editCategory', async ({ id, formData }, { dispatch, getState }) => {
   try {
   await axios.put(`/products/product-category/${id}/`, formData)
-  await dispatch(getCategories(getState().categories.params))
+  await dispatch(getCategories(getState().productsCategories.params))
   return { id, formData }
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
@@ -51,7 +51,7 @@ export const editCategory = createAsyncThunk('appProductsCategories/editCategory
 export const addCategory = createAsyncThunk('appProductsCategories/addCategory', async (category, { dispatch, getState }) => {
   try {
   await axios.post('/products/product-category/', category)
-  await dispatch(getCategories(getState().categories.params))
+  await dispatch(getCategories(getState().productsCategories.params))
   return category
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
@@ -62,7 +62,7 @@ export const addCategory = createAsyncThunk('appProductsCategories/addCategory',
 export const deleteCategory = createAsyncThunk('appProductsCategories/deleteCategory', async (id, { dispatch, getState }) => {
   try {
   await axios.delete(`/products/product-category/${id}/`)
-  await dispatch(getCategories(getState().categories.params))
+  await dispatch(getCategories(getState().productsCategories.params))
   return id
 } catch (error) {
   errorMessage(error.response.data.detail)

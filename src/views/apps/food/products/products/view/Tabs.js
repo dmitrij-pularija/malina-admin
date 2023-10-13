@@ -7,7 +7,7 @@ import Addons from './Addons'
 import RelatesProducts from './RelatesProducts'
 // import UserOrdersList from './UserOrdersList'
 
-const ProductTabs = ({ categories, stores, selectedProduct, active, toggleTab }) => {
+const ProductTabs = ({ categories, store, selectedProduct, active, toggleTab }) => {
 
   return (
     <Fragment>
@@ -33,13 +33,13 @@ const ProductTabs = ({ categories, stores, selectedProduct, active, toggleTab })
       </Nav>
       <TabContent activeTab={active} className="width">
         <TabPane tabId='1'>
-          <ProductDetails categories={categories} stores={stores} selectedProduct={selectedProduct} />
+          <ProductDetails categories={categories} store={store} selectedProduct={selectedProduct} />
         </TabPane>
         <TabPane tabId='2'>
-          <Addons selectedProduct={selectedProduct} />
+          <Addons store={store} selectedProduct={selectedProduct} />
         </TabPane>
         <TabPane tabId='3'>
-          <RelatesProducts selectedProduct={selectedProduct} />
+          <RelatesProducts store={store} selectedProduct={selectedProduct} />
         </TabPane>
       </TabContent>
     </Fragment>

@@ -42,17 +42,17 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedCategory, setSelectedCategory }) => {
+const SidebarNewCategory = ({ store, open, toggleSidebar, selectedCategory, setSelectedCategory }) => {
   const dispatch = useDispatch()
   // const [data, setData] = useState(null)
   // const [item, setItem] = useState('')
   const [avatar, setAvatar] = useState('')
 
-const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-  const supplierOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-  }))
+// const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+//   const supplierOptions = filtredStore.map((store) => ({
+//     value: String(store.id),
+//     label: store.name
+//   }))
 
   // useEffect(() => {
   // if (selectedCategory) {
@@ -72,7 +72,9 @@ const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
 
   const values = selectedCategory ? {
     name: selectedCategory.name,
-    supplier: supplierOptions[supplierOptions.findIndex(i => parseInt(i.value) === parseInt(selectedCategory.supplier))]} : {}
+    supplier: store
+    // supplier: supplierOptions[supplierOptions.findIndex(i => parseInt(i.value) === parseInt(selectedCategory.supplier))]
+  } : {}
 
   const {
     reset,
@@ -91,20 +93,7 @@ const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
     }
     reader.readAsDataURL(files[0])
   }  
-   
-  // const dataURLtoBlob = dataURL => {
-  //   const arr = dataURL.split(',')
-  //   const mime = arr[0].match(/:(.*?);/)[1]
-  //   const bstr = atob(arr[1])
-  //   let n = bstr.length
-  //   const u8arr = new Uint8Array(n)
-  
-  //   while (n--) {
-  //     u8arr[n] = bstr.charCodeAt(n)
-  //   }
-  
-  //   return new Blob([u8arr], { type: mime })
-  // }
+
   const handleClose = () => {
     for (const key in defaultValues) {
       setValue(key, '')
@@ -126,7 +115,8 @@ const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
       toggleSidebar()
       const formData = new FormData();
       formData.append('name', data.name)
-      if (data.supplier) formData.append('supplier', data.supplier.value)
+      formData.append('supplier', store)
+      // if (data.supplier) formData.append('supplier', data.supplier.value)
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
         formData.append('icon', avatarBlob, 'category.jpg')
@@ -204,7 +194,7 @@ const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
           />
           {errors && errors.name && (<FormFeedback>Пожалуйста введите название</FormFeedback>)}
         </div>  
-        <div className='mb-1'>
+        {/* <div className='mb-1'>
           <Label className='form-label' for='supplier'>
           Поставщик
           </Label>
@@ -226,7 +216,7 @@ const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
             )}
           />
         {errors && errors.supplier && (<FormFeedback>{`Пожалуйста выберите поставщика`}</FormFeedback>)}
-        </div>
+        </div> */}
         <Button type='submit' className='me-1' color='primary'>
           Сохранить
         </Button>

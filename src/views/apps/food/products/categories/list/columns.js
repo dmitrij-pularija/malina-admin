@@ -62,7 +62,7 @@ return [
   {
     name: '№',
     sortable: false,
-    minWidth: '30px',
+    width: '100px',
     selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
@@ -81,17 +81,17 @@ return [
       </div>
     )
   },
-  {
-    name: 'Заведение',
-    minWidth: '138px',
-    sortable: true,
-    sortField: 'supplier',
-    selector: row => row,
-    cell: row => renderStoore(parseInt(row.supplier))
-  },
+  // {
+  //   name: 'Заведение',
+  //   minWidth: '138px',
+  //   sortable: true,
+  //   sortField: 'supplier',
+  //   selector: row => row,
+  //   cell: row => renderStoore(parseInt(row.supplier))
+  // },
   {
     name: 'Действия',
-    minWidth: '100px',
+    width: '200px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
         <Button.Ripple 

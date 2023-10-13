@@ -52,7 +52,7 @@ export const addAddon = createAsyncThunk('appAddons/addAddon', async (addon, { d
   try {
   await axios.post('/products/addons/', addon)
   await dispatch(getAddons(getState().addons.params))
-  // return addon
+  return addon
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)

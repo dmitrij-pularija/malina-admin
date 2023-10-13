@@ -163,6 +163,7 @@ const UsersList = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const stores = useSelector(state => state.stores.allStores)
+  const store = useSelector(state => state.auth.userData.id)
   const { data, total } = useSelector(state => state.products)
 
   // ** States
@@ -189,7 +190,7 @@ const UsersList = () => {
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
   }, [])
@@ -247,7 +248,7 @@ const UsersList = () => {
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
     setCurrentPage(page.selected + 1)
@@ -262,7 +263,7 @@ const UsersList = () => {
         search: searchTerm,
         perPage: value,
         page: 1,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
     setRowsPerPage(value)
@@ -277,7 +278,7 @@ const UsersList = () => {
         ordering: `${sort}${sortColumn}`,
         page: 1,
         perPage: rowsPerPage,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
   }
@@ -308,7 +309,7 @@ const UsersList = () => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      supplier_id: currentStore.value,
+      supplier_id: store,
       search: searchTerm
     }
 
@@ -335,14 +336,14 @@ const UsersList = () => {
         search: searchTerm,
         page: 1,
         perPage: rowsPerPage,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
   }
  
   return (
     <Fragment>
-      <Card>
+      {/* <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -371,7 +372,7 @@ const UsersList = () => {
             </Col>
           </Row>
         </CardBody>
-      </Card>
+      </Card> */}
 
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>

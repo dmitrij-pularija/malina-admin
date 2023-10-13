@@ -13,10 +13,9 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 const addProduct = () => {
   const dispatch = useDispatch()
   const [active, setActive] = useState("1")
-  const categories = useSelector(
-    (state) => state.productsCategories.allCategories
-  )
+  const categories = useSelector(state => state.productsCategories.allCategories)
   const stores = useSelector((state) => state.stores.allStores)
+  const store = useSelector(state => state.auth.userData.id)
 
   useEffect(() => {
     if (!categories.length) dispatch(getAllCategories())
@@ -40,16 +39,11 @@ const addProduct = () => {
           <Card>
             <CardBody>
               <Row>
-              <ProductDetails categories={categories} stores={stores} selectedProduct={null} />  
-                {/* <Col className="d-flex flex-column align-items-center justify-content-center width">
-                  <ProductTabs
-                    categories={categories}
-                    stores={stores}
-                    selectedProduct={null}
-                    active={active}
-                    toggleTab={toggleTab}
-                  />
-                </Col> */}
+              <ProductDetails 
+               categories={categories} 
+               store={store} 
+               selectedProduct={null} 
+               />  
               </Row>
             </CardBody>
           </Card>
