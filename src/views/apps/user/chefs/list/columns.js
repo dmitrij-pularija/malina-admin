@@ -42,26 +42,26 @@ const renderClient = row => {
 // }
 
 
-export const columns = (stores, handleEditСhef, handleDelСhef) => {
-  const renderStoore = (id) => {
-    if (!stores.length) return
-    const foundStore = stores.find(item => item.id === id)
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(foundStore)}  
-    <div className='d-flex flex-column ml3'>
-        <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
-    </div>
-  </div>
-    )
-  }
+export const columns = (handleEditСhef, handleDelСhef) => {
+  // const renderStoore = (id) => {
+  //   if (!stores.length) return
+  //   const foundStore = stores.find(item => item.id === id)
+  //   return (
+  //     <div className='d-flex justify-content-left align-items-center'>
+  //     {getAvatar(foundStore)}  
+  //   <div className='d-flex flex-column ml3'>
+  //       <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
+  //     <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+  //   </div>
+  // </div>
+  //   )
+  // }
 
 return [
   {
     name: '№',
     sortable: false,
-    minWidth: '30px',
+    width: '100px',
     selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
@@ -81,17 +81,17 @@ return [
       </div>
     )
   },
-  {
-    name: 'Заведение',
-    minWidth: '138px',
-    sortable: true,
-    sortField: 'supplier',
-    selector: row => row,
-    cell: row => renderStoore(parseInt(row.business))
-  },
+  // {
+  //   name: 'Заведение',
+  //   minWidth: '138px',
+  //   sortable: true,
+  //   sortField: 'supplier',
+  //   selector: row => row,
+  //   cell: row => renderStoore(parseInt(row.business))
+  // },
   {
     name: 'Действия',
-    minWidth: '100px',
+    width: '200px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
         <Button.Ripple 

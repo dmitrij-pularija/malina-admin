@@ -20,7 +20,7 @@ const defaultValues = {
 //   { value: 2, label: 'Food' }
 // ]
 
-const requiredFields = ["telegramId", "business"]
+const requiredFields = ["telegramId"]
 
 // const checkIsValid = data => {
 //   return Object.values(data).every(field => (typeof field === 'object' ? field.value !== "" : field.length > 0))
@@ -42,20 +42,22 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSelectedСhef }) => {
+const SidebarNewCategory = ({ store, open, toggleSidebar, selectedСhef, setSelectedСhef }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
 
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-  const storeOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-  }))
+  // const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  // const storeOptions = filtredStore.map((store) => ({
+  //   value: String(store.id),
+  //   label: store.name
+  // }))
 
   const values = selectedСhef ? {
     name: selectedСhef.name ? selectedСhef.name : '',
     telegramId: selectedСhef.telegram_id ? selectedСhef.telegram_id : '',
-    business: storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedСhef.business))]} : {}
+    business: store
+    // business: storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedСhef.business))]
+  } : {}
 
   const {
     reset,
@@ -94,7 +96,7 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData();
       formData.append('telegram_id', data.telegramId)
-      formData.append('business', data.business.value)
+      formData.append('business', store)
       if (data.name) formData.append('name', data.name)
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
@@ -156,7 +158,7 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
           />
           {errors && errors.name && (<FormFeedback>Пожалуйста введите Имя</FormFeedback>)}
         </div>  
-        <div className='mb-1'>
+        {/* <div className='mb-1'>
           <Label className='form-label' for='business'>
           Заведение<span className='text-danger'>*</span>
           </Label>
@@ -178,7 +180,7 @@ const SidebarNewCategory = ({ stores, open, toggleSidebar, selectedСhef, setSel
             )}
           />
         {errors && errors.business && (<FormFeedback>{`Пожалуйста выберите заведение`}</FormFeedback>)}
-        </div>
+        </div> */}
         <div className='mb-1'>
           <Label className='form-label' for='telegramId'>
           ID полученный в Телеграмм - боте <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span> 

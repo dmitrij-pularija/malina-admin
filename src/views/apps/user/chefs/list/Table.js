@@ -141,7 +141,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
+const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.chefs)
   const [sort, setSort] = useState('+')
@@ -160,12 +160,12 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   //   { value: '1', label: 'Food' },
   //   { value: '2', label: 'Beauty' }
   // ]
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-  const storeOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-  }))
-  storeOptions.unshift({ value: '', label: 'Показать все' })
+  // const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  // const storeOptions = filtredStore.map((store) => ({
+  //   value: String(store.id),
+  //   label: store.name
+  // }))
+  // storeOptions.unshift({ value: '', label: 'Показать все' })
 
   const handleClose = () => {
     setSelectedСhef('')
@@ -185,7 +185,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   useEffect(() => {
     dispatch(getСhefs({
       ordering: `${sort}${sortColumn}`,
-      business__id: currentStore.value,
+      business__id: store,
       search: searchTerm,
       page: currentPage,
       perPage: rowsPerPage
@@ -195,7 +195,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
   const handlePagination = page => {
     dispatch(getСhefs({
       ordering: `${sort}${sortColumn}`,
-      business__id: currentStore.value,
+      business__id: store,
       search: searchTerm,
       page: page.selected + 1,
       perPage: rowsPerPage
@@ -208,7 +208,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setRowsPerPage(value)
     dispatch(getСhefs({
       ordering: `${sort}${sortColumn}`,
-      business__id: currentStore.value,
+      business__id: store,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -219,7 +219,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setSearchTerm(val)
     dispatch(getСhefs({
       ordering: `${sort}${sortColumn}`,
-      business__id: currentStore.value,
+      business__id: store,
       search: val,
       page: 1,
       perPage: rowsPerPage
@@ -249,7 +249,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
 
   const dataToRender = () => {
     const filters = {
-      business__id: currentStore.value,
+      business__id: store,
       search: searchTerm
     }
 
@@ -271,7 +271,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
     setSortColumn(column.sortField)
     dispatch(getСhefs({
       ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
-      business__id: currentStore.value,
+      business__id: store,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -280,7 +280,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
 
   return (
     <Fragment>
-          <Card>
+          {/* <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -306,7 +306,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
             </Col>
           </Row>
         </CardBody>
-      </Card>  
+      </Card>   */}
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
         <DataTable
@@ -317,7 +317,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
             pagination
             responsive
             paginationServer
-            columns={columns(stores, handleEditСhef, handleDelСhef)}
+            columns={columns(handleEditСhef, handleDelСhef)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -338,7 +338,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar }) 
          
         </div>
       </Card>
-      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedСhef={selectedСhef} setSelectedСhef={setSelectedСhef} />
+      <Sidebar store={store} open={sidebarOpen} toggleSidebar={handleClose} selectedСhef={selectedСhef} setSelectedСhef={setSelectedСhef} />
     </Fragment>
   )
 }
