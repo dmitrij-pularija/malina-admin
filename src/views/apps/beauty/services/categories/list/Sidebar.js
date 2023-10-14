@@ -21,7 +21,7 @@ const defaultValues = {
 //   { value: 2, label: 'Food' }
 // ]
 
-const requiredFields = ["name", "business"]
+const requiredFields = ["name"]
 
 // const checkIsValid = data => {
 //   return Object.values(data).every(field => (typeof field === 'object' ? field.value !== "" : field.length > 0))
@@ -43,18 +43,18 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewCategory = ({ stores, categories, open, toggleSidebar, selectedCategory, setSelectedCategory }) => {
+const SidebarNewCategory = ({ store, categories, open, toggleSidebar, selectedCategory, setSelectedCategory }) => {
   const dispatch = useDispatch()
   // const [data, setData] = useState(null)
   // const [item, setItem] = useState('')
   const [avatar, setAvatar] = useState('')
   const categoryList = selectedCategory && selectedCategory.categories.length ? selectedCategory.categories.map(category => parseInt(category.id)) : []
   
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
-  const businessOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-  }))
+  // const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
+  // const businessOptions = filtredStore.map((store) => ({
+  //   value: String(store.id),
+  //   label: store.name
+  // }))
   const categoryOptions = categories.map(category => ({
     value: String(category.id),
     label: category.name
@@ -78,7 +78,8 @@ const SidebarNewCategory = ({ stores, categories, open, toggleSidebar, selectedC
 
   const values = selectedCategory ? {
     name: selectedCategory.category_name ? selectedCategory.category_name : '',
-    business: selectedCategory.business ? initSelect(businessOptions, selectedCategory.business.id) : '',
+    business: store,
+    // business: selectedCategory.business ? initSelect(businessOptions, selectedCategory.business.id) : '',
     category: categoryOptions.filter(i => categoryList.includes(parseInt(i.value)))
   } : {}
 
@@ -132,9 +133,9 @@ const SidebarNewCategory = ({ stores, categories, open, toggleSidebar, selectedC
     if (checkIsValid(data, requiredFields)) {
       reset()  
       toggleSidebar()
-      const formData = new FormData();
+      const formData = new FormData()
       formData.append('category_name', data.name)
-      if (data.business) formData.append('business', data.business.value)
+      formData.append('business', store)
       // if (data.category) formData.append('categories', [...data.category.map(category => parseInt(category.value))])
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
@@ -199,7 +200,7 @@ const SidebarNewCategory = ({ stores, categories, open, toggleSidebar, selectedC
               </div>
         </div>
         </div>
-        <div className='mb-1'>
+        <div className='mb-3'>
           <Label className='form-label' for='name'>
           Название <span className='text-danger'>*</span>
           </Label>
@@ -213,7 +214,7 @@ const SidebarNewCategory = ({ stores, categories, open, toggleSidebar, selectedC
           />
           {errors && errors.name && (<FormFeedback>Пожалуйста введите название</FormFeedback>)}
         </div>  
-        <div className='mb-1'>
+        {/* <div className='mb-1'>
           <Label className='form-label' for='business'>
           Заведение<span className='text-danger'>*</span>
           </Label>
@@ -235,7 +236,7 @@ const SidebarNewCategory = ({ stores, categories, open, toggleSidebar, selectedC
             )}
           />
         {errors && errors.business && (<FormFeedback>{`Пожалуйста выберите заведение`}</FormFeedback>)}
-        </div>
+        </div> */}
         {/* <div className='mb-3'>
           <Label className='form-label' for='category'>
           Категория(и)

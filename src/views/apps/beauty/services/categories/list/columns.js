@@ -2,20 +2,20 @@ import Avatar from '@components/avatar'
 import { Edit, Trash2 } from 'react-feather'
 import { Badge, UncontrolledTooltip, Button, DropdownMenu, DropdownItem } from 'reactstrap'
 
-const getAvatar = data => {
-  if (data && data.image && data.image.includes("http")) {
-    return <Avatar className='me-1' img={data.image} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={data && data.name ? data.name : 'Malina'}
-      />
-    )
-  }
-  }
+// const getAvatar = data => {
+//   if (data && data.image && data.image.includes("http")) {
+//     return <Avatar className='me-1' img={data.image} width='32' height='32' />
+//   } else {
+//     return (
+//       <Avatar
+//         initials
+//         className='me-1'
+//         color={'light-primary'}
+//         content={data && data.name ? data.name : 'Malina'}
+//       />
+//     )
+//   }
+//   }
 
 
 const renderClient = row => {
@@ -42,27 +42,27 @@ const renderClient = row => {
 // }
 
 
-export const columns = (stores, handleEditCategory, handleDelCategory) => {
-  const renderStoore = (id) => {
-    if (!stores.length) return
-    const foundStore = stores.find(item => item.id === id)
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(foundStore)}  
-      {/* <Logo2 src={foundStore.image} size={"s"}/> */}
-    <div className='d-flex flex-column ml3'>
-        <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
-    </div>
-  </div>
-    )
-  }
+export const columns = (handleEditCategory, handleDelCategory) => {
+  // const renderStoore = (id) => {
+  //   if (!stores.length) return
+  //   const foundStore = stores.find(item => item.id === id)
+  //   return (
+  //     <div className='d-flex justify-content-left align-items-center'>
+  //     {getAvatar(foundStore)}  
+  //     {/* <Logo2 src={foundStore.image} size={"s"}/> */}
+  //   <div className='d-flex flex-column ml3'>
+  //       <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
+  //     <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+  //   </div>
+  // </div>
+  //   )
+  // }
 
 return [
   {
     name: '№',
     sortable: false,
-    width: '50px',
+    width: '100px',
     selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
@@ -80,17 +80,17 @@ return [
       </div>
     )
   },
-  {
-    name: 'Заведение',
-    minWidth: '138px',
-    sortable: true,
-    sortField: 'business.id',
-    selector: row => row,
-    cell: row => renderStoore(parseInt(row.business.id))
-  },
+  // {
+  //   name: 'Заведение',
+  //   minWidth: '138px',
+  //   sortable: true,
+  //   sortField: 'business.id',
+  //   selector: row => row,
+  //   cell: row => renderStoore(parseInt(row.business.id))
+  // },
   {
     name: 'Действия',
-    minWidth: '100px',
+    width: '200px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
         <Button.Ripple 

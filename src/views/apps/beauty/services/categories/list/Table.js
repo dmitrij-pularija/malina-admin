@@ -141,7 +141,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
+const CategoriesList = ({ store, categories, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.serviceCategories)
   const [sort, setSort] = useState('+')
@@ -160,12 +160,12 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
   //   { value: '1', label: 'Food' },
   //   { value: '2', label: 'Beauty' }
   // ]
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
-  const storeOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-  }))
-  storeOptions.unshift({ value: '', label: 'Показать все' })
+  // const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
+  // const storeOptions = filtredStore.map((store) => ({
+  //   value: String(store.id),
+  //   label: store.name
+  // }))
+  // storeOptions.unshift({ value: '', label: 'Показать все' })
 
   // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const handleClose = () => {
@@ -196,7 +196,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
   useEffect(() => {
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      business__id: currentType.value,
+      business__id: store,
       search: searchTerm,
       page: currentPage,
       perPage: rowsPerPage
@@ -206,7 +206,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
   const handlePagination = page => {
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      business__id: currentType.value,
+      business__id: store,
       search: searchTerm,
       page: page.selected + 1,
       perPage: rowsPerPage
@@ -219,7 +219,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
     setRowsPerPage(value)
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      business__id: currentType.value,
+      business__id: store,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -230,7 +230,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
     setSearchTerm(val)
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      business__id: currentType.value,
+      business__id: store,
       search: val,
       page: 1,
       perPage: rowsPerPage
@@ -260,7 +260,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
 
   const dataToRender = () => {
     const filters = {
-      business__id: currentType.value,
+      business__id: store,
       search: searchTerm
     }
 
@@ -282,7 +282,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
     setSortColumn(column.sortField)
     dispatch(getCategories({
       ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
-      business__id: currentType.value,
+      business__id: store,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -309,7 +309,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
 
   return (
     <Fragment>
-          <Card>
+          {/* <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -335,7 +335,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
             </Col>
           </Row>
         </CardBody>
-      </Card>  
+      </Card>   */}
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
         <DataTable
@@ -346,7 +346,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
             pagination
             responsive
             paginationServer
-            columns={columns(stores, handleEditCategory, handleDelCategory)}
+            columns={columns(handleEditCategory, handleDelCategory)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -369,7 +369,7 @@ const CategoriesList = ({ stores, categories, sidebarOpen, setSidebarOpen, toggl
          
         </div>
       </Card>
-      <Sidebar stores={stores} categories={categories} open={sidebarOpen} toggleSidebar={handleClose} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
+      <Sidebar store={store} categories={categories} open={sidebarOpen} toggleSidebar={handleClose} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} />
     </Fragment>
   )
 }

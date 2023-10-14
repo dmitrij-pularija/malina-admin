@@ -12,6 +12,7 @@ const ProductsCategoriesList = () => {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const stores = useSelector(state => state.stores.allStores)
+  const store = useSelector(state => state.auth.userData.id)
   const categories = useSelector(state => state.categories.allCategories)
 
   useEffect(() => {
@@ -23,7 +24,7 @@ const ProductsCategoriesList = () => {
     <>
     <div className="app-user-list" >
       <Breadcrumbs title='Категории' data={[{ title: 'Услуги' }, { title: 'Категории' }]} onClick={toggleSidebar} /> 
-      <Table stores={stores} categories={categories} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Table store={store} categories={categories} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
     </div>
     <Loading />
     </>
