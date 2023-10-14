@@ -18,6 +18,7 @@ const ServicesList = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
   // const navigate = useNavigate()
+  const store = useSelector(state => state.auth.userData.id)
   const stores = useSelector(state => state.stores.allStores)
   const masters = useSelector(state => state.masters.allMasters)
   const categories = useSelector(state => state.serviceCategories.allCategories)
@@ -34,7 +35,7 @@ const ServicesList = () => {
   return (
     <div className='app-user-list'>
       <Breadcrumbs title='Услуги' data={[{ title: 'Услуги' }]} onClick={toggleModal} />
-      <Table stores={stores} masters={masters} categories={categories} modalOpen={modalOpen} toggleModal={toggleModal} />
+      <Table store={store} stores={stores} masters={masters} categories={categories} modalOpen={modalOpen} toggleModal={toggleModal} />
       <Loading />  
     </div>
   )

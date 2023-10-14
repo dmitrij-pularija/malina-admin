@@ -187,13 +187,13 @@ return [
       </div>
     )
   },
-  {
-    name: 'Заведение',
-    minWidth: '200px',
-    sortable: true,
-    sortField: 'beauty_service_business',
-    cell: row => renderStoore(row.beauty_service_business)
-  },
+  // {
+  //   name: 'Заведение',
+  //   minWidth: '200px',
+  //   sortable: true,
+  //   sortField: 'beauty_service_business',
+  //   cell: row => renderStoore(row.beauty_service_business)
+  // },
   {
     name: 'Действия',
     minWidth: '120px',

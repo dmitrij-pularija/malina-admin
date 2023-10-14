@@ -155,7 +155,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) => {
+const ServicesList = ({store, stores, masters, categories, modalOpen, toggleModal }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { data, total } = useSelector(state => state.services)
@@ -186,7 +186,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id: currentStore.value,
+        business_id: store,
         master_id: currentMaster.value,
         master_specialty_id: currentSpecialty.value
       })
@@ -199,13 +199,15 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
   }))
   storeOptions.unshift({ value: '', label: 'Показать все' }) 
   
-  const masterOptions = masters.map(master => ({
+  const filtredMasters = masters.filter(master => parseInt(master.master_business) === parseInt(store)) 
+  const masterOptions = filtredMasters.map(master => ({
     value: String(master.id),
     label: master.master_name ? `${master.master_name} ${master.surname ? master.surname : ''}` : master.login
   }))
   masterOptions.unshift({ value: '', label: 'Показать все' }) 
   
-  const specialtyOptions = categories.map(category => ({
+  const filtredSpecialty = categories.filter(category => parseInt(category.business.id) === parseInt(store)) 
+  const specialtyOptions = filtredSpecialty.map(category => ({
     value: String(category.id),
     label: category.category_name
   }))
@@ -260,7 +262,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        business_id: currentStore.value,
+        business_id: store,
         master_id: currentMaster.value,
         master_specialty_id: currentSpecialty.value
       })
@@ -277,7 +279,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
         search: searchTerm,
         perPage: value,
         page: 1,
-        business_id: currentStore.value,
+        business_id: store,
         master_id: currentMaster.value,
         master_specialty_id: currentSpecialty.value
       })
@@ -294,7 +296,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
         ordering: `${sort}${sortColumn}`,
         page: 1,
         perPage: rowsPerPage,
-        business_id: currentStore.value,
+        business_id: store,
         master_id: currentMaster.value,
         master_specialty_id: currentSpecialty.value
       })
@@ -327,7 +329,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      business_id: currentStore.value,
+      business_id: store,
       master_id: currentMaster.value,
       master_specialty_id: currentSpecialty.value,
       search: searchTerm
@@ -368,7 +370,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
       <Card>
         <CardBody>
           <Row>
-            <Col className='my-md-0 my-1' md='4'>
+            {/* <Col className='my-md-0 my-1' md='4'>
               <Label for='plan-select'>Заведение</Label>
               <Select
                 theme={selectThemeColors}
@@ -393,7 +395,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
                   )
                 }}
               />
-            </Col>
+            </Col> */}
             <Col className='my-md-0 my-1' md='4'>
               <Label for='plan-select'>Категория</Label>
               <Select
@@ -478,7 +480,7 @@ const ServicesList = ({stores, masters, categories, modalOpen, toggleModal }) =>
           />
         </div>
       </Card>
-      <ServicesModal masters={masters} stores={stores} categories={categories} open={modalOpen} toggleModal={toggleModal} selectedService={selectedService} setSelectedService={setSelectedService} />
+      <ServicesModal masters={masters} store={store} stores={stores} categories={categories} open={modalOpen} toggleModal={toggleModal} selectedService={selectedService} setSelectedService={setSelectedService} />
     </Fragment>
   )
 }

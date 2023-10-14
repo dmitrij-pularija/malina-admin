@@ -51,10 +51,11 @@ const defaultValues = {
   description: ""
 }
 
-const requiredFields = ["masters", "business"]
+const requiredFields = ["masters"]
 
 const ServicesModal = ({
   open,
+  store,
   stores, 
   masters, 
   categories,
@@ -70,15 +71,18 @@ const ServicesModal = ({
     if (selectedService && selectedService.beauty_service_image) setAvatar(selectedService.beauty_service_image)
   }, [selectedService])
 
-  const masterOptions = masters.map(master => ({
+  const filtredMasters = masters.filter(master => parseInt(master.master_business) === parseInt(store)) 
+  const masterOptions = filtredMasters.map(master => ({
     value: String(master.id),
     label: master.master_name ? `${master.master_name} ${master.surname ? master.surname : ''}` : master.login
   }))
-
-  const categoryOptions = categories.map(category => ({
+  
+  const filtredSpecialty = categories.filter(category => parseInt(category.business.id) === parseInt(store)) 
+  const categoryOptions = filtredSpecialty.map(category => ({
     value: String(category.id),
     label: category.category_name
   }))
+
   const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
   const storeOptions = filtredStore.map(store => ({
     value: String(store.id),
@@ -87,7 +91,8 @@ const ServicesModal = ({
 
   const values = selectedService ? {
       name: selectedService.beauty_service_name ? selectedService.beauty_service_name : '',
-      business: selectedService.beauty_service_business && selectedService.beauty_service_business.id ? initSelect(storeOptions, selectedService.beauty_service_business.id) : '',
+      business: store,
+      // business: selectedService.beauty_service_business && selectedService.beauty_service_business.id ? initSelect(storeOptions, selectedService.beauty_service_business.id) : '',
       category: selectedService.beauty_service_category && selectedService.beauty_service_category.id ? initSelect(categoryOptions, selectedService.beauty_service_category.id) : '',
       hasPause: selectedService.has_pause ? selectedService.has_pause : false,
       pauseTime: selectedService.pause_time ? selectedService.pause_time : "",
@@ -162,7 +167,7 @@ const ServicesModal = ({
   const onSubmit = (data) => {
     if (checkIsValid(data, requiredFields)) {
       const sevice = {}
-      sevice.beauty_service_business = data.business.value
+      sevice.beauty_service_business = store
       sevice.beauty_service_masters = data.masters.map(master => master.value)
       if (data.name) sevice.beauty_service_name = data.name
       if (data.category) sevice.beauty_service_category = data.category.value
@@ -288,7 +293,7 @@ const ServicesModal = ({
                 )}
               </div>
             </Col>
-            <Col md={6} xs={12}>
+            {/* <Col md={6} xs={12}>
               <Label className="form-label" for="business">
                 Заведение <span className="text-danger">*</span>
               </Label>
@@ -314,7 +319,7 @@ const ServicesModal = ({
               {errors && errors.business && (
                 <FormFeedback>Пожалуйста выберите заведение</FormFeedback>
               )}
-            </Col>
+            </Col> */}
             <Col md={6} xs={12}>
               <Label className="form-label" for="category">
                 Категория
@@ -409,7 +414,7 @@ const ServicesModal = ({
               )}
             </Col>
             <Col md={6} xs={12}>
-          <div className='form-check form-check-primary'>
+          <div className='form-check form-check-primary mt-3'>
           <Controller
             name='hasPause'
             control={control}
