@@ -9,6 +9,7 @@ import "@styles/react/apps/app-users.scss"
 
 const TablesList = () => {
   const dispatch = useDispatch()
+  const store = useSelector(state => state.auth.userData.id)
   const stores = useSelector(state => state.stores.allStores)
   const waiters = useSelector(state => state.waiters.allWaiters)
 
@@ -20,7 +21,7 @@ useEffect(() => {
   return (
     <div className="app-user-list">
       <Breadcrumbs title='Столы' data={[{ title: 'Структура' }, { title: 'Столы' }]} />
-      <Table waiters={waiters} stores={stores} />
+      <Table waiters={waiters} store={store} />
       <Loading />
     </div>
   )

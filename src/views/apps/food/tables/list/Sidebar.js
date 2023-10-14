@@ -15,35 +15,43 @@ const defaultValues = {
   waiter: ''
 }
 
-const requiredFields = ["number", "waiter", "business"]
+const requiredFields = ["number", "waiter"]
 
-const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, setSelectedTable }) => {
+const SidebarNewTable = ({ store, open, toggleSidebar, waiters, selectedTable, setSelectedTable }) => {
   const dispatch = useDispatch()
-  const [waiterOptions, setWaiterOptions] = useState([])
+  // const [waiterOptions, setWaiterOptions] = useState([])
 
-  const initWaiterOptions = () => {
-    const filteredWaiters = waiters.filter(waiter => parseInt(waiter.business_id.id) === parseInt(selectedTable.business_id.id))
-    setWaiterOptions(filteredWaiters.map(waiter => ({
-      value: String(waiter.id),
-      label: waiter.full_name
-  })))
-}
+//   const initWaiterOptions = () => {
+//     const filteredWaiters = waiters.filter(waiter => parseInt(waiter.business_id.id) === parseInt(store))
+//     setWaiterOptions(filteredWaiters.map(waiter => ({
+//       value: String(waiter.id),
+//       label: waiter.full_name
+//   })))
+// }
+
+  const filteredWaiters = waiters.filter(waiter => parseInt(waiter.business_id.id) === parseInt(store)) 
+  const waiterOptions = filteredWaiters.map(waiter => ({
+    value: String(waiter.id),
+    label: waiter.full_name
+  }))
+  
   const waiterList = selectedTable ? selectedTable.waiter.map(waiter => parseInt(waiter.id)) : [] 
 
-  useEffect(() => {
-    if (selectedTable) initWaiterOptions()
-  }, [selectedTable])
+  // useEffect(() => {
+  //   initWaiterOptions()
+  // }, [])
 
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)   
-  const storeOptions = filtredStore.map(store => ({
-    value: String(store.id),
-    label: store.name
-  }))
+  // const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)   
+  // const storeOptions = filtredStore.map(store => ({
+  //   value: String(store.id),
+  //   label: store.name
+  // }))
 
   
   const values = selectedTable ? {
     number: selectedTable.number,
-    business: selectedTable.business_id ? initSelect(storeOptions, selectedTable.business_id.id) : '',
+    business: store,
+    // business: selectedTable.business_id ? initSelect(storeOptions, selectedTable.business_id.id) : '',
     landingUrl: selectedTable.landing_url ? selectedTable.landing_url : '',
     waiter: waiterOptions.filter(i => waiterList.includes(parseInt(i.value)))
    } : {}
@@ -72,7 +80,7 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
         editTable({
           id: selectedTable.id, 
           number: parseInt(data.number),
-          business_id: data.business.value,
+          business_id: store,
           landing_url: data.landingUrl ? data.landingUrl : '',
           waiter: waiterValues
         })
@@ -83,7 +91,7 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
         dispatch(
         addTable({
           number: parseInt(data.number),
-          business_id: data.business.value,
+          business_id: store,
           landing_url: data.landingUrl ? data.landingUrl : '',
           waiter: waiterValues
         })
@@ -110,19 +118,19 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
   // }
   const handleWaiterChange = selectedOption => setValue("waiter", selectedOption)
 
-  const handleBusinessChange = selectedOption => {
-    setValue("waiter", "")
-    const filteredWaiters = waiters.filter(
-      waiter => parseInt(waiter.business_id.id) === parseInt(selectedOption.value)
-    )
-    setWaiterOptions(
-      filteredWaiters.map(waiter => ({
-        value: String(waiter.id),
-        label: waiter.full_name
-      }))
-    )
-    setValue("business", selectedOption)
-  }
+  // const handleBusinessChange = selectedOption => {
+  //   setValue("waiter", "")
+  //   const filteredWaiters = waiters.filter(
+  //     waiter => parseInt(waiter.business_id.id) === parseInt(selectedOption.value)
+  //   )
+  //   setWaiterOptions(
+  //     filteredWaiters.map(waiter => ({
+  //       value: String(waiter.id),
+  //       label: waiter.full_name
+  //     }))
+  //   )
+  //   setValue("business", selectedOption)
+  // }
 
   return (
     <Sidebar
@@ -149,7 +157,7 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
           />
         {errors && errors.number && (<FormFeedback>Пожалуйста введите номер стола</FormFeedback>)}    
         </div> 
-        <div className='mb-1'>
+        {/* <div className='mb-1'>
               <Label className="form-label" for="business">
                 Заведение <span className="text-danger">*</span>
               </Label>
@@ -176,8 +184,8 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
               {errors && errors.business && (
                 <FormFeedback>Пожалуйста выберите заведение</FormFeedback>
               )}
-            </div> 
-        {/* <div className='mb-1'>
+            </div>
+        <div className='mb-1'>
           <Label className='form-label' for='landingUrl'>
           Landing url
           </Label>
@@ -204,7 +212,7 @@ const SidebarNewTable = ({ stores, open, toggleSidebar, waiters, selectedTable, 
                 isMulti
                 id='waiter'
                 value={field.value}
-                isDisabled={!getValues("business").value && !selectedTable}
+                // isDisabled={!getValues("business").value && !selectedTable}
                 isClearable={false}
                 classNamePrefix='select'
                 options={waiterOptions}

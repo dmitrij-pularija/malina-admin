@@ -148,7 +148,7 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
   )
 }
 
-const TablesList = ({waiters, stores }) => {
+const TablesList = ({waiters, store }) => {
   const dispatch = useDispatch()
   const { data, total} = useSelector(state => state.tables)
   const [sort, setSort] = useState('+')
@@ -185,17 +185,17 @@ const TablesList = ({waiters, stores }) => {
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id: currentStore.value
+        business_id: store
       })
     )
-  }, [dispatch, data.length, sort, sortColumn, currentPage])
+  }, [])
 
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1) 
-  const storeOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-  }))
-  storeOptions.unshift({ value: '', label: 'Показать все' })
+  // const filtredStore = stores.filter(store => parseInt(store.business_type) === 1) 
+  // const storeOptions = filtredStore.map((store) => ({
+  //   value: String(store.id),
+  //   label: store.name
+  // }))
+  // storeOptions.unshift({ value: '', label: 'Показать все' })
 
   const handlePagination = page => {
     dispatch(
@@ -204,7 +204,7 @@ const TablesList = ({waiters, stores }) => {
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        business_id: currentStore.value
+        business_id: store
       })
     )
     setCurrentPage(page.selected + 1)
@@ -218,7 +218,7 @@ const TablesList = ({waiters, stores }) => {
         search: searchTerm,
         perPage: value,
         page: currentPage,
-        business_id: currentStore.value
+        business_id: store
       })
     )
     setRowsPerPage(value)
@@ -232,7 +232,7 @@ const TablesList = ({waiters, stores }) => {
         ordering: `${sort}${sortColumn}`,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id: currentStore.value
+        business_id: store
       })
     )
   }
@@ -261,7 +261,7 @@ const TablesList = ({waiters, stores }) => {
   
   const dataToRender = () => {
     const filters = {
-      store: currentStore.value,
+      business_id: store,
       search: searchTerm
     }
 
@@ -287,7 +287,7 @@ const TablesList = ({waiters, stores }) => {
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id: currentStore.value
+        business_id: store
       })
     )
   }
@@ -303,7 +303,7 @@ const TablesList = ({waiters, stores }) => {
 
   return (
     <Fragment>
-      <Card>
+      {/* <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -331,7 +331,7 @@ const TablesList = ({waiters, stores }) => {
             </Col>
           </Row>
         </CardBody>
-      </Card>
+      </Card> */}
 
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
@@ -362,7 +362,7 @@ const TablesList = ({waiters, stores }) => {
           />
         </div>
       </Card>
-      <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} waiters={waiters} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
+      <Sidebar store={store} open={sidebarOpen} toggleSidebar={handleClose} waiters={waiters} selectedTable={selectedTable} setSelectedTable={setSelectedTable}/>
       <Modal isOpen={modalShow} toggle={toggleModal} className='modal-dialog-centered'>
       <ModalHeader className='bg-transparent' toggle={toggleModal}></ModalHeader>
         <ModalBody className='px-sm-5 pt-50 pb-5'>

@@ -83,23 +83,23 @@ const handleClick = url => {
   {
     name: '№',
     sortable: false,
-    minWidth: '20px',
+    width: '100px',
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
-  {
-    sortable: true,
-    minWidth: '150px',
-    sortField: 'invoiceStatus',
-    name: 'Заведение',
-    cell: row => row.business_id.name
-  },
-  {
-    sortable: true,
-    minWidth: '150px',
-    sortField: 'invoiceStatus',
-    name: 'Адрес',
-    cell: row => `${row.business_id.business_address.city ? row.business_id.business_address.city : ''}, ${row.business_id.business_address.name ? row.business_id.business_address.name : ''}`
-  },
+  // {
+  //   sortable: true,
+  //   minWidth: '150px',
+  //   sortField: 'invoiceStatus',
+  //   name: 'Заведение',
+  //   cell: row => row.business_id.name
+  // },
+  // {
+  //   sortable: true,
+  //   minWidth: '150px',
+  //   sortField: 'invoiceStatus',
+  //   name: 'Адрес',
+  //   cell: row => `${row.business_id.business_address.city ? row.business_id.business_address.city : ''}, ${row.business_id.business_address.name ? row.business_id.business_address.name : ''}`
+  // },
   {
     sortable: true,
     minWidth: '20px',
@@ -123,7 +123,7 @@ const handleClick = url => {
   },
   {
     name: 'Действия',
-    minWidth: '110px',
+    width: '200px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
         <UncontrolledDropdown>
