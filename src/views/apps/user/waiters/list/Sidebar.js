@@ -38,7 +38,7 @@ const defaultValues = {
 //   )
 // }
 
-const requiredFields = ["fullName", "businessId"]
+const requiredFields = ["fullName"]
 
 // const checkIsValid = (data) => {
 //   return Object.keys(data).every((key) => {
@@ -72,7 +72,7 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
+const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
   // const values = {}
@@ -81,11 +81,11 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
     label: `${item.start_time.slice(0, -3)} - ${item.end_time.slice(0, -3)} ${item.description} `
   }))
   
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-  const storeOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-}))
+//   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+//   const storeOptions = filtredStore.map((store) => ({
+//     value: String(store.id),
+//     label: store.name
+// }))
 
   useEffect(() => {
     if (selectedWaiter) {
@@ -101,7 +101,8 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
   const values = selectedWaiter ? {
     fullName: selectedWaiter.full_name ? selectedWaiter.full_name : '',
     telegram: selectedWaiter.telegram ? selectedWaiter.telegram : '',
-    businessId: selectedWaiter.business_id ? storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.business_id.id))] : '',
+    businessId: store,
+    // businessId: selectedWaiter.business_id ? storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.business_id.id))] : '',
     shift: selectedWaiter.shift ? shiftsOptions[shiftsOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.shift.id))] : ''} : {}
   
     const {
@@ -167,7 +168,7 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData()
       formData.append('full_name', data.fullName)
-      formData.append('business_id', data.businessId.value)
+      formData.append('business_id', store)
       if (data.shift) formData.append('shift', data.shift.value)
       if (data.telegram) formData.append('telegram', data.telegram)
       if (avatar && avatar.startsWith('data:image')) {
@@ -237,7 +238,7 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
           />
           {errors && errors.fullName && (<FormFeedback>Пожалуйста заполните имя</FormFeedback>)}  
         </div>
-        <div className='mb-1'>
+        {/* <div className='mb-1'>
           <Label className='form-label' for='businessId'>
           Заведение <span className='text-danger'>*</span>
           </Label>
@@ -259,7 +260,7 @@ const SidebarNewWaiters = ({ shifts, stores, open, toggleSidebar, selectedWaiter
             )}
           />
           {errors && errors.businessId && (<FormFeedback>Пожалуйста выберите заведение</FormFeedback>)}  
-        </div>
+        </div> */}
         <div className='mb-1'>
           <Label className='form-label' for='shift'>
           Смена

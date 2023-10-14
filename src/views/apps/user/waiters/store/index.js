@@ -3,16 +3,6 @@ import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
  
-// export const getShifts = async () => {
-//   try {
-//   const { data: { results }} = await axios.get('/users/waiter-shifts/')
-//   return results
-// } catch (error) {
-//   errorMessage(error.response.data.detail)
-//   return thunkAPI.rejectWithValue(error)
-// }
-// }
-
 export const getAllWaiters = createAsyncThunk('appWaiters/getAllWaiters', async () => {
   try {
     let isFinished = false

@@ -149,6 +149,7 @@ const WaitersList = ({ sidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.waiters)
   const stores = useSelector(state => state.stores.allStores)
+  const store = useSelector(state => state.auth.userData.id)
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [shifts, setShifts] = useState([])
@@ -157,7 +158,7 @@ const WaitersList = ({ sidebarOpen, toggleSidebar }) => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedWaiter, setSelectedWaiter] = useState('')
-  const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
+  // const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
   // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   // const handleClose = () => {
   //   setSelectedWaiter('')
@@ -178,17 +179,17 @@ const WaitersList = ({ sidebarOpen, toggleSidebar }) => {
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id__id: store.value
+        business_id__id: store
       })
     )
   }, [dispatch, data.length, sort, sortColumn, currentPage])
   
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-  const storeOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-}))
-storeOptions.unshift({ value: '', label: 'Показать все' })
+//   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+//   const storeOptions = filtredStore.map((store) => ({
+//     value: String(store.id),
+//     label: store.name
+// }))
+// storeOptions.unshift({ value: '', label: 'Показать все' })
  
 const handleDelWaiter = (event, id) => {
   event.preventDefault()
@@ -207,7 +208,7 @@ const handleEditWaiter = (event, row) => {
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        business_id__id: store.value
+        business_id__id: store
       })
     )
     setCurrentPage(page.selected + 1)
@@ -221,7 +222,7 @@ const handleEditWaiter = (event, row) => {
         search: searchTerm,
         perPage: value,
         page: 1,
-        business_id__id: store.value
+        business_id__id: store
       })
     )
     setRowsPerPage(value)
@@ -235,7 +236,7 @@ const handleEditWaiter = (event, row) => {
         ordering: `${sort}${sortColumn}`,
         page: 1,
         perPage: rowsPerPage,
-        business_id__id: store.value
+        business_id__id: store
       })
     )
   }
@@ -264,7 +265,7 @@ const handleEditWaiter = (event, row) => {
  
   const dataToRender = () => {
     const filters = {
-      business_id__id: store.value,
+      business_id__id: store,
       search: searchTerm
     }
 
@@ -290,14 +291,14 @@ const handleEditWaiter = (event, row) => {
         search: searchTerm,
         page: 1,
         perPage: rowsPerPage,
-        business_id__id: store.value
+        business_id__id: store
       })
     )
   }
 
   return (
     <Fragment>
-      <Card>
+      {/* <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -326,7 +327,7 @@ const handleEditWaiter = (event, row) => {
             </Col>
           </Row>
         </CardBody>
-      </Card>
+      </Card> */}
 
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
@@ -337,7 +338,7 @@ const handleEditWaiter = (event, row) => {
             pagination
             responsive
             paginationServer
-            columns={columns(stores, handleEditWaiter, handleDelWaiter)}
+            columns={columns(handleEditWaiter, handleDelWaiter)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -358,7 +359,7 @@ const handleEditWaiter = (event, row) => {
         </div>
       </Card>
 
-      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} stores={stores} />
+      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} store={store} />
     </Fragment>
   )
 }
