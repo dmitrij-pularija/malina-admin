@@ -97,15 +97,15 @@ return [
     sortable: true,
     sortField: 'cost',
     selector: row => row,
-    cell: row => <span>{`${row.cost ? formatNumber(row.cost) : ''} / ${row.sale_cost ? formatNumber(row.sale_cost) : ''}`}</span>
+    cell: row => <span>{row.cost ? formatNumber(row.cost) : ''}</span>
   },
   {
-    name: 'Себистоимость',
+    name: 'Скидка',
     width: '200px',
     sortable: true,
     sortField: 'prime_cost',
     selector: row => row,
-    cell: row => formatNumberInt(row.prime_cost)
+    cell: row => <span>{row.prime_cost ? `${formatNumberInt(row.prime_cost)} %` : ''}</span>
   },
   {
     name: 'Категория',
@@ -114,14 +114,14 @@ return [
     sortField: 'category',
     cell: row => renderCategory(row.category)
   },
-  {
-    name: 'Заведение',
-    minWidth: '200px',
-    sortable: true,
-    sortField: 'supplier.id',
-    selector: row => row.supplier,
-    cell: row => renderStoore(row.supplier)
-  },
+  // {
+  //   name: 'Заведение',
+  //   minWidth: '200px',
+  //   sortable: true,
+  //   sortField: 'supplier.id',
+  //   selector: row => row.supplier,
+  //   cell: row => renderStoore(row.supplier)
+  // },
   {
     name: 'Действия',
     minWidth: '120px',

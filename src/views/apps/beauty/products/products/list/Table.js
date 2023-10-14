@@ -163,6 +163,7 @@ const CustomHeader = ({ data, toggleModal, handlePerPage, rowsPerPage, handleFil
 const ProductsList = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const store = useSelector(state => state.auth.userData.id)
   const stores = useSelector(state => state.stores.allStores)
   const categories = useSelector(state => state.beautyProductsCategories.allCategories)
   const { data, total } = useSelector(state => state.productsBeauty)
@@ -185,7 +186,7 @@ const ProductsList = () => {
         page: currentPage,
         perPage: rowsPerPage,
         category_id: currentCategory.value,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
   }, [])
@@ -220,7 +221,7 @@ const ProductsList = () => {
         perPage: rowsPerPage,
         page: page.selected + 1,
         category_id: currentCategory.value,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
     setCurrentPage(page.selected + 1)
@@ -235,7 +236,7 @@ const ProductsList = () => {
         perPage: value,
         page: 1,
         category_id: currentCategory.value,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
     setRowsPerPage(value)
@@ -250,7 +251,7 @@ const ProductsList = () => {
         page: 1,
         perPage: rowsPerPage,
         category_id: currentCategory.value,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
   }
@@ -280,7 +281,7 @@ const ProductsList = () => {
   const dataToRender = () => {
     const filters = {
       category_id: currentCategory.value,
-      supplier_id: currentStore.value,
+      supplier_id: store,
       search: searchTerm
     }
 
@@ -307,7 +308,7 @@ const ProductsList = () => {
         page: 1,
         perPage: rowsPerPage,
         category_id: currentCategory.value,
-        supplier_id: currentStore.value
+        supplier_id: store
       })
     )
   }
@@ -317,7 +318,7 @@ const ProductsList = () => {
       <Card>
         <CardBody>
           <Row>
-            <Col className='my-md-0 my-1' md='4'>
+            {/* <Col className='my-md-0 my-1' md='4'>
               <Label for='plan-select'>Заведение</Label>
               <Select
                 theme={selectThemeColors}
@@ -341,7 +342,7 @@ const ProductsList = () => {
                   )
                 }}
               />
-            </Col>
+            </Col> */}
             <Col className='my-md-0 my-1' md='4'>
               <Label for='plan-select'>Категория</Label>
               <Select
@@ -361,7 +362,7 @@ const ProductsList = () => {
                       page: 1,
                       perPage: rowsPerPage,
                       category_id: data.value,
-                      supplier_id: currentStore.value
+                      supplier_id: store
                     })
                   )
                 }}

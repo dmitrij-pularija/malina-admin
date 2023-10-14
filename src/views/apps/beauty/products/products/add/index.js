@@ -13,6 +13,7 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 const addProduct = () => {
   const dispatch = useDispatch()
   const categories = useSelector(state => state.beautyProductsCategories.allCategories)
+  const store = useSelector(state => state.auth.userData.id)
   const stores = useSelector((state) => state.stores.allStores)
   const products = useSelector((state) => state.productsBeauty.allProducts)
 
@@ -34,7 +35,7 @@ const addProduct = () => {
           <Card>
             <CardBody>
               <Row>
-              <ProductDetails categories={categories} stores={stores} products={products} selectedProduct={null} />  
+              <ProductDetails categories={categories} store={store} stores={stores} products={products} selectedProduct={null} />  
               </Row>
             </CardBody>
           </Card>

@@ -69,13 +69,13 @@ const defaultValues = {
   relatedProducts: ""
 }
 
-const requiredFields = ["name", "cost", "supplier"]
+const requiredFields = ["name", "cost"]
 
 const ProductDetails = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [isRtl] = useRTL()
-  const { categories, stores, products, selectedProduct } = props
+  const { categories, store, stores, products, selectedProduct } = props
   const relatedProductsList = selectedProduct && selectedProduct.related_products.length ? selectedProduct.related_products.map(product => parseInt(product.id)) : []
 
   const initCategoryOptions = () => {
@@ -110,11 +110,12 @@ const relatedProductsOptions = products.map(product => ({
   const values = selectedProduct ? {
   name: selectedProduct.name ? selectedProduct.name : "",
   description: selectedProduct.description ? selectedProduct.description : "",
-  category: selectedProduct.category ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedProduct.category.id))] : '',
+  category: selectedProduct.category ? categoryOptions[categoryOptions.findIndex(i => parseInt(i.value) === parseInt(selectedProduct.category))] : '',
   cost: selectedProduct.cost ? selectedProduct.cost : "",
   composition: selectedProduct.composition ? selectedProduct.composition : "",
   primeCost: selectedProduct.prime_cost ? selectedProduct.prime_cost : "",
-  supplier: selectedProduct.supplier ? supplierOptions[supplierOptions.findIndex(i => parseInt(i.value) === parseInt(selectedProduct.supplier.id))] : '',
+  supplier: store,
+  // supplier: selectedProduct.supplier ? supplierOptions[supplierOptions.findIndex(i => parseInt(i.value) === parseInt(selectedProduct.supplier.id))] : '',
   usageInstruction: selectedProduct.usage_instruction ? selectedProduct.usage_instruction : "",
   volume: selectedProduct.volume ? selectedProduct.volume : "",
   relatedProducts: relatedProductsOptions.filter(i => relatedProductsList.includes(parseInt(i.value)))
@@ -210,7 +211,7 @@ const relatedProductsOptions = products.map(product => ({
       const product = {}
       product.name = data.name
       product.cost = data.cost
-      product.supplier = data.supplier.value
+      product.supplier = store
       if (data.relatedProducts && data.relatedProducts.length) product.related_products = data.relatedProducts.map(item => item.value)
       if (data.description) product.description = data.description
       if (data.category) product.category = data.category.value
@@ -347,7 +348,7 @@ const relatedProductsOptions = products.map(product => ({
           </Col>
         </Row>
         <Row>
-        <Col md={4} className="mt-1">
+        {/* <Col md={4} className="mt-1">
                 <Label className="form-label" for="supplier">
                   Заведение<span className="text-danger">*</span>
                 </Label>
@@ -378,7 +379,7 @@ const relatedProductsOptions = products.map(product => ({
                     Пожалуйста выберите заведение
                   </FormFeedback>
                 )}
-              </Col>
+              </Col> */}
               <Col md={4} className="mt-1">
                 <Label className="form-label" for="category">
                   Категория
@@ -439,7 +440,7 @@ const relatedProductsOptions = products.map(product => ({
                 </div>
                 <div>
                   <Label className="form-label" for="primeCost">
-                    Себистоимость, &#x0441;&#x332;
+                    Скидка, %
                   </Label>
                   <Controller
                     name="primeCost"
@@ -461,28 +462,7 @@ const relatedProductsOptions = products.map(product => ({
                   )}
                 </div>
               </Col>
-              <Col>
-                <Label className="form-label" for="usageInstruction">
-                  Инструкция
-                </Label>
-                <Controller
-                  name="usageInstruction"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-                    <Input
-                      id="usageInstruction"
-                      placeholder="Введите инструкцию"
-                      invalid={errors.usageInstruction && true}
-                      {...field}
-                    />
-                  )}
-                />
-                {errors && errors.usageInstruction && (
-                  <FormFeedback>Пожалуйста введите инструкцию</FormFeedback>
-                )}
-              </Col>
-              <Col>
+              <Col md={4} className="mt-1">
                 <Label className="form-label" for="volume">
                   Объем
                 </Label>
@@ -503,7 +483,28 @@ const relatedProductsOptions = products.map(product => ({
                   <FormFeedback>Пожалуйста введите объем</FormFeedback>
                 )}
               </Col>
-              <Col>
+              <Col md={6} className="mt-1">
+                <Label className="form-label" for="usageInstruction">
+                  Инструкция
+                </Label>
+                <Controller
+                  name="usageInstruction"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Input
+                      id="usageInstruction"
+                      placeholder="Введите инструкцию"
+                      invalid={errors.usageInstruction && true}
+                      {...field}
+                    />
+                  )}
+                />
+                {errors && errors.usageInstruction && (
+                  <FormFeedback>Пожалуйста введите инструкцию</FormFeedback>
+                )}
+              </Col>
+              <Col md={6} className="mt-1">
             <Label className='form-label' for='relatedProducts'>
           Связанные товары
           </Label>

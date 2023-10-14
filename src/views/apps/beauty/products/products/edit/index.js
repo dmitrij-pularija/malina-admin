@@ -19,6 +19,7 @@ const Details = () => {
   const { selectedProduct, allProducts, loading } = useSelector((state) => state.productsBeauty)
   const categories = useSelector(state => state.beautyProductsCategories.allCategories)
   const stores = useSelector((state) => state.stores.allStores)
+  const store = useSelector(state => state.auth.userData.id)
 
   useEffect(() => {
     dispatch(getProduct(parseInt(id)))
@@ -52,7 +53,8 @@ const Details = () => {
                 <Col className="d-flex flex-column align-items-center justify-content-center width">
                   <ProductDetails
                     categories={categories} 
-                    stores={stores} 
+                    stores={stores}
+                    store={store} 
                     products={allProducts} 
                     selectedProduct={selectedProduct}
                   />

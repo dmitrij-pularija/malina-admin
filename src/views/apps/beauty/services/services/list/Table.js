@@ -358,7 +358,7 @@ const ServicesList = ({store, stores, masters, categories, modalOpen, toggleModa
         search: searchTerm,
         page: 1,
         perPage: rowsPerPage,
-        business_id: currentStore.value,
+        business_id: store,
         master_id: currentMaster.value,
         master_specialty_id: currentSpecialty.value
       })
@@ -414,7 +414,7 @@ const ServicesList = ({store, stores, masters, categories, modalOpen, toggleModa
                       search: searchTerm,
                       page: 1,
                       perPage: rowsPerPage,
-                      business_id: currentStore.value,
+                      business_id: store,
                       master_id: currentMaster.value,
                       master_specialty_id: data.value
                     })
@@ -440,7 +440,7 @@ const ServicesList = ({store, stores, masters, categories, modalOpen, toggleModa
                       search: searchTerm,
                       page: 1,
                       perPage: rowsPerPage,
-                      business_id: currentStore.value,
+                      business_id: store,
                       master_id: data.value,
                       master_specialty_id: currentSpecialty.value
                     })
