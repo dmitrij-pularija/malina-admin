@@ -49,7 +49,7 @@ return [
     selector: row => row,
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row.master_profile_picture, `${row.master_name ? row.master_name : "Специалист"} ${row.surname ? row.surname : ''}`)}
+        {renderClient(row.master_profile_picture ? row.master_profile_picture : '', `${row.master_name ? row.master_name : "Специалист"} ${row.surname ? row.surname : ''}`)}
         <div className='d-flex flex-column'>
           <Link
             to={`/apps/user/masters/view/${row.id}`}
@@ -68,7 +68,7 @@ return [
     sortable: true,
     minWidth: '220px',
     sortField: 'master_specialty',
-     cell: row => row.master_specialty.specialty_name
+     cell: row => (<span>{row.master_specialty && row.master_specialty.specialty_name ? row.master_specialty.specialty_name : ""}</span>)
   },
   {
     name: 'Заведение',

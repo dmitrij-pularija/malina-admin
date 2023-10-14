@@ -11,16 +11,16 @@ export default [
     navLink: '/apps/beauty/orders/list'
   },
   {
-    id: 'specialties',
-    title: 'Specialties',
-    icon: <Grid size={20} />,
-    navLink: '/apps/beauty/specialties/list'
-  },
-  {
     id: 'staffBeauty',
     title: 'Staff',
     icon: <Users size={20} />,
     children: [
+      {
+        id: 'specialties',
+        title: 'Specialties',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/specialties/list'
+      },
       {
         id: 'masters',
         title: 'Masters',

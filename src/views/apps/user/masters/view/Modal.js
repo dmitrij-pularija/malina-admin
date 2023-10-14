@@ -82,7 +82,7 @@ const MasterModal = ({
       business: initSelect(storeOptions, selectedMaster.master_business),
         specialty: initSelect(
           specialtyOptions,
-          selectedMaster.master_specialty.id
+          selectedMaster.master_specialty ? selectedMaster.master_specialty.id : ''
         ),
         name: selectedMaster.master_name ? selectedMaster.master_name : "",
         surname: selectedMaster.surname ? selectedMaster.surname : "",
