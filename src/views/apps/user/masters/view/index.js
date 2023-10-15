@@ -22,6 +22,7 @@ const WaiterView = () => {
   const { selectedMaster, loading } = useSelector(state => state.masters)
   const stores = useSelector(state => state.stores.allStores)
   const specialties = useSelector(state => state.specialties.allSpecialties)
+  const { userData } = useSelector(state => state.auth)
   // const rating = useSelector(state => state.ratingWaiters.data)
   const users = useSelector(state => state.users.allUsers)
   const { id } = useParams()
@@ -50,7 +51,7 @@ const WaiterView = () => {
       {selectedMaster !== null && selectedMaster !== undefined ? ( 
       <Row>
         <Col xl='4' lg='5' xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-          <MasterInfoCard specialties={specialties} stores={stores} selectedMaster={selectedMaster} />
+          <MasterInfoCard userData={userData} specialties={specialties} stores={stores} selectedMaster={selectedMaster} />
         </Col>
         <Col xl='8' lg='7' xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
           <MasterTabs id={selectedMaster ? selectedMaster.id : null} works={selectedMaster ? selectedMaster.master_works : []} ratings={rating} users={users} active={active} toggleTab={toggleTab} />

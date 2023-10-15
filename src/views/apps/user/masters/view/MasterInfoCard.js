@@ -17,7 +17,7 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const MySwal = withReactContent(Swal)
 
-const MasterInfoCard = ({ stores, specialties, selectedMaster }) => {
+const MasterInfoCard = ({ userData, stores, specialties, selectedMaster }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [modalOpen, setModalOpen] = useState(false)
@@ -175,7 +175,7 @@ const getStore = id => {
       </Card>
       {/* <Sidebar shifts={shifts} stores={stores} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />   */}
     </Fragment>
-    <MasterModal specialties={specialties} stores={stores} open={modalOpen} toggleModal={toggleModal} selectedMaster={selectedMaster} setSelectedMaster={() => {}} />
+    <MasterModal userData={userData} specialties={specialties} stores={stores} open={modalOpen} toggleModal={toggleModal} selectedMaster={selectedMaster} setSelectedMaster={() => {}} />
     </>
   )
 }

@@ -55,6 +55,7 @@ const requiredFields = ["login", "business"]
 const MasterModal = ({
   open,
   stores,
+  userData,
   specialties,
   toggleModal,
   selectedMaster,
@@ -62,7 +63,7 @@ const MasterModal = ({
 }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState("")
-
+  
   useEffect(() => {
     if (selectedMaster && selectedMaster.master_profile_picture) setAvatar(selectedMaster.master_profile_picture)
   }, [selectedMaster])
@@ -87,7 +88,8 @@ const MasterModal = ({
         name: selectedMaster.master_name ? selectedMaster.master_name : "",
         surname: selectedMaster.surname ? selectedMaster.surname : "",
         login: selectedMaster.login ? selectedMaster.login : "",
-        phone: selectedMaster.phone ? selectedMaster.phone : ""} : {}
+        phone: selectedMaster.phone ? selectedMaster.phone : ""
+      } : {...defaultValues, business: userData.type === 2 ? initSelect(storeOptions, userData.id) : ""}
 
   const {
     reset,
@@ -290,6 +292,7 @@ const MasterModal = ({
                   <Select
                     id="business"
                     isClearable={false}
+                    isDisabled={userData && userData.type === 2}
                     classNamePrefix="select"
                     options={storeOptions}
                     theme={selectThemeColors}

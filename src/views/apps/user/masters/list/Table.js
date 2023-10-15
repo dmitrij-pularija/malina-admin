@@ -142,11 +142,18 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
     </div>
   )
 }
+const initStore = (value, stores) => {
+if (value && stores) {
+  const filtredStore = stores.find(store => parseInt(store.id) === parseInt(value)) || ''
+return { value, label: filtredStore.name }
+} else return { value: '', label: 'Выберите заведение' }
+}
 
 const MastersList = ({ modalOpen, toggleModal }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.masters)
   const stores = useSelector(state => state.stores.allStores)
+  const { userData } = useSelector(state => state.auth)
   const specialties = useSelector(state => state.specialties.allSpecialties)
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
@@ -163,11 +170,13 @@ const MastersList = ({ modalOpen, toggleModal }) => {
   //   setSelectedWaiter('')
   //   setSidebarOpen(false)
   //  }
-// console.log(specialties)
+// console.log(store.value) 
 
    useEffect(() => {
     if (!stores.length) dispatch(getAllStores())
     if (!specialties.length) dispatch(getAllSpecialties())
+    if (stores.length && userData) {
+    if (userData.type === 2) setStore(userData.type === 2 && initStore(userData.id, stores))
     dispatch(
       getMasters({
         ordering: `${sort}${sortColumn}`,
@@ -175,10 +184,11 @@ const MastersList = ({ modalOpen, toggleModal }) => {
         page: currentPage,
         perPage: rowsPerPage,
         master_specialty_id: specialty.value,
-        master_business: store.value
+        master_business: userData.type === 2 ? userData.id : store.value
       })
     )
-  }, []) 
+    }
+  }, [stores.length]) 
  
   // useEffect(() => {
   //   dispatch(
@@ -325,6 +335,7 @@ const handleEdit = (event, row) => {
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
+                isDisabled={userData && userData.type === 2}
                 className='react-select'
                 classNamePrefix='select'
                 options={storeOptions}
@@ -404,7 +415,7 @@ const handleEdit = (event, row) => {
       </Card>
 
       {/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} selectedMaster={selectedMaster} setSelectedMaster={setSelectedMaster} stores={stores} specialties={specialties} /> */}
-      <MasterModal specialties={specialties} stores={stores} open={modalOpen} toggleModal={toggleModal} selectedMaster={selectedMaster} setSelectedMaster={setSelectedMaster} />
+      <MasterModal userData={userData} specialties={specialties} stores={stores} open={modalOpen} toggleModal={toggleModal} selectedMaster={selectedMaster} setSelectedMaster={setSelectedMaster} />
     </Fragment>
   )
 }
