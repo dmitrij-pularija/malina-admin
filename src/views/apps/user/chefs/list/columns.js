@@ -3,8 +3,8 @@ import { Edit, Trash2 } from 'react-feather'
 import { Badge, UncontrolledTooltip, Button, DropdownMenu, DropdownItem } from 'reactstrap'
 
 const getAvatar = data => {
-  if (data && data.avatar && data.avatar.includes("http")) {
-    return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
+  if (data && data.image && data.image.includes("http")) {
+    return <Avatar className='me-1' img={data.image} width='32' height='32' />
   } else {
     return (
       <Avatar
@@ -32,30 +32,21 @@ const renderClient = row => {
     )
   }
 }
-// const availableObj = {
-//   false: 'light-danger',
-//   true: 'light-success'
-// }
-// const statusObj = {
-//   2: 'light-primary',
-//   1: 'light-success'
-// }
 
-
-export const columns = (handleEditСhef, handleDelСhef) => {
-  // const renderStoore = (id) => {
-  //   if (!stores.length) return
-  //   const foundStore = stores.find(item => item.id === id)
-  //   return (
-  //     <div className='d-flex justify-content-left align-items-center'>
-  //     {getAvatar(foundStore)}  
-  //   <div className='d-flex flex-column ml3'>
-  //       <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
-  //     <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
-  //   </div>
-  // </div>
-  //   )
-  // }
+export const columns = (userData, stores, handleEditСhef, handleDelСhef) => {
+  const renderStoore = (id) => {
+    if (!stores.length) return
+    const foundStore = stores.find(item => item.id === id)
+    return (
+      <div className='d-flex justify-content-left align-items-center'>
+      {getAvatar(foundStore)}  
+    <div className='d-flex flex-column ml3'>
+        <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
+      <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+    </div>
+  </div>
+    )
+  }
 
 return [
   {
@@ -81,14 +72,15 @@ return [
       </div>
     )
   },
-  // {
-  //   name: 'Заведение',
-  //   minWidth: '138px',
-  //   sortable: true,
-  //   sortField: 'supplier',
-  //   selector: row => row,
-  //   cell: row => renderStoore(parseInt(row.business))
-  // },
+  {
+    name: 'Заведение',
+    minWidth: '138px',
+    omit: userData && userData.type === 2,
+    sortable: true,
+    sortField: 'supplier',
+    selector: row => row,
+    cell: row => renderStoore(parseInt(row.business))
+  },
   {
     name: 'Действия',
     width: '200px',

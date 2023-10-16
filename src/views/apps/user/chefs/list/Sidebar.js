@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import Sidebar from '@components/sidebar'
-import { selectThemeColors, checkIsValid, dataURLtoBlob } from '@utils'
+import { selectThemeColors, checkIsValid, dataURLtoBlob, initSelect  } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import { useForm, Controller } from 'react-hook-form'
@@ -42,22 +42,21 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewCategory = ({ store, open, toggleSidebar, selectedСhef, setSelectedСhef }) => {
+const SidebarNewCategory = ({ stores, userData, open, toggleSidebar, selectedСhef, setSelectedСhef }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
 
-  // const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-  // const storeOptions = filtredStore.map((store) => ({
-  //   value: String(store.id),
-  //   label: store.name
-  // }))
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  const storeOptions = filtredStore.map((store) => ({
+    value: String(store.id),
+    label: store.name
+  }))
 
   const values = selectedСhef ? {
     name: selectedСhef.name ? selectedСhef.name : '',
     telegramId: selectedСhef.telegram_id ? selectedСhef.telegram_id : '',
-    business: store
-    // business: storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedСhef.business))]
-  } : {}
+    business: initSelect(storeOptions, selectedСhef.business)
+  } : {...defaultValues, business: userData.type === 2 ? initSelect(storeOptions, userData.id) : ""}
 
   const {
     reset,
@@ -96,7 +95,7 @@ const SidebarNewCategory = ({ store, open, toggleSidebar, selectedСhef, setSele
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData();
       formData.append('telegram_id', data.telegramId)
-      formData.append('business', store)
+      formData.append('business', data.business.value)
       if (data.name) formData.append('name', data.name)
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
@@ -158,7 +157,7 @@ const SidebarNewCategory = ({ store, open, toggleSidebar, selectedСhef, setSele
           />
           {errors && errors.name && (<FormFeedback>Пожалуйста введите Имя</FormFeedback>)}
         </div>  
-        {/* <div className='mb-1'>
+        <div className='mb-1'>
           <Label className='form-label' for='business'>
           Заведение<span className='text-danger'>*</span>
           </Label>
@@ -170,6 +169,7 @@ const SidebarNewCategory = ({ store, open, toggleSidebar, selectedСhef, setSele
               <Select
                 id='business'
                 isClearable={false}
+                isDisabled={userData && userData.type === 2}
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}
@@ -180,7 +180,7 @@ const SidebarNewCategory = ({ store, open, toggleSidebar, selectedСhef, setSele
             )}
           />
         {errors && errors.business && (<FormFeedback>{`Пожалуйста выберите заведение`}</FormFeedback>)}
-        </div> */}
+        </div>
         <div className='mb-1'>
           <Label className='form-label' for='telegramId'>
           ID полученный в Телеграмм - боте <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span> 

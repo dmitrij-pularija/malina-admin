@@ -2,8 +2,9 @@ import { Fragment, useState, useEffect } from 'react'
 import Sidebar from './Sidebar'
 import  { columns } from './columns'
 import Select from 'react-select'
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, initSelect } from '@utils'
 import { getСhefs, deleteСhefs } from '../store'
+import { getAllStores } from '../../../food/stores/store'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
@@ -141,9 +142,11 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) => {
+const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.chefs)
+  const { userData } = useSelector(state => state.auth)
+  const stores = useSelector(state => state.stores.allStores)
   const [sort, setSort] = useState('+')
   // const [selectedId, setSelectedId] = useState('')
   const [searchTerm, setSearchTerm] = useState('')
@@ -160,12 +163,12 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
   //   { value: '1', label: 'Food' },
   //   { value: '2', label: 'Beauty' }
   // ]
-  // const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-  // const storeOptions = filtredStore.map((store) => ({
-  //   value: String(store.id),
-  //   label: store.name
-  // }))
-  // storeOptions.unshift({ value: '', label: 'Показать все' })
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  const storeOptions = filtredStore.map((store) => ({
+    value: String(store.id),
+    label: store.name
+  }))
+  storeOptions.unshift({ value: '', label: 'Показать все' })
 
   const handleClose = () => {
     setSelectedСhef('')
@@ -183,19 +186,21 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
   }
 
   useEffect(() => {
+    if (!stores.length) dispatch(getAllStores())
+    if (userData.type === 2 && stores.length) setCurrentStore(initSelect(storeOptions, userData.id))
     dispatch(getСhefs({
       ordering: `${sort}${sortColumn}`,
-      business__id: store,
+      business__id: userData.type === 2 ? userData.id : currentStore.value,
       search: searchTerm,
       page: currentPage,
       perPage: rowsPerPage
     }))
-  }, [])
+  }, [stores.length])
 
   const handlePagination = page => {
     dispatch(getСhefs({
       ordering: `${sort}${sortColumn}`,
-      business__id: store,
+      business__id: currentStore.value,
       search: searchTerm,
       page: page.selected + 1,
       perPage: rowsPerPage
@@ -208,7 +213,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
     setRowsPerPage(value)
     dispatch(getСhefs({
       ordering: `${sort}${sortColumn}`,
-      business__id: store,
+      business__id: currentStore.value,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -219,7 +224,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
     setSearchTerm(val)
     dispatch(getСhefs({
       ordering: `${sort}${sortColumn}`,
-      business__id: store,
+      business__id: currentStore.value,
       search: val,
       page: 1,
       perPage: rowsPerPage
@@ -249,7 +254,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
 
   const dataToRender = () => {
     const filters = {
-      business__id: store,
+      business__id: currentStore.value,
       search: searchTerm
     }
 
@@ -271,7 +276,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
     setSortColumn(column.sortField)
     dispatch(getСhefs({
       ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
-      business__id: store,
+      business__id: currentStore.value,
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -280,7 +285,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
 
   return (
     <Fragment>
-          {/* <Card>
+          <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -288,6 +293,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
+                isDisabled={userData && userData.type === 2}
                 className='react-select'
                 classNamePrefix='select'
                 options={storeOptions}
@@ -306,7 +312,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
             </Col>
           </Row>
         </CardBody>
-      </Card>   */}
+      </Card>  
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
         <DataTable
@@ -317,7 +323,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
             pagination
             responsive
             paginationServer
-            columns={columns(handleEditСhef, handleDelСhef)}
+            columns={columns(userData, stores, handleEditСhef, handleDelСhef)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -338,7 +344,7 @@ const CategoriesList = ({ store, sidebarOpen, setSidebarOpen, toggleSidebar }) =
          
         </div>
       </Card>
-      <Sidebar store={store} open={sidebarOpen} toggleSidebar={handleClose} selectedСhef={selectedСhef} setSelectedСhef={setSelectedСhef} />
+      <Sidebar stores={stores} userData={userData} open={sidebarOpen} toggleSidebar={handleClose} selectedСhef={selectedСhef} setSelectedСhef={setSelectedСhef} />
     </Fragment>
   )
 }
