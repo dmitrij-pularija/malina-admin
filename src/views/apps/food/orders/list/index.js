@@ -32,14 +32,15 @@ import '@styles/react/apps/app-users.scss'
 // }
 
 const OrdersList = () => {
-  const dispatch = useDispatch()
+  // const dispatch = useDispatch()
   const navigate = useNavigate()
   const handleAdd = () => navigate('/apps/food/orders/add/') 
-  const { allOrders, count: { totalOrder, totalPrice,  avgPrice,  avgRait } } = useSelector(state => state.orders)
+  // const { allOrders, count: { totalOrder, totalPrice,  avgPrice,  avgRait } } = useSelector(state => state.orders)
+  const { userData } = useSelector(state => state.auth)
  
-  useEffect(() => {
-    if (!allOrders.length) dispatch(getAllOrders())
-  }, [])
+  // useEffect(() => {
+  //   if (!allOrders.length) dispatch(getAllOrders())
+  // }, [])
 
   // let sum = 0, rate = 0, avg = 0
 
@@ -51,8 +52,8 @@ const OrdersList = () => {
 
   return (
     <div className='app-user-list'>
-<Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} onClick={handleAdd} /> 
-      <Row>
+<Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} onClick={userData.type === 3 ? null : handleAdd} /> 
+      {/* <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='primary'
@@ -85,8 +86,8 @@ const OrdersList = () => {
             renderStats={<h3 className='fw-bolder mb-75'>{formatNumber(avgRait)}</h3>}
           />
         </Col>
-      </Row>
-      <Table />
+      </Row> */}
+      <Table userData={userData} />
       <Loading />
     </div>
   )

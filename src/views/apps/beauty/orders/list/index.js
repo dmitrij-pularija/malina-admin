@@ -40,7 +40,8 @@ const OrdersList = () => {
   const handleAdd = () => navigate('/apps/beauty/orders/add/')
   const users = useSelector(state => state.users.allUsers)
   const status = useSelector(state => state.orders.status)
-  const stores = useSelector(state => state.stores.allStores) 
+  const stores = useSelector(state => state.stores.allStores)
+  const { userData } = useSelector(state => state.auth) 
   // const { allOrders, count: { totalOrder, totalPrice,  avgPrice,  avgRait } } = useSelector(state => state.orders)
  
   useEffect(() => {
@@ -60,7 +61,7 @@ const OrdersList = () => {
 
   return (
     <div className='app-user-list'>
-<Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} onClick={handleAdd} /> 
+<Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} onClick={userData.type === 3 ? null : handleAdd} /> 
       {/* <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal
@@ -95,7 +96,7 @@ const OrdersList = () => {
           />
         </Col>
       </Row> */}
-      <Table stores={stores} users={users} status={status}/>
+      <Table userData={userData} stores={stores} users={users} status={status}/>
       <Loading />
     </div>
   )
