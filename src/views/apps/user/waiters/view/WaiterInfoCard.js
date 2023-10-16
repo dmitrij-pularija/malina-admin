@@ -14,7 +14,7 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const MySwal = withReactContent(Swal)
 
-const WaiterInfoCard = ({ store, stores, shifts, selectedWaiter }) => {
+const WaiterInfoCard = ({ userData, stores, shifts, selectedWaiter }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -138,7 +138,7 @@ const WaiterInfoCard = ({ store, stores, shifts, selectedWaiter }) => {
                 </li>
                 <li className='mb-75'>
                   <span className='fw-bolder me-25'>Телефон:</span>
-                  <span>{selectedWaiter.business_id ? selectedWaiter.business_id.phone : "Не указан"}</span>
+                  <span>{selectedWaiter.business_id && selectedWaiter.business_id.phone ? selectedWaiter.business_id.phone : "Не указан"}</span>
                 </li>
               </ul>
             ) : null}
@@ -153,7 +153,7 @@ const WaiterInfoCard = ({ store, stores, shifts, selectedWaiter }) => {
           </div>
         </CardBody>
       </Card>
-      <Sidebar shifts={shifts} store={store} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />  
+      <Sidebar shifts={shifts} userData={userData} stores={stores} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />  
     </Fragment>
   )
 }

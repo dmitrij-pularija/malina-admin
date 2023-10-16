@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import Sidebar from '@components/sidebar'
 import Avatar from '@components/avatar'
-import { selectThemeColors, checkIsValid, dataURLtoBlob } from '@utils'
+import { selectThemeColors, checkIsValid, dataURLtoBlob, initSelect } from '@utils'
 import Select from 'react-select'
 import classnames from 'classnames'
 import CreatableSelect from 'react-select/creatable';
@@ -38,7 +38,7 @@ const defaultValues = {
 //   )
 // }
 
-const requiredFields = ["fullName"]
+const requiredFields = ["fullName", "businessId"]
 
 // const checkIsValid = (data) => {
 //   return Object.keys(data).every((key) => {
@@ -72,7 +72,7 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
+const SidebarNewWaiters = ({ shifts, userData, stores, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
   // const values = {}
@@ -81,11 +81,11 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
     label: `${item.start_time.slice(0, -3)} - ${item.end_time.slice(0, -3)} ${item.description} `
   }))
   
-//   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-//   const storeOptions = filtredStore.map((store) => ({
-//     value: String(store.id),
-//     label: store.name
-// }))
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  const storeOptions = filtredStore.map((store) => ({
+    value: String(store.id),
+    label: store.name
+}))
 
   useEffect(() => {
     if (selectedWaiter) {
@@ -101,9 +101,9 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
   const values = selectedWaiter ? {
     fullName: selectedWaiter.full_name ? selectedWaiter.full_name : '',
     telegram: selectedWaiter.telegram ? selectedWaiter.telegram : '',
-    businessId: store,
-    // businessId: selectedWaiter.business_id ? storeOptions[storeOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.business_id.id))] : '',
-    shift: selectedWaiter.shift ? shiftsOptions[shiftsOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.shift.id))] : ''} : {}
+    businessId: initSelect(storeOptions, selectedWaiter.business_id.id),
+    shift: selectedWaiter.shift ? shiftsOptions[shiftsOptions.findIndex(i => parseInt(i.value) === parseInt(selectedWaiter.shift.id))] : ''
+    } : {...defaultValues, businessId: userData.type === 2 ? initSelect(storeOptions, userData.id) : ""}
   
     const {
       reset,
@@ -124,40 +124,13 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
       reader.readAsDataURL(files[0])
     }  
      
-    // const dataURLtoBlob = dataURL => {
-    //   const arr = dataURL.split(',')
-    //   const mime = arr[0].match(/:(.*?);/)[1]
-    //   const bstr = atob(arr[1])
-    //   let n = bstr.length
-    //   const u8arr = new Uint8Array(n)
-    
-    //   while (n--) {
-    //     u8arr[n] = bstr.charCodeAt(n)
-    //   }
-    
-    //   return new Blob([u8arr], { type: mime })
-    // }
-  
-//     const handleCreateOption = (value) => {
-// console.log(value)
-//     }
-
-//     const formatCreateLabel = (inputValue) => {
-//       return `Создать смену: ${inputValue}`
-//     }
-
-  
     const handleImgReset = () => {
       setAvatar('')
     } 
     const handleClose = () => {
-      // console.log('clear')
       for (const key in defaultValues) {
         setValue(key, '')
       }
-      // for (const key in values) {
-      //   setValue(key, '')
-      // }
         setSelectedWaiter('')
         toggleSidebar()
         setAvatar('')
@@ -168,7 +141,7 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData()
       formData.append('full_name', data.fullName)
-      formData.append('business_id', store)
+      formData.append('business_id', data.businessId.value)
       if (data.shift) formData.append('shift', data.shift.value)
       if (data.telegram) formData.append('telegram', data.telegram)
       if (avatar && avatar.startsWith('data:image')) {
@@ -180,10 +153,6 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
       } else {
         dispatch(addWaiter(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
-      // setSelectedWaiter('')
-      // toggleSidebar()
-      // setAvatar('')
-      // reset()
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
@@ -205,7 +174,6 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
-      // onClosed={handleClose}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
       <div className='mb-1'>
@@ -238,7 +206,7 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
           />
           {errors && errors.fullName && (<FormFeedback>Пожалуйста заполните имя</FormFeedback>)}  
         </div>
-        {/* <div className='mb-1'>
+        <div className='mb-1'>
           <Label className='form-label' for='businessId'>
           Заведение <span className='text-danger'>*</span>
           </Label>
@@ -250,6 +218,7 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
               <Select
                 id='businessId'
                 isClearable={false}
+                isDisabled={userData && userData.type === 2}
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}
@@ -260,7 +229,7 @@ const SidebarNewWaiters = ({ shifts, store, open, toggleSidebar, selectedWaiter,
             )}
           />
           {errors && errors.businessId && (<FormFeedback>Пожалуйста выберите заведение</FormFeedback>)}  
-        </div> */}
+        </div>
         <div className='mb-1'>
           <Label className='form-label' for='shift'>
           Смена

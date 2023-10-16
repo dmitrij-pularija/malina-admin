@@ -16,7 +16,7 @@ const WaiterView = () => {
   // const [rating, setRating] = useState([])
   const { selectedWaiter } = useSelector(state => state.waiters)
   const stores = useSelector(state => state.stores.allStores)
-  const store = useSelector(state => state.auth.userData.id)
+  const { userData } = useSelector(state => state.auth)
   const rating = useSelector(state => state.ratingWaiters.data)
   const { id } = useParams()
  
@@ -41,7 +41,7 @@ const WaiterView = () => {
       <Breadcrumbs title='Детальная информация' data={[{ title: 'Пользователи' }, { title: 'Официанты' }, { title: 'Детали' }]} />
       <Row>
         <Col xl='4' lg='5' xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-          <WaiterInfoCard store={store} stores={stores} shifts={shifts} selectedWaiter={selectedWaiter} />
+          <WaiterInfoCard userData={userData} stores={stores} shifts={shifts} selectedWaiter={selectedWaiter} />
         </Col>
         <Col xl='8' lg='7' xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
           <WaiterTabs active={active} toggleTab={toggleTab} ratings={rating}/>

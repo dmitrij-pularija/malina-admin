@@ -8,7 +8,7 @@ import Select from 'react-select'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, initSelect } from '@utils'
 import {
   Row,
   Col,
@@ -25,7 +25,7 @@ import {
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
+const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
   function convertArrayOfObjectsToCSV(array) {
     let result
 
@@ -134,10 +134,6 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-
-            {/* <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
-              Добавить
-            </Button> */}
           </div>
         </Col>
       </Row>
@@ -149,7 +145,7 @@ const WaitersList = ({ sidebarOpen, toggleSidebar }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.waiters)
   const stores = useSelector(state => state.stores.allStores)
-  const store = useSelector(state => state.auth.userData.id)
+  const { userData } = useSelector(state => state.auth)
   const [sort, setSort] = useState('+')
   const [searchTerm, setSearchTerm] = useState('')
   const [shifts, setShifts] = useState([])
@@ -158,12 +154,19 @@ const WaitersList = ({ sidebarOpen, toggleSidebar }) => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [sidebarOpen, setSidebarOpen] = useState(false)
   const [selectedWaiter, setSelectedWaiter] = useState('')
-  // const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
+  const [store, setStore] = useState({ value: '', label: 'Выберите заведение' })
   // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   // const handleClose = () => {
   //   setSelectedWaiter('')
   //   setSidebarOpen(false)
   //  }
+
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
+  const storeOptions = filtredStore.map((store) => ({
+    value: String(store.id),
+    label: store.name
+}))
+storeOptions.unshift({ value: '', label: 'Показать все' })
 
    useEffect(() => {
     if (!stores.length) dispatch(getAllStores())
@@ -173,23 +176,19 @@ const WaitersList = ({ sidebarOpen, toggleSidebar }) => {
   }, []) 
  
   useEffect(() => {
+    if (userData.type === 2 && stores.length) setStore(initSelect(storeOptions, userData.id))
     dispatch(
       getWaiters({
         ordering: `${sort}${sortColumn}`,
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id__id: store
+        business_id__id: userData.type === 2 ? userData.id : store.value
       })
     )
-  }, [dispatch, data.length, sort, sortColumn, currentPage])
+  }, [stores.length])
   
-//   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
-//   const storeOptions = filtredStore.map((store) => ({
-//     value: String(store.id),
-//     label: store.name
-// }))
-// storeOptions.unshift({ value: '', label: 'Показать все' })
+
  
 const handleDelWaiter = (event, id) => {
   event.preventDefault()
@@ -208,7 +207,7 @@ const handleEditWaiter = (event, row) => {
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        business_id__id: store
+        business_id__id: store.value
       })
     )
     setCurrentPage(page.selected + 1)
@@ -222,7 +221,7 @@ const handleEditWaiter = (event, row) => {
         search: searchTerm,
         perPage: value,
         page: 1,
-        business_id__id: store
+        business_id__id: store.value
       })
     )
     setRowsPerPage(value)
@@ -236,7 +235,7 @@ const handleEditWaiter = (event, row) => {
         ordering: `${sort}${sortColumn}`,
         page: 1,
         perPage: rowsPerPage,
-        business_id__id: store
+        business_id__id: store.value
       })
     )
   }
@@ -265,7 +264,7 @@ const handleEditWaiter = (event, row) => {
  
   const dataToRender = () => {
     const filters = {
-      business_id__id: store,
+      business_id__id: store.value,
       search: searchTerm
     }
 
@@ -291,14 +290,14 @@ const handleEditWaiter = (event, row) => {
         search: searchTerm,
         page: 1,
         perPage: rowsPerPage,
-        business_id__id: store
+        business_id__id: store.value
       })
     )
   }
 
   return (
     <Fragment>
-      {/* <Card>
+      <Card>
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
@@ -306,6 +305,7 @@ const handleEditWaiter = (event, row) => {
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
+                isDisabled={userData && userData.type === 2}
                 className='react-select'
                 classNamePrefix='select'
                 options={storeOptions}
@@ -327,7 +327,7 @@ const handleEditWaiter = (event, row) => {
             </Col>
           </Row>
         </CardBody>
-      </Card> */}
+      </Card>
 
       <Card className='overflow-hidden'>
         <div className='react-dataTable'>
@@ -338,7 +338,7 @@ const handleEditWaiter = (event, row) => {
             pagination
             responsive
             paginationServer
-            columns={columns(handleEditWaiter, handleDelWaiter)}
+            columns={columns(userData, stores, handleEditWaiter, handleDelWaiter)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -359,7 +359,7 @@ const handleEditWaiter = (event, row) => {
         </div>
       </Card>
 
-      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} store={store} />
+      <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} stores={stores} userData={userData} />
     </Fragment>
   )
 }

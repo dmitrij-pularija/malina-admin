@@ -22,12 +22,12 @@ const renderClient = (picture, name) => {
   }
 }
  
-export const columns = (handleEditWaiter, handleDelWaiter) => {
+export const columns = (userData, stores, handleEditWaiter, handleDelWaiter) => {
 
-// const getSrc = id => {
-//   const storeSrc = stores.find(store => store.id === parseInt(id))
-//   return storeSrc ? storeSrc.image : ""
-// }
+const getSrc = id => {
+  const storeSrc = stores.find(store => store.id === parseInt(id))
+  return storeSrc ? storeSrc.image : ""
+}
 
 return [
   {
@@ -52,23 +52,23 @@ return [
       </div>
     )
   },
-  // {
-  //   name: 'Заведение',
-  //   sortable: true,
-  //   minWidth: '250px',
-  //   sortField: 'business_id.name',
-  //   selector: row => row.storeid,
-  //    cell: row => (
-  //     <div className='d-flex justify-content-left align-items-center'>
-  //       {renderClient(getSrc(row.business_id.id), row.business_id.name)}
-  //         {/* <Logo2 src={getSrc(row.business_id.id)} size={"s"}/> */}
-  //       <div className='d-flex flex-column ml3'>
-  //           <span className='fw-bolder'>{row.business_id.name}</span>
-  //           <span className='fw-bolder'>{row.business_id.phone}</span>
-  //       </div>
-  //     </div>
-  //   )
-  // },
+  {
+    name: 'Заведение',
+    sortable: true,
+    minWidth: '250px',
+    omit: userData && userData.type === 2,
+    sortField: 'business_id.name',
+    selector: row => row.storeid,
+     cell: row => (
+      <div className='d-flex justify-content-left align-items-center'>
+        {renderClient(getSrc(row.business_id.id), row.business_id.name)}
+        <div className='d-flex flex-column ml3'>
+            <span className='fw-bolder'>{row.business_id.name}</span>
+            <span className='fw-bolder'>{row.business_id.phone}</span>
+        </div>
+      </div>
+    )
+  },
   {
     name: 'Смена',
     sortable: true,
