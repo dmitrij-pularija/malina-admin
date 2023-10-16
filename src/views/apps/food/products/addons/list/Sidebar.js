@@ -79,7 +79,7 @@ const SidebarAddons = ({ open, toggleSidebar, selectedAddon, setSelectedAddon })
       if (data.price) formData.append('price', data.price)
       if (avatar && avatar.startsWith('data:image')) {
         const avatarBlob = dataURLtoBlob(avatar)
-        formData.append('icon', avatarBlob, 'addon.jpg')
+        formData.append('image', avatarBlob, 'addon.jpg')
       }
       if (selectedAddon) {
           dispatch(editAddon({ id: selectedAddon.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())

@@ -20,8 +20,8 @@ const getAvatar = data => {
 
 
 const renderClient = row => {
-  if (row.icon) {
-    return <Avatar className='me-1' img={row.icon} width='32' height='32' />
+  if (row.image) {
+    return <Avatar className='me-1' img={row.image} width='32' height='32' />
   } else {
     return (
       <Avatar
@@ -35,19 +35,19 @@ const renderClient = row => {
 }
 
 export const columns = (stores, handleEditAddon, handleDelAddon) => {
-  const renderStoore = (id) => {
-    if (!stores.length) return
-    const foundStore = stores.find(item => item.id === id)
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(foundStore)}  
-    <div className='d-flex flex-column ml3'>
-        <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
-    </div>
-  </div>
-    )
-  }
+  // const renderStoore = (id) => {
+  //   if (!stores.length) return
+  //   const foundStore = stores.find(item => item.id === id)
+  //   return (
+  //     <div className='d-flex justify-content-left align-items-center'>
+  //     {getAvatar(foundStore)}  
+  //   <div className='d-flex flex-column ml3'>
+  //       <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
+  //     <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+  //   </div>
+  // </div>
+  //   )
+  // }
 
 return [
   {
