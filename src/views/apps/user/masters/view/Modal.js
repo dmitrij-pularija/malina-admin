@@ -248,7 +248,7 @@ const MasterModal = ({
                     <Input
                       {...field}
                       id="name"
-                      placeholder="John"
+                      placeholder="Имя"
                       invalid={errors.name && true}
                     />
                   )}
@@ -270,7 +270,7 @@ const MasterModal = ({
                     <Input
                       {...field}
                       id="surname"
-                      placeholder="Doe"
+                      placeholder="Фамилия"
                       invalid={errors.surname && true}
                     />
                   )}
