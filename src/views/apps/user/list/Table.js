@@ -376,7 +376,7 @@ const UsersList = () => {
             columns={columns(handleEditUser, handleDelUser)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
-            className='react-dataTable'
+            className='react-dataTable min-table-height'
             paginationComponent={CustomPagination}
             data={dataToRender()}
             noDataComponent={<h6 className='text-capitalize'>Информация не найдена</h6>}

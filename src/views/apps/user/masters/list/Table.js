@@ -397,7 +397,7 @@ const handleEdit = (event, row) => {
             columns={columns(stores, handleEdit, handleDel)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
-            className='react-dataTable'
+            className='react-dataTable min-table-height'
             paginationComponent={CustomPagination}
             data={dataToRender()}
             noDataComponent={<h6 className='text-capitalize'>Специалисты не найдены</h6>}

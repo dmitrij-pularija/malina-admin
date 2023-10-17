@@ -105,6 +105,13 @@ WE WILL RELEASE FUTURE UPDATES SO IN ORDER TO NOT OVERWRITE YOUR STYLES IT'S BET
 .p-25 {
   padding: 25px;
 }
+.overflow-y {
+  overflow-y: visible !important;
+}
+.min-table-height {
+  min-height: 250px !important;
+}
+
 .loader {
 position: fixed;
 left: 0;

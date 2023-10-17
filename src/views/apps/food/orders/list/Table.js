@@ -433,8 +433,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
         </CardBody>
       </Card>
 
-      <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
+      <Card>
           <DataTable
             dataKey="id"
             noHeader
@@ -446,7 +445,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
             columns={columns(handleDel)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
-            className='react-dataTable'
+            className='react-dataTable min-table-height'
             paginationComponent={CustomPagination}
             data={dataToRender()}
             noDataComponent={<h6 className='text-capitalize'>Заказы не найдены</h6>}
@@ -461,7 +460,6 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
               />
             }
           />
-        </div>
       </Card>
 
       <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />

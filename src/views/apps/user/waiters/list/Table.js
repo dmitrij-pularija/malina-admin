@@ -341,7 +341,7 @@ const handleEditWaiter = (event, row) => {
             columns={columns(userData, stores, handleEditWaiter, handleDelWaiter)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
-            className='react-dataTable'
+            className='react-dataTable min-table-height'
             paginationComponent={CustomPagination}
             data={dataToRender()}
             noDataComponent={<h6 className='text-capitalize'>Официанты не найдены</h6>}
