@@ -3,9 +3,9 @@ import { Nav, NavItem, NavLink, TabContent, TabPane } from 'reactstrap'
 import { ShoppingCart, Image, Award } from 'react-feather'
 import MasterWorksList from './Works'
 import MasterRewards from './Rewards'
-// import MasterOrdersList from './OrdersList'
+import MasterAppointmentsList from './MasterAppointmentsList'
 
-const WaiterTabs = ({ id, works, ratings, users, active, toggleTab }) => {
+const WaiterTabs = ({ id, works, ratings, users, appointments, active, toggleTab }) => {
 
   return (
     <Fragment>
@@ -34,7 +34,7 @@ const WaiterTabs = ({ id, works, ratings, users, active, toggleTab }) => {
           <MasterWorksList works={works} id={id}/>
         </TabPane>
         <TabPane tabId='2'>
-          {/* <MasterOrdersList /> */}
+          <MasterAppointmentsList appointments={appointments}/>
         </TabPane>
         <TabPane tabId='3'>
           <MasterRewards ratings={ratings} users={users} />

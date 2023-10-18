@@ -17,6 +17,20 @@ export const statusObj = {
   11: { label: 'Начислены баллы', colorName: 'light-success' }
 }
 
+export const appointmentsObj = {
+  pending: { colorName: 'light-warning' },
+  2: { label: 'Подтвержден',  colorName: 'light-primary' },
+  3: { label: 'Отменен', colorName: 'light-danger' },
+  4: { label: 'Готово', colorName: 'light-success' },
+  5: { label: 'В пути', colorName: 'light-secondary' },
+  6: { label: 'Получен', colorName: 'light-success' },
+  7: { label: 'Прибыл', colorName: 'light-dark' },
+  8: { label: 'Доставлено', colorName: 'light-success' },
+  9: { label: 'Отказ клиента', colorName: 'light-danger' },
+  10: { label: 'Выполнен', colorName: 'light-success' },
+  11: { label: 'Начислены баллы', colorName: 'light-success' }
+}
+
 export const logoSize = {
   s: {width: "60px", height: "34px"},
   xl: {width: "90px", height: "51px"}

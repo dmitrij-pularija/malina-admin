@@ -45,6 +45,10 @@ const renderSlide = (image) => {
           src={image.master_work_image}
           alt="swiper"
           className="rounded swiper-lazy img-fluid"
+          style={{
+            height: '300px',
+            width: '300px'
+          }}
         />
       </SwiperSlide>
     )
@@ -62,8 +66,8 @@ const renderSlide = (image) => {
           height: "100%"
         }}
         style={{
-          height: "200px",
-          width: "200px"
+          height: '300px',
+          width: '300px'
         }}
       />
     )

@@ -34,7 +34,7 @@ const renderStore = id => {
       {renderClient(store ? store.image : '', store ? store.name : 'Заведение')}
       <div className='d-flex flex-column ml3'>
           <span className='fw-bolder'>{store ? store.name : ''}</span>
-          <span className='fw-bolder'>{store && store.business_address ? `${store.business_address.city}, ${store.business_address.name}` : ''}</span>
+          <span>{store && store.business_address ? `${store.business_address.city}, ${store.business_address.name}` : ''}</span>
       </div>
     </div>
   )
@@ -66,20 +66,20 @@ return [
   {
     name: 'Специальность',
     sortable: true,
-    minWidth: '220px',
+    width: '200px',
     sortField: 'master_specialty',
      cell: row => (<span>{row.master_specialty && row.master_specialty.specialty_name ? row.master_specialty.specialty_name : ""}</span>)
   },
   {
     name: 'Заведение',
     sortable: true,
-    minWidth: '220px',
+    minWidth: '350px',
     sortField: 'master_business',
      cell: row => renderStore(row.master_business)
   },
   {
     name: 'Рейтинг',
-    minWidth: '142px',
+    width: '142px',
     sortable: true,
     sortField: 'average_rating',
     selector: row => row.average_rating,
@@ -95,7 +95,7 @@ return [
   },
   {
     name: 'Действия',
-    minWidth: '100px',
+    width: '120px',
     cell: row => (
       <div className='column-action'>
         <UncontrolledDropdown>
