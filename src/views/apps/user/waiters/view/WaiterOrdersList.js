@@ -6,30 +6,14 @@ import { ChevronDown } from 'react-feather'
 import DataTable from 'react-data-table-component'
 import Logo2 from '@components/logo2'
 import { statusObj } from '../../../../../configs/initial'
-import { formatData, formatNumber } from '@utils'
+import { formatData, formatNumber, formatNumberInt } from '@utils'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 export const columns = [
   {
-    name: 'Заведение',
-    sortable: true,
-    minWidth: '250px',
-    sortField: 'name',
-    selector: row => row.storeId,
-     cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-          <Logo2 src={row.storeId.image} size={"s"}/>
-        <div className='d-flex flex-column ml3'>
-            <span className='fw-bolder'>{row.storeId.name}</span>
-          <small className='text-truncate text-muted mb-0'>{row.email}</small>
-        </div>
-      </div>
-    )
-  },
-  {
     name: '№',
     sortable: true,
-    minWidth: '30px',
+    width: '100px',
     sortField: 'id',
     selector: row => row.id,
     cell: row => (
@@ -45,19 +29,27 @@ export const columns = [
   },
   {
     name: 'Дата',
-    minWidth: '120px',
+    width: '120px',
     sortable: true,
-    sortField: 'date',
-    selector: row => row.date,
-    cell: row => <span className='text-capitalize'>{formatData(row.date)}</span>
+    sortField: 'order_date',
+    selector: row => row.order_date,
+    cell: row => <span className='text-capitalize'>{formatData(row.order_date)}</span>
+  },
+  {
+    name: 'Стол',
+    width: '150px',
+    sortable: true,
+    sortField: 'table',
+    selector: row => row.table,
+    cell: row => <span className='text-capitalize'>{formatNumberInt(row.table)}</span>
   },
   {
     name: 'Сумма',
     minWidth: '120px',
     sortable: true,
-    sortField: 'totalprice',
-    selector: row => row.totalprice,
-    cell: row => <span className='text-capitalize'>{formatNumber(row.totalprice)}</span>
+    sortField: 'total_order_price',
+    selector: row => row.total_order_price,
+    cell: row => <span className='text-capitalize'>{formatNumber(row.total_order_price)} &#x0441;&#x332;</span>
   },
   {
     name: 'Статус',
@@ -73,20 +65,11 @@ export const columns = [
   }
 ]
 
-const UserOrdersList = () => {
-  const [data, setData] = useState([])
-  const { id } = useParams()
-// console.log(data)
-  // useEffect(() => {
-    // axios.get(`/products/user-order/${parseInt(id)}/`).then(response => {
-    //   const orders = response.data.results || []
-    //   // const orders = fullOrders.filter(order => order.waiter === parseInt(id))
-    //   setData(orders)
-    // })
-  // }, [])
+const UserOrdersList = ({ orders }) => {
 
 
-  return data.length ? (
+
+  return orders.length ? (
     <Card>
       <CardHeader tag='h4'>Список заказов офоцианта</CardHeader>
       <div className='react-dataTable user-view-account-projects'>
@@ -95,7 +78,7 @@ const UserOrdersList = () => {
           responsive
           size={'small'}
           columns={columns}
-          data={data}
+          data={orders}
           className='react-dataTable'
           sortIcon={<ChevronDown size={10} />}
         />

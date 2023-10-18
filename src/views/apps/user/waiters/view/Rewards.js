@@ -4,13 +4,50 @@ import { Link } from 'react-router-dom'
 import DataTable from 'react-data-table-component'
 import Rating from 'react-rating'
 import { formatData } from '@utils'
+import Avatar from '@components/avatar'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-export const columns = [
+const getAvatar = data => {
+  if (data.avatar && data.avatar.includes("http")) {
+    return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
+  } else {
+    return (
+      <Avatar
+        initials
+        className='me-1'
+        color={'light-primary'}
+        content={data.name ? data.name : ''}
+      />
+    )
+  }
+  }
+
+const RewardsList = ({ ratings, users }) => {
+
+const getUserInfo = id => {
+  const foundUser = users.find(item => item.id === id)
+  if (!foundUser) return {name: "", avatar: ""}
+  return {name: foundUser.name ? `${foundUser.name} ${foundUser.surname ? foundUser.surname : ''}` : foundUser.login, avatar: foundUser.avatar }
+}
+
+const renderClient = (id) => {
+const data = getUserInfo(id)
+
+return (
+<div className='d-flex justify-content-left align-items-center'>
+{getAvatar(data)}
+<div className='d-flex flex-column'>
+    <span className='fw-bolder'>{data.name}</span>
+</div>
+</div>
+)
+}
+
+const columns = [
   {
-    name: 'заказ',
+    name: 'Заказ',
     sortable: true,
-    minWidth: '30px',
+    width: '110px',
     sortField: 'order',
     selector: row => row.order,
     cell: row => (
@@ -26,7 +63,7 @@ export const columns = [
   },
   {
     name: 'Дата',
-    minWidth: '120px',
+    width: '120px',
     sortable: true,
     sortField: 'date',
     selector: row => row.date,
@@ -42,7 +79,7 @@ export const columns = [
   },
   {
     name: 'Оценка',
-    minWidth: '142px',
+    width: '142px',
     sortable: true,
     sortField: 'star',
     selector: row => row.star.value,
@@ -55,10 +92,16 @@ export const columns = [
         emptySymbol={<Star size={20} fill='#babfc7' stroke='#babfc7' />}
         fullSymbol={<Star size={20} fill='#ff9f43' stroke='#ff9f43' />}
       />)
-  }
+  },
+  // {
+  //   name: 'Клиент',
+  //   minWidth: '150px',
+  //   sortable: true,
+  //   sortField: 'user',
+  //   cell: row => renderClient(row.user)
+  // }
 ]
 
-const RewardsList = ({ ratings }) => {
   return ratings.length ? (
     <Card>
       <CardHeader tag='h4'>Список отзывов об официанте</CardHeader>

@@ -1,7 +1,7 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
 import { useSelector } from 'react-redux'
-
+import i18next from 'i18next'
 // ** Custom Components
 import Logo2 from '@components/logo2'
 import Avatar from '@components/avatar'
@@ -123,6 +123,7 @@ export const columns = (handleDel) => {
     )
   },
   {
+    // name: i18next.t('Date'),
     name: 'Дата',
     minWidth: '120px',
     sortable: true,

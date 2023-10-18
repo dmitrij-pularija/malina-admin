@@ -47,8 +47,7 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-ecommerce.scss'
 
 // ** Table Header
-const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
-  // ** Converts table to CSV
+const CustomHeader = ({ store, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
   function convertArrayOfObjectsToCSV(array) {
     let result
 
@@ -75,7 +74,6 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
     return result
   }
 
-  // ** Downloads CSV
   function downloadCSV(array) {
     const link = document.createElement('a')
     let csv = convertArrayOfObjectsToCSV(array)
@@ -91,6 +89,7 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
     link.setAttribute('download', filename)
     link.click()
   }
+  
   return (
     <div className='invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75'>
       <Row>
@@ -158,10 +157,6 @@ const CustomHeader = ({ store, toggleSidebar, handlePerPage, rowsPerPage, handle
                 </DropdownItem>
               </DropdownMenu>
             </UncontrolledDropdown>
-
-            {/* <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
-              Add New User
-            </Button> */}
           </div>
         </Col>
       </Row>
