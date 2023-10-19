@@ -21,7 +21,7 @@ import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
 
 // ** Utils
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, initSelect } from '@utils'
 import { statusObj } from '../../../../../configs/initial'
 
 // ** Reactstrap Imports
@@ -165,7 +165,7 @@ const CustomHeader = ({ store, handlePerPage, rowsPerPage, handleFilter, searchT
   )
 }
 
-const OrdersList = ({users, stores, status}) => {
+const OrdersList = ({users, userData, stores, status}) => {
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector(state => state.beautyOrders)
@@ -187,8 +187,16 @@ const OrdersList = ({users, stores, status}) => {
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
 
-  // ** Get data on mount
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)   
+
+const storeOptions = filtredStore.map((store) => ({
+    value: String(store.id),
+    label: store.name
+}))
+storeOptions.unshift({ value: '', label: 'Показать все' })
+
   useEffect(() => {
+    if (userData.type === 2 && stores.length) setCurrentStore(userData.type === 2 && initSelect(storeOptions, userData.id))
     dispatch(
       getData({
         ordering: `${sort}${sortColumn}`,
@@ -196,27 +204,10 @@ const OrdersList = ({users, stores, status}) => {
         perPage: rowsPerPage,
         page: currentPage,
         status: currentStatus.value,
-        business_id: currentStore.value
+        business_id: userData.type === 2 ? userData.id : currentStore.value
       })
     )
-    // dispatch(getData())
-    // dispatch(getAllData())
-    // if (!stores.length) dispatch(getAllStores())
-    // if (!status.length) dispatch(getOrderStatus())  
-    // dispatch(getAllData())
-    // dispatch(getWaiters())
-    // sort,
-    // dispatch(
-    //   getData({
-    //     ordering: `${sort}${sortColumn}`,
-    //     search: searchTerm,
-    //     page: currentPage,
-    //     perPage: rowsPerPage,
-    //     status: currentStatus.value,
-    //     business_id: currentStore.value
-    //   })
-    // )
-  }, [dispatch])
+  }, [stores.length])
 // console.log(store.data)
   // ** User filter options
   // const roleOptions = [
@@ -233,13 +224,7 @@ const OrdersList = ({users, stores, status}) => {
   //   { value: '189', label: 'MALINA ECO FOOD' },
   //   { value: '236', label: 'Chicken Crispy' }
   // ]
-const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)   
 
-const storeOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-}))
-storeOptions.unshift({ value: '', label: 'Показать все' })
 
   // const statusOptions = Object.entries(statusObj).map(([number, status]) => ({
   //   value: number,
@@ -406,6 +391,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
+                isDisabled={userData && userData.type === 2}
                 className='react-select'
                 classNamePrefix='select'
                 options={storeOptions}
