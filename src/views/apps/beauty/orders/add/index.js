@@ -23,6 +23,7 @@ const AddOrder = () => {
   const [data, setData] = useState(null)
   const stores = useSelector(state => state.stores.allStores)
   const users = useSelector(state => state.users.allUsers)
+  const { userData } = useSelector(state => state.auth)
   const products = useSelector(state => state.productsBeauty.allProducts)
   const categories = useSelector(state => state.beautyProductsCategories.allCategories)
 
@@ -40,7 +41,7 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
       id: 'step-details',
       title: 'Реквизиты',
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users}  userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
     },
     {
       id: 'step-address',
@@ -52,7 +53,7 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
       id: 'order-details',
       title: 'Состав',
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories} handleUpdate={updateData} orderData={data}  selectedOrder={null} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories}  userData={userData} handleUpdate={updateData} orderData={data}  selectedOrder={null} />
     },
     {
       id: 'step-payment',

@@ -106,8 +106,11 @@ const Cart = ({ categories, stepper, orderData, handleUpdate, products, selected
   }
 
   useEffect(() => {
-    if (products && products.length) initTableData(products)
-  }, [products])
+    if (products && products.length && orderData) {
+      const filtredProducts = products.filter(product => parseInt(product.supplier.id) === parseInt(orderData.order_business))    
+      initTableData(filtredProducts)
+    }
+  }, [products, orderData])
 
   const values = orderData ? {
     orderCart: orderData.carts ? orderData.carts : ''
@@ -191,7 +194,7 @@ const Cart = ({ categories, stepper, orderData, handleUpdate, products, selected
     const cart = {}
       if (isSelected) {
       const selectedDatd = tableData.filter(product => product.selected && product)
-      const productList = selectedDatd.map(product => ({ beauty_product: product.id, quantity: product.quantity}))
+      const productList = selectedDatd.map(product => ({ beauty_product: product.id, quantity: product.quantity, user: orderData.user_account}))
       cart.products_list = []  
       cart.cart_business = orderData.order_business
       cart.is_visible = true

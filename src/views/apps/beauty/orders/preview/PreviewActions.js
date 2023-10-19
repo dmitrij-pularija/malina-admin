@@ -12,16 +12,18 @@ const PreviewActions = ({ id, toggleSidebar, handleDelOrder}) => {
   return (
     <Card className='invoice-action-wrapper'>
       <CardBody>
-        {userData && userData.type === 3 && 
+        {userData && userData.type === 2 && 
         <Button color='primary' block className='mb-75' onClick={toggleSidebar}>
           Изменить статус
         </Button>}
+        {userData && userData.type === 2 && 
         <Button tag={Link} to={`/apps/beauty/orders/edit/${id}`} color='success' block className='mb-75'>
           Редактировать
-        </Button>
+        </Button>}
+        {userData && userData.type === 2 && 
         <Button color='danger' block className='mb-75' onClick={() => handleDelOrder(id)}>
           Удалить
-        </Button>
+        </Button>}
         {/* <Button color='secondary' tag={Link} to={`/apps/food/orders/rev/${id}`} target='_blank' block outline className='mb-75'>
           Отзывы
         </Button>

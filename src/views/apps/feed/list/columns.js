@@ -44,7 +44,7 @@ const renderClient = row => {
 // }
 
 
-export const columns = (handleEdit, handleDel) => {
+export const columns = (userData, handleEdit, handleDel) => {
   const renderStoore = (row) => {
  
     return (
@@ -100,6 +100,7 @@ return [
     width: '320px',
     sortable: true,
     sortField: 'business.id',
+    // omit: userData && userData.type === 2,
     cell: row => renderStoore(row)
   },
   {

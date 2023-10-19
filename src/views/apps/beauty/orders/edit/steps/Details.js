@@ -16,7 +16,7 @@ const defaultValues = {
   }
 const requiredFields = ["user", "store"]
 
-const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiters, tables }) => {
+const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, users, waiters, tables }) => {
   // if (!stores.length || !users.length || !waiters.length || !tables.length) return
   const navigate = useNavigate()
   const handleBack = () => navigate("/apps/beauty/orders/list/")
@@ -24,7 +24,7 @@ const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiter
 
 
 
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 2) 
+  const filtredStore = userData.type === 2 ? stores.filter(store => parseInt(store.id) === parseInt(userData.id)) : stores.filter(store => parseInt(store.business_type) === 2) 
   const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
@@ -82,7 +82,7 @@ const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiter
     user: orderData.user_account ? initSelect(userOptions, orderData.user_account) : '',
     store: orderData.order_business ? initSelect(storeOptions, orderData.order_business) : '',
     orderType: orderData.order_type ? initSelect(orderTypeOptions, orderData.order_type) : ''
-  } : {}
+  } : {...defaultValues, store: userData.type === 2 ? initSelect(storeOptions, userData.id) : "", user: userData.type === 1 ? initSelect(userOptions, userData.id) : ""}
   
   const {
     reset,
@@ -157,6 +157,7 @@ const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiter
                   rules={{ required: true }}
                   render={({ field }) => (
             <Select
+              isDisabled={userData && userData.type === 2}
               theme={selectThemeColors}
               isClearable={false}
               id='store'
@@ -185,6 +186,7 @@ const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiter
                   rules={{ required: true }}
                   render={({ field }) => (
             <Select
+              isDisabled={userData && userData.type === 1}
               theme={selectThemeColors}
               isClearable={false}
               id='user'

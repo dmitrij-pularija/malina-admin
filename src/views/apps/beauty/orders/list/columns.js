@@ -44,7 +44,7 @@ const renderClient = (name, avatar) => {
 
 
 
-export const columns = (stores, users, status, handleDel) => {
+export const columns = (stores, users, userData, status, handleDel) => {
   const getStatus = id => {
     if (id) {
     const findedStatus = status.find(stat => parseInt(stat.id) === parseInt(id))
@@ -102,7 +102,7 @@ export const columns = (stores, users, status, handleDel) => {
   {
     name: 'Заказ',
     sortable: true,
-    width: '150px',
+    width: '120px',
     sortField: 'order_date',
     selector: row => row.id,
     cell: row => (
@@ -128,7 +128,7 @@ export const columns = (stores, users, status, handleDel) => {
   // },
   {
     name: 'Сумма',
-    minWidth: '120px',
+    width: '120px',
     sortable: true,
     sortField: 'total_price',
     selector: row => row.total_order_price,
@@ -139,6 +139,7 @@ export const columns = (stores, users, status, handleDel) => {
     sortable: true,
     minWidth: '250px',
     sortField: 'order_business',
+    omit: userData && userData.type === 2,
      cell: row => renderStoore(row.order_business)
   },
   {

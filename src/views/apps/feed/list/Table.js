@@ -321,7 +321,7 @@ const FeedList = ({ stores, userData, modalOpen, toggleModal }) => {
             pagination
             responsive
             paginationServer
-            columns={columns(handleEdit, handleDel)}
+            columns={columns(userData, handleEdit, handleDel)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'

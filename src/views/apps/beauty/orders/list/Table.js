@@ -425,7 +425,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
             pagination
             responsive
             paginationServer
-            columns={columns(stores, users, status, handleDel)}
+            columns={columns(stores, users, userData, status, handleDel)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable min-table-height'

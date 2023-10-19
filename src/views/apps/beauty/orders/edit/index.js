@@ -29,6 +29,7 @@ const EditOrder = () => {
   const { selectedOrder, loading } = useSelector(state => state.beautyOrders)
   const stores = useSelector(state => state.stores.allStores)
   const users = useSelector(state => state.users.allUsers)
+  const { userData } = useSelector(state => state.auth)
   const products = useSelector(state => state.productsBeauty.allProducts)
   const categories = useSelector(state => state.beautyProductsCategories.allCategories)
 
@@ -56,7 +57,7 @@ const EditOrder = () => {
       id: 'step-details',
       title: 'Реквизиты',
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
     },
     {
       id: 'step-address',
@@ -68,7 +69,7 @@ const EditOrder = () => {
       id: 'order-details',
       title: 'Состав',
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
     },
     {
       id: 'step-payment',
