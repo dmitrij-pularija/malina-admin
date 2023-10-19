@@ -68,7 +68,8 @@ const requiredFields = ["title", "business", "type"]
 
 const FeedModal = ({
   open,
-  stores, 
+  stores,
+  userData, 
   toggleModal,
   selectedFeed,
   setSelectedFeed
@@ -81,7 +82,8 @@ const FeedModal = ({
     setGalery(selectedFeed && selectedFeed.images.length ? selectedFeed.images : [])
   }, [selectedFeed])
 
-    const storeOptions = stores.map((store) => ({
+  const filtredStore = userData.type === 2 ? stores.filter(store => parseInt(store.business_type) === parseInt(userData.business)) : stores
+    const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))
@@ -97,7 +99,7 @@ const FeedModal = ({
     text: selectedFeed.text ? selectedFeed.text : '',
     business: initSelect(storeOptions, selectedFeed.business.id),
     type: initSelect(feedsTypeOptions, selectedFeed.type)
-    } : {}
+    } : {...defaultValues, business: userData.type === 2 ? initSelect(storeOptions, userData.id) : ""}
 
   const {
     reset,
@@ -273,6 +275,7 @@ const FeedModal = ({
               <Select
                 id='business'
                 isClearable={false}
+                isDisabled={userData && userData.type === 2}
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}

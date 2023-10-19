@@ -3,7 +3,7 @@ import { Fragment, useState, useEffect } from 'react'
 import FeedModal from './Modal'
 import  { columns } from './columns'
 import Select from 'react-select'
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, initSelect } from '@utils'
 import { getFeeds, deleteFeed } from '../store'
 import { useDispatch, useSelector } from 'react-redux'
 import ReactPaginate from 'react-paginate'
@@ -142,7 +142,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const FeedList = ({ stores, modalOpen, toggleModal }) => {
+const FeedList = ({ stores, userData, modalOpen, toggleModal }) => {
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.feeds)
   const [sort, setSort] = useState('+')
@@ -161,8 +161,9 @@ const FeedList = ({ stores, modalOpen, toggleModal }) => {
   //   { value: '1', label: 'Food' },
   //   { value: '2', label: 'Beauty' }
   // ]
-
-  const storeOptions = stores.map((store) => ({
+  const filtredStore = userData.type === 2 ? stores.filter(store => parseInt(store.business_type) === parseInt(userData.business)) : stores
+  
+  const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))
@@ -184,14 +185,15 @@ const FeedList = ({ stores, modalOpen, toggleModal }) => {
   }
 
   useEffect(() => {
+    if (userData.type === 2 && stores.length) setCurrentStore(userData.type === 2 && initSelect(storeOptions, userData.id))
     dispatch(getFeeds({
       ordering: `${sort}${sortColumn}`,
-      business: currentStore.value,
+      business: userData.type === 2 ? userData.id : currentStore.value,
       search: searchTerm,
       page: currentPage,
       perPage: rowsPerPage
     }))
-  }, [])
+  }, [stores.length])
 
   const handlePagination = page => {
     dispatch(getFeeds({
@@ -289,6 +291,7 @@ const FeedList = ({ stores, modalOpen, toggleModal }) => {
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
+                isDisabled={userData && userData.type === 2}
                 className='react-select'
                 classNamePrefix='select'
                 options={storeOptions}
@@ -338,7 +341,7 @@ const FeedList = ({ stores, modalOpen, toggleModal }) => {
          
         </div>
       </Card>
-      <FeedModal stores={stores} open={modalOpen} toggleModal={toggleModal} selectedFeed={selectedFeed} setSelectedFeed={setSelectedFeed} />
+      <FeedModal stores={stores} userData={userData} open={modalOpen} toggleModal={toggleModal} selectedFeed={selectedFeed} setSelectedFeed={setSelectedFeed} />
       {/* <Sidebar stores={stores} open={sidebarOpen} toggleSidebar={handleClose} selectedFeed={selectedFeed} setSelectedFeed={setSelectedFeed} /> */}
     </Fragment>
   )

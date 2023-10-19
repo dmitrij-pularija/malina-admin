@@ -11,6 +11,7 @@ const ProductsCategoriesList = () => {
   const [modalOpen, setModalOpen] = useState(false)
   const toggleModal = () => setModalOpen(!modalOpen)
   const stores = useSelector(state => state.stores.allStores)
+  const { userData } = useSelector(state => state.auth)
 
   useEffect(() => {
     if (!stores.length) dispatch(getAllStores())
@@ -20,7 +21,7 @@ const ProductsCategoriesList = () => {
     <>
     <div className="app-user-list" >
       <Breadcrumbs title='Публикации' data={[{ title: 'Публикации' }]} onClick={toggleModal} /> 
-      <Table stores={stores} modalOpen={modalOpen} toggleModal={toggleModal} />
+      <Table stores={stores} userData={userData} modalOpen={modalOpen} toggleModal={toggleModal} />
     </div>
     <Loading />
     </>
