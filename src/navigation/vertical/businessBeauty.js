@@ -1,14 +1,14 @@
-import { Grid, Clipboard, FileText, Command, Award, Circle, ShoppingCart, Users, ShoppingBag } from 'react-feather'
+import { Grid, Calendar, FileText, Command, Award, Circle, ShoppingCart, Users, ShoppingBag } from 'react-feather'
 export default [
   {
     header: 'Malina beauty'
   },
-  {
-    id: 'beautyOrders',
-    title: 'Orders',
-    icon: <ShoppingCart size={20} />,
-    navLink: '/apps/beauty/orders/list'
-  },
+  // {
+  //   id: 'beautyOrders',
+  //   title: 'Orders',
+  //   icon: <ShoppingCart size={20} />,
+  //   navLink: '/apps/beauty/orders/list'
+  // },
   {
     id: 'Services',
     title: 'Services',
@@ -25,6 +25,12 @@ export default [
         title: 'Services',
         icon: <Circle size={12} />,
         navLink: '/apps/beauty/services/services/list'
+      },
+      {
+        id: 'beautyAppointments',
+        title: 'Appointments',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/appointments'
       }
     ]
   },
@@ -44,6 +50,12 @@ export default [
         title: 'Beauty Products',
         icon: <Circle size={12} />,
         navLink: '/apps/beauty/products/products/list'
+      },
+      {
+        id: 'beautyOrders',
+        title: 'Orders',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/orders/list'
       }
     ]
   },    
@@ -52,6 +64,12 @@ export default [
     title: 'Staff',
     icon: <Users size={20} />,
     children: [
+      {
+        id: 'specialties',
+        title: 'Specialties',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/specialties/list'
+      },
       {
         id: 'masters',
         title: 'Masters',

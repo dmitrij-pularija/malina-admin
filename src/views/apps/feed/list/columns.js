@@ -69,14 +69,14 @@ return [
   {
     name: 'Пубдикация',
     sortable: true,
-    width: '300px',
+    width: '350px',
     sortField: 'title',
     cell: row => (
       <div className='d-flex justify-content-left align-items-center'>
         {renderClient(row)}
         <div className='d-flex flex-column'>
             <span className='fw-bolder'>{ row.title ? row.title : "" }</span>
-            <span className='fw-bolder'>{ row.subtitle ? row.subtitle : "" }</span>
+            {/* <span className='fw-bolder'>{ row.subtitle ? row.subtitle : "" }</span> */}
         </div>
       </div>
     )
@@ -97,7 +97,7 @@ return [
   },
   {
     name: 'Заведение',
-    width: '300px',
+    width: '320px',
     sortable: true,
     sortField: 'business.id',
     cell: row => renderStoore(row)

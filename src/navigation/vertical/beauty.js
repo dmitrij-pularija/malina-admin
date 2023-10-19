@@ -36,12 +36,12 @@ export default [
   //     }
   //   ]
   // },
-  {
-    id: 'beautyOrders',
-    title: 'Orders',
-    icon: <ShoppingCart size={20} />,
-    navLink: '/apps/beauty/orders/list'
-  },
+  // {
+  //   id: 'beautyOrders',
+  //   title: 'Orders',
+  //   icon: <ShoppingCart size={20} />,
+  //   navLink: '/apps/beauty/orders/list'
+  // },
   {
     id: 'Services',
     title: 'Services',
@@ -57,7 +57,7 @@ export default [
         id: 'ServicesServices',
         title: 'Services',
         icon: <Circle size={12} />,
-        navLink: '/apps/beauty/services/services/list'
+        navLink: '/apps/beauty/orders/list'
       }
     ]
   },
@@ -75,6 +75,12 @@ export default [
       {
         id: 'beautyProducts',
         title: 'Beauty Products',
+        icon: <Circle size={12} />,
+        navLink: '/apps/beauty/products/products/list'
+      },
+      {
+        id: 'beautyOrders',
+        title: 'Orders',
         icon: <Circle size={12} />,
         navLink: '/apps/beauty/products/products/list'
       }
