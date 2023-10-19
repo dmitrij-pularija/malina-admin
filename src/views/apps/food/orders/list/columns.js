@@ -42,66 +42,7 @@ const renderClient = (name, avatar) => {
   }
 }
 
-// ** Renders Role Columns
-// const renderRole = row => {
-//   const roleObj = {
-//     subscriber: {
-//       class: 'text-primary',
-//       icon: User
-//     },
-//     maintainer: {
-//       class: 'text-success',
-//       icon: Database
-//     },
-//     editor: {
-//       class: 'text-info',
-//       icon: Edit2
-//     },
-//     author: {
-//       class: 'text-warning',
-//       icon: Settings
-//     },
-//     admin: {
-//       class: 'text-danger',
-//       icon: Slack
-//     }
-//   }
-
-//   const Icon = roleObj[row.role] ? roleObj[row.role].icon : Edit2
-
-//   return (
-//     <span className='text-truncate text-capitalize align-middle'>
-//       <Icon size={18} className={`${roleObj[row.role] ? roleObj[row.role].class : ''} me-50`} />
-//       {row.role}
-//     </span>
-//   )
-// }
-
-// const statusObj = {
-//   pending: 'light-warning',
-//   active: 'light-success',
-//   inactive: 'light-secondary'
-// }
-
-// const statusObj = [
-//   {status: '1', label: 'Новый', className: 'light-warning'},
-//   {status: '3', label: 'Отменен', className: 'light-secondary'},
-//   {status: '8', label: 'Доставлен', className: 'light-success'}
-// ]
-// const statusObj = {
-//   1: { label: 'Новый',  colorName: 'light-warning' },
-//   2: { label: '2',  colorName: 'light-warning' },
-//   3: { label: 'Отменен', colorName: 'light-secondary' },
-//   4: { label: '4', colorName: 'light-secondary' },
-//   5: { label: '5', colorName: 'light-secondary' },
-//   6: { label: '6', colorName: 'light-secondary' },
-//   7: { label: '7', colorName: 'light-secondary' },
-//   8: { label: 'Доставлен', colorName: 'light-success' },
-//   9: { label: '9', colorName: 'light-success' },
-//   10: { label: 'Выполнен', colorName: 'light-success' }
-// }
-
-export const columns = (handleDel) => {
+export const columns = (userData, handleDel) => {
 
   return [ 
   {
@@ -143,6 +84,7 @@ export const columns = (handleDel) => {
     name: 'Заведение',
     sortable: true,
     minWidth: '250px',
+    omit: userData && userData.type === 2,
     sortField: 'business_id.id',
     selector: row => row.business_id.id,
      cell: row => (

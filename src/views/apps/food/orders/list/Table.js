@@ -21,7 +21,7 @@ import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
 
 // ** Utils
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, initSelect } from '@utils'
 import { statusObj } from '../../../../../configs/initial'
 
 // ** Reactstrap Imports
@@ -164,7 +164,7 @@ const CustomHeader = ({ store, handlePerPage, rowsPerPage, handleFilter, searchT
   )
 }
 
-const OrdersList = () => {
+const OrdersList = ({ userData }) => {
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector(state => state.orders)
@@ -185,9 +185,18 @@ const OrdersList = () => {
 // console.log(searchTerm)
   // ** Function to toggle sidebar
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
-
-  // ** Get data on mount
+  
+  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)  
+  const storeOptions = filtredStore.map((store) => ({
+    value: String(store.id),
+    label: store.name
+}))
+storeOptions.unshift({ value: '', label: 'Показать все' })
+   
   useEffect(() => {
+    if (!stores.length) dispatch(getAllStores())
+    if (!status.length) dispatch(getOrderStatus())  
+    if (userData.type === 2 && stores.length) setCurrentStore(userData.type === 2 && initSelect(storeOptions, userData.id))
     dispatch(
       getData({
         ordering: `${sort}${sortColumn}`,
@@ -195,70 +204,17 @@ const OrdersList = () => {
         perPage: rowsPerPage,
         page: currentPage,
         status: currentStatus.value,
-        business_id: currentStore.value
+        business_id: userData.type === 2 ? userData.id : currentStore.value
       })
     )
-    // dispatch(getData())
-    // dispatch(getAllData())
-    if (!stores.length) dispatch(getAllStores())
-    if (!status.length) dispatch(getOrderStatus())  
-    // dispatch(getAllData())
-    // dispatch(getWaiters())
-    // sort,
-    // dispatch(
-    //   getData({
-    //     ordering: `${sort}${sortColumn}`,
-    //     search: searchTerm,
-    //     page: currentPage,
-    //     perPage: rowsPerPage,
-    //     status: currentStatus.value,
-    //     business_id: currentStore.value
-    //   })
-    // )
-  }, [dispatch])
-// console.log(store.data)
-  // ** User filter options
-  // const roleOptions = [
-  //   { value: '', label: 'Выберете статус' },
-  //   { value: 'admin', label: 'Admin' },
-  //   { value: 'author', label: 'Author' },
-  //   { value: 'editor', label: 'Editor' },
-  //   { value: 'maintainer', label: 'Maintainer' },
-  //   { value: 'subscriber', label: 'Subscriber' }
-  // ]
-
-  // const storeOptions = [
-  //   { value: '', label: 'Показать все' },
-  //   { value: '189', label: 'MALINA ECO FOOD' },
-  //   { value: '236', label: 'Chicken Crispy' }
-  // ]
-
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)  
-  const storeOptions = filtredStore.map((store) => ({
-    value: String(store.id),
-    label: store.name
-}))
-storeOptions.unshift({ value: '', label: 'Показать все' })
-
-  // const statusOptions = Object.entries(statusObj).map(([number, status]) => ({
-  //   value: number,
-  //   label: status.label
-  // }))
-  // statusOptions.unshift({ value: '', label: 'Показать все' })
-
+  }, [stores.length])
+ 
   const statusOptions = status.map((stat) => ({
     value: String(stat.id),
     label: stat.statusName
   }))
   statusOptions.unshift({ value: '', label: 'Показать все' })
-
-  // const statusOptions = [
-  //   { value: '', label: 'Select Status', number: 0 },
-  //   { value: 'pending', label: 'Pending', number: 1 },
-  //   { value: 'active', label: 'Active', number: 2 },
-  //   { value: 'inactive', label: 'Inactive', number: 3 }
-  // ]
-
+ 
   const handleDel = (event, id) => {
     event.preventDefault()
     dispatch(deleteOrder(id))
@@ -404,6 +360,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
               <Label for='plan-select'>Заведение</Label>
               <Select
                 theme={selectThemeColors}
+                isDisabled={userData && userData.type === 2}
                 isClearable={false}
                 className='react-select'
                 classNamePrefix='select'
@@ -437,7 +394,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
             pagination
             responsive
             paginationServer
-            columns={columns(handleDel)}
+            columns={columns( userData, handleDel)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable min-table-height'
@@ -457,7 +414,7 @@ storeOptions.unshift({ value: '', label: 'Показать все' })
           />
       </Card>
 
-      <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} />
+      {/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} /> */}
     </Fragment>
   )
 }

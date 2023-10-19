@@ -60,7 +60,8 @@ const AddOrder = () => {
   const waiters = useSelector(state => state.waiters.allWaiters)
   const tables = useSelector(state => state.tables.allTables)
   const products = useSelector(state => state.products.allProducts)
- 
+  const { userData } = useSelector(state => state.auth)
+
   useEffect(() => {
     if (!stores.length) dispatch(getAllStores())
     if (!users.length) dispatch(getAllUsers())
@@ -77,7 +78,7 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
       title: 'Реквизиты',
       // subtitle: 'Добввьте реквизиты заказа',
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
     },
     {
       id: 'step-address',
@@ -91,7 +92,7 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
       title: 'Состав',
       // subtitle: 'Выберите состав заказа',
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} handleUpdate={updateData} orderData={data}  selectedOrder={null} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} userData={userData} handleUpdate={updateData} orderData={data}  selectedOrder={null} />
     },
     {
       id: 'step-payment',

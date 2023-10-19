@@ -82,7 +82,7 @@ const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleF
   )
 }
 
-const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => {
+const Cart = ({ stepper, userData, orderData, handleUpdate, products, selectedOrder }) => {
 
   // { product: row.id, quantity: value, total_price: price(row, value), is_visible: true, product_addons: [] }
   // const [selectedRows, setSelectedRows] = useState([])
@@ -150,10 +150,16 @@ const Cart = ({ stepper, orderData, handleUpdate, products, selectedOrder }) => 
     setTableData([...selectedProducts, ...unselectProducts])
   }
 
+  // useEffect(() => {
+  //   if (products.length) initTableData(products)
+  // }, [products])
 
   useEffect(() => {
-    if (products.length) initTableData(products)
-  }, [products])
+    if (products && products.length && orderData) {
+      const filtredProducts = products.filter(product => parseInt(product.supplier.id) === parseInt(orderData.business_id))    
+      initTableData(filtredProducts)
+    }
+  }, [products, orderData])
 
 // console.log(productList)
 // console.log(selectedRows)

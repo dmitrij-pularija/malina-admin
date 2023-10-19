@@ -41,6 +41,7 @@ const EditOrder = () => {
   const waiters = useSelector(state => state.waiters.allWaiters)
   const tables = useSelector(state => state.tables.allTables)
   const products = useSelector(state => state.products.allProducts)
+  const { userData } = useSelector(state => state.auth)
 
   // ** Get invoice on mount based on id
   useEffect(() => {
@@ -68,7 +69,7 @@ const EditOrder = () => {
       id: 'step-details',
       title: 'Реквизиты',
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
     },
     {
       id: 'step-address',
@@ -80,7 +81,7 @@ const EditOrder = () => {
       id: 'order-details',
       title: 'Состав',
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
     },
     {
       id: 'step-payment',

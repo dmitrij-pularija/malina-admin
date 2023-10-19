@@ -26,7 +26,7 @@ const defaultValues = {
   }
 const requiredFields = ["user", "store"]
 
-const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiters, tables }) => {
+const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, users, waiters, tables }) => {
   // if (!stores.length || !users.length || !waiters.length || !tables.length) return
   const navigate = useNavigate()
   const handleBack = () => navigate("/apps/food/orders/list/")
@@ -65,7 +65,10 @@ const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiter
   const initWaiterOptions = () => {
     const filteredWaiters = orderData && orderData.business_id ? waiters.filter(
       waiter => parseInt(waiter.business_id.id) === parseInt(orderData.business_id)
+    ) : userData.type === 2 ? waiters.filter(
+      waiter => parseInt(waiter.business_id.id) === parseInt(userData.id)
     ) : waiters
+
     setWaiterOptions(filteredWaiters.map(waiter => ({
     value: String(waiter.id),
     label: waiter.full_name ? waiter.full_name : waiter.telegram
@@ -76,6 +79,8 @@ const Details = ({ stepper, type, orderData, handleUpdate, stores, users, waiter
 const initTableOptions = () => {
   const filteredTables = orderData && orderData.business_id ? tables.filter(
     table => parseInt(table.business_id.id) === parseInt(orderData.business_id)
+  ) : userData.type === 2 ? tables.filter(
+    table => parseInt(table.business_id.id) === parseInt(userData.id)
   ) : tables
   setTableOptions(filteredTables.map(table => ({
   value: String(table.id),
@@ -94,7 +99,7 @@ const initTableOptions = () => {
     table: orderData.table ? initSelect(tableOptions, orderData.table) : '',
     orderType: orderData.order_type ? initSelect(orderTypeOptions, orderData.order_type) : '',
     waiter: orderData.waiter ? initSelect(waiterOptions, orderData.waiter) : ''
-  } : {}
+  } : {...defaultValues, store: userData.type === 2 ? initSelect(storeOptions, userData.id) : "", user: userData.type === 1 ? initSelect(userOptions, userData.id) : ""}
   
   const {
     reset,
@@ -171,6 +176,7 @@ const initTableOptions = () => {
                   rules={{ required: true }}
                   render={({ field }) => (
             <Select
+              isDisabled={userData && userData.type === 2}
               theme={selectThemeColors}
               isClearable={false}
               id='store'
@@ -199,6 +205,7 @@ const initTableOptions = () => {
                   rules={{ required: true }}
                   render={({ field }) => (
             <Select
+              isDisabled={userData && userData.type === 1}
               theme={selectThemeColors}
               isClearable={false}
               id='user'
