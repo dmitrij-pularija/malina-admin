@@ -32,8 +32,6 @@ const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, use
   const handleBack = () => navigate("/apps/food/orders/list/")
   const handleNext = () => stepper.next()
 
-
-
   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
   const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),

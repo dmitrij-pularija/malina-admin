@@ -16,6 +16,7 @@ const defaultValues = {
   tips: '',
   usedPoints: '',
   earnedPoints: '',
+  comment: '',
   appliances: ''
   }
   const requiredFields = []
@@ -33,7 +34,8 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
     tips: selectedOrder.tips ? selectedOrder.tips : '',
     usedPoints: selectedOrder.used_points ? selectedOrder.used_points : '',
     earnedPoints: selectedOrder.earned_points ? selectedOrder.earned_points : '',
-    appliances: selectedOrder.quantity_appliances ? selectedOrder.quantity_appliances : ''
+    appliances: selectedOrder.quantity_appliances ? selectedOrder.quantity_appliances : '',
+    comment: selectedOrder.comment ? selectedOrder.comment : ''
   } : {}
 
   const {
@@ -49,13 +51,19 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
   const handleNext = () => navigate("/apps/food/orders/list/")
   
   const onSubmit = (data) => {
-    const newData = orderData
+    // const newData = orderData
+    const newData = {}
+    for (const key in orderData) {
+      if (orderData[key]) newData[key] = orderData[key]
+    }
+console.log(newData)
     if (checkIsValid(data, requiredFields)) {
       if (data.paymentType) newData.payment_type = parseInt(data.paymentType.value)
       if (data.tips) newData.tips = parseInt(data.tips)
       if (data.usedPoints) newData.used_points = parseInt(data.usedPoints)
       if (data.earnedPoints) newData.earned_points = parseInt(data.earnedPoints)
       if (data.appliances) newData.quantity_appliances = parseInt(data.appliances)
+      if (data.comment) newData.comment = data.comment
       // if (newData) handleUpdate(newData)
       if (selectedOrder) {
         dispatch(editOrder({ id: selectedOrder.id, order: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleNext())
@@ -167,6 +175,28 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
                 <span className='align-middle d-sm-inline-block d-none'>Изменить</span>
                </Button>
                </div>
+              </Col>
+              <Col md={12} className='mb-1'>
+                <Label className="form-label" for="comment">
+                Коментарий
+                </Label>
+                <Controller
+                  name="comment"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+                    <Input
+                      id="comment"
+                      type="text"
+                      placeholder="Введите коментарий"
+                      invalid={errors.comment && true}
+                      {...field}
+                    />
+                  )}
+                />
+                {errors && errors.comment && (
+                  <FormFeedback>Пожалуйста введите описание</FormFeedback>
+                )}
               </Col>
               <Col md='3' className='mb-1'>
               <Label className="form-label" for="tips">

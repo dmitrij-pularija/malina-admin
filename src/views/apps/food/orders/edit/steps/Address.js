@@ -26,8 +26,7 @@ const defaultValues = {
   longitude: '',
   latitude: '',
   timeDelivery: '',
-  rdt: '',
-  comment: ''
+  rdt: ''
   }
   const requiredFields = ["name", "phone"]
 
@@ -68,8 +67,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
     longitude: selectedOrder.delivery_address && selectedOrder.delivery_address.longitude ? selectedOrder.delivery_address.longitude : '',
     latitude: selectedOrder.delivery_address && selectedOrder.delivery_address.latitude ? selectedOrder.delivery_address.latitude : '',
     timeDelivery: selectedOrder.time_delivery ? selectedOrder.time_delivery : '',
-    rdt: selectedOrder.requested_delivery_time ? formatStringTime(selectedOrder.requested_delivery_time) : '',
-    comment: selectedOrder.comment ? selectedOrder.comment : ''
+    rdt: selectedOrder.requested_delivery_time ? formatStringTime(selectedOrder.requested_delivery_time) : ''
   } : {}
 
   const {
@@ -150,11 +148,9 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
   const onSubmit = (data) => {
     // console.log(data)
     const newData = {}
-    
-    if (checkIsValid(data, requiredFields) || orderData.order_type !== 1) {
+    if (orderData.order_type !== 1) return handleNext()
+    if (checkIsValid(data, requiredFields)) {
       // console.log(data.rdt)
-      if (data.comment) newData.comment = data.comment
-      if (orderData.order_type !== 1) return handleNext()
       if (data) newData.delivery_address = {}
       if (data.name) newData.delivery_address.name = data.name
       if (data.city) newData.delivery_address.city = data.city
@@ -166,7 +162,6 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
       if (data.location) newData.delivery_address.location = data.location
       if (data.longitude) newData.delivery_address.longitude = data.longitude
       if (data.latitude) newData.delivery_address.latitude = data.latitude
-      if (data.comment) newData.comment = data.comment
       // if (data.deliveryPrice) newData.delivery_price = data.deliveryPrice
       if (data.rdt) newData.requested_delivery_time = selectedOrder && selectedOrder.requested_delivery_time ? data.rdt : formatTimeSave(data.rdt)
       if (data.timeDelivery) newData.time_delivery = parseInt(data.timeDelivery)
@@ -583,7 +578,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
                   {(errors && errors.rdt) && (<FormFeedback id='ffb'>Пожалуйста введите время доставки</FormFeedback>)}
                 </div>
               </Col>}
-              <Col className='mb-1'>
+              {/* <Col className='mb-1'>
                 <Label className="form-label" for="comment">
                 Коментарий
                 </Label>
@@ -604,7 +599,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
                 {errors && errors.comment && (
                   <FormFeedback>Пожалуйста введите описание</FormFeedback>
                 )}
-              </Col>      
+              </Col>       */}
         </Row>
         <div className='d-flex justify-content-between mt-1'>
           <Button color='primary' className='btn-prev' onClick={() => stepper.previous()}>
