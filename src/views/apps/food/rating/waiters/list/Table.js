@@ -15,7 +15,7 @@ import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
 
 // ** Utils
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, initSelect } from '@utils'
 
 // ** Reactstrap Imports
 import {
@@ -155,7 +155,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const RatingWaitersList = ({users, waiters, stores}) => {
+const RatingWaitersList = ({userData, users, waiters, stores}) => {
   // ** Store Vars
   const dispatch = useDispatch()
   const { data, total} = useSelector(state => state.ratingWaiters)
@@ -168,22 +168,8 @@ const RatingWaitersList = ({users, waiters, stores}) => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
   const [currentWaiter, setCurrentWaiter] = useState({ value: '', label: 'Выбирите официанта' })
-  // ** Function to toggle sidebar
-
-  // ** Get data on mount
-  useEffect(() => {
-    dispatch(
-      getData({
-        ordering: `${sort}${sortColumn}`,
-        search: searchTerm,
-        page: currentPage,
-        perPage: rowsPerPage,
-        waiter: currentWaiter.value,
-        business_id: currentStore.value
-      })
-    )
-  }, [dispatch, data.length, sort, sortColumn, currentPage])
-
+  
+  
   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)  
   const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
@@ -191,7 +177,23 @@ const RatingWaitersList = ({users, waiters, stores}) => {
   }))
   storeOptions.unshift({ value: '', label: 'Показать все' })
 
-  const waitersOptions = waiters.map((waiter) => ({
+
+  useEffect(() => {
+    if (userData.type === 2 && stores.length) setCurrentStore(userData.type === 2 && initSelect(storeOptions, userData.id))
+    dispatch(
+      getData({
+        ordering: `${sort}${sortColumn}`,
+        search: searchTerm,
+        page: currentPage,
+        perPage: rowsPerPage,
+        waiter: currentWaiter.value,
+        business_id: userData.type === 2 ? userData.id : currentStore.value
+      })
+    )
+  }, [stores.length])
+
+  const filtredWaiters = userData.type === 2 ? waiters.filter(waiter => parseInt(waiter.business_id.id) === parseInt(userData.id)) : waiters
+  const waitersOptions = filtredWaiters.map(waiter => ({
     value: String(waiter.id),
     label: waiter.full_name
   }))
@@ -334,6 +336,7 @@ const RatingWaitersList = ({users, waiters, stores}) => {
             <Col className='my-md-0 my-1' md='4'>
               <Label for='plan-select'>Заведение</Label>
               <Select
+                isDisabled={userData && userData.type === 2}
                 theme={selectThemeColors}
                 isClearable={false}
                 className='react-select'

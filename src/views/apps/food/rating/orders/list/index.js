@@ -9,7 +9,7 @@ import "@styles/react/apps/app-users.scss"
 const RatingOrdersList = () => {
   const dispatch = useDispatch()
   const stores = useSelector(state => state.stores.allStores)
-
+  const { userData } = useSelector(state => state.auth)
 
 useEffect(() => {
   if (!stores.length) dispatch(getAllStores())  
@@ -18,7 +18,7 @@ useEffect(() => {
   return (
     <div className="app-user-list">
       <Breadcrumbs title='Отзывы о заказах' data={[{ title: 'Отзывы' }, { title: 'о заказах' }]} /> 
-      <Table stores={stores} />
+      <Table userData={userData} stores={stores} />
       <Loading />  
     </div>
   )

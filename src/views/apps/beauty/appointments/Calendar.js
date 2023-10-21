@@ -1,5 +1,5 @@
 // ** React Import
-import { useEffect, useRef, memo } from 'react'
+import { useEffect, useState, useRef, memo } from 'react'
 
 // ** Full Calendar & it's Plugins
 import '@fullcalendar/react/dist/vdom'
@@ -8,16 +8,18 @@ import listPlugin from '@fullcalendar/list'
 import dayGridPlugin from '@fullcalendar/daygrid'
 import timeGridPlugin from '@fullcalendar/timegrid'
 import interactionPlugin from '@fullcalendar/interaction'
-
-// ** Third Party Components
+import ruLocale from '@fullcalendar/core/locales/ru'
+import enLocale from '@fullcalendar/core/locales/en-gb'
+import i18next from 'i18next'
 import toast from 'react-hot-toast'
 import { Menu } from 'react-feather'
 import { Card, CardBody } from 'reactstrap'
+import { appointmentsObj } from '../../../../configs/initial'
 
 const Calendar = props => {
   // ** Refs
   const calendarRef = useRef(null)
-
+  const [currentLanguage, setCurrentLanguage] = useState(i18next.language === 'en' ? enLocale : ruLocale)
   // ** Props
   const {
     store,
@@ -40,15 +42,23 @@ const Calendar = props => {
     }
   }, [calendarApi])
 
+  useEffect(() => {
+    const handleLanguageChange = () => setCurrentLanguage(i18next.language === 'en' ? enLocale : ruLocale)
+    i18next.on('languageChanged', handleLanguageChange)
+    return () => i18next.off('languageChanged', handleLanguageChange)
+  }, [])
+
+
   // ** calendarOptions(Props)
   const calendarOptions = {
-    events: store.events.length ? store.events : [],
+    // events: store.events.length ? store.events : [],
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
+    // locale: {ruLocale},
     /*
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable
@@ -114,7 +124,7 @@ const Calendar = props => {
       const ev = blankEvent
       ev.start = info.date
       ev.end = info.date
-      dispatch(selectEvent(ev))
+      // dispatch(selectEvent(ev))
       handleAddEventSidebar()
     },
 
@@ -146,7 +156,7 @@ const Calendar = props => {
   return (
     <Card className='shadow-none border-0 mb-0 rounded-0'>
       <CardBody className='pb-0'>
-        <FullCalendar {...calendarOptions} />{' '}
+        <FullCalendar locale={currentLanguage} {...calendarOptions} />{' '}
       </CardBody>
     </Card>
   )

@@ -13,6 +13,7 @@ const RatingWaitersList = () => {
   const stores = useSelector(state => state.stores.allStores)
   const waiters = useSelector(state => state.waiters.allWaiters)
   const users = useSelector(state => state.users.allUsers)
+  const { userData } = useSelector(state => state.auth)
 
 useEffect(() => {
   if (!waiters.length) dispatch(getAllWaiters())
@@ -24,7 +25,7 @@ useEffect(() => {
   <>
     <div className="app-user-list">
       <Breadcrumbs title='Отзывы о персонале' data={[{ title: 'Отзывы' }, { title: 'о персонале' }]} /> 
-      <Table users={users} waiters={waiters} stores={stores} />
+      <Table userData={userData} users={users} waiters={waiters} stores={stores} />
     </div>
     <Loading />
   </>

@@ -1,21 +1,12 @@
-// ** React Imports
 import { Fragment, useState } from 'react'
-
-// ** Custom Components
 import Avatar from '@components/avatar'
-
-// ** Third Party Components
 import { X } from 'react-feather'
 import toast from 'react-hot-toast'
 import Flatpickr from 'react-flatpickr'
 import Select, { components } from 'react-select' // eslint-disable-line
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { useForm, Controller } from 'react-hook-form'
-
-// ** Reactstrap Imports
 import { Button, Modal, ModalHeader, ModalBody, Label, Input, Form } from 'reactstrap'
-
-// ** Utils
 import { selectThemeColors, isObjEmpty } from '@utils'
 
 // ** Avatar Images
@@ -34,7 +25,7 @@ const AddEventSidebar = props => {
   // ** Props
   const {
     open,
-    store,
+    selectedAppointment,
     dispatch,
     addEvent,
     calendarApi,
@@ -47,7 +38,7 @@ const AddEventSidebar = props => {
   } = props
 
   // ** Vars & Hooks
-  const selectedEvent = store.selectedEvent,
+  const selectedEvent = selectedAppointment,
     {
       control,
       setError,
@@ -146,26 +137,26 @@ const AddEventSidebar = props => {
 
   // ** Set sidebar fields
   const handleSelectedEvent = () => {
-    if (!isObjEmpty(selectedEvent)) {
-      const calendar = selectedEvent.extendedProps.calendar
+    // if (!isObjEmpty(selectedEvent)) {
+    //   const calendar = selectedEvent.extendedProps.calendar
 
-      const resolveLabel = () => {
-        if (calendar.length) {
-          return { label: calendar, value: calendar, color: calendarsColor[calendar] }
-        } else {
-          return { value: 'Business', label: 'Business', color: 'primary' }
-        }
-      }
-      setValue('title', selectedEvent.title || getValues('title'))
-      setAllDay(selectedEvent.allDay || allDay)
-      setUrl(selectedEvent.url || url)
-      setLocation(selectedEvent.extendedProps.location || location)
-      setDesc(selectedEvent.extendedProps.description || desc)
-      setGuests(selectedEvent.extendedProps.guests || guests)
-      setStartPicker(new Date(selectedEvent.start))
-      setEndPicker(selectedEvent.allDay ? new Date(selectedEvent.start) : new Date(selectedEvent.end))
-      setCalendarLabel([resolveLabel()])
-    }
+    //   const resolveLabel = () => {
+    //     if (calendar.length) {
+    //       return { label: calendar, value: calendar, color: calendarsColor[calendar] }
+    //     } else {
+    //       return { value: 'Business', label: 'Business', color: 'primary' }
+    //     }
+    //   }
+    //   setValue('title', selectedEvent.title || getValues('title'))
+    //   setAllDay(selectedEvent.allDay || allDay)
+    //   setUrl(selectedEvent.url || url)
+    //   setLocation(selectedEvent.extendedProps.location || location)
+    //   setDesc(selectedEvent.extendedProps.description || desc)
+    //   setGuests(selectedEvent.extendedProps.guests || guests)
+    //   setStartPicker(new Date(selectedEvent.start))
+    //   setEndPicker(selectedEvent.allDay ? new Date(selectedEvent.start) : new Date(selectedEvent.end))
+    //   setCalendarLabel([resolveLabel()])
+    // }
   }
 
   // ** (UI) updateEventInCalendar
@@ -242,31 +233,31 @@ const AddEventSidebar = props => {
   }
 
   // ** Event Action buttons
-  const EventActions = () => {
-    if (isObjEmpty(selectedEvent) || (!isObjEmpty(selectedEvent) && !selectedEvent.title.length)) {
-      return (
-        <Fragment>
-          <Button className='me-1' type='submit' color='primary'>
-            Add
-          </Button>
-          <Button color='secondary' type='reset' onClick={handleAddEventSidebar} outline>
-            Cancel
-          </Button>
-        </Fragment>
-      )
-    } else {
-      return (
-        <Fragment>
-          <Button className='me-1' color='primary' onClick={handleUpdateEvent}>
-            Update
-          </Button>
-          <Button color='danger' onClick={handleDeleteEvent} outline>
-            Delete
-          </Button>
-        </Fragment>
-      )
-    }
-  }
+  // const EventActions = () => {
+  //   if (isObjEmpty(selectedEvent) || (!isObjEmpty(selectedEvent) && !selectedEvent.title.length)) {
+  //     return (
+  //       <Fragment>
+  //         <Button className='me-1' type='submit' color='primary'>
+  //           Add
+  //         </Button>
+  //         <Button color='secondary' type='reset' onClick={handleAddEventSidebar} outline>
+  //           Cancel
+  //         </Button>
+  //       </Fragment>
+  //     )
+  //   } else {
+  //     return (
+  //       <Fragment>
+  //         <Button className='me-1' color='primary' onClick={handleUpdateEvent}>
+  //           Update
+  //         </Button>
+  //         <Button color='danger' onClick={handleDeleteEvent} outline>
+  //           Delete
+  //         </Button>
+  //       </Fragment>
+  //     )
+  //   }
+  // }
 
   // ** Close BTN
   const CloseBtn = <X className='cursor-pointer' size={15} onClick={handleAddEventSidebar} />
@@ -283,7 +274,7 @@ const AddEventSidebar = props => {
     >
       <ModalHeader className='mb-1' toggle={handleAddEventSidebar} close={CloseBtn} tag='div'>
         <h5 className='modal-title'>
-          {selectedEvent && selectedEvent.title && selectedEvent.title.length ? 'Update' : 'Add'} Event
+          {selectedEvent && selectedEvent.title && selectedEvent.title.length ? 'Редактировать' : 'Добавить'} запись
         </h5>
       </ModalHeader>
       <PerfectScrollbar options={{ wheelPropagation: false }}>
@@ -291,14 +282,14 @@ const AddEventSidebar = props => {
           <Form
             onSubmit={handleSubmit(data => {
               if (data.title.length) {
-                if (isObjEmpty(errors)) {
-                  if (isObjEmpty(selectedEvent) || (!isObjEmpty(selectedEvent) && !selectedEvent.title.length)) {
-                    handleAddEvent()
-                  } else {
-                    handleUpdateEvent()
-                  }
-                  handleAddEventSidebar()
-                }
+                // if (isObjEmpty(errors)) {
+                //   if (isObjEmpty(selectedEvent) || (!isObjEmpty(selectedEvent) && !selectedEvent.title.length)) {
+                //     handleAddEvent()
+                //   } else {
+                //     handleUpdateEvent()
+                //   }
+                //   handleAddEventSidebar()
+                // }
               } else {
                 setError('title', {
                   type: 'manual'
@@ -306,6 +297,44 @@ const AddEventSidebar = props => {
               }
             })}
           >
+            <div className='mb-1'>
+              <Label className='form-label' for='master'>
+                Специалист
+              </Label>
+              <Select
+                id='master'
+                className='react-select'
+                classNamePrefix='select'
+                isClearable={false}
+                options={guestsOptions}
+                theme={selectThemeColors}
+                // value={guests.length ? [...guests] : null}
+                // onChange={data => setMaster([...data])}
+                components={{
+                  Option: GuestsComponent
+                }}
+              />
+            </div>
+            <div className='mb-1'>
+              <Label className='form-label' for='guests'>
+                Клиент
+              </Label>
+              <Select
+                isMulti
+                id='guests'
+                className='react-select'
+                classNamePrefix='select'
+                isClearable={false}
+                options={guestsOptions}
+                theme={selectThemeColors}
+                value={guests.length ? [...guests] : null}
+                onChange={data => setGuests([...data])}
+                components={{
+                  Option: GuestsComponent
+                }}
+              />
+            </div>
+
             <div className='mb-1'>
               <Label className='form-label' for='title'>
                 Title <span className='text-danger'>*</span>
@@ -402,25 +431,7 @@ const AddEventSidebar = props => {
               />
             </div>
 
-            <div className='mb-1'>
-              <Label className='form-label' for='guests'>
-                Guests
-              </Label>
-              <Select
-                isMulti
-                id='guests'
-                className='react-select'
-                classNamePrefix='select'
-                isClearable={false}
-                options={guestsOptions}
-                theme={selectThemeColors}
-                value={guests.length ? [...guests] : null}
-                onChange={data => setGuests([...data])}
-                components={{
-                  Option: GuestsComponent
-                }}
-              />
-            </div>
+            
 
             <div className='mb-1'>
               <Label className='form-label' for='location'>
@@ -444,7 +455,14 @@ const AddEventSidebar = props => {
               />
             </div>
             <div className='d-flex mb-1'>
-              <EventActions />
+            <Fragment>
+             <Button className='me-1' type='submit' color='primary'>
+               Добавить
+             </Button>
+             <Button color='secondary' type='reset' onClick={handleAddEventSidebar} outline>
+               Отменить
+             </Button>
+            </Fragment>
             </div>
           </Form>
         </ModalBody>

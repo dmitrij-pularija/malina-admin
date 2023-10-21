@@ -11,6 +11,7 @@ const RatingMastersList = () => {
   const dispatch = useDispatch()
   const stores = useSelector(state => state.stores.allStores)
   const users = useSelector(state => state.users.allUsers)
+  const { userData } = useSelector(state => state.auth)
 
 useEffect(() => {
   if (!stores.length) dispatch(getAllStores())
@@ -21,7 +22,7 @@ useEffect(() => {
   <>
     <div className="app-user-list">
       <Breadcrumbs title='Отзывы о заказах' data={[{ title: 'Отзывы' }, { title: 'о заказах' }]} /> 
-      <Table users={users} stores={stores} />
+      <Table users={users} stores={stores} userData={userData} />
     </div>
     <Loading />
   </>

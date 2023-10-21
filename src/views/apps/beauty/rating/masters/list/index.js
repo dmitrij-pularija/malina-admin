@@ -13,6 +13,7 @@ const RatingMastersList = () => {
   const stores = useSelector(state => state.stores.allStores)
   const masters = useSelector(state => state.masters.allMasters)
   const users = useSelector(state => state.users.allUsers)
+  const { userData } = useSelector(state => state.auth)
 
 useEffect(() => {
   if (!masters.length) dispatch(getAllMasters())
@@ -24,7 +25,7 @@ useEffect(() => {
   <>
     <div className="app-user-list">
       <Breadcrumbs title='Отзывы о сециалистах' data={[{ title: 'Отзывы' }, { title: 'о специалистах' }]} /> 
-      <Table users={users} masters={masters} stores={stores} />
+      <Table userData={userData} users={users} masters={masters} stores={stores} />
     </div>
     <Loading />
   </>

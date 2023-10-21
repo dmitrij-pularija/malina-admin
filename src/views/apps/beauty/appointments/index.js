@@ -28,7 +28,7 @@ const CalendarComponent = () => {
   const { userData } = useSelector(state => state.auth)
   const stores = useSelector(state => state.stores.allStores)
   const masters = useSelector(state => state.masters.allMasters)
-  const {data, loading} = useSelector(state => state.appointments)
+  const {data, selectedAppointment, loading} = useSelector(state => state.appointments)
   const [calendarApi, setCalendarApi] = useState(null)
   const [addSidebarOpen, setAddSidebarOpen] = useState(false)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
@@ -134,9 +134,9 @@ const CalendarComponent = () => {
             />
           </Col>
           <Col className='position-relative'>
-            {/* <Calendar
+            <Calendar
               isRtl={isRtl}
-              store={store}
+              // store={store}
               dispatch={dispatch}
               blankEvent={blankEvent}
               calendarApi={calendarApi}
@@ -146,7 +146,7 @@ const CalendarComponent = () => {
               calendarsColor={calendarsColor}
               setCalendarApi={setCalendarApi}
               handleAddEventSidebar={handleAddEventSidebar}
-            /> */}
+            />
           </Col>
           <div
             className={classnames('body-content-overlay', {
@@ -157,19 +157,19 @@ const CalendarComponent = () => {
         </Row>
       </div>
       {/* <AddEventSidebar
-        store={store}
+        selectedAppointment={selectedAppointment}
         dispatch={dispatch}
-        addEvent={addEvent}
+        addEvent={addAppointment}
         open={addSidebarOpen}
-        selectEvent={selectEvent}
-        updateEvent={updateEvent}
-        removeEvent={removeEvent}
+        selectEvent={getAppointment}
+        updateEvent={editAppointment}
+        removeEvent={deleteAppointment}
         calendarApi={calendarApi}
         refetchEvents={refetchEvents}
         calendarsColor={calendarsColor}
         handleAddEventSidebar={handleAddEventSidebar}
-      /> */}
-      <Loading /> 
+      />
+      <Loading />  */}
     </Fragment>
   )
 }

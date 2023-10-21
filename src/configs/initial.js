@@ -18,9 +18,9 @@ export const statusObj = {
 }
 
 export const appointmentsObj = {
-  pending: { label: 'Ожидает подтверждения', colorName: 'light-warning' },
-  fulfilled: { label: 'Подтвержден',  colorName: 'light-primary' },
-  success: { label: 'Посещен', colorName: 'light-success' },
+  pending: { label: 'Новая', colorName: 'light-warning' },
+  fulfilled: { label: 'Подтверждена',  colorName: 'light-primary' },
+  success: { label: 'Посещена', colorName: 'light-success' },
   rejected: { label: 'Отменен', colorName: 'light-danger' }
 }
 

@@ -15,7 +15,7 @@ import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy } from 'react-feather'
 
 // ** Utils
-import { selectThemeColors } from '@utils'
+import { selectThemeColors, initSelect } from '@utils'
 
 // ** Reactstrap Imports
 import {
@@ -155,7 +155,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   )
 }
 
-const RatingStoresList = ({users, stores}) => {
+const RatingStoresList = ({userData, users, stores}) => {
   // ** Store Vars
   const dispatch = useDispatch()
   const { data, total} = useSelector(state => state.ratingStores)
@@ -167,27 +167,27 @@ const RatingStoresList = ({users, stores}) => {
   const [sortColumn, setSortColumn] = useState('date')
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
-  // ** Function to toggle sidebar
-
-  // ** Get data on mount
-  useEffect(() => {
-    dispatch(
-      getData({
-        ordering: `${sort}${sortColumn}`,
-        search: searchTerm,
-        page: currentPage,
-        perPage: rowsPerPage,
-        business_id: currentStore.value
-      })
-    )
-  }, [dispatch, data.length, sort, sortColumn, currentPage])
-
+ 
   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)  
   const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))
   storeOptions.unshift({ value: '', label: 'Показать все' })
+
+  useEffect(() => {
+    if (userData.type === 2 && stores.length) setCurrentStore(userData.type === 2 && initSelect(storeOptions, userData.id))
+    dispatch(
+      getData({
+        ordering: `${sort}${sortColumn}`,
+        search: searchTerm,
+        page: currentPage,
+        perPage: rowsPerPage,
+        business_id: userData.type === 2 ? userData.id : currentStore.value
+      })
+    )
+  }, [stores.length])
+
 
   // ** Function in get data on page change
   const handlePagination = page => {
@@ -296,6 +296,7 @@ const RatingStoresList = ({users, stores}) => {
             <Col className='my-md-0 my-1' md='4'>
               <Label for='plan-select'>Заведение</Label>
               <Select
+                isDisabled={userData && userData.type === 2}
                 theme={selectThemeColors}
                 isClearable={false}
                 className='react-select'

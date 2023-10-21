@@ -2,6 +2,7 @@ import { Fragment } from 'react'
 import classnames from 'classnames'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
+import { appointmentsObj } from '../../../../configs/initial'
 import { Card, CardBody, Button, Input, Label } from 'reactstrap'
 import illustration from '@src/assets/images/pages/calendar-illustration.png'
 
@@ -80,7 +81,7 @@ const SidebarLeft = props => {
           )}
         </CardBody>
       </Card>
-      <div className='mb-0'>
+      <div className='mt-auto'>
         <img className='img-fluid' src={illustration} alt='illustration' />
       </div>
     </Fragment>
