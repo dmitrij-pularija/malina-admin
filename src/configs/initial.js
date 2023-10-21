@@ -63,3 +63,4 @@ export const feedsType = {
 
 export const BASE_URL = "https://malina-proxy.onrender.com"
 // export const BASE_URL = "http://167.99.246.103:8080"
+

@@ -86,7 +86,7 @@ return [
             onClick={() => store.dispatch(getData(row.id))}
           >
             <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-            <span>{ row.description ? row.description : "" }</span>
+            {/* <span>{ row.description ? row.description : "" }</span> */}
           </Link>
       </div>
     )
@@ -124,7 +124,7 @@ return [
   // },
   {
     name: 'Действия',
-    minWidth: '120px',
+    width: '120px',
     cell: row => (
       <div className='column-action'>
         <UncontrolledDropdown>
