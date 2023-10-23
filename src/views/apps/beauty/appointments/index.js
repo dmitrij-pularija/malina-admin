@@ -12,7 +12,7 @@ import { getAllUsers } from "../../user/store"
 import { getAllStores } from '../../food/stores/store'
 import { getAllMasters } from '../../user/masters/store'
 import { getAllServices } from '../services/services/store'
-import { getData, getAppointment, addAppointment, editAppointment, deleteAppointment } from './store'
+import { getData, getAppointment, addAppointment, editAppointment, deleteAppointment, selectEvent } from './store'
 // import { fetchEvents, selectEvent, updateEvent, updateFilter, updateAllFilters, addEvent, removeEvent } from './store'
 import Loading from '../../../../@core/components/spinner/Loading'
 import '@styles/react/apps/app-calendar.scss'
@@ -50,7 +50,7 @@ const CalendarComponent = () => {
   const [currentMaster, setCurrentMaster] = useState({ value: '', label: 'Не выбран' })
   const [selectedCalendars, setSelectedCalendars] = useState(filterValues)
   const [appointments, setAppointments] = useState([])
-  console.log(data)
+  // console.log(data)
   
   
   const [filtredMasters, setFiltredMasters] = useState([])
@@ -96,18 +96,29 @@ const CalendarComponent = () => {
     
   }
 
+  // const blankEvent = {
+  //   title: '',
+  //   start: '',
+  //   end: '',
+  //   allDay: false,
+  //   url: '',
+  //   extendedProps: {
+  //     calendar: '',
+  //     guests: [],
+  //     location: '',
+  //     description: ''
+  //   }
+  // }
+
   const blankEvent = {
-    title: '',
-    start: '',
-    end: '',
-    allDay: false,
-    url: '',
-    extendedProps: {
-      calendar: '',
-      guests: [],
-      location: '',
-      description: ''
-    }
+    appointment_user_account: '',
+    name: '',
+    phone: '',
+    appointment_master: '',
+    appointment_services: '',
+    appointment_time: '',
+    appointment_end_time: '',
+    comment: ''
   }
 
   const refetchEvents = () => {
@@ -188,7 +199,9 @@ const CalendarComponent = () => {
               dispatch={dispatch}
               blankEvent={blankEvent}
               calendarApi={calendarApi}
-              selectEvent={getAppointment}
+              selectEvent={selectEvent}
+              currentMaster={currentMaster}
+              getAppointment={getAppointment}
               updateEvent={editAppointment}
               toggleSidebar={toggleSidebar}
               calendarsColor={calendarsColor}
@@ -207,13 +220,14 @@ const CalendarComponent = () => {
       <AddEventSidebar
         users={users}
         masters={masters}
+        currentMaster={currentMaster}
         services={services}
         userData={userData}
         selectedAppointment={selectedAppointment}
         dispatch={dispatch}
         addEvent={addAppointment}
         open={addSidebarOpen}
-        selectEvent={getAppointment}
+        selectEvent={selectEvent}
         updateEvent={editAppointment}
         removeEvent={deleteAppointment}
         calendarApi={calendarApi}

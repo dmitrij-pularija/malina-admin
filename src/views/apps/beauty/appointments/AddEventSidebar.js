@@ -25,7 +25,7 @@ const defaultValues = {
   comment: ''
   }
 
-const requiredFields = ["guests", "name", "phone", "master", "startDate"]
+const requiredFields = ["guests", "name", "phone", "startDate"]
 
 const AddEventSidebar = props => {
   // ** Props
@@ -35,6 +35,7 @@ const AddEventSidebar = props => {
     masters,
     services,
     userData,
+    currentMaster,
     selectedAppointment,
     dispatch,
     addEvent,
@@ -46,7 +47,7 @@ const AddEventSidebar = props => {
     calendarsColor,
     handleAddEventSidebar
   } = props
-
+  if (open && !currentMaster.value) return toast.error('Вначале выберите специалиста!')
   // ** Vars & Hooks
   // const selectedEvent = selectedAppointment,
   //   {
@@ -95,7 +96,7 @@ const AddEventSidebar = props => {
   //   { value: 'Sandy Vega', label: 'Sandy Vega', avatar: img5 },
   //   { value: 'Cheryl May', label: 'Cheryl May', avatar: img6 }
   // ]
-
+  
   // const filtredMasters = masters.filter(master => parseInt(master.master_business) === parseInt(store)) 
   const masterOptions = masters.map(master => ({
     value: String(master.id),
@@ -109,8 +110,13 @@ const AddEventSidebar = props => {
     avatar: user.avatar
   })) 
 
-  
-  const servicesOptions = services.map(service => ({
+  const filtredServices = services && services.length && currentMaster.value ? services.filter(service => {
+    return service.beauty_service_masters.some(master => parseInt(master.id) === parseInt(currentMaster.value))
+  }) : []
+  // console.log(servicesMastersList)
+
+  // const filtredMasters = masters.filter(master => parseInt(master.master_business) === parseInt(store)) 
+  const servicesOptions = filtredServices.map(service => ({
     value: String(service.id),
     label: service.beauty_service_name
   })) 
@@ -125,7 +131,7 @@ const AddEventSidebar = props => {
   //     </components.Option>
   //   )
   // }
-  const servicesList = selectedAppointment ? selectedAppointment.appointment_services.map(service => parseInt(service.id)) : []
+  const servicesList = selectedAppointment && selectedAppointment.appointment_user_account ? selectedAppointment.appointment_services.map(service => parseInt(service.id)) : []
 
   const values = selectedAppointment ? {
     guests: selectedAppointment.appointment_user_account ? initSelect(guestsOptions, selectedAppointment.appointment_user_account.id) : '',
@@ -136,7 +142,7 @@ const AddEventSidebar = props => {
     startDate: selectedAppointment.appointment_time ? formatDataTime(selectedAppointment.appointment_time) : '',
     endDate: selectedAppointment.appointment_end_time ? formatDataTime(selectedAppointment.appointment_end_time) : '',
     comment: selectedAppointment.comment ? selectedAppointment.comment : ''
-  } : {...defaultValues, guests: userData.type === 1 ? initSelect(guestsOptions, userData.id) : "", master: userData.type === 4 ? initSelect(masterOptions, userData.id) : "", name: userData.type === 1 ? userData.name : "", phone: userData.type === 1 ? userData.login : ""}
+  } : {...defaultValues, guests: userData.type === 1 ? initSelect(guestsOptions, userData.id) : "", master: userData.type === 4 ? initSelect(masterOptions, userData.id) : initSelect(masterOptions, currentMaster.value), name: userData.type === 1 ? userData.name : "", phone: userData.type === 1 ? userData.login : ""}
 
   const {
     reset,
@@ -160,43 +166,43 @@ const AddEventSidebar = props => {
   }
 
   // ** Adds New Event
-  const handleAddEvent = () => {
-    const obj = {
-      title: getValues('title'),
-      start: startPicker,
-      end: endPicker,
-      allDay,
-      display: 'block',
-      extendedProps: {
-        calendar: calendarLabel[0].label,
-        url: url.length ? url : undefined,
-        guests: guests.length ? guests : undefined,
-        location: location.length ? location : undefined,
-        desc: desc.length ? desc : undefined
-      }
-    }
-    dispatch(addEvent(obj))
-    refetchEvents()
-    handleAddEventSidebar()
-    toast.success('Event Added')
-  }
+  // const handleAddEvent = () => {
+  //   const obj = {
+  //     title: getValues('title'),
+  //     start: startPicker,
+  //     end: endPicker,
+  //     allDay,
+  //     display: 'block',
+  //     extendedProps: {
+  //       calendar: calendarLabel[0].label,
+  //       url: url.length ? url : undefined,
+  //       guests: guests.length ? guests : undefined,
+  //       location: location.length ? location : undefined,
+  //       desc: desc.length ? desc : undefined
+  //     }
+  //   }
+  //   dispatch(addEvent(obj))
+  //   refetchEvents()
+  //   handleAddEventSidebar()
+  //   toast.success('Event Added')
+  // }
 
   // ** Reset Input Values on Close
-  const handleResetInputValues = () => {
-    dispatch(selectEvent({}))
-    setValue('title', '')
-    setAllDay(false)
-    setUrl('')
-    setLocation('')
-    setDesc('')
-    setGuests({})
-    setCalendarLabel([{ value: 'Business', label: 'Business', color: 'primary' }])
-    setStartPicker(new Date())
-    setEndPicker(new Date())
-  }
+  // const handleResetInputValues = () => {
+  //   dispatch(selectEvent({}))
+  //   setValue('title', '')
+  //   setAllDay(false)
+  //   setUrl('')
+  //   setLocation('')
+  //   setDesc('')
+  //   setGuests({})
+  //   setCalendarLabel([{ value: 'Business', label: 'Business', color: 'primary' }])
+  //   setStartPicker(new Date())
+  //   setEndPicker(new Date())
+  // }
 
   // ** Set sidebar fields
-  const handleSelectedEvent = () => {
+  // const handleSelectedEvent = () => {
     // if (!isObjEmpty(selectedEvent)) {
     //   const calendar = selectedEvent.extendedProps.calendar
 
@@ -217,7 +223,7 @@ const AddEventSidebar = props => {
     //   setEndPicker(selectedEvent.allDay ? new Date(selectedEvent.start) : new Date(selectedEvent.end))
     //   setCalendarLabel([resolveLabel()])
     // }
-  }
+  // }
 
   // ** (UI) updateEventInCalendar
   const updateEventInCalendar = (updatedEventData, propsToUpdate, extendedPropsToUpdate) => {
@@ -284,19 +290,19 @@ const AddEventSidebar = props => {
   const removeEventInCalendar = eventId => {
     calendarApi.getEventById(eventId).remove()
   }
-
-  const handleDeleteEvent = () => {
-    dispatch(removeEvent(selectedEvent.id))
-    removeEventInCalendar(selectedEvent.id)
-    handleAddEventSidebar()
-    toast.error('Event Removed')
-  }
-
   const handleClose = () => {
     for (const key in defaultValues) setValue(key, "")
     handleAddEventSidebar()
     reset({ ...defaultValues })
-  }  
+    dispatch(selectEvent({}))
+  } 
+
+  const handleDeleteEvent = () => {
+    dispatch(removeEvent(selectedAppointment.id))
+    removeEventInCalendar(selectedAppointment.id)
+    handleClose()
+    toast.error('Запись удалена')
+  }
 
   const onSubmit = (data) => {
     // console.log(data)
@@ -309,10 +315,10 @@ const AddEventSidebar = props => {
       if (data.phone) newData.phone = data.phone
       if (data.comment) newData.comment = data.comment
       if (data.startDate) newData.appointment_time = formatDataTimeSave(data.startDate).toString()
-      if (data.endDate) newData.appointment_end_time = formatDataTimeSave(data.endDate).toString()
+      // if (data.endDate) newData.appointment_end_time = formatDataTimeSave(data.endDate).toString()
       if (servicesValues) newData.appointment_services = servicesValues
       
-      if (selectedAppointment) {
+      if (selectedAppointment && selectedAppointment.appointment_user_account) {
         dispatch(updateEvent({ id: selectedAppointment.id, appointment: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
         dispatch(addEvent({ appointment: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
@@ -373,12 +379,13 @@ const AddEventSidebar = props => {
     >
       <ModalHeader className='mb-1' toggle={handleAddEventSidebar} close={CloseBtn} tag='div'>
         <h5 className='modal-title'>
-          {selectedAppointment ? 'Редактировать' : 'Добавить'} запись
+          {selectedAppointment && selectedAppointment.appointment_user_account ? 'Редактировать' : 'Добавить'} запись
         </h5>
       </ModalHeader>
       <PerfectScrollbar options={{ wheelPropagation: false }}>
         <ModalBody className='flex-grow-1 pb-sm-0 pb-3'>
         <Form onSubmit={handleSubmit(onSubmit)}>
+        
             <div className='mb-1'>
               <Label className='form-label' for='guests'>
                 Клиент<span className='text-danger'>*</span>
@@ -407,7 +414,7 @@ const AddEventSidebar = props => {
               )}
               />
               {errors && errors.guests && (
-                <FormFeedback>Пожалуйста клиента</FormFeedback>
+                <FormFeedback>Пожалуйста выберите клиента</FormFeedback>
               )} 
             </div>
 
@@ -440,10 +447,10 @@ const AddEventSidebar = props => {
                 )}
               />
                 {errors && errors.phone && (
-                <FormFeedback>Пожалуйста введите елефон</FormFeedback>
+                <FormFeedback>Пожалуйста введите телефон</FormFeedback>
               )} 
             </div>
-            <div className='mb-1'>
+            {/* <div className='mb-1'>
               <Label className='form-label' for='master'>
                 Специалист<span className='text-danger'>*</span>
               </Label>
@@ -472,33 +479,8 @@ const AddEventSidebar = props => {
               {errors && errors.master && (
                 <FormFeedback>Пожалуйста выберите специалиста</FormFeedback>
               )} 
-            </div>
-            <div className='mb-1'>
-              <Label className='form-label' for='services'>
-               Услуга<span className='text-danger'>*</span>
-              </Label>
-              <Controller
-                  name="services"
-                  control={control}
-                  rules={{ required: true }}
-                  render={({ field }) => (
-              <Select
-                isMulti
-                id='services'
-                className='react-select'
-                classNamePrefix='select'
-                isClearable={false}
-                options={servicesOptions}
-                placeholder="Выберите услугу"
-                theme={selectThemeColors}
-                {...field}
-              />
-              )}
-              />
-              {errors && errors.services && (
-                <FormFeedback>Пожалуйста выберите услугу</FormFeedback>
-              )} 
-            </div>
+            </div> */}
+            
 
             <div className='mb-1'>
               <Label className='form-label' for='startDate'>
@@ -543,6 +525,7 @@ const AddEventSidebar = props => {
               <Flatpickr
                 required
                 id='endDate'
+                disabled={true}
                 // tag={Flatpickr}
                 name='endDate'
                 className='form-control'
@@ -558,6 +541,32 @@ const AddEventSidebar = props => {
               />
               {errors && errors.endDate && (
               <FormFeedback>Пожалуйста выберите время окончания</FormFeedback>
+              )} 
+            </div>
+            <div className='mb-1'>
+              <Label className='form-label' for='services'>
+               Услуга<span className='text-danger'>*</span>
+              </Label>
+              <Controller
+                  name="services"
+                  control={control}
+                  rules={{ required: true }}
+                  render={({ field }) => (
+              <Select
+                isMulti
+                id='services'
+                className='react-select'
+                classNamePrefix='select'
+                isClearable={false}
+                options={servicesOptions}
+                placeholder="Выберите услугу"
+                theme={selectThemeColors}
+                {...field}
+              />
+              )}
+              />
+              {errors && errors.services && (
+                <FormFeedback>Пожалуйста выберите услугу</FormFeedback>
               )} 
             </div>
             <div className='mb-1'>
@@ -586,10 +595,10 @@ const AddEventSidebar = props => {
             <div className='d-flex mb-1'>
             <Fragment>
              <Button className='me-1' type='submit' color='primary'>
-               {selectedAppointment ? "Изменить" : "Добавить"}
+               {selectedAppointment && selectedAppointment.appointment_user_account ? "Изменить" : "Добавить"}
              </Button>
-             <Button color='secondary' type='reset' onClick={handleClose} outline>
-               Отменить
+             <Button color='secondary' type='reset' onClick={selectedAppointment && selectedAppointment.appointment_user_account ? handleDeleteEvent : handleClose} outline>
+               {selectedAppointment && selectedAppointment.appointment_user_account ? "Удалить" : "Отменить" }
              </Button>
             </Fragment>
             </div>

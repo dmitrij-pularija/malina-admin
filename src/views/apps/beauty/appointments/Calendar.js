@@ -14,6 +14,7 @@ import i18next from 'i18next'
 import toast from 'react-hot-toast'
 import { Menu } from 'react-feather'
 import { Card, CardBody } from 'reactstrap'
+import { formatDataTimeSave } from '@utils'
 // import { appointmentsObj } from '../../../../configs/initial'
 // import { formatTimeSave } from '@utils'
 
@@ -33,6 +34,8 @@ const Calendar = props => {
     blankEvent,
     toggleSidebar,
     selectEvent,
+    currentMaster,
+    getAppointment,
     updateEvent
   } = props
 
@@ -108,8 +111,7 @@ const Calendar = props => {
     },
 
     eventClick({ event: clickedEvent }) {
-      // console.log(clickedEvent)
-      dispatch(selectEvent(clickedEvent._def.publicId))
+      dispatch(getAppointment(clickedEvent._def.publicId))
       handleAddEventSidebar()
 
       // * Only grab required field otherwise it goes in infinity loop
@@ -130,11 +132,14 @@ const Calendar = props => {
     },
 
     dateClick(info) {
+      if (currentMaster && currentMaster.value) {
       const ev = blankEvent
-      ev.start = info.date
-      ev.end = info.date
-      // dispatch(selectEvent(ev))
+      ev.appointment_master = currentMaster.value
+      ev.appointment_time = formatDataTimeSave(info.date).toString()
+      ev.appointment_end_time = formatDataTimeSave(info.date).toString()
+      dispatch(selectEvent(ev))
       handleAddEventSidebar()
+      } else toast.error('Вначале выберите специалиста!')
     },
 
     /*

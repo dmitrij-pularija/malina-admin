@@ -129,7 +129,11 @@ export const appBeautyAppointmentsSlice = createSlice({
     error: null,
     selectedAppointment: null
   },
-  reducers: {},
+  reducers: {
+    selectEvent: (state, action) => {
+      state.selectedAppointment = action.payload
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(getData.fulfilled, (state, action) => {
@@ -169,5 +173,7 @@ export const appBeautyAppointmentsSlice = createSlice({
       .addCase(updateAppointment.fulfilled, handleFulfilled)
   }
 })
+
+export const { selectEvent } = appBeautyAppointmentsSlice.actions
 
 export default appBeautyAppointmentsSlice.reducer
