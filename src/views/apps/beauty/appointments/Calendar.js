@@ -14,7 +14,8 @@ import i18next from 'i18next'
 import toast from 'react-hot-toast'
 import { Menu } from 'react-feather'
 import { Card, CardBody } from 'reactstrap'
-import { appointmentsObj } from '../../../../configs/initial'
+// import { appointmentsObj } from '../../../../configs/initial'
+// import { formatTimeSave } from '@utils'
 
 const Calendar = props => {
   // ** Refs
@@ -22,7 +23,7 @@ const Calendar = props => {
   const [currentLanguage, setCurrentLanguage] = useState(i18next.language === 'en' ? enLocale : ruLocale)
   // ** Props
   const {
-    store,
+    data,
     isRtl,
     dispatch,
     calendarsColor,
@@ -48,17 +49,24 @@ const Calendar = props => {
     return () => i18next.off('languageChanged', handleLanguageChange)
   }, [])
 
+  const dataEvents = data && data.length ? data.map(event => ({id: event.id, title: `${event.appointment_services ? event.appointment_services.map(service => service.beauty_service_name).join(', ') : ''} | ${event.name} | ${event.phone}`, start: event.appointment_time, end: event.appointment_end_time, extendedProps: { calendar: event.appointment_status }})) : []
+// const dataEvents = data && data.length ? data.map(event => ({id: event.id, title: `${formatTimeSave(event.appointment_time)} - ${formatTimeSave(event.appointment_end_time)} <br> ${event.appointment_services ? event.appointment_services.map(service => service.beauty_service_name).join(', ') : ''} <br> ${event.name} | ${event.phone}`, start: event.appointment_time, end: event.appointment_end_time})) : []
 
-  // ** calendarOptions(Props)
+// ** calendarOptions(Props)
   const calendarOptions = {
-    // events: store.events.length ? store.events : [],
+    events: dataEvents,
     plugins: [interactionPlugin, dayGridPlugin, timeGridPlugin, listPlugin],
     initialView: 'dayGridMonth',
     headerToolbar: {
       start: 'sidebarToggle, prev,next, title',
       end: 'dayGridMonth,timeGridWeek,timeGridDay,listMonth'
     },
-    // locale: {ruLocale},
+    // eventDidMount(info) {
+    //   info.el.title = info.event.title
+    //   if (info.event.description) {
+    //     info.el.innerHTML += `<br>${info.event.description}`
+    //   }
+    // },
     /*
       Enable dragging and resizing event
       ? Docs: https://fullcalendar.io/docs/editable
@@ -100,7 +108,8 @@ const Calendar = props => {
     },
 
     eventClick({ event: clickedEvent }) {
-      dispatch(selectEvent(clickedEvent))
+      // console.log(clickedEvent)
+      dispatch(selectEvent(clickedEvent._def.publicId))
       handleAddEventSidebar()
 
       // * Only grab required field otherwise it goes in infinity loop
@@ -156,7 +165,14 @@ const Calendar = props => {
   return (
     <Card className='shadow-none border-0 mb-0 rounded-0'>
       <CardBody className='pb-0'>
-        <FullCalendar locale={currentLanguage} {...calendarOptions} />{' '}
+        <FullCalendar 
+        // eventContent={(info) => {
+        //   const title = info.event.title
+        //   return { html: `<div>${title}</div>` }
+        // }}
+        locale={currentLanguage} 
+        {...calendarOptions} 
+        />{' '}
       </CardBody>
     </Card>
   )

@@ -19,9 +19,9 @@ export const statusObj = {
 
 export const appointmentsObj = {
   pending: { label: 'Новая', colorName: 'light-warning' },
-  fulfilled: { label: 'Подтверждена',  colorName: 'light-primary' },
-  success: { label: 'Посещена', colorName: 'light-success' },
-  rejected: { label: 'Отменен', colorName: 'light-danger' }
+  confirmed: { label: 'Подтверждена',  colorName: 'light-info' },
+  comment: { label: 'Посещена', colorName: 'light-success' },
+  cancelled: { label: 'Отменен', colorName: 'light-danger' }
 }
 
 export const logoSize = {
@@ -63,4 +63,3 @@ export const feedsType = {
 
 export const BASE_URL = "https://malina-proxy.onrender.com"
 // export const BASE_URL = "http://167.99.246.103:8080"
-

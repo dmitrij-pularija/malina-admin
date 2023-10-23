@@ -89,6 +89,10 @@ export const formatData = (value) => {
   return value ? new Date(value).toLocaleDateString('ru-Ru') : ""
 }
 
+export const formatDataTime = (value) => {
+  return value ? new Date(value).toLocaleString('ru-Ru') : ""
+}
+
 export const formatTimeSave = (value) => {
   const date = new Date(value)
   const hours = String(date.getHours()).padStart(2, '0')
@@ -119,6 +123,25 @@ const month = String(valueData.getMonth() + 1).padStart(2, '0')
 const day = String(valueData.getDate()).padStart(2, '0')
 return `${year}-${month}-${day}`
 }
+
+export const formatDataTimeSave = (value) => {
+  let valueData
+  if (typeof value === 'string') {
+    const [datePart, timePart] = value.split(', ')
+    const [day, month, year] = datePart.split('.').map(Number)
+    const [hours, minutes, seconds] = timePart.split(':').map(Number)
+    valueData = new Date(year, month - 1, day, hours, minutes, seconds)
+  } else {
+    valueData = new Date(value)
+  }
+ 
+  const year = valueData.getFullYear()
+  const month = String(valueData.getMonth() + 1).padStart(2, '0')
+  const day = String(valueData.getDate()).padStart(2, '0')
+  const hours = String(valueData.getHours()).padStart(2, '0')
+  const minutes = String(valueData.getMinutes()).padStart(2, '0')
+  return `${year}-${month}-${day}T${hours}:${minutes}`
+  }
 
 export const formatNumber = (value) => {
   const formattedNumber = Number(value).toLocaleString('ru', {

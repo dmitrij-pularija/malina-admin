@@ -44,16 +44,15 @@ const renderClient = (user) => {
 const columns = [
   {
     name: "Дата",
-    width: "120px",
+    width: "130px",
     sortable: true,
     sortField: "date",
     selector: (row) => row.date,
     cell: (row) => (
       <div className="d-flex flex-column">
         <span className="fw-bolder">{formatData(row.appointment_time)}</span>
-        <span>
-          {formatTimeSave(row.appointment_time)} -{" "}
-          {formatTimeSave(row.appointment_end_time)}
+        <span className="text-capitalize">
+          {formatTimeSave(row.appointment_time)} - {formatTimeSave(row.appointment_end_time)}
         </span>
       </div>
     )
@@ -67,7 +66,7 @@ const columns = [
     cell: (row) => (
       <span className="text-capitalize">
         {row.appointment_services
-          .map((service) => service.beauty_service_category.category_name)
+          .map((service) => service.beauty_service_name)
           .join(" ")}
       </span>
     )

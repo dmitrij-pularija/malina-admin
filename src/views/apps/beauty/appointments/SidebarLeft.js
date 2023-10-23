@@ -6,13 +6,20 @@ import { appointmentsObj } from '../../../../configs/initial'
 import { Card, CardBody, Button, Input, Label } from 'reactstrap'
 import illustration from '@src/assets/images/pages/calendar-illustration.png'
 
-const renderFilters = masters => {
- return masters ? masters.map(master => ({ id: master.id, label: `${master.master_name} ${master.surname ? master.surname : ''}`})) : []
-}
+// const renderFilters = masters => {
+//  return masters ? masters.map(master => ({ id: master.id, label: `${master.master_name} ${master.surname ? master.surname : ''}`})) : []
+// }
+
+// const filters = [
+//   { id: 1, value: 'pending', label: 'Новая', color: 'warning', className: 'form-check-warning mb-1' },
+//   { id: 2, value: 'confirmed', label: 'Подтверждена', color: 'primary', className: 'form-check-primary mb-1' },
+//   { id: 3, value: 'comment', label: 'Посещена', color: 'success', className: 'form-check-success mb-1' },
+//   { id: 4, value: 'cancelled', label: 'Отменен', color: 'danger', className: 'form-check-danger mb-1' }
+// ]
 
 const SidebarLeft = props => {
-  const { masters, currentStore, storeOptions, handleStoreChange, updateFilter, updateAllFilters, userData, selectedMasters } = props
-  const filters = renderFilters(masters)
+  const { filters, selectedCalendars, currentMaster, masterOptions, handleMasterChange, currentStore, storeOptions, handleStoreChange, updateFilter, updateAllFilters, userData, selectedMasters } = props
+  // const filters = renderFilters(masters)
 
   return (
     <Fragment>
@@ -20,6 +27,7 @@ const SidebarLeft = props => {
         <CardBody className='card-body d-flex flex-column my-sm-0 mb-3'>
               <Label for='plan-select'>Заведение</Label>
               <Select
+                name='plan-select'
                 theme={selectThemeColors}
                 isClearable={false}
                 isDisabled={userData && userData.type === 2}
@@ -28,25 +36,39 @@ const SidebarLeft = props => {
                 options={storeOptions}
                 value={currentStore}
                 onChange={handleStoreChange}
+                placeholder="Не выбрано"
+              />
+        </CardBody>
+        <CardBody className='card-body d-flex flex-column my-sm-0 mb-3'>
+              <Label for='master-select'>Специалист</Label>
+              <Select
+                theme={selectThemeColors}
+                name='master-select'
+                isClearable={false}
+                isDisabled={!currentStore.value}
+                className='react-select'
+                classNamePrefix='select'
+                options={masterOptions}
+                value={currentMaster}
+                onChange={handleMasterChange}
+                placeholder="Не выбран"
               />
         </CardBody>
         <CardBody>
           <h5 className='section-label mb-1'>
-            <span className='align-middle'>Специалисты</span>
+            <span className='align-middle'>Записи</span>
           </h5>
-          {masters.length ? (
-          <>
           <div className='form-check mb-1'>
             <Input
               id='view-all'
               type='checkbox'
               label='View All'
               className='select-all'
-              checked={masters.length === selectedMasters.length}
+              checked={selectedCalendars.length === filters.length}
               onChange={e => updateAllFilters(e.target.checked)}
             />
             <Label className='form-check-label' for='view-all'>
-              Показать всех
+              Показать все
             </Label>
           </div>
           <div className='calendar-events-filter'>
@@ -55,7 +77,9 @@ const SidebarLeft = props => {
                 return (
                   <div
                     key={`${filter.id}-key`}
-                    className='form-check form-check-primary mb-1'
+                    className={classnames('form-check', {
+                      [filter.className]: filter.className
+                    })}
                   >
                     <Input
                       type='checkbox'
@@ -63,8 +87,8 @@ const SidebarLeft = props => {
                       label={filter.label}
                       className='input-filter'
                       id={`${filter.id}-event`}
-                      checked={selectedMasters.includes(filter.id)}
-                      onChange={() => updateFilter(filter.id)}
+                      checked={selectedCalendars.includes(filter.value)}
+                      onChange={() => updateFilter(filter.value)}
                     />
                     <Label className='form-check-label' for={`${filter.id}-event`}>
                       {filter.label}
@@ -73,12 +97,6 @@ const SidebarLeft = props => {
                 )
               })}
           </div>
-          </>
-          ) : (
-              <h5 className='section-label mt-3'>
-              <span className='align-middle'>не выбраны</span>
-              </h5>
-          )}
         </CardBody>
       </Card>
       <div className='mt-auto'>

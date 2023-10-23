@@ -46,7 +46,8 @@ const UserDropdown = () => {
   }
 
   //** Vars
-  const userAvatar = (userData && userData.avatar && userData.avatar.includes("http")) || defaultAvatar
+  const userAvatar = userData && userData.avatar && userData.avatar.includes("http") ? userData.avatar : defaultAvatar
+  
   return (
     <UncontrolledDropdown tag='li' className='dropdown-user nav-item'>
       <DropdownToggle href='/' tag='a' className='nav-link dropdown-user-link' onClick={e => e.preventDefault()}>

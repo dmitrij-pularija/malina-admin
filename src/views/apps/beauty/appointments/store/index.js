@@ -50,7 +50,7 @@ export const getAllAppointments = createAsyncThunk('appBeautyAppointments/getAll
 
 export const getData = createAsyncThunk('appBeautyAppointments/getData', async params => {
   try {
-  const response = await axios.get('/beauty/beauty_appointments/', { params })
+  const response = await axios.get("/beauty/beauty_appointments/", { params })
   return {
     params,
     data: response.data.results,
@@ -72,29 +72,12 @@ export const getAppointment = createAsyncThunk('appBeautyAppointments/getAppoint
 }
 })
 
-export const addAppointment = createAsyncThunk('appBeautyAppointments/addAppointment', async ({ product, galery }, { dispatch, getState }) => {
-  const count = galery ? galery.length : 0
+export const addAppointment = createAsyncThunk('appBeautyAppointments/addAppointment', async ({ appointment }, { dispatch, getState }) => {
   try {
-  const { data: { id } } = await axios.post('/beauty/beauty_appointments/', product)
-  for (let i = 0; i < count; i += 1) {
-  if (galery && galery.length && galery[i].image.startsWith('data:image')) {
-    const formDataImage = new FormData()
-    const formDataProductImage = new FormData()
-    const imageBlob = dataURLtoBlob(galery[i].image)
-    formDataImage.append('image', imageBlob, 'product.jpg')
-    try {
-    const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-    formDataProductImage.append('beauty_product', id)
-    formDataProductImage.append('image', image)
-      await axios.post(`/beauty/beauty-product-images/`, formDataProductImage)
-    } catch (error) {
-      errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
-    }
-    }
-  }
-
+  await axios.post('/beauty/beauty_appointments/', appointment)  
   await dispatch(getData(getState().appointments.params))
-  return product
+  return appointment
+
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
@@ -113,38 +96,21 @@ export const deleteAppointment = createAsyncThunk('appBeautyAppointments/deleteA
 }
 })
 
-export const editAppointment = createAsyncThunk('appBeautyAppointments/editAppointment', async ({ id, product, galery }, { dispatch, getState }) => {
-  const count = galery ? galery.length : 0
-  for (let i = 0; i < count; i += 1) {
-    const formDataImage = new FormData()
-    const formDataProductImage = new FormData()
-    if (galery && galery.length && galery[i].image.startsWith('data:image')) {
-      const imageBlob = dataURLtoBlob(galery[i].image)
-      formDataImage.append('image', imageBlob, 'product.jpg')
-      }
-      try {
-        const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
-        formDataProductImage.append('beauty_product', id)
-        formDataProductImage.append('image', image)
-          await axios.post(`/beauty/beauty-product-images/`, formDataProductImage)
-        } catch (error) {
-          errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
-        }  
-    }
+export const editAppointment = createAsyncThunk('appBeautyAppointments/editAppointment', async ({ id, appointment}, { dispatch, getState }) => {
   try {
-  await axios.patch(`/beauty/beauty_appointments/${id}/`, product)
+  await axios.patch(`/beauty/beauty_appointments/${id}/`, appointment)
   await dispatch(getData(getState().appointments.params))
-  return product
+  return appointment
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
   return thunkAPI.rejectWithValue(error)
 }
 })
 
-export const updateAppointment = createAsyncThunk('appBeautyAppointments/Appointment', async ({ id, product }, { dispatch, getState }) => {
+export const updateAppointment = createAsyncThunk('appBeautyAppointments/Appointment', async ({ id, appointment }, { dispatch, getState }) => {
   
   try {
-  await axios.patch(`/beauty/beauty_appointments/${id}/`, { ...product })
+  await axios.patch(`/beauty/beauty_appointments/${id}/`, { ...appointment })
   await dispatch(getAppointment(id))
 } catch (error) {
   errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)

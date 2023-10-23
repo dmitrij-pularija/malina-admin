@@ -8,33 +8,51 @@ import SidebarLeft from './SidebarLeft'
 import AddEventSidebar from './AddEventSidebar'
 import { useRTL } from '@hooks/useRTL'
 import { initSelect } from '@utils'
-import { getAllMasters } from '../../user/masters/store'
+import { getAllUsers } from "../../user/store"
 import { getAllStores } from '../../food/stores/store'
+import { getAllMasters } from '../../user/masters/store'
+import { getAllServices } from '../services/services/store'
 import { getData, getAppointment, addAppointment, editAppointment, deleteAppointment } from './store'
 // import { fetchEvents, selectEvent, updateEvent, updateFilter, updateAllFilters, addEvent, removeEvent } from './store'
 import Loading from '../../../../@core/components/spinner/Loading'
 import '@styles/react/apps/app-calendar.scss'
 
 const calendarsColor = {
-  Business: 'primary',
-  Holiday: 'success',
-  Personal: 'danger',
-  Family: 'warning',
-  ETC: 'info'
+  pending: 'warning',
+  confirmed: 'info',
+  comment: 'success',
+  cancelled: 'danger'
 }
+
+const filters = [
+  { id: 1, value: 'pending', label: 'Новая', color: 'warning', className: 'form-check-warning mb-1' },
+  { id: 2, value: 'confirmed', label: 'Подтверждена', color: 'info', className: 'form-check-info mb-1' },
+  { id: 3, value: 'comment', label: 'Посещена', color: 'success', className: 'form-check-success mb-1' },
+  { id: 4, value: 'cancelled', label: 'Отменен', color: 'danger', className: 'form-check-danger mb-1' }
+]
+
+const filterValues = filters.map(filter => filter.value)
 
 const CalendarComponent = () => {
   const dispatch = useDispatch()
   const { userData } = useSelector(state => state.auth)
+  const users = useSelector(state => state.users.allUsers)
   const stores = useSelector(state => state.stores.allStores)
   const masters = useSelector(state => state.masters.allMasters)
+  const services = useSelector(state => state.services.allServices)
   const {data, selectedAppointment, loading} = useSelector(state => state.appointments)
   const [calendarApi, setCalendarApi] = useState(null)
   const [addSidebarOpen, setAddSidebarOpen] = useState(false)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
   const [isRtl] = useRTL()
 
-  const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
+  const [currentStore, setCurrentStore] = useState({ value: '', label: 'Не выбрано' })
+  const [currentMaster, setCurrentMaster] = useState({ value: '', label: 'Не выбран' })
+  const [selectedCalendars, setSelectedCalendars] = useState(filterValues)
+  const [appointments, setAppointments] = useState([])
+  console.log(data)
+  
+  
   const [filtredMasters, setFiltredMasters] = useState([])
   const [selectedMasters, setSelectedMasters] = useState([])
 
@@ -46,26 +64,34 @@ const CalendarComponent = () => {
     return filtredMasters.map(master => parseInt(master.id))
   }
   const handleStoreChange = data => {
+    setCurrentMaster({ value: '', label: 'Не выбран' })
     setSelectedMasters([])
     setCurrentStore(data)
     setFiltredMasters(masters.filter(master => parseInt(master.master_business) === parseInt(data.value)))
     setSelectedMasters(masterIds(data.value))
   }
 
+  const handleMasterChange = data => {
+    setCurrentMaster(data)
+  }
+
   const updateAllFilters = value => {
     if (value === true) {
-      setSelectedMasters(filtredMasters.map(master => parseInt(master.id)))
+      setSelectedCalendars(filterValues)
+      // setSelectedMasters(filtredMasters.map(master => parseInt(master.id)))
     } else {
-      setSelectedMasters([])
+      setSelectedCalendars([])
+      // setSelectedMasters([])
     }
   }
 
   const updateFilter = value => {
-    if (selectedMasters.includes(parseInt(value))) {
-    const filtredMasters = selectedMasters.filter(master => parseInt(master) !== parseInt(value))
-    setSelectedMasters(filtredMasters)   
+    if (selectedCalendars.includes(value)) {
+     const filtredCalendars = selectedCalendars.filter(calendar => calendar !== value)  
+    // const filtredMasters = selectedMasters.filter(master => parseInt(master) !== parseInt(value))
+    setSelectedCalendars(filtredCalendars)   
     } else {
-      setSelectedMasters([...selectedMasters, parseInt(value)])
+      setSelectedCalendars([...selectedCalendars, value])
     }
     
   }
@@ -89,6 +115,12 @@ const CalendarComponent = () => {
       calendarApi.refetchEvents()
     }
   }
+  // const filtredMasters = masters.filter(master => parseInt(master.master_business) === parseInt(store)) 
+  const masterOptions = filtredMasters.map(master => ({
+    value: String(master.id),
+    label: master.master_name ? `${master.master_name} ${master.surname ? master.surname : ''}` : master.login,
+    avatar: master.master_profile_picture
+  }))
 
   const filtredStore = stores.filter(store => parseInt(store.business_type) === 2)
   const storeOptions = filtredStore.map(store => ({
@@ -98,9 +130,20 @@ const CalendarComponent = () => {
   storeOptions.unshift({ value: '', label: 'Показать все' }) 
 
   useEffect(() => {
+    if (!users.length) dispatch(getAllUsers())
     if (!stores.length) dispatch(getAllStores())
-    if (!masters.length) dispatch(getAllMasters())  
+    if (!masters.length) dispatch(getAllMasters())
+    if (!services.length) dispatch(getAllServices())
   }, [])
+
+  useEffect(() => {
+    dispatch(getData(currentMaster.value))
+  }, [currentMaster.value])
+
+  useEffect(() => {
+  const filtredAppointments = data.filter(item => selectedCalendars.includes(item.appointment_status) && parseInt(item.appointment_master) === parseInt(currentMaster.value))  
+  setAppointments(filtredAppointments)
+}, [data.length, selectedCalendars, currentMaster.value])
 
   useEffect(() => {
     if (userData.type === 2 && stores.length) {
@@ -122,9 +165,13 @@ const CalendarComponent = () => {
             })}
           >
             <SidebarLeft
-              masters={filtredMasters}
+              filters={filters}
+              selectedCalendars={selectedCalendars}
               userData={userData}
-              appointments={data}
+              appointments={appointments}
+              currentMaster={currentMaster}
+              masterOptions={masterOptions}
+              handleMasterChange={handleMasterChange}
               selectedMasters={selectedMasters}
               currentStore={currentStore}
               storeOptions={storeOptions}
@@ -136,6 +183,7 @@ const CalendarComponent = () => {
           <Col className='position-relative'>
             <Calendar
               isRtl={isRtl}
+              data={appointments}
               // store={store}
               dispatch={dispatch}
               blankEvent={blankEvent}
@@ -156,7 +204,11 @@ const CalendarComponent = () => {
           ></div>
         </Row>
       </div>
-      {/* <AddEventSidebar
+      <AddEventSidebar
+        users={users}
+        masters={masters}
+        services={services}
+        userData={userData}
         selectedAppointment={selectedAppointment}
         dispatch={dispatch}
         addEvent={addAppointment}
@@ -169,7 +221,7 @@ const CalendarComponent = () => {
         calendarsColor={calendarsColor}
         handleAddEventSidebar={handleAddEventSidebar}
       />
-      <Loading />  */}
+      <Loading /> 
     </Fragment>
   )
 }

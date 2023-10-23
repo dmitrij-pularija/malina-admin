@@ -146,7 +146,7 @@ return [
           > */}
           <div className='text-body d-flex flex-column' >
             <span className='fw-bolder'>{row.beauty_service_name ? row.beauty_service_name : "" }</span>
-            <span >{row.beauty_service_description ? row.beauty_service_description : "" }</span>
+            {/* <span >{row.beauty_service_description ? row.beauty_service_description : "" }</span> */}
           </div>  
           {/* </Link> */}
       </div>

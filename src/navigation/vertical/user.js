@@ -1,4 +1,4 @@
-import { Grid, Clipboard, FileText, Command, Award, Circle, ShoppingCart, Users, ShoppingBag } from 'react-feather'
+import { Grid, Calendar, Clipboard, FileText, Command, Award, Circle, ShoppingCart, Users, ShoppingBag } from 'react-feather'
 
 export default [
   {
@@ -9,6 +9,12 @@ export default [
     title: 'Orders',
     icon: <ShoppingCart size={20} />,
     navLink: '/apps/beauty/orders/list'
+  },
+  {
+    id: 'beautyAppointments',
+    title: 'Appointments',
+    icon: <Calendar size={20} />,
+    navLink: '/apps/beauty/appointments'
   },
   {
     id: 'feedbackBeauty',
