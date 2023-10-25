@@ -16,7 +16,7 @@ const UserTabs = ({ active, toggleTab, score }) => {
             <span className='fw-bold'>История заказов</span>
           </NavLink>
         </NavItem>
-        <NavItem>
+        {/* <NavItem>
           <NavLink active={active === '2'} onClick={() => toggleTab('2')}>
             <Award className='font-medium-3 me-50' />
             <span className='fw-bold'>Бонусы</span>
@@ -27,18 +27,18 @@ const UserTabs = ({ active, toggleTab, score }) => {
             <Lock className='font-medium-3 me-50' />
             <span className='fw-bold'>Безопасность</span>
           </NavLink>
-        </NavItem>
+        </NavItem> */}
       </Nav>
       <TabContent activeTab={active}>
         <TabPane tabId='1'>
           <UserOrdersList />
         </TabPane>
-        <TabPane tabId='2'>
+        {/* <TabPane tabId='2'>
           <Rewards score={score} />
         </TabPane>
         <TabPane tabId='3'>
           <SecurityTab />
-        </TabPane>
+        </TabPane> */}
       </TabContent>
     </Fragment>
   )
