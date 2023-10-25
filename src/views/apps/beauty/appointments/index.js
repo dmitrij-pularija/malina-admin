@@ -20,14 +20,14 @@ import '@styles/react/apps/app-calendar.scss'
 const calendarsColor = {
   pending: 'warning',
   confirmed: 'info',
-  comment: 'success',
+  completed: 'success',
   cancelled: 'danger'
 }
 
 const filters = [
   { id: 1, value: 'pending', label: 'Новая', color: 'warning', className: 'form-check-warning mb-1' },
   { id: 2, value: 'confirmed', label: 'Подтверждена', color: 'info', className: 'form-check-info mb-1' },
-  { id: 3, value: 'comment', label: 'Посещена', color: 'success', className: 'form-check-success mb-1' },
+  { id: 3, value: 'completed', label: 'Посещена', color: 'success', className: 'form-check-success mb-1' },
   { id: 4, value: 'cancelled', label: 'Отменен', color: 'danger', className: 'form-check-danger mb-1' }
 ]
 

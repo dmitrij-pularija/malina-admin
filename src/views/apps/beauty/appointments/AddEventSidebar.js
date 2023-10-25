@@ -301,7 +301,7 @@ const AddEventSidebar = props => {
     dispatch(removeEvent(selectedAppointment.id))
     removeEventInCalendar(selectedAppointment.id)
     handleClose()
-    toast.error('Запись удалена')
+    toast.success('Запись удалена')
   }
 
   const onSubmit = (data) => {
@@ -511,7 +511,7 @@ const AddEventSidebar = props => {
               <FormFeedback>Пожалуйста выберите время начала</FormFeedback>
               )} 
             </div>
-
+{/* 
             <div className='mb-1'>
               <Label className='form-label' for='endDate'>
               Время окончания<span className='text-danger'>*</span>
@@ -542,7 +542,7 @@ const AddEventSidebar = props => {
               {errors && errors.endDate && (
               <FormFeedback>Пожалуйста выберите время окончания</FormFeedback>
               )} 
-            </div>
+            </div> */}
             <div className='mb-1'>
               <Label className='form-label' for='services'>
                Услуга<span className='text-danger'>*</span>
