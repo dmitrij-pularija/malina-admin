@@ -73,6 +73,7 @@ const CalendarComponent = () => {
 
   const handleMasterChange = data => {
     setCurrentMaster(data)
+    // dispatch(getData(data.value))
   }
 
   const updateAllFilters = value => {
