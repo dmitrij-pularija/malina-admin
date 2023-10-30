@@ -197,6 +197,7 @@ const Cart = ({ categories, stepper, orderData, handleUpdate, products, selected
       const productList = selectedDatd.map(product => ({ beauty_product: product.id, quantity: product.quantity, user: orderData.user_account}))
       cart.products_list = []  
       cart.cart_business = orderData.order_business
+      cart.user_account = orderData.user_account
       cart.is_visible = true
       createProductCart(productList, cart).then(({carts,  status})  => {
         if (status === 201) {

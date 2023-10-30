@@ -273,10 +273,11 @@ const Cart = ({ stepper, userData, orderData, handleUpdate, products, selectedOr
         } else return []
       }
       const selectedDatd = tableData.filter(product => product.selected && product)
-      const productList = selectedDatd.map(product => ({ product: product.id, quantity: product.quantity, total_price: product.total_price, is_visible: true, product_addons: makeAddons(product.product_addons, product.id) }))
+      const productList = selectedDatd.map(product => ({ product: product.id, quantity: product.quantity, total_price: product.total_price, user: orderData.user_id, is_visible: true, product_addons: makeAddons(product.product_addons, product.id) }))
       // console.log(productList)
       cart.products_list = []  
       cart.business_id = orderData.business_id
+      cart.user_id = orderData.user_id
       cart.is_visible = true
       if (orderData.table_id) cart.table_id = orderData.table_id
       createProductCart(productList, cart).then(({order_cart,  status})  => {

@@ -37,6 +37,14 @@
   "Goods": "Товары",
   "Beauty Products": "Товары",
   "Appointments": "Записи",
+  "appointmentsData": {
+    "store": "Заведение",
+    "master": "Специалист",
+    "appointments": "Записи",
+    "showAll": "Показать все",
+    "notSelected": "Не выбран",
+    "notChosen": "Не выбранo"
+  },
   "Date": "Дата",
   "Email": "Email",
   "Chat": "Chat",

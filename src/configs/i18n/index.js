@@ -35,7 +35,7 @@ i18n
     },
     fallbackLng: 'ru',
     debug: false,
-    keySeparator: false,
+    // keySeparator: false,
     react: {
       useSuspense: false
     },

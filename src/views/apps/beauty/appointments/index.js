@@ -8,6 +8,7 @@ import SidebarLeft from './SidebarLeft'
 import AddEventSidebar from './AddEventSidebar'
 import { useRTL } from '@hooks/useRTL'
 import { initSelect } from '@utils'
+import { useTranslation } from 'react-i18next'
 import { getAllUsers } from "../../user/store"
 import { getAllStores } from '../../food/stores/store'
 import { getAllMasters } from '../../user/masters/store'
@@ -35,6 +36,7 @@ const filterValues = filters.map(filter => filter.value)
 
 const CalendarComponent = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const { userData } = useSelector(state => state.auth)
   const users = useSelector(state => state.users.allUsers)
   const stores = useSelector(state => state.stores.allStores)
@@ -46,8 +48,8 @@ const CalendarComponent = () => {
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
   const [isRtl] = useRTL()
 
-  const [currentStore, setCurrentStore] = useState({ value: '', label: 'Не выбрано' })
-  const [currentMaster, setCurrentMaster] = useState({ value: '', label: 'Не выбран' })
+  const [currentStore, setCurrentStore] = useState({ value: '', label: `${t('appointmentsData.notChosen')}` })
+  const [currentMaster, setCurrentMaster] = useState({ value: '', label: `${t('appointmentsData.notSelected')}` })
   const [selectedCalendars, setSelectedCalendars] = useState(filterValues)
   const [appointments, setAppointments] = useState([])
   // console.log(data)
@@ -64,7 +66,7 @@ const CalendarComponent = () => {
     return filtredMasters.map(master => parseInt(master.id))
   }
   const handleStoreChange = data => {
-    setCurrentMaster({ value: '', label: 'Не выбран' })
+    setCurrentMaster({ value: '', label: `${t('appointmentsData.notChosen')}` })
     setSelectedMasters([])
     setCurrentStore(data)
     setFiltredMasters(masters.filter(master => parseInt(master.master_business) === parseInt(data.value)))
@@ -139,7 +141,7 @@ const CalendarComponent = () => {
     value: String(store.id),
     label: store.name
   }))
-  storeOptions.unshift({ value: '', label: 'Показать все' }) 
+  storeOptions.unshift({ value: '', label: `${t('appointmentsData.notSelected')}` }) 
 
   useEffect(() => {
     if (!users.length) dispatch(getAllUsers())
@@ -153,7 +155,7 @@ const CalendarComponent = () => {
   }, [currentMaster.value])
 
   useEffect(() => {
-  const filtredAppointments = data.filter(item => selectedCalendars.includes(item.appointment_status) && parseInt(item.appointment_master) === parseInt(currentMaster.value))  
+  const filtredAppointments = data.filter(item => selectedCalendars.includes(item.appointment_status) && parseInt(item.appointment_master.id) === parseInt(currentMaster.value))  
   setAppointments(filtredAppointments)
 }, [data.length, selectedCalendars, currentMaster.value])
 

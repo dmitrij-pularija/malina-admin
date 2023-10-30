@@ -3,12 +3,18 @@ export default [
   {
     header: 'Malina beauty'
   },
-  // {
-  //   id: 'beautyOrders',
-  //   title: 'Orders',
-  //   icon: <ShoppingCart size={20} />,
-  //   navLink: '/apps/beauty/orders/list'
-  // },
+  {
+    id: 'beautyOrders',
+    title: 'Orders',
+    icon: <ShoppingCart size={20} />,
+    navLink: '/apps/beauty/orders/list'
+  },
+  {
+    id: 'beautyAppointments',
+    title: 'Appointments',
+    icon: <Calendar size={20} />,
+    navLink: '/apps/beauty/appointments'
+  },
   {
     id: 'Services',
     title: 'Services',
@@ -26,12 +32,12 @@ export default [
         icon: <Circle size={12} />,
         navLink: '/apps/beauty/services/services/list'
       },
-      {
-        id: 'beautyAppointments',
-        title: 'Appointments',
-        icon: <Circle size={12} />,
-        navLink: '/apps/beauty/appointments'
-      }
+      // {
+      //   id: 'beautyAppointments',
+      //   title: 'Appointments',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/apps/beauty/appointments'
+      // }
     ]
   },
   {
@@ -51,12 +57,12 @@ export default [
         icon: <Circle size={12} />,
         navLink: '/apps/beauty/products/products/list'
       },
-      {
-        id: 'beautyOrders',
-        title: 'Orders',
-        icon: <Circle size={12} />,
-        navLink: '/apps/beauty/orders/list'
-      }
+      // {
+      //   id: 'beautyOrders',
+      //   title: 'Orders',
+      //   icon: <Circle size={12} />,
+      //   navLink: '/apps/beauty/orders/list'
+      // }
     ]
   },    
   {

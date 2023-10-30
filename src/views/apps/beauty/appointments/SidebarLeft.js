@@ -2,9 +2,11 @@ import { Fragment } from 'react'
 import classnames from 'classnames'
 import Select from 'react-select'
 import { selectThemeColors } from '@utils'
-import { appointmentsObj } from '../../../../configs/initial'
+// import { cObj } from '../../../../configs/initial'
 import { Card, CardBody, Button, Input, Label } from 'reactstrap'
 import illustration from '@src/assets/images/pages/calendar-illustration.png'
+import { useTranslation } from 'react-i18next'
+import i18next from 'i18next'
 
 // const renderFilters = masters => {
 //  return masters ? masters.map(master => ({ id: master.id, label: `${master.master_name} ${master.surname ? master.surname : ''}`})) : []
@@ -20,12 +22,13 @@ import illustration from '@src/assets/images/pages/calendar-illustration.png'
 const SidebarLeft = props => {
   const { filters, selectedCalendars, currentMaster, masterOptions, handleMasterChange, currentStore, storeOptions, handleStoreChange, updateFilter, updateAllFilters, userData, selectedMasters } = props
   // const filters = renderFilters(masters)
+  const { t } = useTranslation()
 
   return (
     <Fragment>
       <Card className='sidebar-wrapper shadow-none'>
         <CardBody className='card-body d-flex flex-column my-sm-0 mb-3'>
-              <Label for='plan-select'>Заведение</Label>
+              <Label for='plan-select'>{t('appointmentsData.store')}</Label>
               <Select
                 name='plan-select'
                 theme={selectThemeColors}
@@ -36,11 +39,11 @@ const SidebarLeft = props => {
                 options={storeOptions}
                 value={currentStore}
                 onChange={handleStoreChange}
-                placeholder="Не выбрано"
+                placeholder={t('appointmentsData.notChosen')}
               />
         </CardBody>
         <CardBody className='card-body d-flex flex-column my-sm-0 mb-3'>
-              <Label for='master-select'>Специалист</Label>
+              <Label for='master-select'>{t('appointmentsData.master')}</Label>
               <Select
                 theme={selectThemeColors}
                 name='master-select'
@@ -51,12 +54,12 @@ const SidebarLeft = props => {
                 options={masterOptions}
                 value={currentMaster}
                 onChange={handleMasterChange}
-                placeholder="Не выбран"
+                placeholder={t('appointmentsData.notSelected')}
               />
         </CardBody>
         <CardBody>
           <h5 className='section-label mb-1'>
-            <span className='align-middle'>Записи</span>
+            <span className='align-middle'>{t('appointmentsData.appointments')}</span>
           </h5>
           <div className='form-check mb-1'>
             <Input
@@ -68,7 +71,7 @@ const SidebarLeft = props => {
               onChange={e => updateAllFilters(e.target.checked)}
             />
             <Label className='form-check-label' for='view-all'>
-              Показать все
+            {t('appointmentsData.showAll')}
             </Label>
           </div>
           <div className='calendar-events-filter'>
@@ -91,7 +94,7 @@ const SidebarLeft = props => {
                       onChange={() => updateFilter(filter.value)}
                     />
                     <Label className='form-check-label' for={`${filter.id}-event`}>
-                      {filter.label}
+                      {i18next.language === 'ru' ? filter.label : filter.value}
                     </Label>
                   </div>
                 )
