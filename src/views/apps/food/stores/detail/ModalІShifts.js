@@ -33,14 +33,14 @@ const defaultValues = {
 const requiredFields = ["timeBeg", "timeEnd"]
 
 
-const ModalІShifts = ({isOpen, toggle }) => {
+const ModalІShifts = ({isOpen, toggle, business }) => {
   // const dispatch = useDispatch()
   const [shifts, setShifts] = useState([])
   const [selectedShifts, setSelectedShifts] = useState('')
-  const update = () => getShifts().then(response => setShifts(response))
+  const update = id => getShifts(id).then(response => setShifts(response))
 
   useEffect(() => {
-    update()
+    update(business)
   }, []) 
 
 // console.log(shifts)
@@ -64,7 +64,7 @@ const ModalІShifts = ({isOpen, toggle }) => {
   const handleDel = (event, id) => {
     event.preventDefault()
     delShifts(id)
-    update()
+    update(business)
   }
 
   const handleEdit = (event, row) => {
@@ -89,6 +89,7 @@ const ModalІShifts = ({isOpen, toggle }) => {
     // console.log(data)
     if (checkIsValid(data, requiredFields)) {
       const formData = new FormData()
+      // formData.append("business", business)
       formData.append(
           "start_time",
           !selectedShifts ? formatTimeSave(data.timeBeg) : data.timeBeg
@@ -104,7 +105,7 @@ const ModalІShifts = ({isOpen, toggle }) => {
       } else {
         addShifts(formData).then(handleClear())
       }
-      update()
+      update(business)
     } else {
       for (const key in data) {
         if (data[key].length === 0) {

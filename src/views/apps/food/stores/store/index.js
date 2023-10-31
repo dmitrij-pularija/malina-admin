@@ -3,9 +3,9 @@ import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
-export const getDelivery = async () => {
+export const getDelivery = async id => {
   try {
-  const { data: { results }} = await axios.get('/users/deliverytariffs/')
+  const { data: { results }} = await axios.get(`/users/deliverytariffs?business__id=${id}`)
   return results
 } catch (error) {
   errorMessage(error.response.data.detail)
@@ -42,7 +42,7 @@ export const delDelivery = async (id) => {
 
 export const getShifts = async () => {
   try {
-  const { data: { results }} = await axios.get('/users/waiter-shifts/')
+  const { data: { results }} = await axios.get(`/users/waiter-shifts/`)
   return results
 } catch (error) {
   errorMessage(error.response.data.detail)

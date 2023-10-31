@@ -111,7 +111,7 @@ const PreviewCard = ({ data, users, stores }) => {
   } else return ''
 }
 const store = getStore(data.order_business)
-const user = getStore(data.user_account)
+const user = getUser(data.user_account)
 
   return data !== null ? (
     <Card className='invoice-preview-card'>
@@ -160,7 +160,7 @@ const user = getStore(data.user_account)
         <Row className='invoice-spacing'>
           <Col className='p-0' xl='8'>
             <h6 className='mb-2'>Адрес:</h6>
-            <CardText className='mb-1'><span className='invoice-date'>{data.delivery_address ? data.delivery_address.location ? data.delivery_address.location : data.delivery_address.name : "В нутри заведения" }</span></CardText>
+            <CardText className='mb-1'><span className='invoice-date'>{data.delivery_address ? data.delivery_address.location ? data.delivery_address.location : data.delivery_address.name : "Самовывоз" }</span></CardText>
             <div className='order-comments'>
               {data.time_delivery ? <p className='invoice-date-title'>Доставка в течении:</p> : ''}
               <p className='invoice-date'>{data.time_delivery ? `${data.time_delivery} минут` : ""}</p>
@@ -184,7 +184,7 @@ const user = getStore(data.user_account)
             </div>
             <div className='invoice-date-wrapper'>
               <p className='invoice-date-title'>Имя:</p>
-              <p className='invoice-date'>{user && user.name ?`${user.name} ${user.surname ? user.surname : ''}` : 'не указано'}</p>
+              <p className='invoice-date'>{user && user.name ? `${user.name} ${user.surname ? user.surname : ''}` : 'не указано'}</p>
             </div>
             <div className='invoice-date-wrapper'>
               <p className='invoice-date-title'>Телефон:</p>

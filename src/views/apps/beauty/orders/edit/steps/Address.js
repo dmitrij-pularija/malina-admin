@@ -28,7 +28,7 @@ const defaultValues = {
   timeDelivery: '',
   isCourierDelivery: ''
   }
-  const requiredFields = ["city", "city", "houseNumber", "entrance", "floor", "location", "phone"]
+  const requiredFields = ["city", "street", "houseNumber", "location", "phone", "name", "longitude", "longitude"]
 
   const initUserAddressOptions = (list) => {
     if (list && list.length) {
@@ -296,12 +296,12 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
           </Col>
           <Col>
             <Label className='form-label' for='entrance'>
-             Подъезд<span className='text-danger'>*</span>
+             Подъезд
             </Label>
             <Controller
                     name="entrance"
                     control={control}
-                    rules={{ required: true }}
+                    rules={{ required: false }}
                     render={({ field }) => (
             <Input
               type='text'
@@ -321,12 +321,12 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
           </Col>
           <Col>
             <Label className='form-label' for='floor'>
-             Этаж<span className='text-danger'>*</span>
+             Этаж
             </Label>
             <Controller
                     name="floor"
                     control={control}
-                    rules={{ required: true }}
+                    rules={{ required: false }}
                     render={({ field }) => (
             <Input
               type='text'
@@ -375,12 +375,12 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
         <Col md='6'>
         <Col className='mb-1'>
             <Label className='form-label' for='name'>
-              Название адреса
+              Название адреса<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="name"
                     control={control}
-                    rules={{ required: false }}
+                    rules={{ required: true }}
                     render={({ field }) => (
             <Input
               type='text'
@@ -452,12 +452,12 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
           <Col className='d-flex gap-30 mb-1'>
           <Col>
             <Label className='form-label' for='longitude'>
-             Долгота
+             Долгота<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="longitude"
                     control={control}
-                    rules={{ required: false }}
+                    rules={{ required: true }}
                     render={({ field }) => (
             <Input
               type='text'
@@ -477,12 +477,12 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
           </Col>
           <Col>
             <Label className='form-label' for='latitude'>
-             Широта
+             Широта<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="latitude"
                     control={control}
-                    rules={{ required: false }}
+                    rules={{ required: true }}
                     render={({ field }) => (
             <Input
               type='text'

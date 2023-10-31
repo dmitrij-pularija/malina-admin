@@ -36,10 +36,10 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
   // const dispatch = useDispatch()
   const [deliveryTariffs, setDeliveryTariffs] = useState([])
   const [selectedDelivery, setSelectedDelivery] = useState('')
-  const update = () => getDelivery().then((response) => setDeliveryTariffs(response))
+  const update = id => getDelivery(id).then((response) => setDeliveryTariffs(response))
 
   useEffect(() => {
-    update()
+    update(business)
   }, [isOpen]) 
 
 // console.log(shifts)
@@ -61,7 +61,7 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
 
   const handleDel = (event, id) => {
     event.preventDefault()
-    delDelivery(id).then(() => update())
+    delDelivery(id).then(() => update(business))
   }
 
   const handleEdit = (event, row) => {
@@ -70,7 +70,7 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
   }
 
   const handleClear = () => {
-    update()
+    update(business)
     for (const key in defaultValues) {
       setValue(key, '')
     }

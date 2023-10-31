@@ -70,8 +70,8 @@ const StoreView = () => {
         </Card>
       </div>
       {/* <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} /> */}
-      <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} />
-      <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : null}/>  
+      <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} business={selectedStore ? selectedStore.id : ''}/>
+      <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : ''}/>  
     </Fragment>
   )
   }
