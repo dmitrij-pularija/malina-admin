@@ -1,15 +1,9 @@
-// ** React Imports
 import { Link } from 'react-router-dom'
 import { Fragment, useEffect, useState } from 'react'
-
-// ** Third Party Components
 import * as Icon from 'react-feather'
 import classnames from 'classnames'
-
-// ** Custom Component
 import Autocomplete from '@components/autocomplete'
-
-// ** Reactstrap Imports
+import { useTranslation } from 'react-i18next'
 import {
   NavItem,
   NavLink,
@@ -27,7 +21,7 @@ import { getBookmarks, updateBookmarked, handleSearchQuery } from '@store/navbar
 const NavbarBookmarks = props => {
   // ** Props
   const { setMenuVisibility } = props
-
+  const { t } = useTranslation()
   // ** State
   const [value, setValue] = useState('')
   const [openSearch, setOpenSearch] = useState(false)
@@ -35,10 +29,10 @@ const NavbarBookmarks = props => {
   // ** Store Vars
   const dispatch = useDispatch()
   const store = useSelector(state => state.navbar)
-
+  const { business } = useSelector(state => state.auth.userData)
   // ** ComponentDidMount
   useEffect(() => {
-    dispatch(getBookmarks())
+    dispatch(getBookmarks(business))
   }, [])
 
   // ** Loops through Bookmarks Array to return Bookmarks
@@ -51,7 +45,7 @@ const NavbarBookmarks = props => {
             <NavItem key={item.target} className='d-none d-lg-block'>
               <NavLink tag={Link} to={item.link} id={item.target}>
                 <IconTag className='ficon' />
-                <UncontrolledTooltip target={item.target}>{item.title}</UncontrolledTooltip>
+                <UncontrolledTooltip target={item.target}>{t(item.title)}</UncontrolledTooltip>
               </NavLink>
             </NavItem>
           )
@@ -79,7 +73,7 @@ const NavbarBookmarks = props => {
                     return (
                       <DropdownItem tag={Link} to={item.link} key={item.id}>
                         <IconTag className='me-50' size={14} />
-                        <span className='align-middle'>{item.title}</span>
+                        <span className='align-middle'>{t(item.title)}</span>
                       </DropdownItem>
                     )
                   })
@@ -206,7 +200,7 @@ const NavbarBookmarks = props => {
                       >
                         <div className='d-flex justify-content-start align-items-center overflow-hidden'>
                           <IconTag size={17.5} className='me-75' />
-                          <span className='text-truncate'>{item.title}</span>
+                          <span className='text-truncate'>{t(item.title)}</span>
                         </div>
                       </Link>
                       <Icon.Star

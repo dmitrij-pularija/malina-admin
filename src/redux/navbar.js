@@ -1,11 +1,9 @@
-// ** Redux Imports
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-
-// ** Axios Imports
 import axios from 'axios'
 
-export const getBookmarks = createAsyncThunk('layout/getBookmarks', async () => {
-  const response = await axios.get('/api/bookmarks/data')
+export const getBookmarks = createAsyncThunk('layout/getBookmarks', async business => {
+  // const response = await axios.get(`/api/bookmarks/data`)
+  const response = await axios.get(`/api/bookmarks/data?business=${business}`)
   return {
     data: response.data.suggestions,
     bookmarks: response.data.bookmarks
