@@ -10,6 +10,7 @@ import { Button, Modal, ModalHeader, ModalBody, Label, Input, Form, FormFeedback
 import { selectThemeColors, formatDataTimeSave, formatDataTime, checkIsValid, initSelect, isObjEmpty } from '@utils'
 import { Russian } from "flatpickr/dist/l10n/ru.js"
 import { english } from "flatpickr/dist/l10n/default.js"
+import { useTranslation } from 'react-i18next'
 import i18next from 'i18next'
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/flatpickr/flatpickr.scss'
@@ -47,7 +48,10 @@ const AddEventSidebar = props => {
     calendarsColor,
     handleAddEventSidebar
   } = props
-  if (open && !currentMaster.value) return toast.error('Вначале выберите специалиста!')
+  
+  // if (open && !currentMaster.value) return toast.error("Вначале выберите специалиста!")
+  if (open && !currentMaster.value) return toast.error(i18next.language === 'ru' ? "Вначале выберите специалиста!" : "Choose a specialist first!")
+  const { t } = useTranslation()
   // ** Vars & Hooks
   // const selectedEvent = selectedAppointment,
   //   {
@@ -379,7 +383,7 @@ const AddEventSidebar = props => {
     >
       <ModalHeader className='mb-1' toggle={handleAddEventSidebar} close={CloseBtn} tag='div'>
         <h5 className='modal-title'>
-          {selectedAppointment && selectedAppointment.appointment_user_account ? 'Редактировать' : 'Добавить'} запись
+          {selectedAppointment && selectedAppointment.appointment_user_account ? t('appointmentsData.editTitle') : t('appointmentsData.addTitle')}
         </h5>
       </ModalHeader>
       <PerfectScrollbar options={{ wheelPropagation: false }}>
@@ -388,7 +392,7 @@ const AddEventSidebar = props => {
         
             <div className='mb-1'>
               <Label className='form-label' for='guests'>
-                Клиент<span className='text-danger'>*</span>
+              {t('appointmentsData.customer')}<span className='text-danger'>*</span>
               </Label>
               <Controller
                   name="guests"
@@ -403,7 +407,7 @@ const AddEventSidebar = props => {
                 isDisabled={userData && userData.type === 1}
                 options={guestsOptions}
                 theme={selectThemeColors}
-                placeholder="Выберите клиента"
+                placeholder={t('appointmentsData.customerPlaceholder')}
                 // value={guests.length ? [...guests] : null}
                 // onChange={data => setGuests([...data])}
                 components={{
@@ -414,40 +418,40 @@ const AddEventSidebar = props => {
               )}
               />
               {errors && errors.guests && (
-                <FormFeedback>Пожалуйста выберите клиента</FormFeedback>
+                <FormFeedback>{t('appointmentsData.customerFeedback')}</FormFeedback>
               )} 
             </div>
 
             <div className='mb-1'>
               <Label className='form-label' for='name'>
-                Имя <span className='text-danger'>*</span>
+              {t('appointmentsData.name')}<span className='text-danger'>*</span>
               </Label>
               <Controller
                 name='name'
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
-                  <Input id='name' placeholder='Ввелите имя' invalid={errors.name && true} {...field} />
+                  <Input id='name' placeholder={t('appointmentsData.namePlaceholder')} invalid={errors.name && true} {...field} />
                 )}
               />
                 {errors && errors.name && (
-                <FormFeedback>Пожалуйста введите имя</FormFeedback>
+                <FormFeedback>{t('appointmentsData.nameFeedback')}</FormFeedback>
               )} 
             </div>
             <div className='mb-1'>
               <Label className='form-label' for='phone'>
-                Телефон<span className='text-danger'>*</span>
+              {t('appointmentsData.phone')}<span className='text-danger'>*</span>
               </Label>
               <Controller
                 name='phone'
                 control={control}
                 rules={{ required: true }}
                 render={({ field }) => (
-                  <Input id='phone' placeholder='Ввелите телефон' invalid={errors.phone && true} {...field} />
+                  <Input id='phone' placeholder={t('appointmentsData.phonePlaceholder')} invalid={errors.phone && true} {...field} />
                 )}
               />
                 {errors && errors.phone && (
-                <FormFeedback>Пожалуйста введите телефон</FormFeedback>
+                <FormFeedback>{t('appointmentsData.phoneFeedback')}</FormFeedback>
               )} 
             </div>
             {/* <div className='mb-1'>
@@ -484,7 +488,7 @@ const AddEventSidebar = props => {
 
             <div className='mb-1'>
               <Label className='form-label' for='startDate'>
-                Время начала<span className='text-danger'>*</span>
+              {t('appointmentsData.startDate')}<span className='text-danger'>*</span>
               </Label>
               <Controller
                 id="startDate"
@@ -508,7 +512,7 @@ const AddEventSidebar = props => {
               )}
               />
               {errors && errors.startDate && (
-              <FormFeedback>Пожалуйста выберите время начала</FormFeedback>
+              <FormFeedback>{t('appointmentsData.startDateFeedback')}</FormFeedback>
               )} 
             </div>
 {/* 
@@ -545,7 +549,7 @@ const AddEventSidebar = props => {
             </div> */}
             <div className='mb-1'>
               <Label className='form-label' for='services'>
-               Услуга<span className='text-danger'>*</span>
+              {t('appointmentsData.service')}<span className='text-danger'>*</span>
               </Label>
               <Controller
                   name="services"
@@ -559,19 +563,19 @@ const AddEventSidebar = props => {
                 classNamePrefix='select'
                 isClearable={false}
                 options={servicesOptions}
-                placeholder="Выберите услугу"
+                placeholder={t('appointmentsData.servicePlaceholder')}
                 theme={selectThemeColors}
                 {...field}
               />
               )}
               />
               {errors && errors.services && (
-                <FormFeedback>Пожалуйста выберите услугу</FormFeedback>
+                <FormFeedback>{t('appointmentsData.serviceFeedback')}</FormFeedback>
               )} 
             </div>
             <div className='mb-1'>
               <Label className='form-label' for='comment'>
-                Коментарий
+              {t('appointmentsData.comment')}
               </Label>
               <Controller
                   name="comment"
@@ -583,22 +587,22 @@ const AddEventSidebar = props => {
                 name='text'
                 id='comment'
                 rows='3'
-                placeholder='Введите коментарий'
+                placeholder={t('appointmentsData.commentPlaceholder')}
                 {...field}
               />
               )}
               />
               {errors && errors.comment && (
-                <FormFeedback>Пожалуйста введите коментарий</FormFeedback>
+                <FormFeedback>{t('appointmentsData.commentFeedback')}</FormFeedback>
               )} 
             </div>
             <div className='d-flex mb-1'>
             <Fragment>
              <Button className='me-1' type='submit' color='primary'>
-               {selectedAppointment && selectedAppointment.appointment_user_account ? "Изменить" : "Добавить"}
+               {selectedAppointment && selectedAppointment.appointment_user_account ? t('appointmentsData.edit') : t('appointmentsData.add')}
              </Button>
              <Button color='secondary' type='reset' onClick={selectedAppointment && selectedAppointment.appointment_user_account ? handleDeleteEvent : handleClose} outline>
-               {selectedAppointment && selectedAppointment.appointment_user_account ? "Удалить" : "Отменить" }
+               {selectedAppointment && selectedAppointment.appointment_user_account ? t('appointmentsData.delete') : t('appointmentsData.cancel') }
              </Button>
             </Fragment>
             </div>

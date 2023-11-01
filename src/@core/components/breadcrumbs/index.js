@@ -1,8 +1,7 @@
 // ** React Imports
 import { Fragment } from 'react'
 import { Link } from 'react-router-dom'
-
-// ** Third Party Components
+import { useTranslation } from 'react-i18next'
 import Proptypes from 'prop-types'
 import classnames from 'classnames'
 import { Grid, CheckSquare, MessageSquare, Mail, Calendar } from 'react-feather'
@@ -19,8 +18,8 @@ import {
 } from 'reactstrap'
 
 const BreadCrumbs = props => {
-  // ** Props
   const { data, title, onClick } = props
+  const { t } = useTranslation()
 
   const renderBreadCrumbs = () => {
     return data.map((item, index) => {
@@ -48,7 +47,7 @@ const BreadCrumbs = props => {
             <div className='breadcrumb-wrapper vs-breadcrumbs d-sm-block d-none col-12'>
               <Breadcrumb>
                 <BreadcrumbItem tag='li'>
-                  <Link to='/'>Главная</Link>
+                  <Link to='/'>{t('Home')}</Link>
                 </BreadcrumbItem>
                 {renderBreadCrumbs()}
               </Breadcrumb>
@@ -59,7 +58,7 @@ const BreadCrumbs = props => {
       <div className='content-header-right text-md-end col-md-3 col-12 d-md-block d-none'>
         <div className='breadcrumb-right dropdown'>
         {onClick && <Button className='add-new-user' color='primary' onClick={onClick}>
-              Добавить
+        {t('Add')}      
         </Button>}  
           {/* <UncontrolledButtonDropdown>
             <DropdownToggle color='primary' className='btn-icon btn-round dropdown-toggle'>

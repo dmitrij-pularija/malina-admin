@@ -169,7 +169,7 @@ const CalendarComponent = () => {
 
   return (
     <Fragment>
-      <Breadcrumbs title='Записи к специалистам' data={[{ title: 'Услуги' }, { title: 'Запись' }]} onClick={handleAddEventSidebar} />
+      <Breadcrumbs title={t('appointmentsData.title')} data={[{ title: t('appointmentsData.title1') }, { title: t('appointmentsData.title2') }]} onClick={handleAddEventSidebar} />
       <div className='app-calendar overflow-hidden border'>
         <Row className='g-0'>
           <Col
