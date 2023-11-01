@@ -3,6 +3,7 @@ import Avatar from '@components/avatar'
 import { X } from 'react-feather'
 import toast from 'react-hot-toast'
 import Flatpickr from 'react-flatpickr'
+import classnames from "classnames"
 import Select, { components } from 'react-select' // eslint-disable-line
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { useForm, Controller } from 'react-hook-form'
@@ -377,7 +378,7 @@ const AddEventSidebar = props => {
       className='sidebar-lg'
       toggle={handleClose}
       // onOpened={handleSelectedEvent}
-      // onClosed={handleResetInputValues}
+      // onClosed={handleClose}
       contentClassName='p-0 overflow-hidden'
       modalClassName='modal-slide-in event-sidebar'
     >
@@ -401,7 +402,7 @@ const AddEventSidebar = props => {
                   render={({ field }) => (
               <Select
                 id='guests'
-                className='react-select'
+                className={classnames('react-select', { 'is-invalid': errors.guests && true })}
                 classNamePrefix='select'
                 isClearable={false}
                 isDisabled={userData && userData.type === 1}
@@ -500,7 +501,7 @@ const AddEventSidebar = props => {
                 required
                 id='startDate'
                 name='startDate'
-                className='form-control'
+                className={classnames('form-control', { 'is-invalid': errors.startDate && true })}
                 onChange={date => setValue("startDate", date)}
                 value={field.value}
                 options={{
@@ -559,7 +560,7 @@ const AddEventSidebar = props => {
               <Select
                 isMulti
                 id='services'
-                className='react-select'
+                className={classnames('react-select', { 'is-invalid': errors.services && true })}
                 classNamePrefix='select'
                 isClearable={false}
                 options={servicesOptions}

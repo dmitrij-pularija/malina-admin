@@ -115,7 +115,7 @@ const Login = () => {
         .then(res => {
           const newAbility = [{action: "manage", subject: "all"}]
           ability.update(newAbility)
-
+// console.log(res.data.user)
           // const stores = dispatch(getAllStores())
           // const findedStore = stores.find(store => store.login === res.data.user.login)
           // const business = getBusiness(res.data.user.login)
