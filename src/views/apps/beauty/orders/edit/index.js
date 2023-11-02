@@ -115,7 +115,7 @@ const EditOrder = () => {
         </Card>
       </div>
     </Fragment>
-    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedOrder={selectedOrder} />
+    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedAddres={selectedOrder.delivery_address} />
     <Loading />
     </>
   ) : (

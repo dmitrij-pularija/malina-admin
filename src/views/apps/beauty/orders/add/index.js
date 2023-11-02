@@ -101,7 +101,7 @@ const AddOrder = () => {
         </Card>
       </div>
     </Fragment>
-    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedOrder={null} />
+    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedAddres={null} />
     <Loading />
     </>
   )

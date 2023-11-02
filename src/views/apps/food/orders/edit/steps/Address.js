@@ -81,7 +81,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
   } = useForm({ defaultValues, values })
 
   useEffect(() => {
-    if (selectedCoordinates && selectedCoordinates.length) {
+    if (selectedCoordinates && selectedCoordinates.length && selectedCoordinates[0]) {
       setValue('latitude', selectedCoordinates[0])
       setValue('longitude', selectedCoordinates[1])
     } 

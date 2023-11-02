@@ -27,9 +27,9 @@ import { Minus, ChevronDown, Edit, Trash2 } from "react-feather"
 
 
 
-const ModalMap = ({isOpen, toggle, onCoordinateSelected, selectedOrder}) => {
+const ModalMap = ({isOpen, toggle, onCoordinateSelected, selectedAddres }) => {
 
-  const [selectedCoords, setSelectedCoords] = useState([42.872924, 74.582038])
+  const [selectedCoords, setSelectedCoords] = useState(["", ""])
   const [mapsLoaded, setMapsLoaded] = useState(true)
 
   const handleYMapsLoad = () => {
@@ -37,8 +37,8 @@ const ModalMap = ({isOpen, toggle, onCoordinateSelected, selectedOrder}) => {
   }
  
   const updateCurrentCoordinates = () => {
-  if (selectedOrder && selectedOrder.delivery_address && selectedOrder.delivery_address.longitude) {
-    setSelectedCoords([selectedOrder.delivery_address.latitude, selectedOrder.delivery_address.longitude])
+  if (selectedAddres && selectedAddres.longitude) {
+    setSelectedCoords([selectedAddres.latitude, selectedAddres.longitude])
   } else {
     if (navigator.geolocation) {
     navigator.geolocation.getCurrentPosition((position) => {
@@ -52,10 +52,10 @@ const ModalMap = ({isOpen, toggle, onCoordinateSelected, selectedOrder}) => {
 
 useEffect(() => {
   updateCurrentCoordinates()
-}, [selectedOrder])
+}, [selectedAddres])
 
   const closeModal = () => {
-    onCoordinateSelected([42.872924, 74.582038])
+    onCoordinateSelected(["", ""])
     setMapsLoaded(true)
     toggle()
   }

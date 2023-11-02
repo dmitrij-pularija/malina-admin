@@ -9,6 +9,7 @@ import Select from "react-select"
 import { useForm, Controller } from "react-hook-form"
 import { selectThemeColors, formatTime, formatTimeSave, formatStringTime, dataURLtoBlob, checkIsValid } from "@utils"
 import { addStore, editStore } from "../store"
+import ModalMap from '../../../../../@core/components/map/ModalMap'
 import ModalPassword from "./ModalPassword"
 import ModalІShifts from "./ModalІShifts"
 import ModalІDelivery from "./ModalІDelivery"
@@ -178,6 +179,8 @@ const Store = (props) => {
 }
 
   const [avatar, setAvatar] = useState("")
+  const [mapOpen, setMapOpen] = useState(false)
+  // const [selectedCoordinates, setSelectedCoordinates] = useState(null)
   const [categoryOptions, setCategoryOptions] = useState(initCategoryOptions())
   const [subcategoryOptions, setSubcategoryOptions] = useState(initSubcategoryOptions())
   const [modalShow, setModalShow] = useState(false)
@@ -246,7 +249,7 @@ const Store = (props) => {
   }, [selectedStore])
 
 
- 
+
 
   const handlePasswordChange = (event) => {
     const { name, value } = event.target
@@ -318,6 +321,14 @@ const Store = (props) => {
     handleSubmit,
     formState: { errors }
   } = useForm({ defaultValues, values })
+
+  const toggleMap = () => setMapOpen(!mapOpen)
+  const handleCoordinateSelected = coords => {
+    if (coords && coords.length && coords[0]) {
+    setValue('latitude', coords[0])
+    setValue('longitude', coords[1])
+  }
+  }
 
   useEffect(() => {
     if (categories.length) {
@@ -571,8 +582,7 @@ const Store = (props) => {
                   )}
                 />
               </Col>
-              <Col className="d-flex justify-content-between gap-30">
-                 <div>
+              <Col>
                 <Label className="form-label" for="priceLevel">
                   Уровень цен
                 </Label>
@@ -594,8 +604,8 @@ const Store = (props) => {
                     />
                   )}
                 />
-                </div>
-                <div className="width-120" >
+                </Col>
+                <Col>
                   <Label className="form-label" for="avgcheck">
                     Средний чек, &#x0441;&#x332;
                   </Label>
@@ -617,7 +627,6 @@ const Store = (props) => {
                   {errors && errors.avgcheck && (
                     <FormFeedback>Пожалуйста введите cредний чек</FormFeedback>
                   )}
-                </div>
               {/* </Col>
               <Col> */}
              
@@ -818,7 +827,7 @@ const Store = (props) => {
                   />
                 </InputGroup>
               </Col>
-              <Col className="d-flex justify-content-center gap-30">
+              <Col className="d-flex justify-content-center gap-30 mt-1">
                 <div>
                   <Label className="form-label" for="percentage">
                     Скидка
@@ -868,6 +877,21 @@ const Store = (props) => {
                   />
                 </div>
               </Col>
+              <Col className='mt-2' >
+          <div className='form-check form-check-primary'>
+          <Controller
+            name='isStaff'
+            control={control}
+            rules={{ required: false }}
+            render={({ field }) => (
+              <Input id='isStaff'  type='checkbox' checked={field.value} {...field} />
+            )}
+          />
+          <Label className='form-label' for='isStaff'>
+          Персонал
+          </Label>
+        </div>
+          </Col>
             </Col>
             <Col md={4} className="d-flex flex-column p-1">
               <Col>
@@ -954,13 +978,13 @@ const Store = (props) => {
                   <FormFeedback>Пожалуйста введите широту</FormFeedback>
                 )}
               </Col>
-              {/* <Col className="mt-2">
-                <Button color="info" block>
+              <Col className="mt-1">
+                <Button color="info" block onClick={() => toggleMap()}>
                   Выбрать на карте
                 </Button>
-              </Col> */}
+              </Col>
               <Col>
-                <Label className="form-label" for="timeBeg">
+                <Label className="form-label mt-2" for="timeBeg">
                   Время работы
                 </Label>
                 <div className="d-flex justify-content-center align-items-center gap-10">
@@ -1013,22 +1037,6 @@ const Store = (props) => {
                 </div>
               </Col>
               
-             
-          <Col>
-          <div className='form-check form-check-primary'>
-          <Controller
-            name='isStaff'
-            control={control}
-            rules={{ required: false }}
-            render={({ field }) => (
-              <Input id='isStaff'  type='checkbox' checked={field.value} {...field} />
-            )}
-          />
-          <Label className='form-label' for='isStaff'>
-          Персонал
-          </Label>
-        </div>
-          </Col>
           <Col>
                 <Label className="form-label" for="adminTelegram">
                   Телеграм ID
@@ -1051,7 +1059,7 @@ const Store = (props) => {
                 )}
               </Col>
           <div className="d-flex flex-column justify-content-between h-100">         
-          <Col className="mt-1">
+          <Col className="mt-2">
           <div className='form-check form-check-primary'>
           <Controller
             name='isCardPaymentAllow'
@@ -1181,6 +1189,7 @@ const Store = (props) => {
           </Col>
         </Row>
       </Form>
+      <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedAddres={selectedStore && selectedStore.business_address ? selectedStore.business_address : null} />
       <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} />
       <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} business={selectedStore ? selectedStore.id : ''} />
       <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : ''}/>
