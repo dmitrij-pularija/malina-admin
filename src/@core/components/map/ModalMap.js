@@ -87,7 +87,13 @@ useEffect(() => {
           height="400px"
           onClick={handleMapClick}
           onLoad={handleYMapsLoad}
-          defaultState={{ center: selectedCoords, zoom: 13 }}
+          defaultState={{ center: [42.8688730619458, 74.59392492530705], zoom: 10 }}
+          options={{
+            controls: ['zoomControl', 'fullscreenControl'],
+            suppressMapOpenBlock: true,
+            avoidFractionalZoom: false
+          }}
+
         >
           <Placemark geometry={selectedCoords} />
         </Map>
