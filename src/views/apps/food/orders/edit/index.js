@@ -4,6 +4,7 @@ import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from '../../../../../@core/components/spinner/Loading'
+import ModalMap from '../../../../../@core/components/map/ModalMap'
 import { formatStringTime } from '@utils'
 // import axios from 'axios'
 
@@ -35,6 +36,8 @@ const EditOrder = () => {
   const dispatch = useDispatch()
   const [stepper, setStepper] = useState(null)
   const [data, setData] = useState(null)
+  const [mapOpen, setMapOpen] = useState(false)
+  const [selectedCoordinates, setSelectedCoordinates] = useState(null)
   const { selectedOrder, loading } = useSelector(state => state.orders)
   const stores = useSelector((state) => state.stores.allStores)
   const users = useSelector((state) => state.users.allUsers)
@@ -63,7 +66,11 @@ const EditOrder = () => {
   // console.log(data)
   // console.log(selectedOrder)
   const updateData = newData => setData(prevState => ({...prevState, ...newData}))
-
+  const toggleMap = () => setMapOpen(!mapOpen)
+  const handleCoordinateSelected = coords => {
+    setSelectedCoordinates(coords)
+    // console.log(coords)
+  }
   const steps = [
     {
       id: 'step-details',
@@ -75,7 +82,7 @@ const EditOrder = () => {
       id: 'step-address',
       title: 'Адрес',
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} />
     },
     {
       id: 'order-details',
@@ -119,6 +126,7 @@ const EditOrder = () => {
         </Card>
       </div>
     </Fragment>
+    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedOrder={selectedOrder} />
     <Loading />
     </>
   ) : (

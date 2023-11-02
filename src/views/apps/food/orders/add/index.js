@@ -2,6 +2,7 @@ import { useEffect, useRef, useState, Fragment } from "react"
 // import StoreDetails from "../detail/StoreDetails"
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from '../../../../../../src/@core/components/spinner/Loading'
+import ModalMap from '../../../../../@core/components/map/ModalMap'
 import { Card, CardBody } from "reactstrap"
 import { useDispatch, useSelector } from "react-redux"
 import { getAllStores } from "../../stores/store"
@@ -55,6 +56,8 @@ const AddOrder = () => {
   const dispatch = useDispatch()
   const [stepper, setStepper] = useState(null)
   const [data, setData] = useState(null)
+  const [mapOpen, setMapOpen] = useState(false)
+  const [selectedCoordinates, setSelectedCoordinates] = useState(null)
   const stores = useSelector((state) => state.stores.allStores)
   const users = useSelector((state) => state.users.allUsers)
   const waiters = useSelector(state => state.waiters.allWaiters)
@@ -71,7 +74,11 @@ const AddOrder = () => {
   }, [])
   
 const updateData = newData => setData(prevState => ({...prevState, ...newData}))
-  
+const toggleMap = () => setMapOpen(!mapOpen)
+const handleCoordinateSelected = coords => {
+  setSelectedCoordinates(coords)
+  // console.log(coords)
+}  
   const steps = [
     {
       id: 'step-details',
@@ -85,7 +92,7 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
       title: 'Адрес',
       // subtitle: 'введите адрес доставки',
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null} />
+      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} />
     },
     {
       id: 'order-details',
@@ -133,6 +140,7 @@ const updateData = newData => setData(prevState => ({...prevState, ...newData}))
         </Card>
       </div>
     </Fragment>
+    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedOrder={null} />
     <Loading />
     </>
   )

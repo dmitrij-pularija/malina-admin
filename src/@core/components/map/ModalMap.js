@@ -1,7 +1,7 @@
 import { useDispatch } from 'react-redux'
 import React, { useState, useEffect } from 'react'
 import { YMaps, Map, Placemark } from 'react-yandex-maps'
-
+import Loading from '../spinner/Loading-spinner'
 import {
   Row,
   Col,
@@ -15,8 +15,8 @@ import {
   FormFeedback,
   UncontrolledTooltip
 } from "reactstrap"
-import Flatpickr from "react-flatpickr"
-import { useForm, Controller } from "react-hook-form"
+// import Flatpickr from "react-flatpickr"
+// import { useForm, Controller } from "react-hook-form"
 import classnames from "classnames"
 import { Minus, ChevronDown, Edit, Trash2 } from "react-feather"
 // import "@styles/react/apps/app-users.scss"
@@ -30,7 +30,12 @@ import { Minus, ChevronDown, Edit, Trash2 } from "react-feather"
 const ModalMap = ({isOpen, toggle, onCoordinateSelected, selectedOrder}) => {
 
   const [selectedCoords, setSelectedCoords] = useState([42.872924, 74.582038])
-  
+  const [mapsLoaded, setMapsLoaded] = useState(true)
+
+  const handleYMapsLoad = () => {
+    setMapsLoaded(false)
+  }
+ 
   const updateCurrentCoordinates = () => {
   if (selectedOrder && selectedOrder.delivery_address && selectedOrder.delivery_address.longitude) {
     setSelectedCoords([selectedOrder.delivery_address.latitude, selectedOrder.delivery_address.longitude])
@@ -51,10 +56,12 @@ useEffect(() => {
 
   const closeModal = () => {
     onCoordinateSelected([42.872924, 74.582038])
+    setMapsLoaded(true)
     toggle()
   }
   const handleSelectCoords  = () => {
     onCoordinateSelected(selectedCoords)
+    setMapsLoaded(true)
     toggle()
   }
   const handleMapClick = (e) => {
@@ -79,11 +86,13 @@ useEffect(() => {
           width="100%"
           height="400px"
           onClick={handleMapClick}
+          onLoad={handleYMapsLoad}
           defaultState={{ center: selectedCoords, zoom: 13 }}
         >
           <Placemark geometry={selectedCoords} />
         </Map>
     </YMaps>
+    {mapsLoaded && <Loading className="lmap" />}
     </Row>
     <Row>
           <Col className="d-flex justify-content-center align-items-end mt-1 gap-10" sm="12">
