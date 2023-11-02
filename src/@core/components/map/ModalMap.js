@@ -73,7 +73,7 @@ useEffect(() => {
       toggle={closeModal}
     ><p className="text-center">Выберите координаты на карте</p></ModalHeader>
     <ModalBody className="px-sm-5 mx-50 pb-4">
-    <Row>
+    <Row className="height-400">
     <YMaps>
         <Map
           width="100%"
@@ -86,7 +86,7 @@ useEffect(() => {
     </YMaps>
     </Row>
     <Row>
-          <Col className="d-flex justify-content-center mt-1 gap-10" sm="12">
+          <Col className="d-flex justify-content-center align-items-end mt-1 gap-10" sm="12">
             <Button color="primary" onClick={handleSelectCoords}>
               Выбрать
             </Button>
