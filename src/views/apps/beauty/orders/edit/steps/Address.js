@@ -39,7 +39,7 @@ const defaultValues = {
   } else return []
   }
 
-const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
+const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, selectedCoordinates }) => {
   const [addressList, setAddressList] = useState([])
   const [userAddressOptions, setUserAddressOptions] = useState(null)
   
@@ -78,6 +78,13 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
     handleSubmit,
     formState: { errors }
   } = useForm({ defaultValues, values })
+
+  useEffect(() => {
+    if (selectedCoordinates && selectedCoordinates.length) {
+      setValue('latitude', selectedCoordinates[0])
+      setValue('longitude', selectedCoordinates[1])
+    } 
+  }, [selectedCoordinates])
 
   const handleNext = () => stepper.next()
   
@@ -206,11 +213,11 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
           </Col> 
           <Col md='6' className="d-flex justify-content-start align-items-end gap-30"> 
           <Button color='primary' onClick={handleAddressSave}>
-                <span className='align-middle d-sm-inline-block d-none'>Сохранить адрес</span>
+                <span className='align-middle d-sm-inline-block d-none'>Сохранить</span>
           </Button> 
-          {/* <Button color='warning' onClick={() => {}}>
+          <Button color='warning' onClick={() => toggleMap()}>
                 <span className='align-middle d-sm-inline-block d-none'>Выбрать на карте</span>
-          </Button>  */}
+          </Button> 
           </Col>  
         </Row>
         <Row>
