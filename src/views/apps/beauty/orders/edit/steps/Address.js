@@ -467,6 +467,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
                     rules={{ required: true }}
                     render={({ field }) => (
             <Input
+              disabled
               type='text'
               id='longitude'
               name='longitude'
@@ -492,6 +493,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
                     rules={{ required: true }}
                     render={({ field }) => (
             <Input
+              disabled
               type='text'
               id='latitude'
               name='latitude'

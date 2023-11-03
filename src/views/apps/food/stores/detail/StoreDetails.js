@@ -946,6 +946,7 @@ const Store = (props) => {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Input
+                      disabled
                       id="longitude"
                       placeholder="Введите долготу"
                       invalid={errors.longitude && true}
@@ -967,6 +968,7 @@ const Store = (props) => {
                   rules={{ required: true }}
                   render={({ field }) => (
                     <Input
+                      disabled
                       id="latitude"
                       placeholder="Введите широту"
                       invalid={errors.latitude && true}
