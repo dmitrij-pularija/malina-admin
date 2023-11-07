@@ -22,6 +22,7 @@ import beautyProductsCategories from '@src/views/apps/beauty/products/categories
 import serviceCategories from '@src/views/apps/beauty/services/categories/store'
 import services from '@src/views/apps/beauty/services/services/store'
 import appointments from '@src/views/apps/beauty/appointments/store'
+import bookings from '@src/views/apps/food/bookings/store'
 import addons from '@src/views/apps/food/products/addons/store'
 import chefs from '@src/views/apps/user/chefs/store'
 import feeds from '@src/views/apps/feed/store'
@@ -44,6 +45,7 @@ const rootReducer = {
   orders,
   beautyOrders,
   appointments,
+  bookings,
   branches,
   categories,
   stores,

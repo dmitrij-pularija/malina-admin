@@ -51,6 +51,12 @@ export default [
     navLink: '/apps/food/orders/list'
   },
   {
+    id: 'bookings',
+    title: 'Bookings',
+    icon: <Calendar size={20} />,
+    navLink: '/apps/food/bookings'
+  },
+  {
     id: 'feedback',
     title: 'Feedback',
     icon: <Award size={20} />,

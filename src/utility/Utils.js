@@ -1,3 +1,4 @@
+import { array } from 'yup'
 import { foodRoute, beautyRoute, masterRoute, adminRoute, userRoute } from '../router/routes'
 
 // ** Checks if an object is empty (returns boolean)
@@ -116,8 +117,28 @@ export const formatTime = (value) => {
   } else return ''
 }
 
+export const formatDataTimetoDataSave = value => {
+  let valueData = '' 
+  if (Array.isArray(value)) {
+    valueData = value[0]
+  } else { 
+    const parts = value.split(', ')
+    const datePart = parts[0]
+    const dateParts = datePart.split('.')
+    const day = dateParts[0]
+    const month = dateParts[1]
+    const year = dateParts[2]
+    valueData = new Date(year, month - 1, day)
+}
+    const formattedDate = `${valueData.getFullYear()}-${String(valueData.getMonth() + 1).padStart(2, '0')}-${String(valueData.getDate()).padStart(2, '0')}`
+    return formattedDate    
+}
+
 export const formatDataSave = (value) => {
-const valueData = new Date(value)  
+let valueData = '' 
+if (value instanceof Date) {
+  valueData = value
+} else valueData = new Date(value)
 const year = valueData.getFullYear()
 const month = String(valueData.getMonth() + 1).padStart(2, '0')
 const day = String(valueData.getDate()).padStart(2, '0')
@@ -213,6 +234,12 @@ export const initSelect = (option, value) => {
   if (!option && !value) return ''
   if (!option && value) return value
   return option[option.findIndex(i => parseInt(i.value) === parseInt(value))] || ''
+}
+
+export const initSelectString = (option, value) => {
+  if (!option && !value) return ''
+  if (!option && value) return value
+  return option[option.findIndex(i => i.value === value)] || ''
 }
 
 export const arraysAreEqual = (arr1, arr2) => {

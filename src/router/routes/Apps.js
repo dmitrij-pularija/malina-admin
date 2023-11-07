@@ -14,6 +14,7 @@ const BeautyOrdersPreview = lazy(() => import('../../views/apps/beauty/orders/pr
 const BeautyOrdersAdd = lazy(() => import('../../views/apps/beauty/orders/add'))
 const BeautyOrdersEdit = lazy(() => import('../../views/apps/beauty/orders/edit'))
 const BeautyAppointments = lazy(() => import('../../views/apps/beauty/appointments'))
+const Bookings = lazy(() => import('../../views/apps/food/bookings'))
 const ServicesCategories = lazy(() => import('../../views/apps/beauty/services/categories/list'))
 const Services = lazy(() => import('../../views/apps/beauty/services/services/list'))
 const ProductsCategories = lazy(() => import('../../views/apps/food/products/categories/list'))
@@ -119,6 +120,10 @@ const AppRoutes = [
   {
     element: <BeautyAppointments />,
     path: '/apps/beauty/appointments'
+  },
+  {
+    element: <Bookings />,
+    path: '/apps/food/bookings'
   },
   {
     element: <Stores />,
