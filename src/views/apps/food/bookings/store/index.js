@@ -81,6 +81,17 @@ export const editBooking = createAsyncThunk('appBooking/editBooking', async ({ i
 }
 })
 
+export const changeStatus = createAsyncThunk('appBooking/changeStatus', async ({ id, booking}, { dispatch, getState }) => {
+  try {
+  await axios.patch(`/products/admin-update-bookings/${id}/`, booking)
+  await dispatch(getData(getState().bookings.params))
+  return booking
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
+})
+
 export const updateBooking = createAsyncThunk('appBooking/updateBooking', async ({ id, booking }, { dispatch, getState }) => {
   
   try {
@@ -135,6 +146,9 @@ export const appBookingSlice = createSlice({
       .addCase(editBooking.pending, handlePending)
       .addCase(updateBooking.pending, handlePending)
       .addCase(updateBooking.rejected, handleRejected)
+      .addCase(changeStatus.pending, handlePending)
+      .addCase(changeStatus.rejected, handleRejected)
+      .addCase(changeStatus.fulfilled, handleFulfilled)
       .addCase(getData.rejected, handleRejected)
       .addCase(getAllBooking.rejected, handleRejected)
       .addCase(getBooking.rejected, handleRejected)

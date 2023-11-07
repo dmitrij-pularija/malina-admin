@@ -51,6 +51,7 @@ const AddEventSidebar = props => {
     selectEvent,
     updateEvent,
     removeEvent,
+    changeStatus,
     refetchEvents,
     calendarsColor,
     handleAddEventSidebar
@@ -240,6 +241,7 @@ const AddEventSidebar = props => {
 
   const onSubmit = (data) => {
     const newData = {}
+    const statusData = {}
     if (checkIsValid(data, requiredFields)) {
       newData.business = currentStore.value
       if (data.guests) newData.guests = data.guests
@@ -251,13 +253,18 @@ const AddEventSidebar = props => {
         newData.date = formatDataTimetoDataSave(data.startDate).toString()
         newData.time = formatTimeSave(data.startDate).toString()
       }
-      if (data.status) newData.status = data.status.value
-      if (data.response) newData.response = data.response
-      
+      if (data.status && data.status !== 'pending') {
+      statusData.business = currentStore.value
+      statusData.user = data.user.value
+      statusData.status = data.status.value
+      if (data.response) statusData.response = data.response
+      }
       if (selectedBooking && selectedBooking.user) {
-        dispatch(updateEvent({ id: selectedBooking.id, booking: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(updateEvent({ id: selectedBooking.id, booking: newData })).then(response => response.meta.requestStatus === 'fulfilled' && !statusData && handleClose())
+        if (statusData) dispatch(changeStatus({ id: selectedBooking.id, booking: statusData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
         dispatch(addEvent({ booking: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        
       }
 
 

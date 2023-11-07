@@ -11,7 +11,7 @@ import { initSelect } from '@utils'
 import { useTranslation } from 'react-i18next'
 import { getAllUsers } from "../../user/store"
 import { getAllStores } from '../stores/store'
-import { getData, getBooking, addBooking, editBooking, deleteBooking, selectEvent } from './store'
+import { getData, getBooking, addBooking, editBooking, deleteBooking, selectEvent, changeStatus } from './store'
 // import { fetchEvents, selectEvent, updateEvent, updateFilter, updateAllFilters, addEvent, removeEvent } from './store'
 import Loading from '../../../../@core/components/spinner/Loading'
 import '@styles/react/apps/app-calendar.scss'
@@ -117,7 +117,7 @@ const CalendarComponent = () => {
   useEffect(() => {
   const filtredBooking = data.filter(item => selectedCalendars.includes(item.status) && parseInt(item.business.id) === parseInt(currentStore.value))
   setBookings(filtredBooking)
-}, [data.length, selectedCalendars, currentStore.value])
+}, [data, selectedCalendars, currentStore.value])
 
   useEffect(() => {
     if (userData.type === 2 && stores.length) {
@@ -190,6 +190,7 @@ const CalendarComponent = () => {
         removeEvent={deleteBooking}
         calendarApi={calendarApi}
         refetchEvents={refetchEvents}
+        changeStatus={changeStatus}
         calendarsColor={calendarsColor}
         handleAddEventSidebar={handleAddEventSidebar}
       />
