@@ -309,6 +309,13 @@ const AddEventSidebar = props => {
     toast.success('Запись удалена')
   }
 
+  const handleUserChange = selectedOption => {
+    setValue("guests", selectedOption)
+    const findedUser = users.find(users => parseInt(users.id) === parseInt(selectedOption.value)) 
+    if (findedUser.name) setValue("name", findedUser.name)
+    setValue("phone", findedUser.phone ? findedUser.phone : findedUser.login)
+  }
+
   const onSubmit = (data) => {
     // console.log(data)
     const newData = {}
@@ -409,12 +416,12 @@ const AddEventSidebar = props => {
                 options={guestsOptions}
                 theme={selectThemeColors}
                 placeholder={t('appointmentsData.customerPlaceholder')}
-                // value={guests.length ? [...guests] : null}
-                // onChange={data => setGuests([...data])}
+                onChange={handleUserChange}
+                value={field.value}
                 components={{
                   Option: SelectComponent
                 }}
-                {...field}
+                // {...field}
               />
               )}
               />

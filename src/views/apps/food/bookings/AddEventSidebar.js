@@ -217,6 +217,13 @@ const AddEventSidebar = props => {
   const removeEventInCalendar = eventId => {
     calendarApi.getEventById(eventId).remove()
   }
+  const handleUserChange = selectedOption => {
+    setValue("user", selectedOption)
+    const findedUser = users.find(users => parseInt(users.id) === parseInt(selectedOption.value)) 
+    if (findedUser.name) setValue("name", findedUser.name)
+    setValue("phone", findedUser.phone ? findedUser.phone : findedUser.login)
+  }
+
   const handleClose = () => {
     for (const key in defaultValues) setValue(key, "")
     handleAddEventSidebar()
@@ -225,8 +232,8 @@ const AddEventSidebar = props => {
   } 
 
   const handleDeleteEvent = () => {
-    dispatch(removeEvent(selectedAppointment.id))
-    removeEventInCalendar(selectedAppointment.id)
+    dispatch(removeEvent(selectedBooking.id))
+    removeEventInCalendar(selectedBooking.id)
     handleClose()
     toast.success('Запись удалена')
   }
@@ -301,12 +308,14 @@ const AddEventSidebar = props => {
                 isClearable={false}
                 isDisabled={userData && userData.type === 1}
                 options={usersOptions}
+                value={field.value}
+                onChange={handleUserChange}
                 theme={selectThemeColors}
                 placeholder={t('bookingsData.customerPlaceholder')}
                 components={{
                   Option: SelectComponent
                 }}
-                {...field}
+                // {...field}
               />
               )}
               />
