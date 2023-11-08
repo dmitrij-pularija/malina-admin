@@ -48,7 +48,7 @@ export const columns = (userData, handleDel) => {
   {
     name: '№',
     sortable: true,
-    minWidth: '30px',
+    width: '100px',
     sortField: 'id',
     selector: row => row.id,
     cell: row => (
@@ -66,7 +66,7 @@ export const columns = (userData, handleDel) => {
   {
     // name: i18next.t('Date'),
     name: 'Дата',
-    minWidth: '120px',
+    width: '120px',
     sortable: true,
     sortField: 'order_date',
     selector: row => row.order_date,
@@ -74,7 +74,7 @@ export const columns = (userData, handleDel) => {
   },
   {
     name: 'Сумма',
-    minWidth: '120px',
+    width: '120px',
     sortable: true,
     sortField: 'total_order_price',
     selector: row => row.total_order_price,
@@ -111,6 +111,14 @@ export const columns = (userData, handleDel) => {
     cell: row => <span className='text-capitalize'>{row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "Внутри заведения"}</span>
   },
   {
+    name: 'Стол',
+    width: '80px',
+    sortable: false,
+    sortField: 'table',
+    selector: row => row.table,
+    cell: row => <span className='text-capitalize'>{row.table ? row.table : ""}</span>
+  },
+  {
     name: 'Клиент',
     sortable: true,
     minWidth: '200px',
@@ -142,7 +150,7 @@ export const columns = (userData, handleDel) => {
   // },
   {
     name: 'Рейтинг',
-    minWidth: '142px',
+    width: '142px',
     sortable: true,
     sortField: 'order_waiter_rating',
     selector: row => row.rate,
@@ -158,7 +166,7 @@ export const columns = (userData, handleDel) => {
   },
   {
     name: 'Статус',
-    minWidth: '120px',
+    width: '120px',
     sortable: true,
     sortField: 'status',
     selector: row => row.status,
@@ -170,7 +178,7 @@ export const columns = (userData, handleDel) => {
   },
   {
     name: 'Действия',
-    minWidth: '120px',
+    width: '120px',
     cell: row => (
       <div className='column-action'>
         <UncontrolledDropdown>
