@@ -57,7 +57,7 @@ const Calendar = props => {
     return () => i18next.off('languageChanged', handleLanguageChange)
   }, [])
 
-  const dataEvents = data && data.length ? data.map(event => ({id: event.id, title: `Количество гостей ${event.guests} | ${event.name} | ${event.phone}`, start: getDateTime(event.date, event.time), end: getDateTime(event.date, endTime), extendedProps: { calendar: event.status }})) : []
+  const dataEvents = data && data.length ? data.map(event => ({id: event.id, title: `${event.name} | ${event.phone} | Количество гостей ${event.guests}`, start: getDateTime(event.date, event.time), end: getDateTime(event.date, endTime), extendedProps: { calendar: event.status }})) : []
 // ** calendarOptions(Props)
 // console.log(dataEvents)
   const calendarOptions = {

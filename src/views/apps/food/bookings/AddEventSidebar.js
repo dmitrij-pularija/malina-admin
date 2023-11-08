@@ -306,7 +306,7 @@ const AddEventSidebar = props => {
               <Controller
                   name="user"
                   control={control}
-                  rules={{ required: true }}
+                  rules={{ required: false }}
                   render={({ field }) => (
               <Select
                 id='user'
