@@ -107,6 +107,17 @@ export const editAppointment = createAsyncThunk('appBeautyAppointments/editAppoi
 }
 })
 
+export const changeStatus = createAsyncThunk('appBeautyAppointments/changeStatus', async ({ id, appointment}, { dispatch, getState }) => {
+  try {
+  await axios.patch(`/beauty/beauty_appointment_status/update/${id}/`, appointment)
+  await dispatch(getData(getState().appointments.params))
+  return appointment
+} catch (error) {
+  errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  return thunkAPI.rejectWithValue(error)
+}
+})
+
 export const updateAppointment = createAsyncThunk('appBeautyAppointments/Appointment', async ({ id, appointment }, { dispatch, getState }) => {
   
   try {
@@ -159,6 +170,9 @@ export const appBeautyAppointmentsSlice = createSlice({
       .addCase(addAppointment.pending, handlePending)
       .addCase(deleteAppointment.pending, handlePending)
       .addCase(editAppointment.pending, handlePending)
+      .addCase(changeStatus.pending, handlePending)
+      .addCase(changeStatus.rejected, handleRejected)
+      .addCase(changeStatus.fulfilled, handleFulfilled)
       .addCase(updateAppointment.pending, handlePending)
       .addCase(updateAppointment.rejected, handleRejected)
       .addCase(getData.rejected, handleRejected)

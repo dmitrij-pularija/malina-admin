@@ -8,7 +8,7 @@ import Select, { components } from 'react-select' // eslint-disable-line
 import PerfectScrollbar from 'react-perfect-scrollbar'
 import { useForm, Controller } from 'react-hook-form'
 import { Button, Modal, ModalHeader, ModalBody, Label, Input, Form, FormFeedback } from 'reactstrap'
-import { selectThemeColors, formatDataTimeSave, formatDataTime, checkIsValid, initSelect, isObjEmpty } from '@utils'
+import { selectThemeColors, formatDataTimeSave, formatDataTime, checkIsValid, initSelect, initSelectString } from '@utils'
 import { Russian } from "flatpickr/dist/l10n/ru.js"
 import { english } from "flatpickr/dist/l10n/default.js"
 import { useTranslation } from 'react-i18next'
@@ -24,7 +24,8 @@ const defaultValues = {
   services: '',
   startDate: '',
   endDate: '',
-  comment: ''
+  comment: '',
+  status: ''
   }
 
 const requiredFields = ["guests", "name", "phone", "startDate"]
@@ -35,6 +36,7 @@ const AddEventSidebar = props => {
     open,
     users,
     masters,
+    filters,
     services,
     userData,
     currentMaster,
@@ -45,6 +47,7 @@ const AddEventSidebar = props => {
     selectEvent,
     updateEvent,
     removeEvent,
+    changeStatus,
     refetchEvents,
     calendarsColor,
     handleAddEventSidebar
@@ -113,7 +116,12 @@ const AddEventSidebar = props => {
     value: String(user.id),
     label: user.name ? user.name : user.login,
     avatar: user.avatar
-  })) 
+  }))
+  
+  const statusOptions = filters.map(filter => ({
+    value: filter.value,
+    label: i18next.language === 'ru' ? filter.label : filter.value
+  }))
 
   const filtredServices = services && services.length && currentMaster.value ? services.filter(service => {
     return service.beauty_service_masters.some(master => parseInt(master.id) === parseInt(currentMaster.value))
@@ -146,6 +154,7 @@ const AddEventSidebar = props => {
     services: selectedAppointment.appointment_services ? servicesOptions.filter(i => servicesList.includes(parseInt(i.value))) : '',
     startDate: selectedAppointment.appointment_time ? formatDataTime(selectedAppointment.appointment_time) : '',
     endDate: selectedAppointment.appointment_end_time ? formatDataTime(selectedAppointment.appointment_end_time) : '',
+    status: selectedAppointment.appointment_status ? initSelectString(statusOptions, selectedAppointment.appointment_status) : initSelectString(statusOptions, 'pending'),
     comment: selectedAppointment.comment ? selectedAppointment.comment : ''
   } : {...defaultValues, guests: userData.type === 1 ? initSelect(guestsOptions, userData.id) : "", master: userData.type === 4 ? initSelect(masterOptions, userData.id) : initSelect(masterOptions, currentMaster.value), name: userData.type === 1 ? userData.name : "", phone: userData.type === 1 ? userData.login : ""}
 
@@ -317,7 +326,7 @@ const AddEventSidebar = props => {
   }
 
   const onSubmit = (data) => {
-    // console.log(data)
+    const statusData = {}
     const newData = {}
     const servicesValues = data.services ? data.services.map(service => parseInt(service.value)) : null
     if (checkIsValid(data, requiredFields)) {
@@ -329,9 +338,10 @@ const AddEventSidebar = props => {
       if (data.startDate) newData.appointment_time = formatDataTimeSave(data.startDate).toString()
       // if (data.endDate) newData.appointment_end_time = formatDataTimeSave(data.endDate).toString()
       if (servicesValues) newData.appointment_services = servicesValues
-      
+      if (data.status) statusData.appointment_status = data.status.value
       if (selectedAppointment && selectedAppointment.appointment_user_account) {
-        dispatch(updateEvent({ id: selectedAppointment.id, appointment: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(updateEvent({ id: selectedAppointment.id, appointment: newData })).then(response => response.meta.requestStatus === 'fulfilled' && !statusData && handleClose())
+        if (statusData) dispatch(changeStatus({ id: selectedAppointment.id, appointment: statusData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
         dispatch(addEvent({ appointment: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
@@ -581,6 +591,33 @@ const AddEventSidebar = props => {
                 <FormFeedback>{t('appointmentsData.serviceFeedback')}</FormFeedback>
               )} 
             </div>
+            {userData.type === 2 && selectedAppointment && selectedAppointment.appointment_user_account && 
+            <div className='mb-1'>
+              <Label className='form-label' for='status'>
+              {t('appointmentsData.status')}
+              </Label>
+              <Controller
+                  name="status"
+                  control={control}
+                  rules={{ required: false }}
+                  render={({ field }) => (
+              <Select
+                id='status'
+                className={classnames('react-select', { 'is-invalid': errors.status && true })}
+                classNamePrefix='select'
+                isClearable={false}
+                // isDisabled={userData && userData.type === 1}
+                options={statusOptions}
+                theme={selectThemeColors}
+                placeholder={t('appointmentsData.statusPlaceholder')}
+                {...field}
+              />
+              )}
+              />
+              {errors && errors.status && (
+                <FormFeedback>{t('appointmentsData.statusFeedback')}</FormFeedback>
+              )} 
+            </div>}
             <div className='mb-1'>
               <Label className='form-label' for='comment'>
               {t('appointmentsData.comment')}

@@ -13,7 +13,7 @@ import { getAllUsers } from "../../user/store"
 import { getAllStores } from '../../food/stores/store'
 import { getAllMasters } from '../../user/masters/store'
 import { getAllServices } from '../services/services/store'
-import { getData, getAppointment, addAppointment, editAppointment, deleteAppointment, selectEvent } from './store'
+import { getData, getAppointment, addAppointment, editAppointment, deleteAppointment, selectEvent, changeStatus } from './store'
 // import { fetchEvents, selectEvent, updateEvent, updateFilter, updateAllFilters, addEvent, removeEvent } from './store'
 import Loading from '../../../../@core/components/spinner/Loading'
 import '@styles/react/apps/app-calendar.scss'
@@ -157,7 +157,7 @@ const CalendarComponent = () => {
   useEffect(() => {
   const filtredAppointments = data.filter(item => selectedCalendars.includes(item.appointment_status) && parseInt(item.appointment_master.id) === parseInt(currentMaster.value))  
   setAppointments(filtredAppointments)
-}, [data.length, selectedCalendars, currentMaster.value])
+}, [data, selectedCalendars, currentMaster.value])
 
   useEffect(() => {
     if (userData.type === 2 && stores.length) {
@@ -223,6 +223,7 @@ const CalendarComponent = () => {
       <AddEventSidebar
         users={users}
         masters={masters}
+        filters={filters}
         currentMaster={currentMaster}
         services={services}
         userData={userData}
@@ -231,6 +232,7 @@ const CalendarComponent = () => {
         addEvent={addAppointment}
         open={addSidebarOpen}
         selectEvent={selectEvent}
+        changeStatus={changeStatus}
         updateEvent={editAppointment}
         removeEvent={deleteAppointment}
         calendarApi={calendarApi}
