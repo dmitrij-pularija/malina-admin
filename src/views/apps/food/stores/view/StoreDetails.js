@@ -71,7 +71,7 @@ import {
     <Col sm={4} className="d-flex">
     <div className='width'>
             <div className='d-flex align-items-center flex-column'>
-              {renderLogo(selectedStore.name, selectedStore.image)}
+              {renderLogo(selectedStore.name, selectedStore.avatar)}
               <div className='d-flex flex-column align-items-center text-center'>
                 <div className='d-flex flex-column user-info'>
                   <h4>{selectedStore.name ? selectedStore.name : ''}</h4>

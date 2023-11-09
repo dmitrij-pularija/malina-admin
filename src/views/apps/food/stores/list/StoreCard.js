@@ -87,7 +87,7 @@ const StoreCard = props => {
         return (
           <Card className='ecommerce-card' key={item.name}>
             {/* <div className='item-img text-center mx-auto'> */}
-              {renderLogo(item.image, item.name)}
+              {renderLogo(item.avatar, item.name)}
             {/* </div> */}
             <CardBody>
                 <CardText tag='span' className='company-name'>

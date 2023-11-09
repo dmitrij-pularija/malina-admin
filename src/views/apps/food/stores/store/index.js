@@ -1,5 +1,5 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
-import { handlePending, handleFulfilled, handleRejected } from "@utils"
+import { handlePending, handleFulfilled, handleRejected, dataURLtoBlob } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
@@ -145,9 +145,20 @@ export const getStore = createAsyncThunk('appStores/getStore', async id => {
 }
 })
 
-export const addStore = createAsyncThunk('appStores/addStore', async (formData, { dispatch, getState }) => {
+export const addStore = createAsyncThunk('appStores/addStore', async ({ store, avatar }, { dispatch, getState }) => {
+  if (avatar && avatar.startsWith('data:image')) {
+    const formDataImage = new FormData()
+    try {  
+      const avatarBlob = dataURLtoBlob(avatar)
+      formDataImage.append('image', avatarBlob, 'avatar.jpg')
+      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+      store.avatar = image
+    } catch (error) {
+      errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    }
+    }
   try {
-  await axios.post('/users/businesses/', formData)
+  await axios.post('/users/businesses/', store)
   await dispatch(getData(getState().stores.params))
   await dispatch(getAllStores())
 } catch (error) {
@@ -156,9 +167,20 @@ export const addStore = createAsyncThunk('appStores/addStore', async (formData, 
 }
 })
 
-export const editStore = createAsyncThunk('appStores/editStore', async ({ id, formData }, { dispatch, getState }) => {
+export const editStore = createAsyncThunk('appStores/editStore', async ({ id, store, avatar }, { dispatch, getState }) => {
+  if (avatar && avatar.startsWith('data:image')) {
+    const formDataImage = new FormData()
+    try {  
+      const avatarBlob = dataURLtoBlob(avatar)
+      formDataImage.append('image', avatarBlob, 'avatar.jpg')
+      const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+      store.avatar = image
+    } catch (error) {
+      errorMessage(error.response.data ? Object.values(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+    }
+    }
   try {
-  await axios.put(`/users/businesses/${ id }/`, formData)
+  await axios.patch(`/users/businesses/${ id }/`, store)
   await dispatch(getData(getState().stores.params))
   await dispatch(getAllStores())
   return id

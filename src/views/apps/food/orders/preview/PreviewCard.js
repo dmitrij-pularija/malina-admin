@@ -104,7 +104,7 @@ const PreviewCard = ({ data }) => {
         <div className='d-flex justify-content-between flex-md-row flex-column invoice-spacing mt-0'>
           <div>
             <div className='logo-wrapper gap-10'>
-            {renderImg(data.business_id.image, data.business_id.name)}  
+            {renderImg(data.business_id.avatar, data.business_id.name)}  
             {/* <Logo2 src={data.business_id.image} size={"xl"} />   */}
               <h3 className='text-primary'>{data.business_id.name ? data.business_id.name : data.business_id.login}</h3>
             </div>

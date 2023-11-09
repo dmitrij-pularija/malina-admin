@@ -75,6 +75,14 @@ export const searchArrFood = [
       },
       {
         id: 2,
+        target: 'bookings',
+        isBookmarked: true,
+        title: 'Bookings',
+        icon: 'Calendar',
+        link: '/apps/food/bookings'
+      },
+      {
+        id: 3,
         target: 'feeds',
         isBookmarked: true,
         title: 'Feeds',
@@ -116,6 +124,14 @@ export const searchArr = [
       },
       {
         id: 4,
+        target: 'bookings',
+        isBookmarked: true,
+        title: 'Bookings',
+        icon: 'Calendar',
+        link: '/apps/food/bookings'
+      },
+      {
+        id: 5,
         target: 'feeds',
         isBookmarked: true,
         title: 'Feeds',
@@ -123,7 +139,7 @@ export const searchArr = [
         link: '/apps/feed/list'
       },
       {
-        id: 5,
+        id: 6,
         target: 'ServicesServices',
         isBookmarked: false,
         title: 'Services',
@@ -131,7 +147,7 @@ export const searchArr = [
         link: '/apps/beauty/services/services/list'
       },
       {
-        id: 6,
+        id: 7,
         target: 'beautyProducts',
         isBookmarked: false,
         title: 'Beauty Products',

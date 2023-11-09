@@ -93,7 +93,7 @@ export const columns = (userData, handleDel) => {
             className='user_name text-truncate text-body d-flex justify-content-left align-items-center'
             // onClick={() => { if (row.user_id) store.dispatch(getUser(row.user_id.id)) } }
           >
-        {renderClient(row.business_id && row.business_id.name ? row.business_id.name : 'Заведение', row.business_id ? row.business_id.image : '')}
+        {renderClient(row.business_id && row.business_id.name ? row.business_id.name : 'Заведение', row.business_id ? row.business_id.avatar : '')}
           {/* <Logo2 src={row.business_id.image} size={"s"}/> */}
         <div className='d-flex flex-column ml3'>
             <span className='fw-bolder'>{row.business_id.name}</span>

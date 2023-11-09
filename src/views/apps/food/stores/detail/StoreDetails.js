@@ -194,7 +194,7 @@ const Store = (props) => {
 
   useEffect(() => {
     if (selectedStore) {
-      setAvatar(selectedStore.image)
+      setAvatar(selectedStore.avatar)
       setCardPaymentAllow(selectedStore.is_card_payment_allow)
       values.name = selectedStore.name ? selectedStore.name : defaultValues.name
       values.login = selectedStore.login ? selectedStore.login : defaultValues.login
@@ -391,60 +391,48 @@ const Store = (props) => {
     // console.log(data)
     if (checkIsValid(data, requiredFields)) {
       if (!passwords.newPassword && !selectedStore) return toggleModal()
-      const formData = new FormData()
-      formData.append("login", data.login)
-      formData.append("business_address.name", data.address)
-      formData.append("business_address.city", data.city)
-      formData.append("business_address.longitude", data.longitude)
-      formData.append("business_address.latitude", data.latitude)
-      if (passwords.newPassword) formData.append("password", passwords.newPassword)
-      if (data.name) formData.append("name", data.name)
-      if (data.phone) formData.append("phone", data.phone)
-      if (data.email) formData.append("email", data.email)
-      if (data.type) formData.append("type", parseInt(data.type.value))
-      if (data.business) formData.append("business_type", parseInt(data.business.value))
-      if (data.percentage) formData.append("percentage", data.percentage)
-      if (data.percentService) formData.append("service_charge", data.percentService)
-      if (data.timeBeg) formData.append(
-          "work_time_start",
-          data.timeBeg
-        )
-      if (data.timeEnd) formData.append(
-          "work_time_end",
-          data.timeEnd
-        )
-      if (data.telegram) formData.append("telegram", data.telegram)
-      if (data.instagram) formData.append("instagram", data.instagram)
-      if (data.whatsapp) formData.append("whatsapp", data.whatsapp)
-      if (data.adminTelegram) formData.append("admin_telegram_id", data.adminTelegram)
-      if (data.slogan) formData.append("slogan", data.slogan)
-      if (data.description) formData.append("description", data.description)
-      if (data.avgcheck) formData.append("average_check", data.avgcheck)
-      if (data.category) formData.append("category", data.category.value)
-      if (data.subcategory) formData.append("subcategory", data.subcategory.value)
-      if (data.priceLevel) formData.append("price_level", parseInt(data.priceLevel.value))
+      const newData = {}
+      newData.business_address = {}
+      newData.login = data.login
+      newData.business_address.name = data.address
+      newData.business_address.city = data.city
+      newData.business_address.longitude = data.longitude
+      newData.business_address.latitude = data.latitude
+      if (passwords.newPassword) newData.password = passwords.newPassword
+      if (data.name) newData.name = data.name
+      if (data.phone) newData.phone = data.phone
+      if (data.email) newData.email = data.email
+      if (data.type) newData.type = parseInt(data.type.value)
+      if (data.business) newData.business_type = parseInt(data.business.value)
+      if (data.percentage) newData.percentage = data.percentage
+      if (data.percentService) newData.service_charge = data.percentService
+      if (data.timeBeg) newData.work_time_start = data.timeBeg
+      if (data.timeEnd) newData.work_time_end = data.timeEnd
+      if (data.telegram) newData.telegram = data.telegram
+      if (data.instagram) newData.instagram = data.instagram
+      if (data.whatsapp) newData.whatsapp = data.whatsapp
+      if (data.adminTelegram) newData.admin_telegram_id = data.adminTelegram
+      if (data.slogan) newData.slogan = data.slogan
+      if (data.description) newData.description = data.description
+      if (data.avgcheck) newData.average_check = data.avgcheck
+      if (data.category) newData.category = data.category.value
+      if (data.subcategory) newData.subcategory = data.subcategory.value
+      if (data.priceLevel) newData.price_level = parseInt(data.priceLevel.value)
       if (data.isCardPaymentAllow) {
-        formData.append("is_card_payment_allow", data.isCardPaymentAllow)
-        if (data.merchantId) formData.append("merchant_id", data.merchantId)
-        if (data.secretKey) formData.append("pay_secret_key", data.secretKey)
+        newData.is_card_payment_allow = data.isCardPaymentAllow
+        if (data.merchantId) newData.merchant_id = data.merchantId
+        if (data.secretKey) newData.pay_secret_key = data.secretKey
       } else {
-        formData.append("merchant_id", "")
-        formData.append("pay_secret_key", "")
+        newData.merchant_id = ""
+        newData.pay_secret_key = ""
       }
-      if (data.isStaff) formData.append("is_staff", data.isStaff)
+      if (data.isStaff) newData.is_staff = data.isStaff
 
-      if (avatar && avatar.startsWith("data:image")) {
-        const avatarBlob = dataURLtoBlob(avatar)
-        formData.append("image", avatarBlob, "logo.jpg")
-      }
       if (selectedStore) {
-        dispatch(editStore({ id: selectedStore.id, formData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(editStore({ id: selectedStore.id, store: newData, avatar })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
-        dispatch(addStore(formData)).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
+        dispatch(addStore({ store: newData, avatar })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       }
-      // setAvatar("")
-      // reset()
-      // navigate("/apps/food/stores/list/")
     } else {
       for (const key in data) {
         if (data[key].length === 0) {
