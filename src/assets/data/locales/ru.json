@@ -17,7 +17,7 @@
   "Feedback": "Отзывы",
   "Staff rating": "o персоналe",
   "Order Feedback": "о заказах",
-  "Reviews about establishments": "о заведениях",
+  "Store Feedback": "о заведениях",
   "Filters": "Фильтры",
   "Menu": "Меню",
   "Products": "Блюда",
@@ -25,6 +25,11 @@
   "Chefs": "Повара",
   "Masters": "Специалисты",
   "Complaints": "о блюдах",
+  "complaintsData": {
+    "title": "О блюдах",
+    "title1": "Отзывы",
+    "title2": "о блюдах"
+  },
   "Feeds": "Публикации",
   "Specialties": "Специальности",
   "Staff": "Персонал",
@@ -115,9 +120,22 @@
     "delete": "Удалить",
     "cancel": "Отменить"
   },
+  "CustomHeaderData": {
+    "show": "Показать",
+    "records": "записей",
+    "search": "Поиск:",
+    "export": "Экспорт",
+    "print": "Печать",
+    "copy": "Копировать"
+  },  
   "Home": "Главная",
   "Add": "Добавить",
+  "customer": "Клиент",
+  "product": "Блюдо",
+  "article": "Cтатья",
+  "review": "Отзыв",
   "Date": "Дата",
+  "notFound": "Не найдены",
   "Email": "Email",
   "Chat": "Chat",
   "Todo": "Todo",

@@ -90,6 +90,12 @@ export default [
     icon: <Award size={20} />,
     children: [
       {
+        id: 'storeFeedback',
+        title: 'Store Feedback',
+        icon: <Circle size={12} />,
+        navLink: '/apps/food/rating/stores/list'
+      },
+      {
         id: 'orderBeautyFeedback',
         title: 'Order Beauty Feedback',
         icon: <Circle size={12} />,

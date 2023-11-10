@@ -100,8 +100,8 @@ export default [
     icon: <Award size={20} />,
     children: [
       {
-        id: 'reviewsEstablishments',
-        title: 'Reviews about establishments',
+        id: 'storeFeedback',
+        title: 'Store Feedback',
         icon: <Circle size={12} />,
         navLink: '/apps/food/rating/stores/list'
       },

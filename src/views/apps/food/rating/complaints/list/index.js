@@ -3,11 +3,13 @@
 import Breadcrumbs from '@components/breadcrumbs'
 import Loading from '../../../../../../../src/@core/components/spinner/Loading'
 import Table from "./Table"
+import { useTranslation } from 'react-i18next'
 // import { getAllUsers } from "../../../../user/store"
 // import { getAllStores } from '../../../stores/store'
 import "@styles/react/apps/app-users.scss"
 
 const RatingStoresList = () => {
+const { t } = useTranslation()
   // const dispatch = useDispatch()
   // const stores = useSelector(state => state.stores.allStores)
   // const users = useSelector(state => state.users.allUsers)
@@ -21,8 +23,8 @@ const RatingStoresList = () => {
   return (
   <> 
     <div className="app-user-list">
-      <Breadcrumbs title='О блюдах' data={[{ title: 'Отзывы' }, { title: 'о блюдах' }]} /> 
-      <Table />
+    <Breadcrumbs title={t('complaintsData.title')} data={[{ title: t('complaintsData.title1') }, { title: t('complaintsData.title2') }]} /> 
+      <Table t={t} />
     </div>
     <Loading />
   </>
