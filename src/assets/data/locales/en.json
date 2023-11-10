@@ -22,6 +22,11 @@
     "title2": "About staff"
   },
   "Order Feedback": "about Orders",
+  "orderRatingData": {
+    "title": "Orders reviews",
+    "title1": "Reviews",
+    "title2": "About urders"
+  },
   "Store Feedback": "about Stores",
   "Menu": "Menu",
   "Products": "Products",

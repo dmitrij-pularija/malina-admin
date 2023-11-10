@@ -22,6 +22,11 @@
     "title2": "о персонале"
   },
   "Order Feedback": "о заказах",
+  "orderRatingData": {
+    "title": "Отзывы о заказах",
+    "title1": "Отзывы",
+    "title2": "о заказах"
+  },
   "Store Feedback": "о заведениях",
   "Complaints": "о блюдах",
   "complaintsData": {
@@ -141,6 +146,7 @@
   "review": "Отзыв",
   "rating": "Рейтинг",
   "Date": "Дата",
+  "order": "Заказ",
   "store": "Заведение",
   "selectStore": "Выбирите заведение",
   "waiter": "Официант",

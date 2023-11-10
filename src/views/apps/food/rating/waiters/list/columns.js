@@ -30,7 +30,7 @@ import { formatData } from '@utils'
 // ** Renders Client Columns
 
 
-export const columns = (users, waiters, stores, t) => {
+export const columns = (users, waiters, stores, userData, t) => {
 
   // const getWaiterInfo = id => {
   //   const foundWaiter = waiters.find(item => item.id === id)
@@ -155,6 +155,7 @@ export const columns = (users, waiters, stores, t) => {
     name: t('store'),
     minWidth: '250px',
     sortable: true,
+    omit: userData && userData.type === 2,
     sortField: 'row.business_id',
     cell: row => renderClient(getStoreInfo(row.business_id), "store")
   }

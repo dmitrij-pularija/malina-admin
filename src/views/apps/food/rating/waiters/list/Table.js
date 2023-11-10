@@ -171,7 +171,7 @@ const RatingWaitersList = ({userData, users, waiters, stores, t}) => {
     label: store.name
   }))
   storeOptions.unshift({ value: '', label: t('showAll') })
-  console.log(data)
+  
 
   useEffect(() => {
     if (userData.type === 2 && stores.length) setCurrentStore(userData.type === 2 && initSelect(storeOptions, userData.id))
@@ -366,7 +366,7 @@ const RatingWaitersList = ({userData, users, waiters, stores, t}) => {
             pagination
             responsive
             paginationServer
-            columns={columns(users, waiters, stores, t)}
+            columns={columns(users, waiters, stores, userData, t)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'

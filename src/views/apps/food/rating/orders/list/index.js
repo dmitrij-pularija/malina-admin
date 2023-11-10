@@ -4,10 +4,12 @@ import Breadcrumbs from '@components/breadcrumbs'
 import Loading from '../../../../../../../src/@core/components/spinner/Loading'
 import Table from "./Table"
 import { getAllStores } from '../../../stores/store'
+import { useTranslation } from 'react-i18next'
 import "@styles/react/apps/app-users.scss"
 
 const RatingOrdersList = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const stores = useSelector(state => state.stores.allStores)
   const { userData } = useSelector(state => state.auth)
 
@@ -17,8 +19,8 @@ useEffect(() => {
 
   return (
     <div className="app-user-list">
-      <Breadcrumbs title='Отзывы о заказах' data={[{ title: 'Отзывы' }, { title: 'о заказах' }]} /> 
-      <Table userData={userData} stores={stores} />
+      <Breadcrumbs title={t('orderRatingData.title')} data={[{ title: t('orderRatingData.title1') }, { title: t('orderRatingData.title2') }]} />
+      <Table userData={userData} stores={stores} t={t} />
       <Loading />  
     </div>
   )
