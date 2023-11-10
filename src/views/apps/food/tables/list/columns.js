@@ -72,7 +72,7 @@ const renderQr = (url, handleClick) => {
     }
 }
 
-export const columns = (downloadImg, setQqrcodeUrl, toggleModal, handleDel, handleEdit) => {
+export const columns = (downloadImg, setQqrcodeUrl, toggleModal, handleDel, handleEdit, t) => {
 
 const handleClick = url => {
   setQqrcodeUrl(url)
@@ -104,25 +104,25 @@ const handleClick = url => {
     sortable: true,
     minWidth: '20px',
     sortField: 'number',
-    name: 'Номер',
+    name: t('tablesData.number'),
     cell: row => row.number
   },
   {
-    name: 'QR код',
+    name: t('tablesData.qr'),
     sortable: false,
     minWidth: '40px',
     sortField: 'qr_code',
     cell: row => renderQr(row.qr_code, handleClick)
   },
   {
-    name: 'Официанты',
+    name: t('waiter'),
     sortable: false,
     minWidth: '200px',
     sortField: 'total',
     cell: row => renderWaiter(row.waiter)
   },
   {
-    name: 'Действия',
+    name: t('action'),
     width: '200px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
@@ -131,13 +131,9 @@ const handleClick = url => {
             <MoreVertical size={17} className='cursor-pointer' />
           </DropdownToggle>
           <DropdownMenu end>
-          {/* <DropdownItem tag='a' href='/' className='w-100' onClick={e => e.preventDefault()}>
-              <Eye size={14} className='me-50' />
-              <span className='align-middle'>Просмотр</span>
-          </DropdownItem> */}
             <DropdownItem tag='a' href={row.qr_code} download className='w-100' onClick={e => { e.preventDefault(); downloadImg(row.qr_code) }} >
               <Download size={14} className='me-50' />
-              <span className='align-middle'>Скачать QR-kod</span>
+              <span className='align-middle'>{t('download')}</span>
             </DropdownItem>
             <DropdownItem
               tag='a'
@@ -146,7 +142,7 @@ const handleClick = url => {
               onClick={event => handleEdit(event, row)}
             >
               <Edit size={14} className='me-50' />
-              <span className='align-middle'>Редактировать</span>
+              <span className='align-middle'>{t('edit')}</span>
             </DropdownItem>
             <DropdownItem
               tag='a'
@@ -155,7 +151,7 @@ const handleClick = url => {
               onClick={event => handleDel(event, row.id)}
             >
               <Trash size={14} className='me-50' />
-              <span className='align-middle'>Удалить</span>
+              <span className='align-middle'>{t('delete')}</span>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

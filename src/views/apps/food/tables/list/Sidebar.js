@@ -17,7 +17,7 @@ const defaultValues = {
 
 const requiredFields = ["number", "waiter"]
 
-const SidebarNewTable = ({ store, open, toggleSidebar, waiters, selectedTable, setSelectedTable }) => {
+const SidebarNewTable = ({ store, open, toggleSidebar, waiters, selectedTable, setSelectedTable, t }) => {
   const dispatch = useDispatch()
   // const [waiterOptions, setWaiterOptions] = useState([])
 
@@ -136,26 +136,26 @@ const SidebarNewTable = ({ store, open, toggleSidebar, waiters, selectedTable, s
     <Sidebar
       size='lg'
       open={open}
-      title={selectedTable ? 'Редактирование стола' : 'Создание нового стола'}
+      title={selectedTable ? t('tablesData.edit') : t('tablesData.add')}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
-      onClosed={handleClose}
+      // onClosed={handleClose}
     >
       <Form onSubmit={handleSubmit(onSubmit)}>
         <div className='mb-1'>
           <Label className='form-label' for='number'>
-          Номер стола <span className='text-danger'>*</span>
+          {t('tablesData.number')} <span className='text-danger'>*</span>
           </Label>
           <Controller
             name='number'
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <Input id='number' placeholder='Введите номер стола' invalid={errors.number && true} {...field} />
+              <Input id='number' placeholder={t('tablesData.placeholderNumber')} invalid={errors.number && true} {...field} />
             )}
           />
-        {errors && errors.number && (<FormFeedback>Пожалуйста введите номер стола</FormFeedback>)}    
+        {errors && errors.number && (<FormFeedback>{t('tablesData.feedbackNumber')}</FormFeedback>)}    
         </div> 
         {/* <div className='mb-1'>
               <Label className="form-label" for="business">
@@ -201,7 +201,7 @@ const SidebarNewTable = ({ store, open, toggleSidebar, waiters, selectedTable, s
         </div>  */}
         <div className='mb-3'>
           <Label className='form-label' for='waiter'>
-          Официант(ы)
+          {t('tablesData.waiter')}
           </Label>
           <Controller
             name='waiter'
@@ -218,18 +218,18 @@ const SidebarNewTable = ({ store, open, toggleSidebar, waiters, selectedTable, s
                 options={waiterOptions}
                 onChange={handleWaiterChange}
                 theme={selectThemeColors}
-                placeholder="Выбирите официанта(ов)"
+                placeholder={t('tablesData.placeholderWaiter')}
                 className={classnames('react-select', { 'is-invalid': errors.waiter && true })}
               />
             )}
           />
-         {errors && errors.waiter && (<FormFeedback>Пожалуйста выберите официанта</FormFeedback>)} 
+         {errors && errors.waiter && (<FormFeedback>{t('tablesData.feedbackWaiter')}</FormFeedback>)} 
         </div>   
         <Button type='submit' className='me-1' color='primary'>
-          Сохранить
+        {t('save')}
         </Button>
         <Button type='reset' color='secondary' outline onClick={handleClose}>
-          Отменить
+        {t('cancel')}
         </Button>
       </Form>
     </Sidebar>
