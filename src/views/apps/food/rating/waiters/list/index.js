@@ -6,10 +6,12 @@ import Loading from '../../../../../../../src/@core/components/spinner/Loading'
 import { getAllWaiters } from "../../../../user/waiters/store"
 import { getAllUsers } from "../../../../user/store"
 import { getAllStores } from '../../../stores/store'
+import { useTranslation } from 'react-i18next'
 import "@styles/react/apps/app-users.scss"
 
 const RatingWaitersList = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const stores = useSelector(state => state.stores.allStores)
   const waiters = useSelector(state => state.waiters.allWaiters)
   const users = useSelector(state => state.users.allUsers)
@@ -24,8 +26,8 @@ useEffect(() => {
   return (
   <>
     <div className="app-user-list">
-      <Breadcrumbs title='Отзывы о персонале' data={[{ title: 'Отзывы' }, { title: 'о персонале' }]} /> 
-      <Table userData={userData} users={users} waiters={waiters} stores={stores} />
+    <Breadcrumbs title={t('staffRatingData.title')} data={[{ title: t('staffRatingData.title1') }, { title: t('staffRatingData.title2') }]} /> 
+      <Table userData={userData} users={users} waiters={waiters} stores={stores} t={t} />
     </div>
     <Loading />
   </>

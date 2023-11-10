@@ -168,7 +168,7 @@ const ProductComplaintsList = ({t}) => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   // const [currentStore, setCurrentStore] = useState({ value: '', label: 'Выбирите заведение' })
   // ** Function to toggle sidebar
-console.log(data)
+// console.log(data)
   // ** Get data on mount
   useEffect(() => {
     dispatch(

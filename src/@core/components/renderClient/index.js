@@ -22,6 +22,8 @@ const renderClient = (data, type) => {
  let name = "User"
  let login = ""
  let avatar = ""
+
+ if (data) {
  if (type === "user") {
     redirectLink = `/apps/user/view/${data.id}`
     name = data.name ? `${data.name} ${data.surname ? data.surname : ''}` : "User"
@@ -30,8 +32,9 @@ const renderClient = (data, type) => {
  }
  if (type === "waiter") {
     redirectLink = `/apps/user/waiters/view/${data.id}`
-    name = "Waiter"
+    name = data.full_name ?  data.full_name : "Waiter"
     login = ""
+    avatar = data.profile_picture
  }
  if (type === "chef") {
     redirectLink = ""
@@ -43,10 +46,13 @@ const renderClient = (data, type) => {
     login = ""
  }
  if (type === "store") {
-    name = "Store"
+    redirectLink = `/apps/food/stores/view/${data.id}`
+    name = data.name ?  data.name : "Store"
+    login = data.business_address && data.business_address.city ?  `${data.business_address.city}, ${data.business_address.name ? data.business_address.name : ''}` : "Store"
+    avatar = data.avatar
  }
 
- if (data) {
+ 
   return (
     <Link
     to={redirectLink}

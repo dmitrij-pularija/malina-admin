@@ -15,7 +15,12 @@
   "Customers": "Customers",
   "Guests": "Guests",
   "Feedback": "Feedback",
-  "Staff rating": "about Staff",
+  "Staff rating": "about staff",
+  "staffRatingData": {
+    "title": "Staff reviews",
+    "title1": "Reviews",
+    "title2": "About staff"
+  },
   "Order Feedback": "about Orders",
   "Store Feedback": "about Stores",
   "Menu": "Menu",
@@ -26,7 +31,7 @@
   "Complaints": "Complaints",
   "complaintsData": {
     "title": "Complaints",
-    "title1": "Feedback",
+    "title1": "Reviews",
     "title2": "Complaints"
   },
   "Feeds": "Feeds",
@@ -133,7 +138,13 @@
   "product": "Product",
   "article": "Article",
   "review": "Review",
+  "rating": "Rating",
   "Date": "Date",
+  "store": "Store",
+  "selectStore": "Choose a store",
+  "waiter": "Waiter",
+  "selectWaiter": "Choose a waiter",
+  "showAll": "Show all",
   "notFound": "Not found",
   "Email": "Email",
   "Chat": "Chat",
