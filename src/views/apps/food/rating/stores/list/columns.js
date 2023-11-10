@@ -1,100 +1,42 @@
-import { Link } from 'react-router-dom'
-// ** React Imports
-import Avatar from '@components/avatar'
-import Logo2 from '@components/logo2'
-import { getUser } from '../../../../user/store'
-// ** Icons Imports
+import renderClient from '@components/renderClient'
 import { Star } from 'react-feather'
-
-// ** Reactstrap Imports
 import Rating from 'react-rating'
 import '@styles/base/pages/app-ecommerce.scss'
 import { formatData } from '@utils'
 
-  const getAvatar = data => {
-  if (data.avatar && data.avatar.includes("http")) {
-    return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={data.name}
-      />
-    )
-  }
-  }
-
-// ** Renders Client Columns
-
-
-export const columns = (users, stores) => {
+export const columns = (users, stores, userData, t) => {
 
   const getUserInfo = id => {
-      const foundUser = users.find(item => item.id === id)
-      if (!foundUser) return {name: "User", avatar: "", login: ""}
-      return {name: `${foundUser.name ? foundUser.name : ''} ${foundUser.surname ? foundUser.surname : ''}`, avatar: foundUser.avatar, login: foundUser.login }
-    }
-
-  const renderClient = (id, type) => {
-    let data = {}
-    if (type === "user") data = getUserInfo(id)
-   
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(data)}
-      <div className='d-flex flex-column'>
-        <Link
-          to={`/apps/user/view/${id}`}
-          className='user_name text-truncate text-body d-flex flex-column'
-          onClick={() => store.dispatch(getUser(id))}
-        >
-          <span className='fw-bolder'>{ data.name }</span>
-        <small className='text-truncate text-muted mb-0'>{data.login}</small>
-        </Link>
-      </div>
-    </div>    
-    )
+    const foundUser = users.find(item => item.id === id)
+    if (!foundUser) return {}
+    return foundUser
   }
 
-  const renderStoore = (id) => {
-    if (!stores.length) return null
+  const getStoreInfo = id => {
     const foundStore = stores.find(item => item.id === id)
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(foundStore)}   
-      {/* <Logo2 src={foundStore.image} size={"s"}/> */}
-    <div className='d-flex flex-column ml3'>
-        <span className='fw-bolder'>{foundStore.name}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
-    </div>
-  </div>
-    )
+    if (!foundStore) return {}
+    return foundStore
   }
-
+  
   return [
   {
     name: '№',
     sortable: false,
-    minWidth: '30px',
-    selector: row => row,
+    width: '80px',
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Клиент',
+    name: t('customer'),
     minWidth: '200px',
     sortable: true,
     sortField: 'user',
-    selector: row => row.user,
-    cell: row => renderClient(row.user, "user")
+    cell: row => renderClient(getUserInfo(row.user), "user")
   },
   {
-    name: 'Рейтинг',
-    minWidth: '142px',
+    name: t('rating'),
+    width: '142px',
     sortable: true,
     sortField: 'star.value',
-    selector: row => row.star.value,
     cell: row => (
       <Rating
         readonly
@@ -106,7 +48,7 @@ export const columns = (users, stores) => {
       />)
   },
   {
-    name: 'Отзыв',
+    name: t('review'),
     minWidth: '300px',
     sortable: true,
     sortField: 'text',
@@ -115,19 +57,19 @@ export const columns = (users, stores) => {
   },
 
   {
-    name: 'Дата',
-    minWidth: '120px',
+    name: t('Date'),
+    width: '120px',
     sortable: true,
     sortField: 'date',
     selector: row => row.date,
     cell: row => <span className='text-capitalize'>{formatData(row.date)}</span>
   },
   {
-    name: 'Заведение',
+    name: t('store'),
     minWidth: '250px',
     sortable: false,
-    selector: row => row.store,
-    cell: row => renderStoore(row.business)
+    omit: userData && userData.type === 2,
+    cell: row => renderClient(getStoreInfo(row.business), "store")
   }
 ]
 }

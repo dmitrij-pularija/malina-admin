@@ -5,7 +5,7 @@
   "eCommerce": "Malina beauty",
   "Orders": "Orders",
   "Structure": "Structures",
-  "Store": "Restaurants",
+  "Store": "Stores",
   "Categories": "Categories",
   "Branches": "Branches",
   "Tables": "Tables",
@@ -21,19 +21,24 @@
     "title1": "Reviews",
     "title2": "About staff"
   },
-  "Order Feedback": "about Orders",
+  "Order Feedback": "about orders",
   "orderRatingData": {
     "title": "Orders reviews",
     "title1": "Reviews",
     "title2": "About urders"
   },
-  "Store Feedback": "about Stores",
+  "Store Feedback": "about stores",
+  "storesData": {
+    "title": "Stores reviews",
+    "title1": "Reviews",
+    "title2": "About stores"
+  },
   "Menu": "Menu",
   "Products": "Products",
   "Addons": "Addons",
   "Chefs": "Chefs",
   "Masters": "Masters",
-  "Complaints": "Complaints",
+  "Complaints": "complaints",
   "complaintsData": {
     "title": "Complaints",
     "title1": "Reviews",

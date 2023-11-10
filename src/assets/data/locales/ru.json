@@ -28,6 +28,11 @@
     "title2": "о заказах"
   },
   "Store Feedback": "о заведениях",
+  "storesData": {
+    "title": "Отзывы о заведениях",
+    "title1": "Отзывы",
+    "title2": "о заведениях"
+  },
   "Complaints": "о блюдах",
   "complaintsData": {
     "title": "Отзывы о блюдах",
