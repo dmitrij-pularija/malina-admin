@@ -67,6 +67,7 @@ const defaultValues = {
 const requiredFields = ["title", "business", "type"]
 
 const FeedModal = ({
+  t,
   open,
   stores,
   userData, 
@@ -211,7 +212,7 @@ const FeedModal = ({
       <ModalBody className="px-sm-5 pt-50 pb-5">
         <div className="text-center mb-2">
           <h1 className="mb-1">
-            {selectedFeed ? 'Редактирование публикации' : 'Создание новой публикации'}
+            {selectedFeed ? t('FeedsData.titleEdit') : t('FeedsData.titleAdd')}
           </h1>
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -228,7 +229,7 @@ const FeedModal = ({
                       size="sm"
                       color="primary"
                     >
-                      Загрузить
+                      {t('download')}
                       <Input
                         type="file"
                         onChange={handleImg}
@@ -242,7 +243,7 @@ const FeedModal = ({
                       outline
                       onClick={handleImgReset}
                     >
-                      Очистить
+                      {t('clear')}
                     </Button>
                   </div>
                 </div>
@@ -251,21 +252,21 @@ const FeedModal = ({
             <Row>
             <Col md={6} xs={12}>
             <Label className='form-label' for='title'>
-          Заголовок<span className='text-danger'>*</span>
+            {t('FeedsData.headerLabel')}<span className='text-danger'>*</span>
           </Label>
           <Controller
             name='title'
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <Input id='title' placeholder='Введите заголовок' invalid={errors.title && true} {...field} />
+              <Input id='title' placeholder={t('FeedsData.headerPlaceholder')} invalid={errors.title && true} {...field} />
             )}
           />
-          {errors && errors.title && (<FormFeedback>Пожалуйста введите заголовок</FormFeedback>)}
+          {errors && errors.title && (<FormFeedback>{t('FeedsData.headerFeedback')}</FormFeedback>)}
             </Col>
             <Col md={6} xs={12}>
             <Label className='form-label' for='business'>
-          Заведение<span className='text-danger'>*</span>
+            {t('FeedsData.storeLabel')}<span className='text-danger'>*</span>
           </Label>
           <Controller
             name='business'
@@ -279,31 +280,31 @@ const FeedModal = ({
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}
-                placeholder={"Выберите заведение"}
+                placeholder={t('FeedsData.storePlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.business && true })}
                 {...field}
               />
             )}
           />
-        {errors && errors.business && (<FormFeedback>{`Пожалуйста выберите заведение`}</FormFeedback>)}
+        {errors && errors.business && (<FormFeedback>{t('FeedsData.storeFeedback')}</FormFeedback>)}
             </Col>
             <Col md={6} xs={12}>
             <Label className='form-label' for='subtitle'>
-          Под заголовок 
+            {t('FeedsData.subtitleLabel')} 
           </Label>
           <Controller
             name='subtitle'
             control={control}
             rules={{ required: false }}
             render={({ field }) => (
-              <Input id='subtitle' placeholder='Введите под заголовок' invalid={errors.subtitle && true} {...field} />
+              <Input id='subtitle' placeholder={t('FeedsData.subtitlePlaceholder')} invalid={errors.subtitle && true} {...field} />
             )}
           />
-          {errors && errors.subtitle && (<FormFeedback>Пожалуйста введите под заголовок</FormFeedback>)}
+          {errors && errors.subtitle && (<FormFeedback>{t('FeedsData.subtitleFeedback')}</FormFeedback>)}
             </Col>
             <Col md={6} xs={12}>
             <Label className='form-label' for='type'>
-          Тип<span className='text-danger'>*</span>
+            {t('FeedsData.typeLabel')}<span className='text-danger'>*</span>
           </Label>
           <Controller
             name='type'
@@ -316,31 +317,31 @@ const FeedModal = ({
                 classNamePrefix='select'
                 options={feedsTypeOptions}
                 theme={selectThemeColors}
-                placeholder={"Выберите тип публикации"}
+                placeholder={t('FeedsData.typePlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.type && true })}
                 {...field}
               />
             )}
           />
-        {errors && errors.type && (<FormFeedback>{`Пожалуйста выберите тип публикации`}</FormFeedback>)}
+        {errors && errors.type && (<FormFeedback>{t('FeedsData.typeFeedback')}</FormFeedback>)}
             </Col>
             <Col>
             <Label className='form-label' for='text'>
-          Публикация
+            {t('FeedsData.textLabel')}
           </Label>
           <Controller
             name='text'
             control={control}
             rules={{ required: false }}
             render={({ field }) => (
-              <Input id='text' type="textarea" placeholder='Введите публикацию' invalid={errors.text && true} {...field} />
+              <Input id='text' type="textarea" placeholder={t('FeedsData.textPlaceholder')} invalid={errors.text && true} {...field} />
             )}
           />
-          {errors && errors.text && (<FormFeedback>Пожалуйста введите публикацию</FormFeedback>)}
+          {errors && errors.text && (<FormFeedback>{t('FeedsData.textFeedback')}</FormFeedback>)}
             </Col>
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">
-                Сохранить
+              {t('save')}
               </Button>
               <Button
                 type="reset"
@@ -348,7 +349,7 @@ const FeedModal = ({
                 outline
                 onClick={handleClose}
               >
-                Отменить
+                {t('cancel')}
               </Button>
             </Col>
           </Row>

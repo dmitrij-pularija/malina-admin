@@ -51,6 +51,11 @@ const renderClient = (data, type) => {
     login = data.business_address && data.business_address.city ?  `${data.business_address.city}, ${data.business_address.name ? data.business_address.name : ''}` : "Store"
     avatar = data.avatar
  }
+ if (type === "feed") {
+    redirectLink = ""
+    name = data.title ?  data.title : "Feed"
+    avatar = data.images && data.images.length ? data.images[0].link : ""
+}
 
  
   return (
