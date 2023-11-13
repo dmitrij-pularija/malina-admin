@@ -69,6 +69,16 @@
   },
   "Products": "Products",
   "Addons": "Addons",
+  "Addon": "Addon",
+  "addonsData": {
+    "titleEdit": "Editing a Addon",
+    "titleAdd": "Create a new Addon",
+    "nameLabel": "Addon name",
+    "namePlaceholder": "Enter addon name",
+    "nameFeedback": "Please enter a addon name",
+    "pricePlaceholder": "Enter price",
+    "priceFeedback": "Please enter price"
+  },
   "Chefs": "Chefs",
   "сhefsData": {
     "Chef": "Chef",
@@ -215,6 +225,7 @@
   "rating": "Rating",
   "star": "Оценка",
   "Table": "Table",
+  "price": "Price",
   "Price": "Price",
   "Status": "Status",
   "Category": "Category",

@@ -11,7 +11,7 @@ import { useDispatch } from 'react-redux'
 
 const defaultValues = {
   name: '',
-  price: 0
+  price: ''
 }
 
 const requiredFields = ["name"]
@@ -32,7 +32,7 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarAddons = ({ open, toggleSidebar, selectedAddon, setSelectedAddon }) => {
+const SidebarAddons = ({ open, toggleSidebar, selectedAddon, setSelectedAddon, t }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
 
@@ -101,7 +101,7 @@ const SidebarAddons = ({ open, toggleSidebar, selectedAddon, setSelectedAddon })
     <Sidebar
       size='lg'
       open={open}
-      title={selectedAddon ? 'Редактирование добавки' : 'Создание новой добавки'}
+      title={selectedAddon ? t('FeedsData.titleEdit') : t('FeedsData.titleAdd')}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
@@ -114,48 +114,48 @@ const SidebarAddons = ({ open, toggleSidebar, selectedAddon, setSelectedAddon })
         <div className='d-flex align-items-center justify-content-center mt-75'>
               <div>
                 <Button tag={Label} className='mb-75 me-75' size='sm' color='primary'>
-                  Загрузить
+                {t('download')}
                   <Input type='file' onChange={handleImg} hidden accept='image/*' />
                 </Button>
                 <Button className='mb-75' color='secondary' size='sm' outline onClick={handleImgReset}>
-                  Очистить
+                {t('clear')}
                 </Button>
               </div>
         </div>
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='name'>
-          Название <span className='text-danger'>*</span>
+          {t('addonsData.nameLabel')} <span className='text-danger'>*</span>
           </Label>
           <Controller
             name='name'
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <Input id='name' placeholder='Введите название' invalid={errors.name && true} {...field} />
+              <Input id='name' placeholder={t('addonsData.namePlaceholder')} invalid={errors.name && true} {...field} />
             )}
           />
-          {errors && errors.name && (<FormFeedback>Пожалуйста введите название</FormFeedback>)}
+          {errors && errors.name && (<FormFeedback>{t('addonsData.nameFeedback')}</FormFeedback>)}
         </div>  
         <div className='mb-1'>
           <Label className='form-label' for='price'>
-          Цена
+          {t('price')}
           </Label>
           <Controller
             name='price'
             control={control}
             rules={{ required: false }}
             render={({ field }) => (
-              <Input id='price' placeholder='Введите цену' invalid={errors.price && true} {...field} />
+              <Input id='price' placeholder={t('addonsData.pricePlaceholder')} invalid={errors.price && true} {...field} />
             )}
           />
-          {errors && errors.price && (<FormFeedback>Пожалуйста введите цену</FormFeedback>)}
+          {errors && errors.price && (<FormFeedback>{t('addonsData.priceFeedback')}</FormFeedback>)}
         </div>
         <Button type='submit' className='me-1' color='primary'>
-          Сохранить
+        {t('save')}
         </Button>
         <Button type='reset' color='secondary' outline onClick={handleClose}>
-          Отменить
+        {t('cancel')}
         </Button>
       </Form>
     </Sidebar>

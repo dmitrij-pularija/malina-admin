@@ -27,7 +27,7 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar, t }) => {
   const dispatch = useDispatch()
-  const { data, allCategories, total } = useSelector(state => state.productsCategories)
+  const { data, total } = useSelector(state => state.productsCategories)
   const store = useSelector(state => state.auth.userData.id)
   const [sort, setSort] = useState('+')
   // const [selectedId, setSelectedId] = useState('')

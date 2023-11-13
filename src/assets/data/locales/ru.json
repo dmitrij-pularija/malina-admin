@@ -76,6 +76,16 @@
   },
   "Products": "Блюда",
   "Addons": "Добавки",
+  "Addon": "Добавка",
+  "addonsData": {
+    "titleEdit": "Редактирование добавки",
+    "titleAdd": "Создание новой добавки",
+    "nameLabel": "Название",
+    "namePlaceholder": "Введите название",
+    "nameFeedback": "Пожалуйста введите название",
+    "pricePlaceholder": "Введите цену",
+    "priceFeedback": "Пожалуйста введите цену"
+  },
   "Chefs": "Повара",
   "сhefsData": {
     "Chef": "Повар",
@@ -216,6 +226,7 @@
   "rating": "Рейтинг",
   "star": "Оценка",
   "Table": "Стол",
+  "price": "Цена",
   "Price": "Сумма",
   "Status": "Статус",
   "Category": "Категория",
