@@ -60,6 +60,13 @@
     "title2": "About stores"
   },
   "Menu": "Menu",
+  "menuData": {
+    "titleEdit": "Editing a Category",
+    "titleAdd": "Create a new Category",
+    "nameLabel": "Category name",
+    "namePlaceholder": "Enter category name",
+    "nameFeedback": "Please enter a category name"
+  },
   "Products": "Products",
   "Addons": "Addons",
   "Chefs": "Chefs",
@@ -210,6 +217,7 @@
   "Table": "Table",
   "Price": "Price",
   "Status": "Status",
+  "Category": "Category",
   "Date": "Date",
   "action": "Action",
   "edit": "Edit",

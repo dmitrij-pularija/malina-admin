@@ -59,7 +59,7 @@ const renderClient = (data, type) => {
     name = data.title ?  data.title : "Feed"
     avatar = data.images && data.images.length ? data.images[0].link : ""
 }
-
+if (type === "productsCategory") name = data.name ? data.name : "Category"
  
   return (
     <Link

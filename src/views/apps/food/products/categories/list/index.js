@@ -1,5 +1,6 @@
 import { useDispatch, useSelector } from "react-redux"
 import { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import Table from "./Table"
 import Breadcrumbs from '@components/breadcrumbs'
 import { getAllStores } from '../../../stores/store'
@@ -8,6 +9,7 @@ import "@styles/react/apps/app-users.scss"
 
 const ProductsCategoriesList = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const stores = useSelector(state => state.stores.allStores)
@@ -19,8 +21,8 @@ const ProductsCategoriesList = () => {
   return (
     <>
     <div className="app-user-list" >
-      <Breadcrumbs title='Категории' data={[{ title: 'Меню' }, { title: 'Категории' }]} onClick={toggleSidebar} /> 
-      <Table stores={stores} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} toggleSidebar={toggleSidebar} />
+      <Breadcrumbs title={t('Categories')} data={[{ title: t('Menu') }, { title: t('Categories') }]} onClick={toggleSidebar} /> 
+      <Table stores={stores} sidebarOpen={sidebarOpen} setSidebarOpen={setSidebarOpen} toggleSidebar={toggleSidebar} t={t} />
     </div>
     <Loading />
     </>
