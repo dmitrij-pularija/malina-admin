@@ -33,7 +33,7 @@ const renderClient = (data, type) => {
  if (type === "waiter") {
     redirectLink = `/apps/user/waiters/view/${data.id}`
     name = data.full_name ?  data.full_name : "Waiter"
-    login = ""
+    login = data.telegram ? data.telegram : ""
     avatar = data.profile_picture
  }
  if (type === "chef") {

@@ -4,7 +4,7 @@ import { ShoppingCart, Award } from 'react-feather'
 import Rewards from './Rewards'
 import WaiterOrdersList from './WaiterOrdersList'
 
-const WaiterTabs = ({ active, toggleTab, ratings, orders, users }) => {
+const WaiterTabs = ({ active, toggleTab, ratings, orders, users, t }) => {
 
   return (
     <Fragment>
@@ -12,13 +12,13 @@ const WaiterTabs = ({ active, toggleTab, ratings, orders, users }) => {
       <NavItem>
           <NavLink active={active === '1'} onClick={() => toggleTab('1')}>
             <Award className='font-medium-3 me-50' />
-            <span className='fw-bold'>Отзывы</span>
+            <span className='fw-bold'>{t('Feedback')}</span>
           </NavLink>
         </NavItem>
         <NavItem>
           <NavLink active={active === '2'} onClick={() => toggleTab('2')}>
             <ShoppingCart className='font-medium-3 me-50' />
-            <span className='fw-bold'>История заказов</span>
+            <span className='fw-bold'>{t('History')}</span>
           </NavLink>
         </NavItem>
 
@@ -26,10 +26,10 @@ const WaiterTabs = ({ active, toggleTab, ratings, orders, users }) => {
       <TabContent activeTab={active}>
 
         <TabPane tabId='1'>
-          <Rewards ratings={ratings} users={users} />
+          <Rewards ratings={ratings} users={users} t={t}/>
         </TabPane>
         <TabPane tabId='2'>
-          <WaiterOrdersList orders={orders} />
+          <WaiterOrdersList orders={orders} t={t}/>
         </TabPane>
       </TabContent>
     </Fragment>

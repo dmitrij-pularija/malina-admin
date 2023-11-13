@@ -72,15 +72,19 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewWaiters = ({ shifts, userData, stores, open, toggleSidebar, selectedWaiter, setSelectedWaiter }) => {
+const SidebarNewWaiters = ({ shifts, userData, stores, open, toggleSidebar, selectedWaiter, setSelectedWaiter, t }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
   // const values = {}
-  const shiftsOptions = shifts.map((item) => ({
+  const initShiftsOptions = id => { 
+  const filtredShifts = id ? shifts.filter(shift => parseInt(shift.business.id) === parseInt(id)) : shifts
+  return filtredShifts.map((item) => ({
     value: String(item.id),
     label: `${item.start_time.slice(0, -3)} - ${item.end_time.slice(0, -3)} ${item.description} `
   }))
-  
+}
+  const [shiftsOptions, setShiftsOptions] = useState(initShiftsOptions(selectedWaiter ? selectedWaiter.business_id.id : ''))
+
   const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)
   const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
@@ -164,13 +168,18 @@ const SidebarNewWaiters = ({ shifts, userData, stores, open, toggleSidebar, sele
     }
   }
 
+  const handleStoreChange = (selectedOption) => {
+    setValue("shift", "")
+    setShiftsOptions(initShiftsOptions(selectedOption.value))
+    setValue("businessId", selectedOption)
+  } 
 
 
   return (
     <Sidebar
       size='lg'
       open={open}
-      title={selectedWaiter ? 'Редактирование официанта' : 'Новый официант'}
+      title={selectedWaiter ? t('waiterData.titleEdit') : t('waiterData.titleAdd')}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
@@ -183,32 +192,32 @@ const SidebarNewWaiters = ({ shifts, userData, stores, open, toggleSidebar, sele
         <div className='d-flex align-items-center justify-content-center mt-75'>
               <div>
                 <Button tag={Label} className='mb-75 me-75' size='sm' color='primary'>
-                  Загрузить
+                {t('download')}
                   <Input type='file' onChange={handleImg} hidden accept='image/*' />
                 </Button>
                 <Button className='mb-75' color='secondary' size='sm' outline onClick={handleImgReset}>
-                  Очистить
+                {t('clear')}
                 </Button>
               </div>
         </div>
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='fullName'>
-            Имя <span className='text-danger'>*</span>
+          {t('nameLabel')} <span className='text-danger'>*</span>
           </Label>
           <Controller
             name='fullName'
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <Input id='fullName' placeholder='John' invalid={errors.fullName && true} {...field} />
+              <Input id='fullName' placeholder={t('namePlaceholder')} invalid={errors.fullName && true} {...field} />
             )}
           />
-          {errors && errors.fullName && (<FormFeedback>Пожалуйста заполните имя</FormFeedback>)}  
+          {errors && errors.fullName && (<FormFeedback>{t('nameFeedback')}</FormFeedback>)}  
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='businessId'>
-          Заведение <span className='text-danger'>*</span>
+          {t('storeLabel')} <span className='text-danger'>*</span>
           </Label>
           <Controller
             name='businessId'
@@ -218,21 +227,22 @@ const SidebarNewWaiters = ({ shifts, userData, stores, open, toggleSidebar, sele
               <Select
                 id='businessId'
                 isClearable={false}
+                value={field.value}
                 isDisabled={userData && userData.type === 2}
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}
-                placeholder="Выберите Заведение"
+                onChange={handleStoreChange}
+                placeholder={t('storePlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.businessId && true })}
-                {...field}
               />
             )}
           />
-          {errors && errors.businessId && (<FormFeedback>Пожалуйста выберите заведение</FormFeedback>)}  
+          {errors && errors.businessId && (<FormFeedback>{t('storeFeedback')}</FormFeedback>)}  
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='shift'>
-          Смена
+          {t('shift')}
           </Label>
           <Controller
             name='shift'
@@ -242,15 +252,18 @@ const SidebarNewWaiters = ({ shifts, userData, stores, open, toggleSidebar, sele
               <Select
                 id='shift'
                 isClearable={false}
+                // value={field.value}
+                isDisabled={!getValues('businessId').value}
                 classNamePrefix='select'
                 options={shiftsOptions}
                 theme={selectThemeColors}
-                placeholder="Выберите смену"
+                placeholder={t('waiterData.shiftPlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.shift && true })}
                 {...field}
               />
             )}
           />
+          {errors && errors.shift && (<FormFeedback>{t('waiterData.shiftFeedback')}</FormFeedback>)}
         </div>
         {/* <div className='mb-3'>
   <Label className='form-label' htmlFor='shift'>
@@ -298,23 +311,23 @@ const SidebarNewWaiters = ({ shifts, userData, stores, open, toggleSidebar, sele
 </div> */}
 <div className='mb-3'>
           <Label className='form-label' for='telegram'>
-          ID полученный в Телеграмм - боте <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span>
+          {t('waiterData.telegramIdLabel')} <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span>
           </Label>
           <Controller
             name='telegram'
             control={control}
             rules={{ required: false }}
             render={({ field }) => (
-              <Input id='telegram' placeholder='12345' invalid={errors.telegram && true} {...field} />
+              <Input id='telegram' placeholder={t('waiterData.telegramIdPlaceholder')} invalid={errors.telegram && true} {...field} />
             )}
           />
-          {errors && errors.telegram && (<FormFeedback>Введите Телеграмм ID</FormFeedback>)}  
+          {errors && errors.telegram && (<FormFeedback>{t('waiterData.telegramIdFeedback')}</FormFeedback>)}  
         </div>  
         <Button type='submit' className='me-1' color='primary'>
-          Сохранить
+        {t('save')}
         </Button>
         <Button type='reset' color='secondary' outline onClick={handleClose}>
-          Отменить
+        {t('cancel')}
         </Button>
       </Form>
     </Sidebar>

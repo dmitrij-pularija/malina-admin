@@ -14,7 +14,7 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const MySwal = withReactContent(Swal)
 
-const WaiterInfoCard = ({ userData, stores, shifts, selectedWaiter }) => {
+const WaiterInfoCard = ({ userData, stores, shifts, selectedWaiter, t }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [sidebarOpen, setSidebarOpen] = useState(false)
@@ -115,7 +115,7 @@ const WaiterInfoCard = ({ userData, stores, shifts, selectedWaiter }) => {
               </div>
             </div>
           </div>
-          <h4 className='fw-bolder border-bottom pb-50 mb-1'>Информация:</h4>
+          <h4 className='fw-bolder border-bottom pb-50 mb-1'>{t('Info')}</h4>
           <div className='info-container'>
             {selectedWaiter !== null ? (
               <ul className='list-unstyled'>
@@ -124,36 +124,36 @@ const WaiterInfoCard = ({ userData, stores, shifts, selectedWaiter }) => {
                   <span>{selectedWaiter.id}</span>
                 </li>  
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Telegram:</span>
-                  <span>{selectedWaiter.telegram ? selectedWaiter.telegram : "Не указан"}</span>
+                  <span className='fw-bolder me-25'>{t('Telegram')}</span>
+                  <span>{selectedWaiter.telegram ? selectedWaiter.telegram : t('notSpecified')}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Ресторан:</span>
-                  <span>{selectedWaiter.business_id ? selectedWaiter.business_id.name : "Не указан"}</span>
+                  <span className='fw-bolder me-25'>{t('Store1')}</span>
+                  <span>{selectedWaiter.business_id ? selectedWaiter.business_id.name : t('notSpecified')}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Смена:</span>
-                  <span>{selectedWaiter.shift ? `${selectedWaiter.shift.start_time.slice(0, -3)} - ${selectedWaiter.shift.end_time.slice(0, -3)}` : "Не указана"}</span>
+                  <span className='fw-bolder me-25'>{t('Shift')}</span>
+                  <span>{selectedWaiter.shift ? `${selectedWaiter.shift.start_time.slice(0, -3)} - ${selectedWaiter.shift.end_time.slice(0, -3)}` : t('notSpecified')}</span>
                   {/* <span>{selectedWaiter.shift ? selectedWaiter.shift.description : ''}</span> */}
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Телефон:</span>
-                  <span>{selectedWaiter.business_id && selectedWaiter.business_id.phone ? selectedWaiter.business_id.phone : "Не указан"}</span>
+                  <span className='fw-bolder me-25'>{t('Phone')}</span>
+                  <span>{selectedWaiter.business_id && selectedWaiter.business_id.phone ? selectedWaiter.business_id.phone : t('notSpecified')}</span>
                 </li>
               </ul>
             ) : null}
           </div>
           <div className='d-flex justify-content-center pt-2'>
             <Button color='primary' onClick={toggleSidebar}>
-              Изменить
+            {t('edit')}
             </Button>
             <Button className='ms-1' color='danger' outline onClick={handleClose}>
-            Отменить
+            {t('cancel')}
             </Button>
           </div>
         </CardBody>
       </Card>
-      <Sidebar shifts={shifts} userData={userData} stores={stores} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />  
+      <Sidebar shifts={shifts} userData={userData} stores={stores} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} t={t}/>  
     </Fragment>
   )
 }
