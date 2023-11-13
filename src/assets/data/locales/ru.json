@@ -56,6 +56,14 @@
   "Products": "Блюда",
   "Addons": "Добавки",
   "Chefs": "Повара",
+  "сhefsData": {
+    "Chef": "Повар",
+    "titleEdit": "Редактирование повара",
+    "titleAdd": "Создание нового повара",
+    "telegramIdLabel": "ID полученный в Телеграмм - боте",
+    "telegramIdPlaceholder": "Введите Телеграмм ID",
+    "telegramIdFeedback": "Пожалуйста введите Телеграмм ID"
+  },
   "Masters": "Специалисты",
   "Feeds": "Публикации",
   "FeedsData": {
@@ -192,6 +200,12 @@
   "order": "Заказ",
   "store": "Заведение",
   "selectStore": "Выбирите заведение",
+  "storeLabel": "Заведение",
+  "storePlaceholder": "Выберите заведение",
+  "storeFeedback": "Пожалуйста выберите заведение",
+  "nameLabel": "Имя",
+  "namePlaceholder": "Введите имя",
+  "nameFeedback": "Пожалуйста введите имя",
   "waiter": "Официант",
   "selectWaiter": "Выбирите официанта",
   "showAll": "Показать все",

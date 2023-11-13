@@ -42,7 +42,7 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewCategory = ({ stores, userData, open, toggleSidebar, selectedСhef, setSelectedСhef }) => {
+const SidebarNewCategory = ({ stores, userData, open, toggleSidebar, selectedСhef, setSelectedСhef, t }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState('')
 
@@ -121,7 +121,7 @@ const SidebarNewCategory = ({ stores, userData, open, toggleSidebar, selectedСh
     <Sidebar
       size='lg'
       open={open}
-      title={selectedСhef ? 'Редактирование повара' : 'Создание нового повара'}
+      title={selectedСhef ? t('сhefsData.titleEdit') : t('сhefsData.titleAdd')}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
@@ -134,32 +134,32 @@ const SidebarNewCategory = ({ stores, userData, open, toggleSidebar, selectedСh
         <div className='d-flex align-items-center justify-content-center mt-75'>
               <div>
                 <Button tag={Label} className='mb-75 me-75' size='sm' color='primary'>
-                  Загрузить
+                {t('download')}
                   <Input type='file' onChange={handleImg} hidden accept='image/*' />
                 </Button>
                 <Button className='mb-75' color='secondary' size='sm' outline onClick={handleImgReset}>
-                  Очистить
+                {t('clear')}
                 </Button>
               </div>
         </div>
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='name'>
-          Имя 
+          {t('nameLabel')} 
           </Label>
           <Controller
             name='name'
             control={control}
             rules={{ required: false }}
             render={({ field }) => (
-              <Input id='name' placeholder='Введите название' invalid={errors.name && true} {...field} />
+              <Input id='name' placeholder={t('namePlaceholder')} invalid={errors.name && true} {...field} />
             )}
           />
-          {errors && errors.name && (<FormFeedback>Пожалуйста введите Имя</FormFeedback>)}
+          {errors && errors.name && (<FormFeedback>{t('nameFeedback')}</FormFeedback>)}
         </div>  
         <div className='mb-1'>
           <Label className='form-label' for='business'>
-          Заведение<span className='text-danger'>*</span>
+          {t('storeLabel')}<span className='text-danger'>*</span>
           </Label>
           <Controller
             name='business'
@@ -173,33 +173,33 @@ const SidebarNewCategory = ({ stores, userData, open, toggleSidebar, selectedСh
                 classNamePrefix='select'
                 options={storeOptions}
                 theme={selectThemeColors}
-                placeholder={"Выберите заведение"}
+                placeholder={t('storePlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.business && true })}
                 {...field}
               />
             )}
           />
-        {errors && errors.business && (<FormFeedback>{`Пожалуйста выберите заведение`}</FormFeedback>)}
+        {errors && errors.business && (<FormFeedback>{t('storeFeedback')}</FormFeedback>)}
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='telegramId'>
-          ID полученный в Телеграмм - боте <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span> 
+          {t('сhefsData.telegramIdLabel')} <a href='https://t.me/malinappbot' target="_blank" className='w-100'>@malinappbot</a><span className='text-danger'>*</span> 
           </Label>
           <Controller
             name='telegramId'
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <Input id='telegramId' placeholder='Введите название' invalid={errors.telegramId && true} {...field} />
+              <Input id='telegramId' placeholder={t('сhefsData.telegramIdPlaceholder')} invalid={errors.telegramId && true} {...field} />
             )}
           />
-          {errors && errors.telegramId && (<FormFeedback>Пожалуйста введите Telegram ID повара</FormFeedback>)}
+          {errors && errors.telegramId && (<FormFeedback>{t('сhefsData.telegramIdFeedback')}</FormFeedback>)}
         </div> 
         <Button type='submit' className='me-1' color='primary'>
-          Сохранить
+        {t('save')}
         </Button>
         <Button type='reset' color='secondary' outline onClick={handleClose}>
-          Отменить
+        {t('cancel')}
         </Button>
       </Form>
     </Sidebar>

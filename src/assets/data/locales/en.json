@@ -49,6 +49,14 @@
   "Products": "Products",
   "Addons": "Addons",
   "Chefs": "Chefs",
+  "сhefsData": {
+    "Chef": "Chef",
+    "titleEdit": "Editing a Chef",
+    "titleAdd": "Create a new Chef",
+    "telegramIdLabel": "ID received in Telegram bot",
+    "telegramIdPlaceholder": "Enter Telegram ID",
+    "telegramIdFeedback": "Please enter Telegram ID"
+  },
   "Masters": "Masters",
   "Complaints": "complaints",
   "complaintsData": {
@@ -190,6 +198,12 @@
   "delete": "Delete",
   "store": "Store",
   "selectStore": "Choose a store",
+  "storeLabel": "Store",
+  "storePlaceholder": "Select a store",
+  "storeFeedback": "Please select a store",
+  "nameLabel": "Name",
+  "namePlaceholder": "Enter your name",
+  "nameFeedback": "Please enter a name",
   "waiter": "Waiter",
   "selectWaiter": "Choose a waiter",
   "showAll": "Show all",
