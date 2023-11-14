@@ -41,9 +41,9 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 const MySwal = withReactContent(Swal)
 
-const RelatesProducts = ({ store, selectedProduct }) => {
+const RelatesProducts = ({ store, selectedProduct, t }) => {
   const dispatch = useDispatch()
-  const [currentRelatesProduct, setCurrentRelatesProduct] = useState({ value: '', label: 'Выбирите блюдо' })
+  const [currentRelatesProduct, setCurrentRelatesProduct] = useState("")
   const allProducts = useSelector(state => state.products.allProducts)
 
   useEffect(() => {
@@ -75,6 +75,7 @@ const RelatesProducts = ({ store, selectedProduct }) => {
                 className='react-select'
                 classNamePrefix='select'
                 options={productsOptions}
+                placeholder={t('productsData.relatesProductsPlaceholder')}
                 value={currentRelatesProduct}
                 onChange={data => {
                   setCurrentRelatesProduct(data)
@@ -83,7 +84,7 @@ const RelatesProducts = ({ store, selectedProduct }) => {
             </Col>
             <Col className='my-md-0 my-1' md='4'>
             <Button className='add-new-user' color='primary' onClick={handleAddProduct}>
-              Добавить
+            {t('Add')}
             </Button>
             </Col>
           </Row>
@@ -97,11 +98,11 @@ const RelatesProducts = ({ store, selectedProduct }) => {
         <DataTable
           responsive
           size={'small'}
-          columns={relatesProductColumns(handleDelProduct)}
+          columns={relatesProductColumns(handleDelProduct, t)}
           data={selectedProduct.related_products}
           className='react-dataTable'
           sortIcon={<ChevronDown size={10} />}
-          noDataComponent={<h6 className='text-capitalize'>Связанные продукты не найдены</h6>}
+          noDataComponent={<h6 className='text-capitalize'>{t('notFound')}</h6>}
         />
       </div> 
       </Row> 

@@ -1,62 +1,29 @@
-// ** React Imports
-import { Fragment } from 'react'
+import renderClient from '@components/renderClient'
 import { Link } from 'react-router-dom'
 import { formatNumber, formatNumberInt } from '@utils'
-// ** Custom Components
-import Avatar from '@components/avatar'
-
-// ** Reactstrap Imports
 import { Button, UncontrolledTooltip } from 'reactstrap'
-
-// ** Third Party Components
 import { Trash2 } from 'react-feather'
 
-const renderClient = (image, name) => {
-  if (image) {
-    return <Avatar className='me-1' img={image} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={name}
-      />
-    )
-  }
-}
 
-export const relatesProductColumns = (handleDelAddon) => {
+export const relatesProductColumns = (handleDelAddon, t) => {
 
   return [
   {
     name: '№',
     sortable: false,
-    minWidth: '30px',
+    width: '50px',
     selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Блюдо',
+    name: t('Product'),
     sortable: true,
     minWidth: '230px',
     sortField: 'name',
-    selector: row => row,
-    cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row.images.length ? row.images[0].image : '', row.name ? row.name : "Блюдо")}
-          <Link
-            to={`/apps/food/products/products/edit/${row.id}`}
-            className='user_name text-truncate text-body d-flex flex-column'
-            onClick={() => store.dispatch(getData(row.id))}
-          >
-            <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-          </Link>
-      </div>
-    )
+    cell: row => renderClient(row, "product")
   },
   {
-    name: 'Цена',
+    name: t('price'),
     minWidth: '80px',
     sortable: true,
     sortField: 'cost',
@@ -64,7 +31,7 @@ export const relatesProductColumns = (handleDelAddon) => {
     cell: row => formatNumber(row.cost)
   },
   {
-    name: 'Скидка',
+    name: t('Discount'),
     minWidth: '130px',
     sortable: true,
     sortField: 'prime_cost',
@@ -72,8 +39,8 @@ export const relatesProductColumns = (handleDelAddon) => {
     cell: row => `${formatNumberInt(row.prime_cost)} %`
   },
   {
-    name: 'Действия',
-    minWidth: '100px',
+    name: t('action'),
+    width: '120px',
     cell: row => (
       <>
         <Button.Ripple 
@@ -84,7 +51,7 @@ export const relatesProductColumns = (handleDelAddon) => {
           <Trash2 size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
-          Удалить
+        {t('delete')}
         </UncontrolledTooltip>
       </>  
     )

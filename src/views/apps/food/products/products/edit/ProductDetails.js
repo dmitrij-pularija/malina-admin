@@ -71,7 +71,7 @@ const ProductDetails = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [isRtl] = useRTL()
-  const { categories, store, selectedProduct } = props
+  const { categories, store, selectedProduct, t } = props
 
   const initCategoryOptions = () => {
     const filteredCategories = categories.filter(
@@ -318,7 +318,7 @@ const ProductDetails = (props) => {
                       size="sm"
                       color="primary"
                     >
-                      Загрузить
+                    {t('download')}
                       <Input
                         type="file"
                         onChange={handleImg}
@@ -332,7 +332,7 @@ const ProductDetails = (props) => {
                       outline
                       onClick={handleImgReset}
                     >
-                      Очистить
+                    {t('clear')}
                     </Button>
                   </div>
                 </div>
@@ -343,7 +343,7 @@ const ProductDetails = (props) => {
             <Col md={6} className="d-flex flex-column">
               <Col>
                 <Label className="form-label" for="name">
-                  Название<span className="text-danger">*</span>
+                {t('productsData.nameLabel')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="name"
@@ -352,19 +352,19 @@ const ProductDetails = (props) => {
                   render={({ field }) => (
                     <Input
                       id="name"
-                      placeholder="Введите название заведения"
+                      placeholder={t('productsData.namePlaceholder')}
                       invalid={errors.name && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.name && (
-                  <FormFeedback>Пожалуйста введите название</FormFeedback>
+                  <FormFeedback>{t('productsData.nameFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col className="d-flex flex-column mt-1">
             <Label className="form-label" for="composition">
-              Состав
+            {t('productsData.compositionLabel')}
             </Label>
             <Controller
               name="composition"
@@ -374,19 +374,19 @@ const ProductDetails = (props) => {
                 <Input
                   id="composition"
                   type="textarea"
-                  placeholder="Введите состав"
+                  placeholder={t('productsData.compositionPlaceholder')}
                   invalid={errors.composition && true}
                   {...field}
                 />
               )}
             />
             {errors && errors.description && (
-              <FormFeedback>Пожалуйста введите состав</FormFeedback>
+              <FormFeedback>{t('productsData.compositionFeedback')}</FormFeedback>
             )}
           </Col>
               <Col className="d-flex flex-column mt-1">
             <Label className="form-label" for="description">
-              Описание
+            {t('descriptionLabel')}
             </Label>
             <Controller
               name="description"
@@ -396,20 +396,20 @@ const ProductDetails = (props) => {
                 <Input
                   id="description"
                   type="textarea"
-                  placeholder="Введите описание"
+                  placeholder={t('descriptionPlaceholder')}
                   invalid={errors.description && true}
                   {...field}
                 />
               )}
             />
             {errors && errors.description && (
-              <FormFeedback>Пожалуйста введите описание</FormFeedback>
+              <FormFeedback>{t('descriptionFeedback')}</FormFeedback>
             )}
           </Col>
               <Col className="d-flex justify-content-between gap-30 mt-1">
               <div>
                   <Label className="form-label" for="kcal">
-                  Калорий, кКал
+                  {t('productsData.kcalLabel')}
                   </Label>
                   <Controller
                     name="kcal"
@@ -427,12 +427,12 @@ const ProductDetails = (props) => {
                     )}
                   />
                   {errors && errors.kcal && (
-                    <FormFeedback>Пожалуйста введите количество калорий</FormFeedback>
+                    <FormFeedback>{t('productsData.kcalFeedback')}</FormFeedback>
                   )}
                 </div> 
               <div>
                   <Label className="form-label" for="proteins">
-                  Протеины, г
+                  {t('productsData.proteinsLabel')}
                   </Label>
                   <Controller
                     name="proteins"
@@ -450,12 +450,12 @@ const ProductDetails = (props) => {
                     )}
                   />
                   {errors && errors.proteins && (
-                    <FormFeedback>Пожалуйста введите количество протеинов</FormFeedback>
+                    <FormFeedback>{t('productsData.proteinsFeedback')}</FormFeedback>
                   )}
                 </div>
                 <div>
                   <Label className="form-label" for="fats">
-                  Жиры, г
+                  {t('productsData.fatsLabel')}
                   </Label>
                   <Controller
                     name="fats"
@@ -474,13 +474,13 @@ const ProductDetails = (props) => {
                   />
                   {errors && errors.fats && (
                     <FormFeedback>
-                      Пожалуйста введите количество жиров
+                      {t('productsData.fatsFeedback')}
                     </FormFeedback>
                   )}
                 </div>
                 <div>
                   <Label className="form-label" for="carbohydrates">
-                  Углеводы, г
+                  {t('productsData.carbohydratesLabel')}
                   </Label>
                   <Controller
                     name="carbohydrates"
@@ -498,7 +498,7 @@ const ProductDetails = (props) => {
                     )}
                   />
                   {errors && errors.carbohydrates && (
-                    <FormFeedback>Пожалуйста введите количество угдеводов</FormFeedback>
+                    <FormFeedback>{t('productsData.carbohydratesFeedback')}</FormFeedback>
                   )}
                 </div>
               </Col>
@@ -541,7 +541,7 @@ const ProductDetails = (props) => {
               </Col> */}
               <Col md={4} className="mt-1">
                 <Label className="form-label" for="category">
-                  Категория
+                {t('Category')}
                 </Label>
                 <Controller
                   name="category"
@@ -558,7 +558,7 @@ const ProductDetails = (props) => {
                       options={categoryOptions}
                       theme={selectThemeColors}
                       onChange={handleCategoryChange}
-                      placeholder="Выберите категорию"
+                      placeholder={t('categoryPlaceholder')}
                       className={classnames("react-select", {
                         "is-invalid": errors.category && true
                       })}
@@ -566,14 +566,14 @@ const ProductDetails = (props) => {
                   )}
                 />
                 {errors && errors.category && (
-                  <FormFeedback>Пожалуйста выберите категорию</FormFeedback>
+                  <FormFeedback>{t('categoryFeedback')}</FormFeedback>
                 )}
               </Col> 
 
               <Col md={4} className="d-flex justify-content-between gap-30 mt-1">
                 <div>
                   <Label className="form-label" for="cost">
-                  Цена, &#x0441;&#x332; <span className="text-danger">*</span>
+                  {t('price')}{', '} &#x0441;&#x332; <span className="text-danger">*</span>
                   </Label>
                   <Controller
                     name="cost"
@@ -592,13 +592,13 @@ const ProductDetails = (props) => {
                   />
                   {errors && errors.cost && (
                     <FormFeedback>
-                      Пожалуйста введите цену
+                      {t('priceFeedback')}
                     </FormFeedback>
                   )}
                 </div>
                 <div>
                   <Label className="form-label" for="primeCost">
-                    Скидка
+                  {t('Discount')}
                   </Label>
                   <Controller
                     name="primeCost"
@@ -620,7 +620,7 @@ const ProductDetails = (props) => {
                     )}
                   />
                   {errors && errors.primeCost && (
-                    <FormFeedback>Пожалуйста введите скидку</FormFeedback>
+                    <FormFeedback>{t('discountFeedback')}</FormFeedback>
                   )}
                 </div>
               </Col>
@@ -630,7 +630,7 @@ const ProductDetails = (props) => {
               <div className="d-flex justify-content-center align-items-center gap-30">
                 <div>  
                 <Label className="form-label" for="cookingTime">
-                  Время приготовления, мин
+                {t('productsData.cookingTimeLabel')}
                 </Label>
                 <Controller
                     name="cookingTime"
@@ -648,7 +648,7 @@ const ProductDetails = (props) => {
                     )}
                   />
                    {errors && errors.cookingTime && (
-                    <FormFeedback>Пожалуйста введите время приготовления</FormFeedback>
+                    <FormFeedback>{t('productsData.cookingTimeFeedback')}</FormFeedback>
                   )}
                </div>     
               <div className='form-check form-check-primary mt-2'>
@@ -661,7 +661,7 @@ const ProductDetails = (props) => {
             )}
           />
           <Label className='form-label' for='isLongCooking'>
-          Долго готовить
+          {t('productsData.isLongCooking')}
           </Label>
         </div>
         </div>   
@@ -669,7 +669,7 @@ const ProductDetails = (props) => {
 
               <Col md={6} className="mt-1">
                 <Label className="form-label" for="longCookingMessage">
-                  Сообщение при длительном приготовлении
+                {t('productsData.messageLabel')}
                 </Label>
                 <Controller
                   name="longCookingMessage"
@@ -678,14 +678,14 @@ const ProductDetails = (props) => {
                   render={({ field }) => (
                     <Input
                       id="longCookingMessage"
-                      placeholder="Введите сообщение при длительном приготовлении"
+                      placeholder={t('productsData.messagePlaceholder')}
                       invalid={errors.longCookingMessage && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.longCookingMessage && (
-                  <FormFeedback>Пожалуйста введите сообщение при длительном приготовлении</FormFeedback>
+                  <FormFeedback>{t('productsData.messageFeedback')}</FormFeedback>
                 )}
               </Col>
               
@@ -700,14 +700,14 @@ const ProductDetails = (props) => {
             )}
           />
           <Label className='form-label' for='requiresContainer'>
-          Требуется упаковка
+          {t('productsData.requiresContainer')}
           </Label>
         </div>
               </Col>
               <Col md={4} className="d-flex justify-content-between gap-30 mt-1">
                 <div>
                   <Label className="form-label" for="containerPrice">
-                  Стоимость упаковки, &#x0441;&#x332;
+                  {t('productsData.containerLabel')}&#x0441;&#x332;
                   </Label>
                   <Controller
                     name="containerPrice"
@@ -726,13 +726,13 @@ const ProductDetails = (props) => {
                   />
                   {errors && errors.containerPrice && (
                     <FormFeedback>
-                      Пожалуйста введите стоимость упаковки
+                      {t('productsData.containerFeedback')}
                     </FormFeedback>
                   )}
                 </div>
                 <div>
                   <Label className="form-label" for="appliancePrice">
-                  Стоимость приборов, &#x0441;&#x332;
+                  {t('productsData.applianceLabel')}&#x0441;&#x332;
                   </Label>
                   <Controller
                     name="appliancePrice"
@@ -750,14 +750,14 @@ const ProductDetails = (props) => {
                     )}
                   />
                   {errors && errors.appliancePrice && (
-                    <FormFeedback>Пожалуйста введите стоимость приборов</FormFeedback>
+                    <FormFeedback>{t('productsData.applianceFeedback')}</FormFeedback>
                   )}
                 </div>
               </Col>
               <Col md={2} className="mt-1">
                 <div>
                   <Label className="form-label" for="gram">
-                  Вес, г
+                  {t('productsData.gramLabel')}
                   </Label>
                   <Controller
                     name="gram"
@@ -776,7 +776,7 @@ const ProductDetails = (props) => {
                   />
                   {errors && errors.gram && (
                     <FormFeedback>
-                      Пожалуйста введите вес
+                      {t('productsData.gramFeedback')}
                     </FormFeedback>
                   )}
                 </div>
@@ -792,7 +792,7 @@ const ProductDetails = (props) => {
             )}
           />
           <Label className='form-label' for='isArchived'>
-          В архиве
+          {t('productsData.isArchived')}
           </Label>
         </div>
               </Col>
@@ -800,10 +800,10 @@ const ProductDetails = (props) => {
         <Row>
           <Col className="d-flex justify-content-center mt-2 gap-10" sm="12">
             <Button type="submit" color="primary">
-              Сохранить
+            {t('save')}
             </Button>
             <Button color="secondary" outline onClick={handleClose}>
-              Отменить
+            {t('cancel')}
             </Button>
           </Col>
         </Row>

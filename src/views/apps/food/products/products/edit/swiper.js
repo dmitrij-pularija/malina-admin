@@ -41,7 +41,7 @@ const renderSlide = (image) => {
           content={"Malina"}
           contentStyles={{
             borderRadius: 0,
-            fontSize: 'calc(48px)',
+            fontSize: 'calc(78px)',
             width: '100%',
             height: '100%'
           }}

@@ -1,5 +1,6 @@
 import { useEffect, useState, Fragment } from "react"
 import { useParams, Link } from "react-router-dom"
+import { useTranslation } from 'react-i18next'
 import ProductTabs from "../view/Tabs"
 import BreadCrumbs from "@components/breadcrumbs"
 import { Alert, Row, Col, Card, CardBody } from "reactstrap"
@@ -14,6 +15,7 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 const Details = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const [active, setActive] = useState("1")
   const { selectedProduct, loading } = useSelector((state) => state.products)
   const categories = useSelector(state => state.productsCategories.allCategories)
@@ -37,11 +39,11 @@ const Details = () => {
   ) : (
     <Fragment>
       <BreadCrumbs
-        title="Редактирование блюда"
+        title={t('productsData.titleEdit')}
         data={[
-          { title: "Меню" },
-          { title: "Блюда" },
-          { title: "Редактирование" },
+          { title: t('Menu') },
+          { title: t('Products') },
+          { title: t('Editing') }
         ]}
       />
       <div className="app-ecommerce-details">
@@ -56,17 +58,17 @@ const Details = () => {
                     selectedProduct={selectedProduct}
                     active={active}
                     toggleTab={toggleTab}
+                    t={t}
                   />
                 </Col>
               </Row>
             ) : (
               <Alert color="danger">
-                <h4 className="alert-heading">Блюдо не найдено</h4>
+                <h4 className="alert-heading">{t('productsData.alert')}</h4>
                 <div className="alert-body">
-                  Информация о блюде с id: {id} не доступка. Проверьте список
-                  блюд:{" "}
+                {t('productsData.alertText1')} {id} {t('productsData.alertText2')}{" "}
                   <Link to="/apps/food/products/products/list">
-                    Список блюд
+                  {t('productsData.alertText3')}
                   </Link>
                 </div>
               </Alert>

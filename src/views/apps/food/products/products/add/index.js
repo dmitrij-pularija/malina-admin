@@ -1,5 +1,5 @@
 import { useEffect, useState, Fragment } from "react"
-// import ProductTabs from "../view/Tabs"
+import { useTranslation } from 'react-i18next'
 import ProductDetails from "../edit/ProductDetails"
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from "../../../../../../@core/components/spinner/Loading"
@@ -12,6 +12,7 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 
 const addProduct = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const [active, setActive] = useState("1")
   const categories = useSelector(state => state.productsCategories.allCategories)
   const stores = useSelector((state) => state.stores.allStores)
@@ -32,8 +33,8 @@ const addProduct = () => {
     <>
       <Fragment>
         <BreadCrumbs
-          title="Создание блюда"
-          data={[{ title: "Меню" }, { title: "Блюда" }, { title: "Создание" }]}
+          title={t('productsData.titleAdd')}
+          data={[{ title: t('Menu') }, { title: t('Products') }, { title: t('Creation') }]}
         />
         <div className="app-ecommerce-details">
           <Card>
@@ -42,7 +43,8 @@ const addProduct = () => {
               <ProductDetails 
                categories={categories} 
                store={store} 
-               selectedProduct={null} 
+               selectedProduct={null}
+               t={t} 
                />  
               </Row>
             </CardBody>

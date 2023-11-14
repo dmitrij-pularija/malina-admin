@@ -2,11 +2,11 @@
 import { Link } from 'react-router-dom'
 
 // ** Custom Components
-import Avatar from '@components/avatar'
+import renderClient from '@components/renderClient'
 import { formatNumber, formatNumberInt } from '@utils'
 // ** Store & Actions
-import { store } from '@store/store'
-import { getData } from '../store'
+// import { store } from '@store/store'
+// import { getData } from '../store'
 
 // ** Icons Imports
 import { Slack, User, Command, Edit, Edit2, MoreVertical, FileText, Trash2, Archive } from 'react-feather'
@@ -15,36 +15,36 @@ import { Slack, User, Command, Edit, Edit2, MoreVertical, FileText, Trash2, Arch
 import { Badge, Button, UncontrolledTooltip, DropdownMenu, DropdownItem } from 'reactstrap'
 
 
-const getAvatar = data => {
-  if (data && data.avatar && data.avatar.includes("http")) {
-    return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={data && data.name ? data.name : 'Malina'}
-      />
-    )
-  }
-  }
+// const getAvatar = data => {
+//   if (data && data.avatar && data.avatar.includes("http")) {
+//     return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
+//   } else {
+//     return (
+//       <Avatar
+//         initials
+//         className='me-1'
+//         color={'light-primary'}
+//         content={data && data.name ? data.name : 'Malina'}
+//       />
+//     )
+//   }
+//   }
 
 
-const renderClient = (image, name) => {
-  if (image) {
-    return <Avatar className='me-1' img={image} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={name}
-      />
-    )
-  }
-}
+// const renderClient = (image, name) => {
+//   if (image) {
+//     return <Avatar className='me-1' img={image} width='32' height='32' />
+//   } else {
+//     return (
+//       <Avatar
+//         initials
+//         className='me-1'
+//         color={'light-primary'}
+//         content={name}
+//       />
+//     )
+//   }
+// }
 
 
 
@@ -89,60 +89,25 @@ const statusObj = {
 //   admin: 'Администратор'
 // }
 
-export const columns = (stores, handleEditProduct, handleDelProduct) => {
-  
-  const renderStoore = (id) => {
-    if (!stores.length) return
-    const foundStore = stores.find(item => item.id === id)
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(foundStore)}  
-      {/* <Logo2 src={foundStore.image} size={"s"}/> */}
-    <div className='d-flex flex-column ml3'>
-        <span className='fw-bolder'>{foundStore && foundStore.name ? foundStore.name : ''}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore && foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
-    </div>
-  </div>
-    )
-  }
+export const columns = (stores, handleEditProduct, handleDelProduct, t) => {
 
 return [
   {
-    name: 'Блюдо',
+    name: t('Product'),
     sortable: true,
     minWidth: '230px',
     sortField: 'name',
-    selector: row => row.name,
-    cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row.images.length ? row.images[0].image : '', row.name ? row.name : "Блюдо")}
-          <Link
-            to={`/apps/food/products/products/edit/${row.id}`}
-            className='user_name text-truncate text-body d-flex flex-column'
-            onClick={() => store.dispatch(getData(row.id))}
-          >
-            <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-          </Link>
-      </div>
-    )
+    cell: row => renderClient(row, "product")
   },
   {
-    name: 'Категория',
+    name: t('Category'),
     sortable: true,
     minWidth: '200px',
     sortField: 'category.id',
-    selector: row => row,
-    cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-        {renderClient( row.category && row.category.image ? row.category.image : '', row.category ? row.category.name : 'Категория')}
-        <div className='d-flex flex-column'>
-            <span className='fw-bolder'>{ row.category && row.category.name ? row.category.name : "" }</span>
-        </div>
-      </div>
-    )
+    cell: row => renderClient(row, "productsCategory")
   },
   {
-    name: 'Цена',
+    name: t('price'),
     minWidth: '80px',
     sortable: true,
     sortField: 'cost',
@@ -150,57 +115,49 @@ return [
     cell: row => formatNumber(row.cost)
   },
   {
-    name: 'Скидка',
+    name: t('Discount'),
     minWidth: '130px',
     sortable: true,
     sortField: 'prime_cost',
     selector: row => row,
     cell: row => `${formatNumberInt(row.prime_cost)} %`
   },
-  // {
-  //   name: 'Заведение',
-  //   minWidth: '200px',
-  //   sortable: true,
-  //   sortField: 'supplier',
-  //   selector: row => row,
-  //   cell: row => renderStoore(parseInt(row.supplier.id))
-  // },
   {
-    name: 'Статус',
+    name: t('Status'),
     minWidth: '138px',
     sortable: true,
     sortField: 'is_archived',
     selector: row => row.is_archived,
     cell: row => (
       <Badge className='text-capitalize' color={statusObj[row.is_archived]} pill>
-        {row.is_archived ? "Не доступно" : "Доступно"}
+        {row.is_archived ? t('productsData.notAvailable') : t('productsData.available')}
       </Badge>
     )
   },
   {
-    name: 'Действия',
+    name: t('action'),
     minWidth: '120px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
         <Button.Ripple 
-        className='btn-icon cursor-pointer' 
+        className='btn-icon cursor-pointer p-0' 
         color='transparent' 
         id={`edit-tooltip-${row.id}`}  
         onClick={event => handleEditProduct(event, row)}>
         <Edit size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
-          Редактировать
+        {t('edit')}
         </UncontrolledTooltip>
         <Button.Ripple 
-        className='btn-icon cursor-pointer' 
+        className='btn-icon cursor-pointer p-0' 
         color='transparent' 
         id={`del-tooltip-${row.id}`} 
         onClick={event => handleDelProduct(event, row.id)}>
           <Trash2 size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
-          Удалить
+        {t('delete')}
         </UncontrolledTooltip>
       </div>
     )

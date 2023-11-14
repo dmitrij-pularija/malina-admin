@@ -1,58 +1,28 @@
 // ** React Imports
-import { Fragment } from 'react'
-import { Link } from 'react-router-dom'
+import renderClient from '@components/renderClient'
 import { formatNumber } from '@utils'
-// ** Custom Components
-import Avatar from '@components/avatar'
-
-// ** Reactstrap Imports
 import { Button, UncontrolledTooltip } from 'reactstrap'
-
-// ** Third Party Components
 import { Trash2 } from 'react-feather'
 
-const renderClient = row => {
-  if (row.icon) {
-    return <Avatar className='me-1' img={row.icon} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={row.name ? row.name : 'Добавка'}
-      />
-    )
-  }
-}
-
-export const columns = (handleDelAddon) => {
+export const columns = (handleDelAddon, t) => {
 
   return [
   {
     name: '№',
     sortable: false,
-    minWidth: '30px',
+    width: '50px',
     selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Добавка',
+    name: t('Addon'),
     sortable: true,
     minWidth: '300px',
     sortField: 'name',
-    selector: row => row.name,
-    cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row)}
-        <div className='d-flex flex-column'>
-            <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-        </div>
-      </div>
-    )
+    cell: row => renderClient(row, "addons")
   },
   {
-    name: 'Цена',
+    name: t('price'),
     sortable: true,
     minWidth: '70px',
     sortField: 'price',
@@ -60,8 +30,8 @@ export const columns = (handleDelAddon) => {
     cell: row => formatNumber(row.price)
   },
   {
-    name: 'Действия',
-    minWidth: '100px',
+    name: t('action'),
+    width: '120px',
     cell: row => (
       <>
         <Button.Ripple 
@@ -72,7 +42,7 @@ export const columns = (handleDelAddon) => {
           <Trash2 size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
-          Удалить
+        {t('delete')}
         </UncontrolledTooltip>
       </>  
     )

@@ -60,8 +60,13 @@ const renderClient = (data, type) => {
     avatar = data.images && data.images.length ? data.images[0].link : ""
 }
 if (type === "addons") {
-  name = data.name ?  data.name : "Addons"
+  name = data.name ?  data.name : "Addon"
   avatar = data.image ? data.image : ""
+}
+if (type === "product") {
+  name = data.name ?  data.name : "Product"
+  redirectLink = `/apps/food/products/products/edit/${data.id}`
+  avatar = data.images && data.images.length ? data.images[0].image : ""
 }
 if (type === "productsCategory") name = data.name ? data.name : "Category"
 

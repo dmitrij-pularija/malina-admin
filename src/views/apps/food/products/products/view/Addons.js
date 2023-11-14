@@ -42,9 +42,10 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 
 const MySwal = withReactContent(Swal)
 
-const Addons = ({ store, selectedProduct }) => {
+const Addons = ({ store, selectedProduct, t }) => {
   const dispatch = useDispatch()
-  const [currentAddon, setCurrentAddon] = useState({ value: '', label: 'Выбирите добавку' })
+  const [currentAddon, setCurrentAddon] = useState('')
+  // const [currentAddon, setCurrentAddon] = useState({ value: '', label: 'Выбирите добавку' })
   const allAddons = useSelector(state => state.addons.allAddons)
   
   useEffect(() => {
@@ -79,6 +80,7 @@ const Addons = ({ store, selectedProduct }) => {
                 classNamePrefix='select'
                 options={addonsOptions}
                 value={currentAddon}
+                placeholder={t('productsData.addonsPlaceholder')}
                 onChange={data => {
                   setCurrentAddon(data)
                 }}
@@ -86,7 +88,7 @@ const Addons = ({ store, selectedProduct }) => {
             </Col>
             <Col className='my-md-0 my-1' md='4'>
             <Button className='add-new-user' color='primary' onClick={handleAddAddon}>
-              Добавить
+            {t('Add')}
             </Button>
             </Col>
           </Row>
@@ -103,11 +105,11 @@ const Addons = ({ store, selectedProduct }) => {
         <DataTable
           responsive
           size={'small'}
-          columns={columns(handleDelAddon)}
+          columns={columns(handleDelAddon, t)}
           data={selectedProduct.addons}
           className='react-dataTable'
           sortIcon={<ChevronDown size={10} />}
-          noDataComponent={<h6 className='text-capitalize'>Добавки не найдены</h6>}
+          noDataComponent={<h6 className='text-capitalize'>{t('notFound')}</h6>}
         />
       </div> 
       </Row> 

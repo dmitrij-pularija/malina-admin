@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import Breadcrumbs from '@components/breadcrumbs'
 import { useParams, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 // import { getUser } from '../store'
 import { useSelector, useDispatch } from 'react-redux'
 import { Row, Col, Alert } from 'reactstrap'
@@ -10,6 +11,7 @@ import '@styles/react/apps/app-users.scss'
 
 const UserView = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const { selectedUser } = useSelector(state => state.users)
   const { id } = useParams()
 
