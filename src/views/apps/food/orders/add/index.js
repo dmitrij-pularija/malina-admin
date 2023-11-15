@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, Fragment } from "react"
 // import StoreDetails from "../detail/StoreDetails"
+import { useTranslation } from 'react-i18next'
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import ModalMap from '../../../../../@core/components/map/ModalMap'
@@ -19,41 +20,10 @@ import Cart from '../edit/steps/Cart'
 import "@styles/react/apps/app-users.scss"
 import "@styles/base/pages/app-ecommerce-details.scss"
 
-// const defaultValues = {
-   // name: '',
-   // city: '',
-   // street: '',
-   // houseNumber: '',
-   // entrance: '',
-   // floor: '',
-   // phoneNumber: '',
-  // deliveryPrice: '',
-   // location: '',
-   // longitude: '',
-   // latitude: '',
-  // timeDelivery: '',
-  // rdt: '',
-  // comment: ''
-// }
-
-//  user_id	
-//  business_id
-//  table	
-//  payment_type	
-//  order_type	
-//  time_delivery	
-//  used_points	
-//  delivery_address	
-//  tips	
-//  quantity_appliances	
-//  comment	
-//  order_cart
-//  waiter	
-//  requested_delivery_time	
-
 const AddOrder = () => {
   const ref = useRef(null)
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const [stepper, setStepper] = useState(null)
   const [data, setData] = useState(null)
   const [mapOpen, setMapOpen] = useState(false)
@@ -82,31 +52,31 @@ const handleCoordinateSelected = coords => {
   const steps = [
     {
       id: 'step-details',
-      title: 'Реквизиты',
+      title: t('ordersData.step1'),
       // subtitle: 'Добввьте реквизиты заказа',
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={null} t={t} />
     },
     {
       id: 'step-address',
-      title: 'Адрес',
+      title: t('ordersData.step2'),
       // subtitle: 'введите адрес доставки',
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} />
+      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} t={t} />
     },
     {
       id: 'order-details',
-      title: 'Состав',
+      title: t('ordersData.step3'),
       // subtitle: 'Выберите состав заказа',
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} userData={userData} handleUpdate={updateData} orderData={data}  selectedOrder={null} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} userData={userData} handleUpdate={updateData} orderData={data}  selectedOrder={null} t={t} />
     },
     {
       id: 'step-payment',
-      title: 'Оплата',
+      title: t('ordersData.step4'),
       // subtitle: 'Добавьте способ оплаты',
       icon: <Copy size={18} />,
-      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={null} />
+      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={null} t={t} />
     }
   ]
 
@@ -116,10 +86,10 @@ const handleCoordinateSelected = coords => {
     <>
     <Fragment>
       <BreadCrumbs
-        title="Создание заказа"
+        title={t('ordersData.titleAdd')}
         data={[
-          { title: "Заказы" },
-          { title: "Создание" }
+          { title: t('Orders') },
+          { title: t('Creation') }
         ]}
       />
       <div className="app-ecommerce-details">
@@ -140,7 +110,7 @@ const handleCoordinateSelected = coords => {
         </Card>
       </div>
     </Fragment>
-    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedOrder={null} />
+    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedOrder={null}  t={t} />
     <Loading />
     </>
   )

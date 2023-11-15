@@ -104,7 +104,7 @@ return [
     sortable: true,
     minWidth: '200px',
     sortField: 'category.id',
-    cell: row => renderClient(row, "productsCategory")
+    cell: row => renderClient(row.category, "productsCategory")
   },
   {
     name: t('price'),

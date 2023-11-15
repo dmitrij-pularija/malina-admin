@@ -26,7 +26,7 @@ const defaultValues = {
   }
 const requiredFields = ["user", "store"]
 
-const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, users, waiters, tables }) => {
+const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, users, waiters, tables, t }) => {
   // if (!stores.length || !users.length || !waiters.length || !tables.length) return
   const navigate = useNavigate()
   const handleBack = () => navigate("/apps/food/orders/list/")
@@ -110,8 +110,8 @@ const initTableOptions = () => {
   } = useForm({ defaultValues, values })
 
   const handleStoreChange = (selectedOption) => {
-    setValue("table", { value: "", label: "Выбирите номер стола" })
-    setValue("waiter", { value: "", label: "Выбирите официанта" })
+    setValue("table", { value: "", label: t('FeedsData.tablePlaceholder') })
+    setValue("waiter", { value: "", label: t('selectWaiter') })
     const filteredWaiters = waiters.filter(
       waiter => parseInt(waiter.business_id.id) === parseInt(selectedOption.value)
     )
@@ -159,14 +159,14 @@ const initTableOptions = () => {
   return (
     <Fragment>
       <div className='content-header mb-1'>
-        <h5 className='mb-0'>Реквизиты</h5>
-        <small>Добввьте реквизиты заказа</small>
+        <h5 className='mb-0'>{t('ordersData.step1')}</h5>
+        <small>{t('ordersData.step1Title')}</small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)} >
         <Row>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='store'>
-          Завдение<span className='text-danger'>*</span>
+          {t('storeLabel')}<span className='text-danger'>*</span>
           </Label>
           <Controller
                   name="store"
@@ -184,18 +184,18 @@ const initTableOptions = () => {
               })}
               classNamePrefix='select'
               options={storeOptions}
-              placeholder='Выбирите заведение'
+              placeholder={t('storePlaceholder')}
               onChange={handleStoreChange}
             />
             )}
             />
             {errors && errors.store && (
-              <FormFeedback>Пожалуйста выбирите заведение</FormFeedback>
+              <FormFeedback>{t('storeFeedback')}</FormFeedback>
             )}  
           </Col>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='user'>
-          Клиент<span className='text-danger'>*</span>
+          {t('customer')}<span className='text-danger'>*</span>
           </Label>
           <Controller
                   name="user"
@@ -212,18 +212,18 @@ const initTableOptions = () => {
               })}
               classNamePrefix='select'
               options={userOptions}
-              placeholder='Выбирите клиента'
+              placeholder={t('customerPlaceholder')}
               {...field}
             />
             )}
             />
             {errors && errors.user && (
-              <FormFeedback>Пожалуйста выбирите клиента</FormFeedback>
+              <FormFeedback>{t('customerFeedback')}</FormFeedback>
             )} 
           </Col>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='waiter'>
-          Официант
+          {t('waiter')}
           </Label>
           <Controller
                   name="waiter"
@@ -240,18 +240,18 @@ const initTableOptions = () => {
               })}
               classNamePrefix='select'
               options={waiterOptions}
-              placeholder='Выбирите официанта'
+              placeholder={t('selectWaiter')}
               {...field}
             />
             )}
             />
             {errors && errors.waiter && (
-              <FormFeedback>Пожалуйста выберите официанта</FormFeedback>
+              <FormFeedback>{t('waiterFeedback')}</FormFeedback>
             )}
           </Col>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='table'>
-          Стол
+          {t('ordersData.tableLabel')}
           </Label>
           <Controller
                   name="table"
@@ -269,18 +269,18 @@ const initTableOptions = () => {
               })}
               classNamePrefix='select'
               options={tableOptions}
-              placeholder='Выбирите номер стола'
+              placeholder={t('ordersData.tablePlaceholder')}
               {...field}
             />
             )}
             />
             {errors && errors.table && (
-              <FormFeedback>Пожалуйста выберите стол</FormFeedback>
+              <FormFeedback>{t('ordersData.tableFeedback')}</FormFeedback>
             )}
           </Col>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='orderType'>
-          Тип заказа
+          {t('ordersData.orderTypeLabel')}
           </Label>
           <Controller
                   name="orderType"
@@ -296,23 +296,23 @@ const initTableOptions = () => {
               })}
               classNamePrefix='select'
               options={orderTypeOptions}
-              placeholder='Выбирите тип заказа'
+              placeholder={t('ordersData.orderTypePlaceholder')}
               {...field}
             />
             )}
             />
             {errors && errors.orderType && (
-              <FormFeedback>Пожалуйста выберите тип заказа</FormFeedback>
+              <FormFeedback>{t('ordersData.orderTypeFeedback')}</FormFeedback>
             )}
           </Col>
         </Row>
         <div className='d-flex justify-content-between mt-1'>
           <Button color='primary' className='btn-prev' outline onClick={() => handleBack()}>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
-            <span className='align-middle d-sm-inline-block d-none'>Назад</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Prev')}</span>
           </Button>
           <Button type='submit' color='primary' className='btn-next' >
-            <span className='align-middle d-sm-inline-block d-none'>Далее</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Next')}</span>
             <ArrowRight size={14} className='align-middle ms-sm-25 ms-0'></ArrowRight>
           </Button>
         </div>

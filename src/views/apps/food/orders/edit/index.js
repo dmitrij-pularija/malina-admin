@@ -2,6 +2,7 @@
 import { useEffect, useRef, useState, Fragment } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from '../../../../../@core/components/spinner/Loading'
 import ModalMap from '../../../../../@core/components/map/ModalMap'
@@ -34,6 +35,7 @@ const EditOrder = () => {
   const { id } = useParams()
   const ref = useRef(null)
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const [stepper, setStepper] = useState(null)
   const [data, setData] = useState(null)
   const [mapOpen, setMapOpen] = useState(false)
@@ -74,27 +76,27 @@ const EditOrder = () => {
   const steps = [
     {
       id: 'step-details',
-      title: 'Реквизиты',
+      title: t('ordersData.step1'),
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} waiters={waiters} tables={tables} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} t={t} />
     },
     {
       id: 'step-address',
-      title: 'Адрес',
+      title: t('ordersData.step2'),
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} />
+      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} t={t} />
     },
     {
       id: 'order-details',
-      title: 'Состав',
+      title: t('ordersData.step3'),
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} t={t} />
     },
     {
       id: 'step-payment',
-      title: 'Оплата',
+      title: t('ordersData.step4'),
       icon: <Copy size={18} />,
-      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} t={t} />
     }
   ]
 
@@ -102,10 +104,10 @@ const EditOrder = () => {
     <>
     <Fragment>
       <BreadCrumbs
-        title="Редактирование заказа"
+        title={t('ordersData.titleEdit')}
         data={[
-          { title: "Заказы" },
-          { title: "Редактирование" }
+          { title: t('Orders') },
+          { title: t('Editing') }
         ]}
       />
       <div className="app-ecommerce-details">
@@ -126,15 +128,15 @@ const EditOrder = () => {
         </Card>
       </div>
     </Fragment>
-    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedOrder={selectedOrder} />
+    <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedOrder={selectedOrder} t={t} />
     <Loading />
     </>
   ) : (
     loading ? <Loading /> : <Alert color='danger'>
-      <h4 className='alert-heading'>Заказ не найден</h4>
+      <h4 className='alert-heading'>{t('ordersData.alert')}</h4>
       <div className='alert-body'>
-      Информация о заказе с id: {id} не доступка. Проверьте список заказов:{' '}
-        <Link to='/apps/food/orders/list'>Список заказов</Link>
+      {t('ordersData.alertText1')} {id} {t('ordersData.alertText2')}{' '}
+        <Link to='/apps/food/orders/list'>{t('ordersData.alertText3')}</Link>
       </div>
     </Alert>
   )

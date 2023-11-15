@@ -21,7 +21,7 @@ const defaultValues = {
   }
   const requiredFields = []
 
-const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
+const Payment = ({ stepper, orderData, selectedOrder, handleUpdate, t }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -56,7 +56,7 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
     for (const key in orderData) {
       if (orderData[key]) newData[key] = orderData[key]
     }
-console.log(newData)
+// console.log(newData)
     if (checkIsValid(data, requiredFields)) {
       if (data.paymentType) newData.payment_type = parseInt(data.paymentType.value)
       if (data.tips) newData.tips = parseInt(data.tips)
@@ -87,14 +87,14 @@ console.log(newData)
   return (
     <Fragment>
       <div className='content-header'>
-        <h5 className='mb-0'>Оплата</h5>
-        <small>Введите детали оплаты.</small>
+        <h5 className='mb-0'>{t('ordersData.step4')}</h5>
+        <small>{t('ordersData.step4Title')}</small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
         <Col md='6' className='mb-1'>
           <Label className='form-label' for='paymentType'>
-          Тип оплаты
+          {t('ordersData.paymentTypeLabel')}
           </Label>
           <Controller
                   name="paymentType"
@@ -110,19 +110,19 @@ console.log(newData)
               })}
               classNamePrefix='select'
               options={paymentTypeOptions}
-              placeholder='Выбирите тип оплаты'
+              placeholder={t('ordersData.paymentTypePlaceholder')}
               {...field}
             />
             )}
             />
             {errors && errors.paymentType && (
-              <FormFeedback>Пожалуйста выбирите тип оплаты</FormFeedback>
+              <FormFeedback>{t('ordersData.paymentTypeFeedback')}</FormFeedback>
             )}  
           </Col>
           <Col md='6' className="d-flex justify-content-between align-items-end gap-10 mb-1">
                 <div>
                   <Label className="form-label" for="earnedPoints">
-                    Начислено балов
+                  {t('ordersData.earnedPointsLabel')}
                   </Label>
                   <Controller
                     name="earnedPoints"
@@ -142,13 +142,13 @@ console.log(newData)
                   />
                   {errors && errors.earnedPoints && (
                     <FormFeedback>
-                      Пожалуйста введите количество балов
+                      {t('ordersData.earnedPointsFeedback')}
                     </FormFeedback>
                   )}
                 </div>
                 <div>
                   <Label className="form-label" for="usedPoints">
-                    Использовано балов
+                  {t('ordersData.usedPointsLabel')}
                   </Label>
                   <Controller
                     name="usedPoints"
@@ -167,18 +167,18 @@ console.log(newData)
                     )}
                   />
                   {errors && errors.usedPoints && (
-                    <FormFeedback>Пожалуйста введите количество балов</FormFeedback>
+                    <FormFeedback>{t('ordersData.usedPointsFeedback')}</FormFeedback>
                   )}
                 </div>
                 <div>
                 <Button color='primary' onClick={() => {}}>
-                <span className='align-middle d-sm-inline-block d-none'>Изменить</span>
+                <span className='align-middle d-sm-inline-block d-none'>{t('edit')}</span>
                </Button>
                </div>
               </Col>
               <Col md={12} className='mb-1'>
                 <Label className="form-label" for="comment">
-                Коментарий
+                {t('comment')}
                 </Label>
                 <Controller
                   name="comment"
@@ -188,19 +188,19 @@ console.log(newData)
                     <Input
                       id="comment"
                       type="text"
-                      placeholder="Введите коментарий"
+                      placeholder={t('commentPlaceholder')}
                       invalid={errors.comment && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.comment && (
-                  <FormFeedback>Пожалуйста введите описание</FormFeedback>
+                  <FormFeedback>{t('commentFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col md='3' className='mb-1'>
               <Label className="form-label" for="tips">
-                  Чаевые, &#x0441;&#x332;
+              {t('ordersData.tipsLabel')}&#x0441;&#x332;
                   </Label>
                   <Controller
                     name="tips"
@@ -218,12 +218,12 @@ console.log(newData)
                     )}
                   />
                   {errors && errors.tips && (
-                    <FormFeedback>Пожалуйста введите чаевые</FormFeedback>
+                    <FormFeedback>{t('ordersData.tipsFeedback')}</FormFeedback>
                   )}
               </Col>
               <Col md='3' className='mb-1'>
               <Label className="form-label" for="appliances">
-                  Количество приборов, шт
+              {t('ordersData.appliancesLabel')}
                   </Label>
                   <Controller
                     name="appliances"
@@ -241,17 +241,17 @@ console.log(newData)
                     )}
                   />
                   {errors && errors.appliances && (
-                    <FormFeedback>Пожалуйста введите количество приборов</FormFeedback>
+                    <FormFeedback>{t('ordersData.appliancesFeedback')}</FormFeedback>
                   )}
               </Col>
         </Row>
         <div className='d-flex justify-content-between mt-1'>
           <Button color='primary' className='btn-prev' onClick={() => stepper.previous()}>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
-            <span className='align-middle d-sm-inline-block d-none'>Назад</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Prev')}</span>
           </Button>
           <Button  type='submit' color='success' className='btn-submit' >
-            {selectedOrder ? "Изменить" : "Создать"}
+            {selectedOrder ? t('edit') : t('add')}
           </Button>
         </div>
       </Form>

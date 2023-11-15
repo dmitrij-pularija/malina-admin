@@ -29,6 +29,7 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar, t 
   const dispatch = useDispatch()
   const { data, total } = useSelector(state => state.productsCategories)
   const store = useSelector(state => state.auth.userData.id)
+  // const store = 27
   const [sort, setSort] = useState('+')
   // const [selectedId, setSelectedId] = useState('')
   const [searchTerm, setSearchTerm] = useState('')

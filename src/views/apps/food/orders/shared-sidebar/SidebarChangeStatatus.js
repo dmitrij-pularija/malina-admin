@@ -15,7 +15,7 @@ const defaultValues = {
   orderStatus: ''
 }
 
-const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }) => {
+const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder, t  }) => {
   const dispatch = useDispatch()
   const statusOptions = statuses.map((item) => ({
     value: String(item.id),
@@ -63,7 +63,7 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
     <Sidebar
       size='lg'
       open={open}
-      title='Изменение статуса заказа'
+      title={t('ordersData.sidebarTitle')}
       headerClassName='mt-1 mb-1'
       contentClassName='p-0'
       bodyClassName='pb-sm-0 pb-3'
@@ -72,7 +72,7 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
       <Form  className='m3-3' onSubmit={handleSubmit(onSubmit)}>
         <div className='mb-3'>
           <Label className='form-label' for='orderStatus'>
-          Статус заказа
+          {t('Status')}
           </Label>
           <Controller
             id='orderStatus'
@@ -87,7 +87,7 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
                 classNamePrefix='select'
                 options={statusOptions}
                 theme={selectThemeColors}
-                placeholder={"Выберите статус"}
+                placeholder={t('statusPlaceholder')}
                 className={classnames("react-select", {
                   "is-invalid": errors.orderStatus && true
                 })}
@@ -96,14 +96,14 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
               )}
             />
             {errors && errors.orderStatus && (
-              <FormFeedback>Текущий статус соответствует выбранному</FormFeedback>
+              <FormFeedback>{t('statusFeedback')}</FormFeedback>
             )}
         </div>
         <Button type='submit' className='me-1' color='primary'>
-          Изменить
+        {t('save')}
         </Button>
         <Button type='reset' color='secondary' outline onClick={handleClose}>
-          Отменить
+        {t('cancel')}
         </Button>
       </Form>
     </Sidebar>

@@ -11,7 +11,7 @@ import '@styles/base/pages/app-ecommerce.scss'
         initials
         className='me-1'
         color={'light-primary'}
-        content={name}
+        content={name || "User"}
       />
     )
   }
@@ -26,7 +26,7 @@ const renderClient = (data, type) => {
  if (data) {
  if (type === "user") {
     redirectLink = `/apps/user/view/${data.id}`
-    name = data.name ? `${data.name} ${data.surname ? data.surname : ''}` : "User"
+    name = data.name ? `${data.name} ${data.surname ? data.surname : ''}` : ""
     login = data.login
     avatar = data.avatar
  }
@@ -37,8 +37,6 @@ const renderClient = (data, type) => {
     avatar = data.profile_picture
  }
  if (type === "chef") {
-    avatar = ""
-    redirectLink = ""
     name = data.name ?  data.name : "Chef"
     login = data.telegram_id ? data.telegram_id : ""
 
@@ -46,7 +44,6 @@ const renderClient = (data, type) => {
  if (type === "master") {
     redirectLink = `/apps/user/masters/view/${data.id}`
     name = "Master"
-    login = ""
  }
  if (type === "store") {
     redirectLink = `/apps/food/stores/view/${data.id}`
@@ -62,6 +59,7 @@ const renderClient = (data, type) => {
 if (type === "addons") {
   name = data.name ?  data.name : "Addon"
   avatar = data.image ? data.image : ""
+  redirectLink = `/apps/food/products/addons/list`
 }
 if (type === "product") {
   name = data.name ?  data.name : "Product"

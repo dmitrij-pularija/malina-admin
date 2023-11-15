@@ -39,7 +39,7 @@ const defaultValues = {
   } else return []
   }
 
-const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, selectedCoordinates }) => {
+const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, selectedCoordinates, t }) => {
   // const dispatch = useDispatch()
   const [addressList, setAddressList] = useState([])
   const [userAddressOptions, setUserAddressOptions] = useState(null)
@@ -198,15 +198,15 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
   return (
     <Fragment>
       <div className='content-header'>
-        <h5 className='mb-0'>Адрес</h5>
-        <small>{orderData && orderData.order_type === 1 ? "Выберите адрес доставки или создайте новый." : "В нутри заведения"}</small>
+        <h5 className='mb-0'>{t('Address')}</h5>
+        <small>{orderData && orderData.order_type === 1 ? t('ordersData.step2Title1') : t('ordersData.step2Title2')}</small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
        {orderData && orderData.order_type === 1 && <>
         <Row className='mb-1'>
         <Col md='6'>
           <Label className='form-label' for='userAddress'>
-          Сохраненные адреса
+          {t('ordersData.savedAddresses')}
           </Label>
             <Select
               isDisabled={!userAddressOptions}
@@ -217,16 +217,16 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               className='react-select'
               classNamePrefix='select'
               options={userAddressOptions}
-              placeholder='Выбирите адрес клиента'
+              placeholder={t('ordersData.savedAddressesPlaceholder')}
               onChange={data => handleAddressSelect(data)}
             />
           </Col> 
           <Col md='6' className="d-flex justify-content-start align-items-end gap-30"> 
           <Button color='primary' onClick={handleAddressSave}>
-                <span className='align-middle d-sm-inline-block d-none'>Сохранить</span>
+                <span className='align-middle d-sm-inline-block d-none'>{t('save')}</span>
           </Button> 
           <Button color='warning' onClick={() => toggleMap()}>
-                <span className='align-middle d-sm-inline-block d-none'>Выбрать на карте</span>
+                <span className='align-middle d-sm-inline-block d-none'>{t('SelectOnMap')}</span>
           </Button> 
           </Col>  
         </Row>
@@ -234,7 +234,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
         <Col md='6'>
         <Col className='mb-1'>
             <Label className='form-label' for='city'>
-              Город<span className='text-danger'>*</span>
+            {t('City')}<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="city"
@@ -245,7 +245,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='city'
               name='city'
-              placeholder='Название города'
+              placeholder={t('cityPlaceholder')}
               invalid={errors.city && true}
               onInput={event => handleLocation(event)}
               {...field}
@@ -254,13 +254,13 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.city && (
               <FormFeedback>
-                Пожалуйста введите название города
+                {t('cityFeedback')}
               </FormFeedback>
             )}
         </Col>
         <Col className='mb-1'>
             <Label className='form-label' for='street'>
-              Улица<span className='text-danger'>*</span>
+            {t('Street')}<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="street"
@@ -271,7 +271,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='street'
               name='street'
-              placeholder='Название улицы'
+              placeholder={t('streetPlaceholder')}
               invalid={errors.street && true}
               onInput={event => handleLocation(event)}
               {...field}
@@ -280,14 +280,14 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.street && (
               <FormFeedback>
-                Пожалуйста введите название улицы
+                {t('streetFeedback')}
               </FormFeedback>
             )}
           </Col>
           <Col className='d-flex gap-30 mb-1'>
           <Col >
             <Label className='form-label' for='houseNumber'>
-             Дом<span className='text-danger'>*</span>
+            {t('houseNumber')}<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="houseNumber"
@@ -298,7 +298,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='houseNumber'
               name='houseNumber'
-              placeholder='№ дома'
+              placeholder={t('houseNumberPlaceholder')}
               onInput={event => handleLocation(event)}
               invalid={errors.houseNumber && true}
               {...field}
@@ -307,13 +307,13 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.houseNumber && (
               <FormFeedback>
-                Пожалуйста введите № дома
+                {t('houseNumberFeedback')}
               </FormFeedback>
             )}
           </Col>
           <Col>
             <Label className='form-label' for='entrance'>
-             Подъезд
+            {t('entrance')}
             </Label>
             <Controller
                     name="entrance"
@@ -324,7 +324,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='entrance'
               name='entrance'
-              placeholder='Подъезд'
+              placeholder={t('entrancePlaceholder')}
               invalid={errors.entrance && true}
               {...field}
             />
@@ -332,13 +332,13 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.entrance && (
               <FormFeedback>
-                Пожалуйста введите № подъезда<span className='text-danger'>*</span>
+                {t('entranceFeedback')}<span className='text-danger'>*</span>
               </FormFeedback>
             )}
           </Col>
           <Col>
             <Label className='form-label' for='floor'>
-             Этаж
+            {t('floor')}
             </Label>
             <Controller
                     name="floor"
@@ -349,7 +349,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='floor'
               name='floor'
-              placeholder='Этаж'
+              placeholder={t('floorPlaceholder')}
               invalid={errors.floor && true}
               {...field}
             />
@@ -357,14 +357,14 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.floor && (
               <FormFeedback>
-                Пожалуйста введите № этажа
+                {t('floorFeedback')}
               </FormFeedback>
             )}
           </Col>
           </Col>
           <Col className='mb-1'>
             <Label className='form-label' for='location'>
-              Адрес<span className='text-danger'>*</span>
+            {t('Address')}<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="location"
@@ -376,7 +376,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='location'
               name='location'
-              placeholder='Адрес доставки'
+              placeholder={t('addressPlaceholder')}
               // value={`${getValues('city')}, ${getValues('street')}, ${getValues('houseNumber')}`}
               invalid={errors.location && true}
               {...field}
@@ -385,7 +385,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.location && (
               <FormFeedback>
-                Пожалуйста введите адрес доставки
+                {t('addressFeedback')}
               </FormFeedback>
             )}
           </Col>
@@ -393,7 +393,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
         <Col md='6'>
         <Col className='mb-1'>
             <Label className='form-label' for='name'>
-              Название адреса<span className='text-danger'>*</span>
+            {t('addressName')}<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="name"
@@ -404,7 +404,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='name'
               name='name'
-              placeholder='Выберите название адреса'
+              placeholder={t('addressNamePlaceholder')}
               invalid={errors.name && true}
               {...field}
             />
@@ -412,13 +412,13 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.name && (
               <FormFeedback>
-                Пожалуйста введите название адреса
+                {t('addressNameFeedback')}
               </FormFeedback>
             )}
           </Col>
           <Col className='mb-1'>
             <Label className='form-label' for='phoneNumber'>
-              Мобильный телефона<span className='text-danger'>*</span>
+            {t('phone')}<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="phoneNumber"
@@ -429,7 +429,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='phoneNumber'
               name='phoneNumber'
-              placeholder='Введите номер телефона'
+              placeholder={t('phonePlaceholder')}
               invalid={errors.phoneNumber && true}
               {...field}
             />
@@ -437,13 +437,13 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.phoneNumber && (
               <FormFeedback>
-                Пожалуйста введите номер телефона
+                {t('phoneFeedback')}
               </FormFeedback>
             )}
           </Col>
           <Col className='mb-1'>
             <Label className='form-label' for='deliveryPrice'>
-              Стоимость доставки
+            {t('ordersData.deliveryPriceLabel')}
             </Label>
             <Controller
                     name="deliveryPrice"
@@ -455,7 +455,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='deliveryPrice'
               name='deliveryPrice'
-              placeholder='Введите стоимость доставки'
+              placeholder={t('ordersData.deliveryPricePlaceholder')}
               invalid={errors.deliveryPrice && true}
               {...field}
             />
@@ -463,14 +463,14 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.deliveryPrice && (
               <FormFeedback>
-                Пожалуйста введите стоимость доставки
+                {t('ordersData.deliveryPriceFeedback')}
               </FormFeedback>
             )}
           </Col>
           <Col className='d-flex gap-30 mb-1'>
           <Col>
             <Label className='form-label' for='longitude'>
-             Долгота<span className='text-danger'>*</span>
+            {t('longitude')}<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="longitude"
@@ -482,7 +482,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='longitude'
               name='longitude'
-              placeholder='Долгота'
+              placeholder={t('longitudePlaceholder')}
               invalid={errors.longitude && true}
               {...field}
             />
@@ -490,13 +490,13 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.longitude && (
               <FormFeedback>
-                Пожалуйста введите долготу
+                {t('longitudeFeedback')}
               </FormFeedback>
             )}
           </Col>
           <Col>
             <Label className='form-label' for='latitude'>
-             Широта<span className='text-danger'>*</span>
+            {t('latitude')}<span className='text-danger'>*</span>
             </Label>
             <Controller
                     name="latitude"
@@ -508,7 +508,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
               type='text'
               id='latitude'
               name='latitude'
-              placeholder='Широта'
+              placeholder={t('latitudePlaceholder')}
               invalid={errors.latitude && true}
               {...field}
             />
@@ -516,7 +516,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
             />
             {errors && errors.latitude && (
               <FormFeedback>
-                Пожалуйста введите широту
+                {t('latitudeFeedback')}
               </FormFeedback>
             )}
           </Col>
@@ -527,7 +527,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
         <Row>
           {orderData && orderData.order_type === 1 && <Col md='4' className='mb-1' >
             <Label className="form-label" for="timeDelivery">
-              Время доставки, мин
+            {t('ordersData.deliveryTimeLabel')}
             </Label>
                 <div className="d-flex justify-content-center align-items-center gap-10">
                   <div>
@@ -540,7 +540,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
                       <Input
                       // disabled
                       id="timeDelivery"
-                      placeholder="расчетное"
+                      placeholder={t('ordersData.deliveryTimePlaceholder1')}
                       invalid={errors.timeDelivery && true}
                       {...field}
                     />  
@@ -568,7 +568,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
                           // value={field.value}
                           id="rdt"
                           name="rdt"
-                          placeholder="желаемое"
+                          placeholder={t('ordersData.deliveryTimePlaceholder2')}
                           value={field.value}
                           invalid={errors.rdt && true}
                           options={{
@@ -585,7 +585,7 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
                       )}
                     />
                   </div>
-                  {(errors && errors.rdt) && (<FormFeedback id='ffb'>Пожалуйста введите время доставки</FormFeedback>)}
+                  {(errors && errors.rdt) && (<FormFeedback id='ffb'>{t('ordersData.deliveryTimeFeedback')}</FormFeedback>)}
                 </div>
               </Col>}
               {/* <Col className='mb-1'>
@@ -614,10 +614,10 @@ const Address = ({ stepper, orderData, selectedOrder, handleUpdate, toggleMap, s
         <div className='d-flex justify-content-between mt-1'>
           <Button color='primary' className='btn-prev' onClick={() => stepper.previous()}>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
-            <span className='align-middle d-sm-inline-block d-none'>Назад</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Prev')}</span>
           </Button>
           <Button type='submit' color='primary' className='btn-next'>
-            <span className='align-middle d-sm-inline-block d-none'>Далее</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Next')}</span>
             <ArrowRight size={14} className='align-middle ms-sm-25 ms-0'></ArrowRight>
           </Button>
         </div>

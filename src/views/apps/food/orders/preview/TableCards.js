@@ -17,39 +17,34 @@ import {
 
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-const ExpandableTable = ({ data }) => {
+const ExpandableTable = ({ data, t }) => {
      
     return <DataTable 
     responsive
-    fixedHeader={true}
-    noDataComponent={<h6 className='text-capitalize'>Добавки отсутствуют</h6>}
+    noDataComponent={<h6 className='text-capitalize'>{t('ordersData.addonsNotFound')}</h6>}
     noTableHead={true}
     data={data.product_addons}
-    columns={columnsAddons}
+    columns={columnsAddons(t)}
     className='react-dataTable'
     />
   }
 
-const TableCards = ({ data }) => {
+const TableCards = ({ data, t }) => {
  
 return (
-    <div className='react-dataTable'>
     <DataTable
         dataKey="id"
         responsive
-        fixedHeader={true}
         expandableRows
         expandOnRowClicked
-        columns={columns}
+        columns={columns(t)}
         sortIcon={<ChevronDown />}
         className='react-dataTable'
-        expandableRowsComponent={ExpandableTable}
+        expandableRowsComponent={(data) => ExpandableTable({data, t})}
         // onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
         data={data}
-        noDataComponent={<h6 className='text-capitalize'>Блюда не указаны</h6>}
+        noDataComponent={<h6 className='text-capitalize'>{t('ordersData.productsNotFound')}</h6>}
       />
-     
-     </div>    
 )
 }
 

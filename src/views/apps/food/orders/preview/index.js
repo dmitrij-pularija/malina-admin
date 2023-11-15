@@ -1,5 +1,6 @@
 // ** React Imports
 import { useEffect, useState } from 'react'
+import { useTranslation } from 'react-i18next'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link, useNavigate } from 'react-router-dom'
 import { getOrder, getOrderStatus, deleteOrder } from '../store'
@@ -19,6 +20,7 @@ const MySwal = withReactContent(Swal)
 
 const OrderPreview = () => {
   const { id } = useParams()
+  const { t } = useTranslation()
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const { selectedOrder, status, loading } = useSelector(state => state.orders)
@@ -81,21 +83,21 @@ const handleDelOrder = (id) => {
     <div className='invoice-preview-wrapper'>
       <Row className='invoice-preview'>
         <Col xl={9} md={8} sm={12}>
-          <PreviewCard data={selectedOrder} />
+          <PreviewCard data={selectedOrder} t={t} />
         </Col>
         <Col xl={3} md={4} sm={12}>
-          <PreviewActions id={id} toggleSidebar={toggleSidebar} handleDelOrder={handleDelOrder} />
+          <PreviewActions id={id} toggleSidebar={toggleSidebar} handleDelOrder={handleDelOrder} t={t} />
         </Col>
       </Row>
-      <SidebarChangeStatatus toggleSidebar={toggleSidebar} open={sidebarOpen} statuses={status} selectedOrder={selectedOrder}/>
+      <SidebarChangeStatatus toggleSidebar={toggleSidebar} open={sidebarOpen} statuses={status} selectedOrder={selectedOrder}  t={t}/>
     </div>
   ) : (
     loading ? <Loading /> : <Alert color='danger'>
-      <h4 className='alert-heading'>Заказ не найден</h4>
+      <h4 className='alert-heading'>{t('ordersData.alert')}</h4>
       <div className='alert-body'>
-      Информация о заказе с id: {id} не доступка. Проверьте список заказов:{' '}
-        <Link to='/apps/food/orders/list'>Список заказов</Link>
-      </div> 
+      {t('ordersData.alertText1')} {id} {t('ordersData.alertText2')}{' '}
+        <Link to='/apps/food/orders/list'>{t('ordersData.alertText3')}</Link>
+      </div>
     </Alert>
   )
 }
