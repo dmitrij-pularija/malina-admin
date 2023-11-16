@@ -301,7 +301,7 @@ const AddEventSidebar = props => {
         
             <div className='mb-1'>
               <Label className='form-label' for='user'>
-              {t('bookingsData.customer')}<span className='text-danger'>*</span>
+              {t('bookingsData.customer')}
               </Label>
               <Controller
                   name="user"

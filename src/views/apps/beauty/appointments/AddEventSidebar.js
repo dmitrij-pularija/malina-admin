@@ -28,7 +28,7 @@ const defaultValues = {
   status: ''
   }
 
-const requiredFields = ["guests", "name", "phone", "startDate"]
+const requiredFields = ["name", "phone", "startDate"]
 
 const AddEventSidebar = props => {
   // ** Props
@@ -410,12 +410,12 @@ const AddEventSidebar = props => {
         
             <div className='mb-1'>
               <Label className='form-label' for='guests'>
-              {t('appointmentsData.customer')}<span className='text-danger'>*</span>
+              {t('appointmentsData.customer')}
               </Label>
               <Controller
                   name="guests"
                   control={control}
-                  rules={{ required: true }}
+                  rules={{ required: false }}
                   render={({ field }) => (
               <Select
                 id='guests'

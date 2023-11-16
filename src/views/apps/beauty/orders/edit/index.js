@@ -67,25 +67,25 @@ const EditOrder = () => {
       id: 'step-details',
       title: t('ordersBeautyData.step1'),
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} t={t} />
     },
     {
       id: 'step-address',
       title: t('ordersBeautyData.step2'),
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} />
+      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} t={t} />
     },
     {
       id: 'order-details',
       title: t('ordersBeautyData.step3'),
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} t={t} />
     },
     {
       id: 'step-payment',
       title: t('ordersBeautyData.step4'),
       icon: <Copy size={18} />,
-      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
+      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} t={t} />
     }
   ]
 
