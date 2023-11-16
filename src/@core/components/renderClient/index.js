@@ -69,7 +69,7 @@ if (type === "product") {
 }
 if (type === "beautyService") {
   name = data.beauty_service_name ?  data.beauty_service_name : "Service"
-  redirectLink = `/apps/food/services/services/list`
+  redirectLink = `/apps/beauty/services/services/list`
   avatar = data.beauty_service_image ? data.beauty_service_image : ""
 }
 if (type === "beautyProduct") {
@@ -80,6 +80,8 @@ if (type === "beautyProduct") {
 if (type === "productsCategory") name = data.name ? data.name : "Category"
 if (type === "beautyProductCategory") name = data.category_name ? data.category_name : "Category"
 if (type === "beautyServiceCategory") name = data.category_name ? data.category_name : "Category"
+if (type === "beautySpecialty") name = data.specialty_name ? data.specialty_name : "Specialty"
+
 
 
   return (

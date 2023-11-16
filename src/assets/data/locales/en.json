@@ -363,6 +363,14 @@
     "headerFeedback": "Please enter a title"
   }, 
   "Specialties": "Specialties",
+  "Specialty": "Специальность",
+  "SpecialtyData": {
+    "titleEdit": "Editing a specialty",
+    "titleAdd": "Creation of a new specialty",
+    "nameLabel": "Name of specialty",
+    "namePlaceholder": "Enter the name",
+    "nameFeedback": "Please enter a name"
+  }, 
   "Staff": "Staff",
   "Reviews about Specialties": "about Specialties",
   "Order Beauty Feedback": "Order Beauty Feedback",

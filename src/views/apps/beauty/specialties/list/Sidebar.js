@@ -39,7 +39,7 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewSpecialty = ({ open, toggleSidebar, selectedSpecialty, setSelectedSpecialty }) => {
+const SidebarNewSpecialty = ({ open, toggleSidebar, selectedSpecialty, setSelectedSpecialty, t }) => {
   const dispatch = useDispatch()
   // const [data, setData] = useState(null)
   // const [item, setItem] = useState('')
@@ -162,7 +162,7 @@ const SidebarNewSpecialty = ({ open, toggleSidebar, selectedSpecialty, setSelect
     <Sidebar
       size='lg'
       open={open}
-      title={selectedSpecialty ? 'Редактирование специальности' : 'Создание новой специальности'}
+      title={selectedSpecialty ?  t('SpecialtyData.titleEdit') : t('SpecialtyData.titleAdd')}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
@@ -176,34 +176,34 @@ const SidebarNewSpecialty = ({ open, toggleSidebar, selectedSpecialty, setSelect
         <div className='d-flex align-items-center justify-content-center mt-75'>
               <div>
                 <Button tag={Label} className='mb-75 me-75' size='sm' color='primary'>
-                  Загрузить
+                {t('download')}
                   <Input type='file' onChange={handleImg} hidden accept='image/*' />
                 </Button>
                 <Button className='mb-75' color='secondary' size='sm' outline onClick={handleImgReset}>
-                  Очистить
+                {t('clear')}
                 </Button>
               </div>
         </div>
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='name'>
-          Название <span className='text-danger'>*</span>
+          {t('SpecialtyData.nameLabel')} <span className='text-danger'>*</span>
           </Label>
           <Controller
             name='name'
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <Input id='name' placeholder='Введите название' invalid={errors.name && true} {...field} />
+              <Input id='name' placeholder={t('SpecialtyData.namePlaceholder')} invalid={errors.name && true} {...field} />
             )}
           />
-          {errors && errors.name && (<FormFeedback>Пожалуйста введите название</FormFeedback>)}
+          {errors && errors.name && (<FormFeedback>{t('SpecialtyData.nameFeedback')}</FormFeedback>)}
         </div>  
         <Button type='submit' className='me-1' color='primary'>
-          Сохранить
+        {t('save')}
         </Button>
         <Button type='reset' color='secondary' outline onClick={handleClose}>
-          Отменить
+        {t('cancel')}
         </Button>
       </Form>
     </Sidebar>

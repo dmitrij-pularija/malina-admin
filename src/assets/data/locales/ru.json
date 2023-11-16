@@ -362,6 +362,14 @@
     "headerFeedback": "Пожалуйста введите заголовок"
   }, 
   "Specialties": "Специальности",
+  "Specialty": "Специальность",
+  "SpecialtyData": {
+    "titleEdit": "Редактирование специальности",
+    "titleAdd": "Создание новой специальности",
+    "nameLabel": "Название специальности",
+    "namePlaceholder": "Введите название",
+    "nameFeedback": "Пожалуйста введите название"
+  },  
   "Staff": "Персонал",
   "Reviews about Specialties": "о специалистах",
   "Order Beauty Feedback": "о заказах",
