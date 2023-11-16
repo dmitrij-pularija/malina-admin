@@ -18,7 +18,7 @@ const defaultValues = {
   }
   const requiredFields = []
 
-const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
+const Payment = ({ stepper, orderData, selectedOrder, handleUpdate, t }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
 
@@ -75,14 +75,14 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
   return (
     <Fragment>
       <div className='content-header'>
-        <h5 className='mb-0'>Оплата</h5>
-        <small>Введите детали оплаты.</small>
+        <h5 className='mb-0'>{t('ordersBeautyData.step4')}</h5>
+        <small>{t('ordersBeautyData.step4Title')}</small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
         <Col md='6' className='mb-1'>
           <Label className='form-label' for='paymentType'>
-          Тип оплаты
+          {t('ordersBeautyData.paymentTypeLabel')}
           </Label>
           <Controller
                   name="paymentType"
@@ -98,19 +98,19 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
               })}
               classNamePrefix='select'
               options={paymentTypeOptions}
-              placeholder='Выбирите тип оплаты'
+              placeholder={t('ordersBeautyData.paymentTypePlaceholder')}
               {...field}
             />
             )}
             />
             {errors && errors.paymentType && (
-              <FormFeedback>Пожалуйста выбирите тип оплаты</FormFeedback>
+              <FormFeedback>{t('ordersBeautyData.paymentTypeFeedback')}</FormFeedback>
             )}  
           </Col>
           <Col md='6' className="d-flex justify-content-between align-items-end gap-10 mb-1">
                 <div>
                   <Label className="form-label" for="earnedPoints">
-                    Начислено балов
+                  {t('ordersBeautyData.earnedPointsLabel')}
                   </Label>
                   <Controller
                     name="earnedPoints"
@@ -130,13 +130,13 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
                   />
                   {errors && errors.earnedPoints && (
                     <FormFeedback>
-                      Пожалуйста введите количество балов
+                      {t('ordersBeautyData.earnedPointsFeedback')}
                     </FormFeedback>
                   )}
                 </div>
                 <div>
                   <Label className="form-label" for="usedPoints">
-                    Использовано балов
+                  {t('ordersBeautyData.usedPointsLabel')}
                   </Label>
                   <Controller
                     name="usedPoints"
@@ -155,18 +155,18 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
                     )}
                   />
                   {errors && errors.usedPoints && (
-                    <FormFeedback>Пожалуйста введите количество балов</FormFeedback>
+                    <FormFeedback>{t('ordersBeautyData.usedPointsFeedback')}</FormFeedback>
                   )}
                 </div>
                 <div>
                 <Button color='primary' onClick={() => {}}>
-                <span className='align-middle d-sm-inline-block d-none'>Изменить</span>
+                <span className='align-middle d-sm-inline-block d-none'>{t('edit')}</span>
                </Button>
                </div>
               </Col>
               <Col className='mb-1'>
                 <Label className="form-label" for="comment">
-                Коментарий
+                {t('comment')}
                 </Label>
                 <Controller
                   name="comment"
@@ -176,24 +176,24 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate }) => {
                     <Input
                       id="comment"
                       type="text"
-                      placeholder="Введите коментарий"
+                      placeholder={t('commentPlaceholder')}
                       invalid={errors.comment && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.comment && (
-                  <FormFeedback>Пожалуйста введите коментарий</FormFeedback>
+                  <FormFeedback>{t('commentFeedback')}</FormFeedback>
                 )}
               </Col>     
         </Row>
         <div className='d-flex justify-content-between mt-1'>
           <Button color='primary' className='btn-prev' onClick={() => stepper.previous()}>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
-            <span className='align-middle d-sm-inline-block d-none'>Назад</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Prev')}</span>
           </Button>
           <Button  type='submit' color='success' className='btn-submit' >
-            {selectedOrder ? "Изменить" : "Создать"}
+            {selectedOrder ? t('edit') : t('add')}
           </Button>
         </div>
       </Form>

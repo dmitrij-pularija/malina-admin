@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react'
+import { Fragment } from 'react'
 import { useForm, Controller } from "react-hook-form"
 import { useNavigate } from "react-router-dom"
 import Select from 'react-select'
@@ -16,29 +16,16 @@ const defaultValues = {
   }
 const requiredFields = ["user", "store"]
 
-const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, users, waiters, tables }) => {
-  // if (!stores.length || !users.length || !waiters.length || !tables.length) return
+const Details = ({ stepper, userData, orderData, handleUpdate, stores, users, t }) => {
   const navigate = useNavigate()
   const handleBack = () => navigate("/apps/beauty/orders/list/")
   const handleNext = () => stepper.next()
-
-
 
   const filtredStore = userData.type === 2 ? stores.filter(store => parseInt(store.id) === parseInt(userData.id)) : stores.filter(store => parseInt(store.business_type) === 2) 
   const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
   }))
-
-  // const waiterOptions = waiters.map((waiter) => ({
-  //   value: String(waiter.id),
-  //   label: waiter.full_name ? waiter.full_name : waiter.telegram
-  // }))
-
-  // const tableOptions = tables.map((table) => ({
-  //   value: String(table.id),
-  //   label: table.number
-  // }))
 
   const userOptions = users.map((user) => ({
     value: String(user.id),
@@ -49,35 +36,7 @@ const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, use
     value: key,
     label: orderType[key]
   }))
-  // const [waiterOptions, setWaiterOptions] = useState(null)
-  // const [tableOptions, setTableOptions] = useState(null) 
-
-//   const initWaiterOptions = () => {
-//     const filteredWaiters = orderData && orderData.business_id ? waiters.filter(
-//       waiter => parseInt(waiter.business_id.id) === parseInt(orderData.business_id)
-//     ) : waiters
-//     setWaiterOptions(filteredWaiters.map(waiter => ({
-//     value: String(waiter.id),
-//     label: waiter.full_name ? waiter.full_name : waiter.telegram
-//     }))
-//     )
-// }
-
-// const initTableOptions = () => {
-//   const filteredTables = orderData && orderData.business_id ? tables.filter(
-//     table => parseInt(table.business_id.id) === parseInt(orderData.business_id)
-//   ) : tables
-//   setTableOptions(filteredTables.map(table => ({
-//   value: String(table.id),
-//   label: table.number
-// }))
-// )
-// }
-  // useEffect(() => {
-  //   initTableOptions()
-  //   initWaiterOptions()
-  // }, [tables, waiters])
-
+ 
   const values = orderData ? {
     user: orderData.user_account ? initSelect(userOptions, orderData.user_account) : '',
     store: orderData.order_business ? initSelect(storeOptions, orderData.order_business) : '',
@@ -94,30 +53,7 @@ const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, use
     formState: { errors }
   } = useForm({ defaultValues, values })
 
-  const handleStoreChange = (selectedOption) => {
-    // setValue("table", { value: "", label: "Выбирите номер стола" })
-    // setValue("waiter", { value: "", label: "Выбирите официанта" })
-    // const filteredWaiters = waiters.filter(
-    //   waiter => parseInt(waiter.business_id.id) === parseInt(selectedOption.value)
-    // )
-    // setWaiterOptions(
-    //   filteredWaiters.map(waiter => ({
-    //     value: String(waiter.id),
-    //     label: waiter.full_name ? waiter.full_name : waiter.telegram
-    //   }))
-    // )
-    // const filteredTables = tables.filter(
-    //   table => parseInt(table.business_id.id) === parseInt(selectedOption.value)
-    // )
-    // setTableOptions(
-    //   filteredTables.map(table => ({
-    //     value: String(table.id),
-    //     label: table.number
-    //   }))
-    // )
-
-    setValue("store", selectedOption)
-  }
+  const handleStoreChange = (selectedOption) => setValue("store", selectedOption)
   
 
   const onSubmit = (data) => {
@@ -142,14 +78,14 @@ const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, use
   return (
     <Fragment>
       <div className='content-header mb-1'>
-        <h5 className='mb-0'>Реквизиты</h5>
-        <small>Добввьте реквизиты заказа</small>
+        <h5 className='mb-0'>{t('ordersBeautyData.step1')}</h5>
+        <small>{t('ordersBeautyData.step1Title')}</small>
       </div>
       <Form onSubmit={handleSubmit(onSubmit)} >
         <Row>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='store'>
-          Завдение<span className='text-danger'>*</span>
+          {t('storeLabel')}<span className='text-danger'>*</span>
           </Label>
           <Controller
                   name="store"
@@ -167,18 +103,18 @@ const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, use
               })}
               classNamePrefix='select'
               options={storeOptions}
-              placeholder='Выбирите заведение'
+              placeholder={t('storePlaceholder')}
               onChange={handleStoreChange}
             />
             )}
             />
             {errors && errors.store && (
-              <FormFeedback>Пожалуйста выбирите заведение</FormFeedback>
+              <FormFeedback>{t('storeFeedback')}</FormFeedback>
             )}  
           </Col>
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='user'>
-          Клиент<span className='text-danger'>*</span>
+          {t('customer')}<span className='text-danger'>*</span>
           </Label>
           <Controller
                   name="user"
@@ -195,75 +131,18 @@ const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, use
               })}
               classNamePrefix='select'
               options={userOptions}
-              placeholder='Выбирите клиента'
+              placeholder={t('customerPlaceholder')}
               {...field}
             />
             )}
             />
             {errors && errors.user && (
-              <FormFeedback>Пожалуйста выбирите клиента</FormFeedback>
+              <FormFeedback>{t('customerFeedback')}</FormFeedback>
             )} 
           </Col>
-          {/* <Col md='6' className='mb-1'>
-          <Label className='form-label' for='waiter'>
-          Официант
-          </Label>
-          <Controller
-                  name="waiter"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-            <Select
-              theme={selectThemeColors}
-              isClearable={false}
-              isDisabled={!getValues("store").value}
-              id='waiter'
-              className={classnames("react-select", {
-                "is-invalid": errors.waiter && true
-              })}
-              classNamePrefix='select'
-              options={waiterOptions}
-              placeholder='Выбирите официанта'
-              {...field}
-            />
-            )}
-            />
-            {errors && errors.waiter && (
-              <FormFeedback>Пожалуйста выберите официанта</FormFeedback>
-            )}
-          </Col> */}
-          {/* <Col md='6' className='mb-1'>
-          <Label className='form-label' for='table'>
-          Стол
-          </Label>
-          <Controller
-                  name="table"
-                  control={control}
-                  rules={{ required: false }}
-                  render={({ field }) => (
-            <Select
-              theme={selectThemeColors}
-              isClearable={false}
-              isDisabled={!getValues("store").value}
-              id='table'
-              // value={field.value}
-              className={classnames("react-select", {
-                "is-invalid": errors.table && true
-              })}
-              classNamePrefix='select'
-              options={tableOptions}
-              placeholder='Выбирите номер стола'
-              {...field}
-            />
-            )}
-            />
-            {errors && errors.table && (
-              <FormFeedback>Пожалуйста выберите стол</FormFeedback>
-            )}
-          </Col> */}
           <Col md='6' className='mb-1'>
           <Label className='form-label' for='orderType'>
-          Тип заказа
+          {t('ordersBeautyData.orderTypeLabel')}
           </Label>
           <Controller
                   name="orderType"
@@ -279,23 +158,23 @@ const Details = ({ stepper, userData, type, orderData, handleUpdate, stores, use
               })}
               classNamePrefix='select'
               options={orderTypeOptions}
-              placeholder='Выбирите тип заказа'
+              placeholder={t('ordersBeautyData.orderTypePlaceholder')}
               {...field}
             />
             )}
             />
             {errors && errors.orderType && (
-              <FormFeedback>Пожалуйста выберите тип заказа</FormFeedback>
+              <FormFeedback>{t('ordersBeautyData.orderTypeFeedback')}</FormFeedback>
             )}
           </Col>
         </Row>
         <div className='d-flex justify-content-between mt-1'>
           <Button color='primary' className='btn-prev' outline onClick={() => handleBack()}>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
-            <span className='align-middle d-sm-inline-block d-none'>Назад</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Prev')}</span>
           </Button>
           <Button type='submit' color='primary' className='btn-next' >
-            <span className='align-middle d-sm-inline-block d-none'>Далее</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Next')}</span>
             <ArrowRight size={14} className='align-middle ms-sm-25 ms-0'></ArrowRight>
           </Button>
         </div>

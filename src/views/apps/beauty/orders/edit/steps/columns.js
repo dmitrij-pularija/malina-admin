@@ -1,41 +1,31 @@
-import Avatar from '@components/avatar'
+import renderClient from '@components/renderClient'
 import InputNumber from "rc-input-number"
 import { Plus, Minus } from "react-feather"
 import { formatNumber, formatNumberInt } from '@utils'
 
-const renderClient = (image, name) => {
-    if (image) {
-      return <Avatar className='me-1' img={image} width='32' height='32' />
-    } else {
-      return (
-        <Avatar
-          initials
-          className='me-1'
-          color={'light-primary'}
-          content={name}
-        />
-      )
-    }
-  }
+const price = (row, quantity) => row.cost * (1 - (row.prime_cost / 100)) * quantity
 
-  const price = (row, quantity) => row.cost * (1 - (row.prime_cost / 100)) * quantity
-
-export const columns = (categories, tableData, setTableData) => {
-const renderCategory = id => {  
-  if (id) {
-    const findedCategory = categories.find(category => parseInt(category.id) === parseInt(id))
-    if (findedCategory) { 
-      return (
-        <div key={id} className='d-flex justify-content-left align-items-center'>
-        {renderClient(findedCategory.image ? findedCategory.image : '', findedCategory.category_name ? findedCategory.category_name : 'Категория')}
-        <div className='d-flex flex-column'>
-            <span className='fw-bolder'>{ findedCategory.category_name ? findedCategory.category_name : "" }</span>
-        </div>
-      </div>
-    ) 
-    } else return ''
-  } else return ''
-}
+export const columns = (categories, tableData, setTableData, t) => {
+  const getCategoryInfo = id => {
+    const findedCategory = categories.find(item => item.id === id)
+    if (!findedCategory) return {}
+    return findedCategory
+  }  
+// const renderCategory = id => {  
+//   if (id) {
+//     const findedCategory = categories.find(category => parseInt(category.id) === parseInt(id))
+//     if (findedCategory) { 
+//       return (
+//         <div key={id} className='d-flex justify-content-left align-items-center'>
+//         {renderClient(findedCategory.image ? findedCategory.image : '', findedCategory.category_name ? findedCategory.category_name : 'Категория')}
+//         <div className='d-flex flex-column'>
+//             <span className='fw-bolder'>{ findedCategory.category_name ? findedCategory.category_name : "" }</span>
+//         </div>
+//       </div>
+//     ) 
+//     } else return ''
+//   } else return ''
+// }
 
   const handleChangeQuantity = (value, row) => {
     const updatedData = tableData.map(rowData => {
@@ -49,46 +39,37 @@ const renderCategory = id => {
 
   return [  
   {
-    name: 'Товар',
+    name: t('BeautyProduct'),
     sortable: true,
-    width: '25%',
+    minWidth: '80px',
     sortField: 'name',
-    selector: row => row.name,
-    cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row.beauty_product_images && row.beauty_product_images.length ? row.beauty_product_images[0].image : '', row.name ? row.name : "Товар")}
-            <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-      </div>
-    )
+    cell: row => renderClient(row, "beautyProduct")
   },
   {
-    name: 'Категория',
+    name: t('Category'),
     sortable: true,
-    width: '20%',
+    minWidth: '80px',
     sortField: 'category',
-    selector: row => row.category,
-    cell: row => renderCategory(row.category)
+    cell: row => renderClient(getCategoryInfo(row.category), "beautyProductCategory")
   },
   {
-    name: 'Цена',
-    width: '15%',
+    name: t('price'),
+    width: '120px',
     sortable: true,
     sortField: 'cost',
-    selector: row => row.cost,
     cell: row => <span className='width right'>{formatNumber(row.cost)}</span>
   },
   {
-    name: 'Скидка',
-    width: '15%',
+    name: t('Discount'),
+    width: '140px',
     sortable: true,
     sortField: 'prime_cost',
-    selector: row => row.prime_cost,
     cell: row => <span className='width center'>{`${formatNumberInt(row.prime_cost)} %`}</span>
   },
   {
-    name: 'Кол-во',
+    name: t('Quantity'),
     sortable: false,
-    width: '13%',
+    width: '140px',
     sortField: 'quantity',
     cell: row => (<InputNumber
     id={`quantity-${row.id}`}

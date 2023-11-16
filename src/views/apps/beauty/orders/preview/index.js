@@ -2,6 +2,7 @@
 import { useEffect, useState } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link, useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { getOrderStatus } from '../../../food/orders/store'
 import { getAllStores } from "../../../food/stores/store"
 import { getAllUsers } from "../../../user/store"
@@ -24,6 +25,7 @@ const OrderPreview = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const { status } = useSelector(state => state.orders)
   const stores = useSelector(state => state.stores.allStores)
   const users = useSelector(state => state.users.allUsers)
@@ -87,20 +89,20 @@ const handleDelOrder = (id) => {
     <div className='invoice-preview-wrapper'>
       <Row className='invoice-preview'>
         <Col xl={9} md={8} sm={12}>
-          <PreviewCard data={selectedOrder} stores={stores} users={users}/>
+          <PreviewCard data={selectedOrder} stores={stores} users={users} t={t} />
         </Col>
         <Col xl={3} md={4} sm={12}>
-          <PreviewActions id={id} toggleSidebar={toggleSidebar} handleDelOrder={handleDelOrder} />
+          <PreviewActions id={id} toggleSidebar={toggleSidebar} handleDelOrder={handleDelOrder} t={t} />
         </Col>
       </Row>
-      <SidebarChangeStatatus toggleSidebar={toggleSidebar} open={sidebarOpen} statuses={status} selectedOrder={selectedOrder}/>
+      <SidebarChangeStatatus toggleSidebar={toggleSidebar} open={sidebarOpen} statuses={status} selectedOrder={selectedOrder} t={t} />
     </div>
   ) : (
     loading ? <Loading /> : <Alert color='danger'>
-      <h4 className='alert-heading'>Заказ не найден</h4>
+      <h4 className='alert-heading'>{t('ordersData.alert')}</h4>
       <div className='alert-body'>
-      Информация о заказе с id: {id} не доступка. Проверьте список заказов:{' '}
-        <Link to='/apps/beauty/orders/list'>Список заказов</Link>
+      {t('ordersData.alertText1')} {id} {t('ordersData.alertText2')}{' '}
+        <Link to='/apps/beauty/orders/list'>{t('ordersData.alertText3')}</Link>
       </div> 
     </Alert>
   )

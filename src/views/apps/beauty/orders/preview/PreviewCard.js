@@ -93,7 +93,7 @@ const renderImg = (avatar, name) => {
   
 // }
 
-const PreviewCard = ({ data, users, stores }) => {
+const PreviewCard = ({ data, users, stores, t }) => {
   
   if (!data) return 
 
@@ -128,22 +128,22 @@ const user = getUser(data.user_account)
           </div>
           <div className='mt-md-0 mt-2'>
             <h4 className='invoice-title'>
-              Заказ №<span className='invoice-number'>{data.id}</span>
+            {t('ordersData.previewTitle1')}<span className='invoice-number'>{data.id}</span>
             </h4>
             <div className='invoice-date-wrapper'>
-              <p className='invoice-date-title'>Дата заказа:</p>
+              <p className='invoice-date-title'>{t('ordersData.previewTitle2')}</p>
               <p className='invoice-date'>{formatData(data.order_date)}</p>
             </div>
             <div className='invoice-date-wrapper'>
-              <p className='invoice-date-title'>Время:</p>
+              <p className='invoice-date-title'>{t('ordersData.previewTitle3')}</p>
               <p className='invoice-date'>{formatTime(data.order_date)}</p>
             </div>
             <div className='invoice-date-wrapper'>
-              <p className='invoice-date-title'>Тип заказа:</p>
+              <p className='invoice-date-title'>{t('ordersData.previewTitle4')}</p>
               <p className='invoice-date'>{orderType[data.order_type]}</p>
             </div>
             <div className='invoice-date-wrapper'>
-              <p className='invoice-date-title'>Статус:</p>
+              <p className='invoice-date-title'>{t('ordersData.previewTitle5')}</p>
               <p className='invoice-date'>
               <Badge className='text-capitalize' color={statusObj[data.status.toString()].colorName} pill>
               {statusObj[data.status.toString()].label}
@@ -159,14 +159,14 @@ const user = getUser(data.user_account)
       <CardBody className='invoice-padding pt-0'>
         <Row className='invoice-spacing'>
           <Col className='p-0' xl='8'>
-            <h6 className='mb-2'>Адрес:</h6>
+            <h6 className='mb-2'>{t('ordersData.previewDeliveryAddress')}</h6>
             <CardText className='mb-1'><span className='invoice-date'>{data.delivery_address ? data.delivery_address.location ? data.delivery_address.location : data.delivery_address.name : "Самовывоз" }</span></CardText>
             <div className='order-comments'>
-              {data.time_delivery ? <p className='invoice-date-title'>Доставка в течении:</p> : ''}
+              {data.time_delivery ? <p className='invoice-date-title'>{t('ordersData.previewDeliveryRequestedTime')}</p> : ''}
               <p className='invoice-date'>{data.time_delivery ? `${data.time_delivery} минут` : ""}</p>
             </div>
             <div className='order-comments'>
-              {data.comment ? <p className='invoice-date-title'>Комментарий:</p> : ''}
+              {data.comment ? <p className='invoice-date-title'>{t('ordersData.previewComment')}</p> : ''}
               <p className='invoice-date'>{data.comment ? data.comment : ''}</p>
             </div>  
             {/* <CardText className='mb-25'><span className='invoice-date-title'>Город: </span><span className='invoice-date'>{data.address ? data.address.city : ""}</span></CardText>
@@ -178,17 +178,17 @@ const user = getUser(data.user_account)
             <CardText className='mb-0'><span className='invoice-date-title'>Телефон для контакта: </span><span className='invoice-date'>{data.address ? data.address.phone : ""}</span></CardText> */}
           </Col>
           <Col className='p-0 mt-xl-0 mt-2' xl='4'>  
-            <h6 className='mb-2'>Клиент:</h6>
+            <h6 className='mb-2'>{t('ordersData.previewCustomer')}</h6>
             <div className='order-avatar'>
             {renderImg(user && user.avatar ? user.avatar : "",  user && user.name ? `${user.name} ${user.surname ? user.surname : ''}` : 'Клиент')}
             </div>
             <div className='invoice-date-wrapper'>
-              <p className='invoice-date-title'>Имя:</p>
-              <p className='invoice-date'>{user && user.name ? `${user.name} ${user.surname ? user.surname : ''}` : 'не указано'}</p>
+              <p className='invoice-date-title'>{t('ordersData.previewCustomerName')}</p>
+              <p className='invoice-date'>{user && user.name ? `${user.name} ${user.surname ? user.surname : ''}` : t('notSpecified')}</p>
             </div>
             <div className='invoice-date-wrapper'>
-              <p className='invoice-date-title'>Телефон:</p>
-              <p className='invoice-date'>{user && user.login ? user.login : 'не указан' }</p>
+              <p className='invoice-date-title'>{t('ordersData.previewCustomerPhone')}</p>
+              <p className='invoice-date'>{user && user.login ? user.login : t('notSpecified') }</p>
             </div>
           </Col>
         </Row>
@@ -205,8 +205,8 @@ const user = getUser(data.user_account)
         </Col> */}
         </Row>
       <Row className='invoice-sales-total-wrapper'>
-      <h6 className='mb-2'>Состав заказа:</h6>
-     <TableCards data={carts} />
+      <h6 className='mb-2'>{t('ordersData.previewOrder')}</h6>
+     <TableCards data={carts} t={t} />
      </Row>
     </CardBody>
       <hr className='invoice-spacing' />
@@ -214,14 +214,14 @@ const user = getUser(data.user_account)
         <Row className='invoice-sales-total-wrapper'>
           <Col className='mt-md-0 mt-3' md='6' order={{ md: 1, lg: 2 }}>
               <div className='mt-md-0 mt-2'>
-              <h6 className='mb-2'>Оплата:</h6>
+              <h6 className='mb-2'>{t('ordersData.previewPayment')}</h6>
               <div className='invoice-date-wrapper text-nowrap'>
-                <p className='invoice-date fw-bold'>Вид оплаты:</p>
+                <p className='invoice-date fw-bold'>{t('ordersData.previewPaymentType')}</p>
                 <p className='invoice-date'>{paymentType[data.payment_type]}</p>
               </div>
               <div className='invoice-date-wrapper text-nowrap'>
-                <p className='invoice-date fw-bold'>Статус оплаты:</p>
-                <p className='invoice-date'>{data.payment_status ? "Оплачен" : "Не оплачен"}</p>
+                <p className='invoice-date fw-bold'>{t('ordersData.previewPaymentStatus')}</p>
+                <p className='invoice-date'>{data.payment_status ? t('paymentPaid') : t('paymentNotPaid')}</p>
               </div>
               </div>
           </Col>
@@ -229,26 +229,26 @@ const user = getUser(data.user_account)
           <table>
               <tbody>
               <tr>
-                  <td className='pe-1'>Итого, &#x0441;&#x332;:</td>
+                  <td className='pe-1'>{t('ordersData.previewTotalPrice')}&#x0441;&#x332;:</td>
                   <td className='right'>{formatNumber(data.total_price)}</td>
               </tr>
               <tr>
-                  <td className='pe-1'>В том числе:</td>
+                  <td className='pe-1'>{t('ordersData.previewDetailPrice')}</td>
               </tr>
               <tr>
-                  <td className='pe-1'>Стоимость товаров, &#x0441;&#x332;</td>
+                  <td className='pe-1'>{t('ordersBeautyData.previewProductPrice')}&#x0441;&#x332;</td>
                   <td className='right'>{formatNumber(data.total_price - data.delivery_price)}</td>
                 </tr>
                 <tr>
-                  <td className='pe-1'>Стоимость доставки, &#x0441;&#x332;</td>
+                  <td className='pe-1'>{t('ordersData.previewDeliveryPrice')}&#x0441;&#x332;</td>
                   <td className='right'>{formatNumber(data.delivery_price)}</td>
                 </tr>
                 <tr>
-                  <td className='pe-1'>Баллов списано:</td>
+                  <td className='pe-1'>{t('ordersData.previewUsedPoints')}</td>
                   <td className='right'>{data.used_points}</td>
                 </tr>
                 <tr>
-                  <td className='pe-1'>Баллов начислено:</td>
+                  <td className='pe-1'>{t('ordersData.previewEarnedPoints')}</td>
                   <td className='right'>{data.earned_points}</td>
                 </tr>
               </tbody>

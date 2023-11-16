@@ -31,14 +31,14 @@ const price = row => row.cost * (1 - (row.prime_cost / 100))
 
 
 
-const CustomHeader = ({ handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
+const CustomHeader = ({ handlePerPage, rowsPerPage, handleFilter, searchTerm, t }) => {
   
   return (
     <div className='invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75'>
       <Row>
         <Col xl='6' className='d-flex align-items-center p-0'>
           <div className='d-flex align-items-center w-100'>
-            <label htmlFor='rows-per-page'>Показать</label>
+            <label htmlFor='rows-per-page'>{t('CustomHeaderData.show')}</label>
             <Input
               className='mx-50'
               type='select'
@@ -51,7 +51,7 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, handleFilter, searchTerm }) 
               <option value='50'>50</option>
               <option value='100'>100</option>
             </Input>
-            <label htmlFor='rows-per-page'>записей</label>
+            <label htmlFor='rows-per-page'>{t('CustomHeaderData.records')}</label>
           </div>
         </Col>
         <Col
@@ -60,7 +60,7 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, handleFilter, searchTerm }) 
         >
           <div className='d-flex align-items-center mb-sm-0 mb-1 me-1'>
             <label className='mb-0' htmlFor='search-invoice'>
-              Поиск:
+            {t('CustomHeaderData.search')}
             </label>
             <Input
               id='search-invoice'
@@ -79,7 +79,7 @@ const CustomHeader = ({ handlePerPage, rowsPerPage, handleFilter, searchTerm }) 
   )
 }
 
-const Cart = ({ categories, stepper, orderData, handleUpdate, products, selectedOrder }) => {
+const Cart = ({ categories, stepper, orderData, handleUpdate, products, selectedOrder, t }) => {
 
   const [tableData, setTableData] = useState([])
   const [searchTerm, setSearchTerm] = useState('')
@@ -243,8 +243,8 @@ const Cart = ({ categories, stepper, orderData, handleUpdate, products, selected
   return (
     <Fragment>
       <div className='content-header'>
-        <h5 className='mb-0'>Состав заказа</h5>
-        {errors && errors.orderCart ? <small className='text-danger'>Пожалуйста выбирите товары</small> : <small className='text-muted'>Выберите товары</small> } 
+        <h5 className='mb-0'>{t('ordersBeautyData.step3Title1')}</h5>
+        {errors && errors.orderCart ? <small className='text-danger'>{t('ordersBeautyData.step3Title2')}</small> : <small className='text-muted'>{t('ordersBeautyData.step3Title3')}</small> } 
       </div>
       <Form onSubmit={handleSubmit(onSubmit)}>
         <Row>
@@ -255,21 +255,21 @@ const Cart = ({ categories, stepper, orderData, handleUpdate, products, selected
             subHeader
             pagination
             responsive
-            fixedHeader={true}
             highlightOnHover
             selectableRows
             selectableRowsNoSelectAll
             paginationServer
-            columns={columns(categories, tableData, setTableData)}
+            columns={columns(categories, tableData, setTableData, t)}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
             paginationComponent={CustomPagination}
             selectableRowsComponent={BootstrapCheckbox}
             data={tableData}
             selectableRowSelected={row => row.selected}
-            noDataComponent={<h6 className='text-capitalize'>Товары не найдены</h6>}
+            noDataComponent={<h6 className='text-capitalize'>{t('ordersBeautyData.productsNotFound')}</h6>}
             subHeaderComponent={
               <CustomHeader
+                t={t}
                 data={products}
                 searchTerm={searchTerm}
                 rowsPerPage={rowsPerPage}
@@ -283,10 +283,10 @@ const Cart = ({ categories, stepper, orderData, handleUpdate, products, selected
         <div className='d-flex justify-content-between mt-1'>
           <Button color='primary' className='btn-prev' onClick={() => stepper.previous()}>
             <ArrowLeft size={14} className='align-middle me-sm-25 me-0'></ArrowLeft>
-            <span className='align-middle d-sm-inline-block d-none'>Назад</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Prev')}</span>
           </Button>
           <Button  type='submit' color='primary' className='btn-next' >
-            <span className='align-middle d-sm-inline-block d-none'>Далее</span>
+            <span className='align-middle d-sm-inline-block d-none'>{t('Next')}</span>
             <ArrowRight size={14} className='align-middle ms-sm-25 ms-0'></ArrowRight>
           </Button>
         </div>

@@ -66,9 +66,14 @@ if (type === "product") {
   redirectLink = `/apps/food/products/products/edit/${data.id}`
   avatar = data.images && data.images.length ? data.images[0].image : ""
 }
+if (type === "beautyProduct") {
+  name = data.name ?  data.name : "Product"
+  redirectLink = `/apps/beauty/products/products/edit/${data.id}`
+  avatar = data.beauty_product_images && data.beauty_product_images.length ? data.beauty_product_images[0].image : ""
+}
 if (type === "productsCategory") name = data.name ? data.name : "Category"
+if (type === "beautyProductCategory") name = data.category_name ? data.category_name : "Category"
 
- 
   return (
     <Link
     to={redirectLink}

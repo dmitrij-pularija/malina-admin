@@ -18,7 +18,7 @@ const defaultValues = {
   timeDelivery: ''
 }
 
-const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }) => {
+const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder, t  }) => {
   const dispatch = useDispatch()
   const statusOptions = statuses.map((item) => ({
     value: String(item.id),
@@ -72,7 +72,7 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
     <Sidebar
       size='lg'
       open={open}
-      title='Изменение статуса заказа'
+      title={t('ordersBeautyData.sidebarTitle')}
       headerClassName='mt-1 mb-1'
       contentClassName='p-0'
       bodyClassName='pb-sm-0 pb-3'
@@ -81,7 +81,7 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
       <Form  className='m3-3' onSubmit={handleSubmit(onSubmit)}>
         <div className='mb-1'>
           <Label className='form-label' for='orderStatus'>
-          Статус заказа
+          {t('Status')}
           </Label>
           <Controller
             id='orderStatus'
@@ -96,7 +96,7 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
                 classNamePrefix='select'
                 options={statusOptions}
                 theme={selectThemeColors}
-                placeholder={"Выберите статус"}
+                placeholder={t('statusPlaceholder')}
                 className={classnames("react-select", {
                   "is-invalid": errors.orderStatus && true
                 })}
@@ -105,7 +105,7 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
               )}
             />
             {errors && errors.orderStatus && (
-              <FormFeedback>Текущий статус соответствует выбранному</FormFeedback>
+              <FormFeedback>{t('statusFeedback')}</FormFeedback>
             )}
         </div>
         <div className='form-check form-check-primary mb-1'>
@@ -118,12 +118,12 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
                    )}
                  />
                  <Label className='form-label' for='paymentStatus'>
-                 Заказ оплачен
+                 {t('ordersBeautyData.sidebarPaymentStatus')}
                  </Label>
         </div>
         <div className='mb-1' >
             <Label className="form-label" for="timeDelivery">
-              Время доставки, мин
+            {t('ordersBeautyData.deliveryTimeLabel')}
             </Label>
                   <div>
                     <Controller
@@ -135,13 +135,13 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
                       <Input
                       // disabled
                       id="timeDelivery"
-                      placeholder="расчетное"
+                      placeholder={t('ordersBeautyData.deliveryTimePlaceholder')}
                       invalid={errors.timeDelivery && true}
                       {...field}
                       />  
                     )}
                      />
-                  {(errors && errors.rdt) && (<FormFeedback id='ffb'>Пожалуйста введите время доставки</FormFeedback>)}
+                  {(errors && errors.rdt) && (<FormFeedback id='ffb'>{t('ordersBeautyData.deliveryTimeFeedback')}</FormFeedback>)}
                 </div>
               </div>
         <div className='form-check form-check-primary mb-3'>
@@ -154,14 +154,14 @@ const SidebarChangeStatatus = ({ open, toggleSidebar, statuses, selectedOrder  }
                    )}
                  />
                  <Label className='form-label' for='isCourierDelivery'>
-                 Доставка курьером
+                 {t('ordersBeautyData.isCourierDelivery')}
                  </Label>
         </div>
         <Button type='submit' className='me-1' color='primary'>
-          Изменить
+        {t('save')}
         </Button>
         <Button type='reset' color='secondary' outline onClick={handleClose}>
-          Отменить
+        {t('cancel')}
         </Button>
       </Form>
     </Sidebar>

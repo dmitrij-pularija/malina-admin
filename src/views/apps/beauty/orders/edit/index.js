@@ -3,6 +3,7 @@ import { useEffect, useRef, useState, Fragment } from "react"
 import { useDispatch, useSelector } from 'react-redux'
 import { useParams, Link } from 'react-router-dom'
 import BreadCrumbs from "@components/breadcrumbs"
+import { useTranslation } from 'react-i18next'
 import Loading from '../../../../../@core/components/spinner/Loading'
 import { formatStringTime } from '@utils'
 import { getOrder } from '../store'
@@ -25,6 +26,7 @@ const EditOrder = () => {
   const { id } = useParams()
   const ref = useRef(null)
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const [stepper, setStepper] = useState(null)
   const [data, setData] = useState(null)
   const [mapOpen, setMapOpen] = useState(false)
@@ -63,25 +65,25 @@ const EditOrder = () => {
   const steps = [
     {
       id: 'step-details',
-      title: 'Реквизиты',
+      title: t('ordersBeautyData.step1'),
       icon: <User size={18} />,
       content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
     },
     {
       id: 'step-address',
-      title: 'Адрес',
+      title: t('ordersBeautyData.step2'),
       icon: <MapPin size={18} />,
       content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} />
     },
     {
       id: 'order-details',
-      title: 'Состав',
+      title: t('ordersBeautyData.step3'),
       icon: <FileText size={18} />,
       content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories} userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
     },
     {
       id: 'step-payment',
-      title: 'Оплата',
+      title: t('ordersBeautyData.step4'),
       icon: <Copy size={18} />,
       content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={selectedOrder} />
     }
@@ -91,10 +93,10 @@ const EditOrder = () => {
     <>
     <Fragment>
       <BreadCrumbs
-        title="Редактирование заказа"
+        title={t('ordersBeautyData.titleEdit')}
         data={[
-          { title: "Заказы" },
-          { title: "Редактирование" }
+          { title: t('Orders') },
+          { title: t('Editing') }
         ]}
       />
       <div className="app-ecommerce-details">
@@ -120,10 +122,10 @@ const EditOrder = () => {
     </>
   ) : (
     loading ? <Loading /> : <Alert color='danger'>
-      <h4 className='alert-heading'>Заказ не найден</h4>
+      <h4 className='alert-heading'>{t('ordersData.alert')}</h4>
       <div className='alert-body'>
-      Информация о заказе с id: {id} не доступка. Проверьте список заказов:{' '}
-        <Link to='/apps/beauty/orders/list'>Список заказов</Link>
+      {t('ordersData.alertText1')} {id} {t('ordersData.alertText2')}{' '}
+        <Link to='/apps/beauty/orders/list'>{t('ordersData.alertText3')}</Link>
       </div>
     </Alert>
   )

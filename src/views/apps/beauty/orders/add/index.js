@@ -1,5 +1,6 @@
 import { useEffect, useRef, useState, Fragment } from "react"
 import BreadCrumbs from "@components/breadcrumbs"
+import { useTranslation } from 'react-i18next'
 import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import { Card, CardBody } from "reactstrap"
 import { useDispatch, useSelector } from "react-redux"
@@ -20,6 +21,7 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 const AddOrder = () => {
   const ref = useRef(null)
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const [stepper, setStepper] = useState(null)
   const [mapOpen, setMapOpen] = useState(false)
   const [selectedCoordinates, setSelectedCoordinates] = useState(null)
@@ -47,27 +49,27 @@ const AddOrder = () => {
   const steps = [
     {
       id: 'step-details',
-      title: 'Реквизиты',
+      title: t('ordersBeautyData.step1'),
       icon: <User size={18} />,
-      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users}  userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={null}/>
+      content: <Details stepper={stepper} type='modern-vertical' stores={stores} users={users}  userData={userData} handleUpdate={updateData} orderData={data} selectedOrder={null} t={t} />
     },
     {
       id: 'step-address',
-      title: 'Адрес',
+      title: t('ordersBeautyData.step2'),
       icon: <MapPin size={18} />,
-      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates}/>
+      content: <Address stepper={stepper} type='modern-vertical' handleUpdate={updateData} orderData={data} selectedOrder={null} toggleMap={toggleMap} selectedCoordinates={selectedCoordinates} t={t} />
     },
     {
       id: 'order-details',
-      title: 'Состав',
+      title: t('ordersBeautyData.step3'),
       icon: <FileText size={18} />,
-      content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories}  userData={userData} handleUpdate={updateData} orderData={data}  selectedOrder={null} />
+      content: <Cart stepper={stepper} type='modern-vertical' products={products} categories={categories}  userData={userData} handleUpdate={updateData} orderData={data}  selectedOrder={null} t={t} />
     },
     {
       id: 'step-payment',
-      title: 'Оплата',
+      title: t('ordersBeautyData.step4'),
       icon: <Copy size={18} />,
-      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={null} />
+      content: <Payment stepper={stepper} type='modern-vertical'  handleUpdate={updateData} orderData={data} selectedOrder={null} t={t} />
     }
   ]
 
@@ -77,10 +79,10 @@ const AddOrder = () => {
     <>
     <Fragment>
       <BreadCrumbs
-        title="Создание заказа"
+        title={t('ordersBeautyData.titleAdd')}
         data={[
-          { title: "Заказы" },
-          { title: "Создание" }
+          { title: t('Orders') },
+          { title: t('Creation') }
         ]}
       />
       <div className="app-ecommerce-details">
