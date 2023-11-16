@@ -54,6 +54,7 @@ const defaultValues = {
 const requiredFields = ["masters"]
 
 const ServicesModal = ({
+  t,
   open,
   store,
   stores, 
@@ -210,7 +211,7 @@ const ServicesModal = ({
       <ModalBody className="px-sm-5 pt-50 pb-5">
         <div className="text-center mb-2">
           <h1 className="mb-1">
-            {selectedService ? "Изменение информации о услуге" : "Добавление новой услуги"}
+            {selectedService ? t('servicesData.titleEdit') : t('servicesData.titleAdd')}
           </h1>
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -228,7 +229,7 @@ const ServicesModal = ({
                     size="sm"
                     color="primary"
                   >
-                    Загрузить
+                  {t('download')}
                     <Input
                       type="file"
                       onChange={handleImg}
@@ -242,7 +243,7 @@ const ServicesModal = ({
                     outline
                     onClick={handleImgReset}
                   >
-                    Очистить
+                  {t('clear')}
                   </Button>
                 </div>
               </div>
@@ -250,7 +251,7 @@ const ServicesModal = ({
             <Col md={6} xs={12}>
               <div>
                 <Label className="form-label" for="name">
-                  Название
+                  {t('servicesData.nameLabel')}
                 </Label>
                 <Controller
                   control={control}
@@ -261,18 +262,18 @@ const ServicesModal = ({
                     <Input
                       {...field}
                       id="name"
-                      placeholder="Введите название услуги"
+                      placeholder={t('servicesData.namePlaceholder')}
                       invalid={errors.name && true}
                     />
                   )}
                 />
                 {errors && errors.name && (
-                  <FormFeedback>Пожалуйста заполните название</FormFeedback>
+                  <FormFeedback>{t('servicesData.nameFeedback')}</FormFeedback>
                 )}
               </div>
               <div className="mt-1">
                 <Label className="form-label" for="description">
-                  Описание
+                {t('descriptionLabel')}
                 </Label>
                 <Controller
                   control={control}
@@ -283,13 +284,13 @@ const ServicesModal = ({
                     <Input
                       {...field}
                       id="description"
-                      placeholder="Введите описание"
+                      placeholder={t('descriptionPlaceholder')}
                       invalid={errors.description && true}
                     />
                   )}
                 />
                 {errors && errors.description && (
-                  <FormFeedback>Пожалуйста заполните описание</FormFeedback>
+                  <FormFeedback>{t('descripFeedback')}</FormFeedback>
                 )}
               </div>
             </Col>
@@ -322,7 +323,7 @@ const ServicesModal = ({
             </Col> */}
             <Col md={6} xs={12}>
               <Label className="form-label" for="category">
-                Категория
+              {t('Category')}
               </Label>
               <Controller
                 name="category"
@@ -335,7 +336,7 @@ const ServicesModal = ({
                     classNamePrefix="select"
                     options={categoryOptions}
                     theme={selectThemeColors}
-                    placeholder="Выберите категорию"
+                    placeholder={t('categoryPlaceholder')}
                     className={classnames("react-select", {
                       "is-invalid": errors.category && true
                     })}
@@ -344,12 +345,12 @@ const ServicesModal = ({
                 )}
               />
               {errors && errors.category && (
-                <FormFeedback>Пожалуйста выберите категорию</FormFeedback>
+                <FormFeedback>{t('categoryFeedback')}</FormFeedback>
               )}
             </Col>
             <Col md={6} xs={12}>
             <Label className='form-label' for='masters'>
-          Специалист(ы)<span className="text-danger">*</span>
+            {t('servicesData.mastersLabel')}<span className="text-danger">*</span>
           </Label>
           <Controller
             name='masters'
@@ -363,17 +364,17 @@ const ServicesModal = ({
                 classNamePrefix='select'
                 options={masterOptions}
                 theme={selectThemeColors}
-                placeholder="Выбирите специалиста(ов)"
+                placeholder={t('servicesData.mastersPlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.masters && true })}
                 {...field}
               />
             )}
           />
-         {errors && errors.masters && (<FormFeedback>Пожалуйста выберите специалиста</FormFeedback>)} 
+         {errors && errors.masters && (<FormFeedback>{t('servicesData.mastersFeedback')}</FormFeedback>)} 
             </Col>
             <Col md={6} xs={12}>
               <Label className="form-label" for="price">
-              Стоимость услуги
+              {t('servicesData.priceLabel')}
               </Label>
               <Controller
                 name="price"
@@ -382,19 +383,19 @@ const ServicesModal = ({
                 render={({ field }) => (
                   <Input
                     id="price"
-                    placeholder="Введите стоимость"
+                    placeholder={t('servicesData.pricePlaceholder')}
                     invalid={errors.price && true}
                     {...field}
                   />
                 )}
               />
               {errors && errors.price && (
-                <FormFeedback>Введите стоимость</FormFeedback>
+                <FormFeedback>{t('servicesData.priceFeedback')}</FormFeedback>
               )}
             </Col>
             <Col md={6} xs={12}>
               <Label className="form-label" for="duration">
-              Продолжительность, мин
+              {t('servicesData.durationLabel')}
               </Label>
               <Controller
                 name="duration"
@@ -403,14 +404,14 @@ const ServicesModal = ({
                 render={({ field }) => (
                   <Input
                     id="duration"
-                    placeholder="Введите продолжительность"
+                    placeholder={t('servicesData.durationPlaceholder')}
                     invalid={errors.duration && true}
                     {...field}
                   />
                 )}
               />
               {errors && errors.duration && (
-                <FormFeedback>Введите продолжительность</FormFeedback>
+                <FormFeedback>{t('servicesData.durationFeedback')}</FormFeedback>
               )}
             </Col>
             <Col md={6} xs={12}>
@@ -424,13 +425,13 @@ const ServicesModal = ({
             )}
           />
           <Label className='form-label' for='hasPause'>
-          Пауза между процедурами
+          {t('servicesData.hasPause')}
           </Label>
         </div>
           </Col>
             <Col md={6} xs={12} className="mt-1">
               <Label className="form-label" for="pauseTime">
-              Время паузы, мин
+              {t('servicesData.pauseTimeLabel')}
               </Label>
               <Controller
                 name="pauseTime"
@@ -439,19 +440,19 @@ const ServicesModal = ({
                 render={({ field }) => (
                   <Input
                     id="pauseTime"
-                    placeholder="Введите время паузы"
+                    placeholder={t('servicesData.pauseTimePlaceholder')}
                     invalid={errors.pauseTime && true}
                     {...field}
                   />
                 )}
               />
               {errors && errors.pauseTime && (
-                <FormFeedback>Введите время паузы</FormFeedback>
+                <FormFeedback>{t('servicesData.pauseTimeFeedback')}</FormFeedback>
               )}
             </Col>
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">
-                Сохранить
+              {t('save')}
               </Button>
               <Button
                 type="reset"
@@ -459,7 +460,7 @@ const ServicesModal = ({
                 outline
                 onClick={handleClose}
               >
-                Отменить
+              {t('cancel')}
               </Button>
             </Col>
           </Row>

@@ -43,7 +43,8 @@ const renderClient = (data, type) => {
  }
  if (type === "master") {
     redirectLink = `/apps/user/masters/view/${data.id}`
-    name = "Master"
+    name = data.master_name ? `${data.master_name} ${data.surname ? data.surname : ''}` : "Master"
+    avatar = data.master_profile_picture
  }
  if (type === "store") {
     redirectLink = `/apps/food/stores/view/${data.id}`
@@ -65,6 +66,11 @@ if (type === "product") {
   name = data.name ?  data.name : "Product"
   redirectLink = `/apps/food/products/products/edit/${data.id}`
   avatar = data.images && data.images.length ? data.images[0].image : ""
+}
+if (type === "beautyService") {
+  name = data.beauty_service_name ?  data.beauty_service_name : "Service"
+  redirectLink = `/apps/food/services/services/list`
+  avatar = data.beauty_service_image ? data.beauty_service_image : ""
 }
 if (type === "beautyProduct") {
   name = data.name ?  data.name : "Product"
