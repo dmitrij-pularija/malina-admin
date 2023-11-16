@@ -73,6 +73,8 @@ if (type === "beautyProduct") {
 }
 if (type === "productsCategory") name = data.name ? data.name : "Category"
 if (type === "beautyProductCategory") name = data.category_name ? data.category_name : "Category"
+if (type === "beautyServiceCategory") name = data.category_name ? data.category_name : "Category"
+
 
   return (
     <Link
