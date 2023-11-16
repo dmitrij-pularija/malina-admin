@@ -288,7 +288,7 @@ storeOptions.unshift({ value: '', label: t('showAll') })
             noDataComponent={<h6 className='text-capitalize'>{t('notFound')}</h6>}
             subHeaderComponent={
               <CustomHeader
-                store={store}
+                data={dataToRender()}
                 searchTerm={searchTerm}
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}

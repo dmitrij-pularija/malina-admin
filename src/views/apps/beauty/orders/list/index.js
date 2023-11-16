@@ -1,6 +1,7 @@
 import { useEffect } from 'react'
 import { useDispatch, useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import Breadcrumbs from '@components/breadcrumbs'
 import { getAllUsers } from '../../../user/store'
@@ -37,6 +38,7 @@ import '@styles/react/apps/app-users.scss'
 const OrdersList = () => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   const handleAdd = () => navigate('/apps/beauty/orders/add/')
   const users = useSelector(state => state.users.allUsers)
   const status = useSelector(state => state.orders.status)
@@ -61,7 +63,7 @@ const OrdersList = () => {
 
   return (
     <div className='app-user-list'>
-<Breadcrumbs title='Заказы' data={[{ title: 'Заказы' }]} onClick={userData.type === 3 ? null : handleAdd} /> 
+<Breadcrumbs title={t('Orders')} data={[{ title: t('Orders') }]} onClick={userData.type === 3 ? null : handleAdd} /> 
       {/* <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal
@@ -96,7 +98,7 @@ const OrdersList = () => {
           />
         </Col>
       </Row> */}
-      <Table userData={userData} stores={stores} users={users} status={status}/>
+      <Table userData={userData} stores={stores} users={users} status={status} t={t} />
       <Loading />
     </div>
   )

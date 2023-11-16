@@ -1,93 +1,29 @@
-// ** React Imports
 import { Link } from 'react-router-dom'
-import { useSelector } from 'react-redux'
-
-// ** Custom Components
-import Logo2 from '@components/logo2'
-import Avatar from '@components/avatar'
-import classnames from 'classnames'
-// ** Store & Actions
-import { store } from '@store/store'
-import { getOrder } from '../store'
-
-
-// ** Icons Imports
-import { Slack, User, Settings, Database, Edit2, MoreVertical, FileText, Trash2, Edit, Star } from 'react-feather'
-
-// ** Reactstrap Imports
-import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem, Card, CardBody } from 'reactstrap'
+import renderClient from '@components/renderClient'
+import { MoreVertical, FileText, Trash2, Edit, Star } from 'react-feather'
+import { Badge, UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
 import Rating from 'react-rating'
 import '@styles/base/pages/app-ecommerce.scss'
 import { formatData, formatNumber, getRate } from '../../../../../utility/Utils'
 import { statusObj } from '../../../../../configs/initial'
 
-const getWaiterInfo = id => {
-const waiters = useSelector(state => state.waiters.data)
-const foundWaiter = waiters.find(waiter => waiter.id === id) || null
-return foundWaiter ? foundWaiter.full_name : ""
-}
-// ** Renders Client Columns
-const renderClient = (name, avatar) => {
-  if (avatar && avatar.includes("http")) {
-    return <Avatar className='me-1' img={avatar} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={name || 'Malina'}
-      />
-    )
+export const columns = (stores, users, userData, status, handleDel, t) => {
+  const getStoreInfo = id => {
+    const foundStore = stores.find(item => item.id === id)
+    if (!foundStore) return {}
+    return foundStore
   }
-}
 
+  const getUserInfo = id => {
+    const foundUser = users.find(item => item.id === id)
+    if (!foundUser) return {}
+    return foundUser
+  }
 
-
-export const columns = (stores, users, userData, status, handleDel) => {
   const getStatus = id => {
     if (id) {
     const findedStatus = status.find(stat => parseInt(stat.id) === parseInt(id))
       return findedStatus ? findedStatus.statusName : ''
-    } else return ''
-  }
-  const renderStoore = id => {
-    if (id) {
-    const findedStore = stores.find(store => parseInt(store.id) === parseInt(id))
-    if (findedStore) {
-    return (
-      <Link
-      to={id ? `/apps/food/stores/store-detail/${id}` : `/apps/food/stores/list/`}
-      className='user_name text-truncate text-body d-flex justify-content-left align-items-center'
-    >
-    {renderClient(findedStore.name ? findedStore.name : 'Заведение', findedStore.image ? findedStore.image : '')}
-      <div className='d-flex flex-column ml3'>
-      <span className='fw-bolder'>{findedStore.name ? findedStore.name : ''}</span>
-      <small className='text-truncate text-muted mb-0'>{findedStore.business_address ? `${findedStore.business_address.city ? findedStore.business_address.city : ''}, ${findedStore.business_address.name ? findedStore.business_address.name : ''}` : ''}</small>
-     </div>
-    </Link>
-    )
-    } else return '' 
-    } else return ''
-  }
-
-  const renderCustomer = id => {
-    if (id) {
-    const findedUser = users.find(user => parseInt(user.id) === parseInt(id))
-    if (findedUser) {
-    return (
-      <Link
-      to={id ? `/apps/user/view/${id}` : `/apps/user/list/`}
-      className='user_name text-truncate text-body d-flex justify-content-left align-items-center'
-    >
-    {renderClient(findedUser.name ? `${findedUser.name} ${findedUser.surname ? findedUser.surname : ''}` : 'Клиент', findedUser.avatar ? findedUser.avatar : '')}
-      <div className='d-flex flex-column ml3'>
-      <span className='fw-bolder'>{findedUser.name ? `${findedUser.name} ${findedUser.surname ? findedUser.surname : ''}` : ''}</span>
-      <small className='text-truncate text-muted mb-0'>{findedUser.login ? findedUser.login : ''}</small>
-     </div>
-    </Link>
-    )
-    } else return '' 
     } else return ''
   }
 
@@ -100,34 +36,22 @@ export const columns = (stores, users, userData, status, handleDel) => {
       cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
     },
   {
-    name: 'Заказ',
+    name: t('order'),
     sortable: true,
     width: '120px',
     sortField: 'order_date',
-    selector: row => row.id,
     cell: row => (
-      // <div className='d-flex justify-content-left align-items-center'>
           <Link
             to={`/apps/beauty/orders/preview/${row.id}`}
             className='text-truncate text-body d-flex flex-column gap-10'
-            onClick={() => store.dispatch(getOrder(row.id))}
           >
             <span className='fw-bolder'>{`№ ${row.id}`}</span>
             <span className='text-capitalize'>{formatData(row.order_date)}</span>
           </Link>
-      // </div>
     )
   },
-  // {
-  //   name: 'Дата',
-  //   minWidth: '120px',
-  //   sortable: true,
-  //   sortField: 'order_date',
-  //   selector: row => row.order_date,
-  //   cell: row => <span className='text-capitalize'>{formatData(row.order_date)}</span>
-  // },
   {
-    name: 'Сумма',
+    name: t('Price'),
     width: '120px',
     sortable: true,
     sortField: 'total_price',
@@ -135,34 +59,32 @@ export const columns = (stores, users, userData, status, handleDel) => {
     cell: row => <span className='text-capitalize'>{formatNumber(row.total_price)}</span>
   },
   {
-    name: 'Заведение',
+    name: t('store'),
     sortable: true,
     minWidth: '250px',
     sortField: 'order_business',
     omit: userData && userData.type === 2,
-     cell: row => renderStoore(row.order_business)
+     cell: row => renderClient(getStoreInfo(row.order_business), "store")
   },
   {
-    name: 'Адрес доставки',
+    name: t('deliveryAddress'),
     minWidth: '180px',
     sortable: false,
     sortField: 'delivery_address.name',
-    selector: row => row.delivery_address,
     cell: row => <span className='text-capitalize'>{row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "Внутри заведения"}</span>
   },
   {
-    name: 'Клиент',
+    name: t('customer'),
     sortable: true,
     minWidth: '200px',
     sortField: 'user_account',
-    cell: row => renderCustomer(row.user_account)
+    cell: row => renderClient(getUserInfo(row.user_account), "user")
   },
   {
-    name: 'Рейтинг',
-    minWidth: '142px',
+    name: t('rating'),
+    width: '142px',
     sortable: true,
     sortField: 'rate',
-    selector: row => row.rate,
     cell: row => (
       <Rating
         readonly
@@ -174,11 +96,10 @@ export const columns = (stores, users, userData, status, handleDel) => {
       />)
   },
   {
-    name: 'Статус',
-    minWidth: '120px',
+    name: t('Status'),
+    width: '120px',
     sortable: true,
     sortField: 'status',
-    selector: row => row.status,
     cell: row => (
       <Badge className='text-capitalize' color={statusObj[row.status.toString()].colorName} pill>
         {getStatus(row.status)}
@@ -186,8 +107,8 @@ export const columns = (stores, users, userData, status, handleDel) => {
     )
   },
   {
-    name: 'Действия',
-    minWidth: '120px',
+    name: t('action'),
+    width: '120px',
     cell: row => (
       <div className='column-action'>
         <UncontrolledDropdown>
@@ -199,14 +120,13 @@ export const columns = (stores, users, userData, status, handleDel) => {
               tag={Link}
               className='w-100'
               to={`/apps/beauty/orders/preview/${row.id}`}
-              onClick={() => store.dispatch(getOrder(row.id))}
             >
               <FileText size={14} className='me-50' />
-              <span className='align-middle'>Просмотр</span>
+              <span className='align-middle'>{t('View')}</span>
             </DropdownItem>
             <DropdownItem tag='a' href={`/apps/beauty/orders/edit/${row.id}`} className='w-100'>
               <Edit size={14} className='me-50' />
-              <span className='align-middle'>Редактировать</span>
+              <span className='align-middle'>{t('edit')}</span>
             </DropdownItem>
             <DropdownItem
               tag='a'
@@ -215,7 +135,7 @@ export const columns = (stores, users, userData, status, handleDel) => {
               onClick={event => handleDel(event, row.id)}
             >
               <Trash2 size={14} className='me-50' />
-              <span className='align-middle'>Удалить</span>
+              <span className='align-middle'>{t('delete')}</span>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

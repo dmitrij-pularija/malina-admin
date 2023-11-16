@@ -10,26 +10,48 @@ import { statusObj } from '../../../../../configs/initial'
 export const columns = (userData, handleDel, t) => {
 
   return [ 
+  // {
+  //   name: '№',
+  //   sortable: true,
+  //   width: '100px',
+  //   sortField: 'id',
+  //   cell: row => (
+  //         <Link
+  //           to={`/apps/food/orders/preview/${row.id}`}
+  //           className='user_name text-truncate text-body'
+  //         >
+  //           <span className='fw-bolder'>{row.id}</span>
+  //         </Link>
+  //   )
+  // },
+  // {
+  //   name: t('Date'),
+  //   width: '120px',
+  //   sortable: true,
+  //   sortField: 'order_date',
+  //   cell: row => <span className='text-capitalize'>{formatData(row.order_date)}</span>
+  // },
   {
     name: '№',
-    sortable: true,
-    width: '100px',
-    sortField: 'id',
-    cell: row => (
-          <Link
-            to={`/apps/food/orders/preview/${row.id}`}
-            className='user_name text-truncate text-body'
-          >
-            <span className='fw-bolder'>{row.id}</span>
-          </Link>
-    )
+    sortable: false,
+    width: '80px',
+    selector: row => row,
+    cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
-  {
-    name: t('Date'),
-    width: '120px',
-    sortable: true,
-    sortField: 'order_date',
-    cell: row => <span className='text-capitalize'>{formatData(row.order_date)}</span>
+{
+  name: t('order'),
+  sortable: true,
+  width: '120px',
+  sortField: 'order_date',
+  cell: row => (
+        <Link
+          to={`/apps/food/orders/preview/${row.id}`}
+          className='text-truncate text-body d-flex flex-column gap-10'
+        >
+          <span className='fw-bolder'>{`№ ${row.id}`}</span>
+          <span className='text-capitalize'>{formatData(row.order_date)}</span>
+        </Link>
+  )
   },
   {
     name: t('Price'),
