@@ -75,7 +75,7 @@ const ProductDetails = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [isRtl] = useRTL()
-  const { categories, store, stores, products, selectedProduct } = props
+  const { categories, store, stores, products, selectedProduct, t } = props
   const relatedProductsList = selectedProduct && selectedProduct.related_products.length ? selectedProduct.related_products.map(product => parseInt(product.id)) : []
 
   const initCategoryOptions = () => {
@@ -253,7 +253,7 @@ const relatedProductsOptions = products.map(product => ({
                       size="sm"
                       color="primary"
                     >
-                      Загрузить
+                      {t('download')}
                       <Input
                         type="file"
                         onChange={handleImg}
@@ -267,7 +267,7 @@ const relatedProductsOptions = products.map(product => ({
                       outline
                       onClick={handleImgReset}
                     >
-                      Очистить
+                      {t('clear')}
                     </Button>
                   </div>
                 </div>
@@ -279,7 +279,7 @@ const relatedProductsOptions = products.map(product => ({
             <Col md={6} className="d-flex flex-column">
               <Col>
                 <Label className="form-label" for="name">
-                  Название<span className="text-danger">*</span>
+                {t('BeautyProductData.nameLabel')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="name"
@@ -288,19 +288,19 @@ const relatedProductsOptions = products.map(product => ({
                   render={({ field }) => (
                     <Input
                       id="name"
-                      placeholder="Введите название заведения"
+                      placeholder={t('BeautyProductData.namePlaceholder')}
                       invalid={errors.name && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.name && (
-                  <FormFeedback>Пожалуйста введите название</FormFeedback>
+                  <FormFeedback>{t('BeautyProductData.nameFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col className="d-flex flex-column mt-1" sm="12">
             <Label className="form-label" for="composition">
-              Состав
+            {t('BeautyProductData.compositionLabel')}
             </Label>
             <Controller
               name="composition"
@@ -310,19 +310,19 @@ const relatedProductsOptions = products.map(product => ({
                 <Input
                   id="composition"
                   type="textarea"
-                  placeholder="Введите состав"
+                  placeholder={t('BeautyProductData.compositionPlaceholder')}
                   invalid={errors.composition && true}
                   {...field}
                 />
               )}
             />
             {errors && errors.description && (
-              <FormFeedback>Пожалуйста введите состав</FormFeedback>
+              <FormFeedback>{t('BeautyProductData.compositionFeedback')}</FormFeedback>
             )}
           </Col>
               <Col className="d-flex flex-column mt-1" sm="12">
             <Label className="form-label" for="description">
-              Описание
+            {t('descriptionLabel')}
             </Label>
             <Controller
               name="description"
@@ -332,14 +332,14 @@ const relatedProductsOptions = products.map(product => ({
                 <Input
                   id="description"
                   type="textarea"
-                  placeholder="Введите описание"
+                  placeholder={t('descriptionPlaceholder')}
                   invalid={errors.description && true}
                   {...field}
                 />
               )}
             />
             {errors && errors.description && (
-              <FormFeedback>Пожалуйста введите описание</FormFeedback>
+              <FormFeedback>{t('descriptionFeedback')}</FormFeedback>
             )}
           </Col>
             </Col>
@@ -382,7 +382,7 @@ const relatedProductsOptions = products.map(product => ({
               </Col> */}
               <Col md={4} className="mt-1">
                 <Label className="form-label" for="category">
-                  Категория
+                {t('Category')}
                 </Label>
                 <Controller
                   name="category"
@@ -399,7 +399,7 @@ const relatedProductsOptions = products.map(product => ({
                       options={categoryOptions}
                       theme={selectThemeColors}
                       // onChange={handleCategoryChange}
-                      placeholder="Выберите категорию"
+                      placeholder={t('categoryPlaceholder')}
                       className={classnames("react-select", {
                         "is-invalid": errors.category && true
                       })}
@@ -408,14 +408,14 @@ const relatedProductsOptions = products.map(product => ({
                   )}
                 />
                 {errors && errors.category && (
-                  <FormFeedback>Пожалуйста выберите категорию</FormFeedback>
+                  <FormFeedback>{t('categoryFeedback')}</FormFeedback>
                 )}
               </Col> 
 
               <Col md={4} className="d-flex justify-content-between gap-30 mt-1">
                 <div>
                   <Label className="form-label" for="cost">
-                  Цена, &#x0441;&#x332; <span className="text-danger">*</span>
+                  {t('BeautyProductData.costLabel')}&#x0441;&#x332; <span className="text-danger">*</span>
                   </Label>
                   <Controller
                     name="cost"
@@ -434,13 +434,13 @@ const relatedProductsOptions = products.map(product => ({
                   />
                   {errors && errors.cost && (
                     <FormFeedback>
-                      Пожалуйста введите цену
+                      {t('BeautyProductData.costFeedback')}
                     </FormFeedback>
                   )}
                 </div>
                 <div>
                   <Label className="form-label" for="primeCost">
-                    Скидка, %
+                  {t('BeautyProductData.discountLabel')}
                   </Label>
                   <Controller
                     name="primeCost"
@@ -458,13 +458,13 @@ const relatedProductsOptions = products.map(product => ({
                     )}
                   />
                   {errors && errors.primeCost && (
-                    <FormFeedback>Пожалуйста введите себистоимость</FormFeedback>
+                    <FormFeedback>{t('BeautyProductData.discountFeedback')}</FormFeedback>
                   )}
                 </div>
               </Col>
               <Col md={4} className="mt-1">
                 <Label className="form-label" for="volume">
-                  Объем
+                {t('BeautyProductData.volumeLabel')}
                 </Label>
                 <Controller
                   name="volume"
@@ -473,19 +473,19 @@ const relatedProductsOptions = products.map(product => ({
                   render={({ field }) => (
                     <Input
                       id="volume"
-                      placeholder="Введите объем"
+                      placeholder={t('BeautyProductData.volumePlaceholder')}
                       invalid={errors.volume && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.volume && (
-                  <FormFeedback>Пожалуйста введите объем</FormFeedback>
+                  <FormFeedback>{t('BeautyProductData.volumeFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col md={6} className="mt-1">
                 <Label className="form-label" for="usageInstruction">
-                  Инструкция
+                {t('BeautyProductData.instructionLabel')}
                 </Label>
                 <Controller
                   name="usageInstruction"
@@ -494,19 +494,19 @@ const relatedProductsOptions = products.map(product => ({
                   render={({ field }) => (
                     <Input
                       id="usageInstruction"
-                      placeholder="Введите инструкцию"
+                      placeholder={t('BeautyProductData.instructionPlaceholder')}
                       invalid={errors.usageInstruction && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.usageInstruction && (
-                  <FormFeedback>Пожалуйста введите инструкцию</FormFeedback>
+                  <FormFeedback>{t('BeautyProductData.instructionFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col md={6} className="mt-1">
             <Label className='form-label' for='relatedProducts'>
-          Связанные товары
+            {t('BeautyProductData.relatedProductsLabel')}
           </Label>
           <Controller
             name='relatedProducts'
@@ -520,22 +520,22 @@ const relatedProductsOptions = products.map(product => ({
                 classNamePrefix='select'
                 options={relatedProductsOptions}
                 theme={selectThemeColors}
-                placeholder="Выбирите связанные товары"
+                placeholder={t('BeautyProductData.relatedProductsPlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.relatedProducts && true })}
                 {...field}
               />
             )}
           />
-         {errors && errors.relatedProducts && (<FormFeedback>Пожалуйста выберите связанные товары</FormFeedback>)} 
+         {errors && errors.relatedProducts && (<FormFeedback>{t('BeautyProductData.relatedProductsFeedback')}</FormFeedback>)} 
             </Col>
         </Row>
         <Row>
           <Col className="d-flex justify-content-center mt-2 gap-10" sm="12">
             <Button type="submit" color="primary">
-              Сохранить
+            {t('save')}
             </Button>
             <Button color="secondary" outline onClick={handleClose}>
-              Отменить
+            {t('cancel')}
             </Button>
           </Col>
         </Row>

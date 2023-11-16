@@ -1,19 +1,14 @@
-// import { useEffect } from 'react'
-// import { useDispatch, useSelector } from "react-redux"
 import { useNavigate } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import Table from './Table'
-// import { getAllStores } from '../../../stores/store'
 import Loading from '../../../../../../@core/components/spinner/Loading'
 import Breadcrumbs from '@components/breadcrumbs'
-// import { Row, Col } from 'reactstrap'
-// import StatsHorizontal from '@components/widgets/stats/StatsHorizontal'
-// import { Users, UserPlus, UserCheck, UserX } from 'react-feather'
-// import { formatNumberInt } from '@utils'
 import '@styles/react/apps/app-users.scss'
 
 const ProductsList = () => {
   // const dispatch = useDispatch()
   const navigate = useNavigate()
+  const { t } = useTranslation()
   // const stores = useSelector(state => state.stores.allStores)
 
   // useEffect(() => {
@@ -24,8 +19,8 @@ const ProductsList = () => {
 
   return (
     <div className='app-user-list'>
-      <Breadcrumbs title='Товары' data={[{ title: 'Товары' }]} onClick={handleAdd} />
-      <Table />
+      <Breadcrumbs title={t('Goods')} data={[{ title: t('Goods') }]} onClick={handleAdd} />
+      <Table t={t} />
       <Loading />  
     </div>
   )

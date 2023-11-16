@@ -1,5 +1,6 @@
 import { useEffect, useState, Fragment } from "react"
 import { useParams, Link } from "react-router-dom"
+import { useTranslation } from 'react-i18next'
 // import ProductTabs from "../view/Tabs"
 import ProductDetails from "./ProductDetails"
 import BreadCrumbs from "@components/breadcrumbs"
@@ -15,6 +16,7 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 const Details = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   // const [active, setActive] = useState("1")
   const { selectedProduct, allProducts, loading } = useSelector((state) => state.productsBeauty)
   const categories = useSelector(state => state.beautyProductsCategories.allCategories)
@@ -39,10 +41,10 @@ const Details = () => {
   ) : (
     <Fragment>
       <BreadCrumbs
-        title="Редактирование товара"
+        title={t('BeautyProductData.titleEdit')}
         data={[
-          { title: "Товары" },
-          { title: "Редактирование" }
+          { title: t('Goods') },
+          { title: t('Editing') }
         ]}
       />
       <div className="app-ecommerce-details">
@@ -57,17 +59,17 @@ const Details = () => {
                     store={store} 
                     products={allProducts} 
                     selectedProduct={selectedProduct}
+                    t={t}
                   />
                 </Col>
               </Row>
             ) : (
               <Alert color="danger">
-                <h4 className="alert-heading">Товар не найден</h4>
+                <h4 className="alert-heading">{t('BeautyProductData.alert')}</h4>
                 <div className="alert-body">
-                  Информация о товаре с id: {id} не доступна. Проверьте список
-                  товаров:{" "}
+                {t('BeautyProductData.alertText1')} {id} {t('BeautyProductData.alertText2')} {" "}
                   <Link to="/apps/beauty/products/products/list">
-                    Список товаров
+                  {t('BeautyProductData.alertText3')}
                   </Link>
                 </div>
               </Alert>
