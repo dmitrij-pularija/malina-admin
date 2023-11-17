@@ -262,6 +262,7 @@
     "Info": "Информация"
   },
   "Categories": "Категории",
+  "SelectCoordinates": "Выберите координаты на карте",
   "Branches": "Филиалы",
   "Tables": "Столы",
   "tablesData": {
@@ -409,6 +410,11 @@
     "telegramIdPlaceholder": "Введите Телеграмм ID",
     "telegramIdFeedback": "Пожалуйста введите Телеграмм ID"
   },
+  "Role": "Роль",
+  "guest": "Гость",
+  "superadmin": "Администратор",
+  "Active": "Активный",
+  "NotActive": "Не активный",
   "Masters": "Специалисты",
   "service": "Услуга",
   "Login": "Логин:",
@@ -743,7 +749,7 @@
   "Wizard": "Wizard",
   "Forms & Tables": "Forms & Tables",
   "Form Elements": "Form Elements",
-  "Select": "Select",
+  "Select": "Выбрать",
   "Switch": "Switch",
   "Checkbox": "Checkbox",
   "Radio": "Radio",

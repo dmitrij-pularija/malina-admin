@@ -1,5 +1,6 @@
 import { useDispatch } from 'react-redux'
 import React, { useState, useEffect } from 'react'
+import { useTranslation } from 'react-i18next'
 import { YMaps, Map, Placemark } from 'react-yandex-maps'
 import Loading from '../spinner/Loading-spinner'
 import {
@@ -28,7 +29,7 @@ import { Minus, ChevronDown, Edit, Trash2 } from "react-feather"
 
 
 const ModalMap = ({isOpen, toggle, onCoordinateSelected, selectedAddres }) => {
-
+  const { t } = useTranslation()
   const [selectedCoords, setSelectedCoords] = useState(["", ""])
   const [mapsLoaded, setMapsLoaded] = useState(true)
 
@@ -78,7 +79,7 @@ useEffect(() => {
     <ModalHeader
       className="bg-transparent"
       toggle={closeModal}
-    ><p className="text-center">Выберите координаты на карте</p></ModalHeader>
+    ><p className="text-center">{t('SelectCoordinates')}</p></ModalHeader>
     <ModalBody className="px-sm-5 mx-50 pb-4">
     <Row className="height-400">
     <YMaps>
@@ -103,10 +104,10 @@ useEffect(() => {
     <Row>
           <Col className="d-flex justify-content-center align-items-end mt-1 gap-10" sm="12">
             <Button color="primary" onClick={handleSelectCoords}>
-              Выбрать
+            {t('Select')}
             </Button>
             <Button color="secondary" outline onClick={closeModal}>
-              Отменить
+            {t('cancel')}
             </Button>
           </Col>
         </Row>

@@ -263,6 +263,7 @@
     "Info": "Information"
   },
   "Categories": "Categories",
+  "SelectCoordinates": "Select coordinates on the map",
   "Branches": "Branches",
   "Tables": "Tables",
   "tablesData": {
@@ -404,6 +405,11 @@
     "telegramIdPlaceholder": "Enter Telegram ID",
     "telegramIdFeedback": "Please enter Telegram ID"
   },
+  "Role": "Role",
+  "guest": "Guest",
+  "superadmin": "Superadmin",
+  "Active": "Active",
+  "NotActive": "Not active",
   "Masters": "Masters",
   "service": "Service",
   "Login": "Login:",

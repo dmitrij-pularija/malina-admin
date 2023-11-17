@@ -1,4 +1,6 @@
+import { useState, useEffect } from 'react'
 import { useSelector } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import Table from './Table'
 import Loading from '../../../../../src/@core/components/spinner/Loading'
 import Breadcrumbs from '@components/breadcrumbs'
@@ -9,12 +11,14 @@ import { formatNumberInt } from '@utils'
 import '@styles/react/apps/app-users.scss'
 
 const UsersList = () => {
-  const { totalCount, totalUsers, totalCustomers, totalGuests } = useSelector(state => state.users.count)
-
+  const { t } = useTranslation()
+  const [modalOpen, setModalOpen] = useState(false)
+  // const { totalCount, totalUsers, totalCustomers, totalGuests } = useSelector(state => state.users.count)
+  const toggleModal = () => setModalOpen(!modalOpen)
   return (
     <div className='app-user-list'>
-      <Breadcrumbs title='Пользователи' data={[{ title: 'Пользователи' }]} />
-      <Row>
+      <Breadcrumbs title={t('Users')} data={[{ title: t('Users') }]} onClick={toggleModal}/>
+      {/* <Row>
         <Col lg='3' sm='6'>
           <StatsHorizontal
             color='primary'
@@ -47,8 +51,8 @@ const UsersList = () => {
             renderStats={<h3 className='fw-bolder mb-75'>{formatNumberInt(totalGuests)}</h3>}
           />
         </Col>
-      </Row>
-      <Table />
+      </Row> */}
+      <Table modalOpen={modalOpen} toggleModal={toggleModal} t={t} />
       <Loading />  
     </div>
   )
