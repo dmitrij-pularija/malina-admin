@@ -17,7 +17,7 @@ import '@styles/react/libs/flatpickr/flatpickr.scss'
 
 const MySwal = withReactContent(Swal)
 
-const MasterInfoCard = ({ userData, stores, specialties, selectedMaster }) => {
+const MasterInfoCard = ({ userData, stores, specialties, selectedMaster, t }) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
   const [modalOpen, setModalOpen] = useState(false)
@@ -28,7 +28,7 @@ const MasterInfoCard = ({ userData, stores, specialties, selectedMaster }) => {
   // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const handleClose = () => navigate("/apps/user/masters/list/") 
 const getStore = id => {
-  if (!id) return <span> Не указано</span>
+  if (!id) return <span>{t('MastersData.notIndicated')}</span>
   const store = stores.find(store => parseInt(store.id) === parseInt(id))
   if (store) {
     return (
@@ -37,7 +37,7 @@ const getStore = id => {
           <span>{store && store.business_address ? `${store.business_address.city}, ${store.business_address.name}` : ''}</span>
       </div>
     )
-  } else return <span> Не указано</span>
+  } else return <span>{t('MastersData.notIndicated')}</span>
 }
   const renderUserImg = () => {
     if (selectedMaster !== null && selectedMaster.master_profile_picture) {
@@ -136,7 +136,7 @@ const getStore = id => {
               </div>
             </div>
           </div>
-          <h4 className='fw-bolder border-bottom pb-50'>Информация:</h4>
+          <h4 className='fw-bolder border-bottom pb-50'> {t('Info')}</h4>
           <div className='info-container'>
             {selectedMaster !== null ? (
               <ul className='list-unstyled'>
@@ -149,15 +149,15 @@ const getStore = id => {
                   <span>{selectedMaster.master_specialty ? selectedMaster.master_specialty.specialty_name : "Не указана"}</span>
                 </li> */}
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Заведение:</span>
+                  <span className='fw-bolder me-25'>{t('Store1')}</span>
                   {getStore(selectedMaster.master_business)}
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Логин:</span>
+                  <span className='fw-bolder me-25'>{t('Login')}</span>
                   <span>{selectedMaster.login ? selectedMaster.login : "Не указан"}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Телефон:</span>
+                  <span className='fw-bolder me-25'>{t('Phone')}</span>
                   <span>{selectedMaster.phone ? selectedMaster.phone : "Не указан"}</span>
                 </li>
               </ul>
@@ -165,17 +165,17 @@ const getStore = id => {
           </div>
           <div className='d-flex justify-content-center pt-2'>
             <Button color='primary' onClick={toggleModal}>
-              Изменить
+            {t('edit')}
             </Button>
             <Button className='ms-1' color='danger' outline onClick={handleClose}>
-            Отменить
+            {t('cancel')}
             </Button>
           </div>
         </CardBody>
       </Card>
       {/* <Sidebar shifts={shifts} stores={stores} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={() => {}} />   */}
     </Fragment>
-    <MasterModal userData={userData} specialties={specialties} stores={stores} open={modalOpen} toggleModal={toggleModal} selectedMaster={selectedMaster} setSelectedMaster={() => {}} />
+    <MasterModal userData={userData} specialties={specialties} stores={stores} open={modalOpen} toggleModal={toggleModal} selectedMaster={selectedMaster} setSelectedMaster={() => {}} t={t} />
     </>
   )
 }

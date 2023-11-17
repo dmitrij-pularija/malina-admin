@@ -336,6 +336,33 @@
     "telegramIdFeedback": "Please enter Telegram ID"
   },
   "Masters": "Masters",
+  "service": "Service",
+  "Login": "Login:",
+  "loginLabel": "Login",
+  "loginPlaceholder": "Enter login",
+  "loginFeedback": "Please enter your login",
+  "password": "Password",
+  "confirmPassword": "Confirm your password",
+  "surname": "Last name",
+  "surnamePlaceholder": "Enter last name",
+  "surnameFeedback": "Please enter last name",
+  "DetailedInfo": "Detailed information",
+  "SpecialtyPlaceholder": "Select a specialty",
+  "SpecialtyFeedback": "Please select a specialty",
+  "MastersData": {
+    "titleEdit": "Changing information about a Master",
+    "titleAdd": "Create a new Master",
+    "alert": "Master not found",
+    "alertText1": "Master with id: ",
+    "alertText2": "not found. Check the list of masters: ",
+    "alertText3": "List of masters",
+    "notIndicated": "Not indicated",
+    "works": "Master work",
+    "appointments": "Appointments history",
+    "appointmentsTitle": "List of appointments with a specialist",
+    "rewards": "Reviews",
+    "rewardsTitle": "List of reviews about the specialist"
+  },
   "Complaints": "complaints",
   "complaintsData": {
     "title": "Complaints",
@@ -363,7 +390,7 @@
     "headerFeedback": "Please enter a title"
   }, 
   "Specialties": "Specialties",
-  "Specialty": "Специальность",
+  "Specialty": "Specialty",
   "SpecialtyData": {
     "titleEdit": "Editing a specialty",
     "titleAdd": "Creation of a new specialty",

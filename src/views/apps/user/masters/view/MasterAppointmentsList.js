@@ -4,46 +4,13 @@ import DataTable from "react-data-table-component"
 import { Card, CardHeader, Badge } from "reactstrap"
 import { appointmentsObj } from "../../../../../configs/initial"
 import { formatData, formatTimeSave } from "@utils"
-import Avatar from "@components/avatar"
+import renderClient from '@components/renderClient'
 import "@styles/react/libs/tables/react-dataTable-component.scss"
 
-const getAvatar = (data) => {
-  if (data.avatar && data.avatar.includes("http")) {
-    return <Avatar className="me-1" img={data.avatar} width="32" height="32" />
-  } else {
-    return (
-      <Avatar
-        initials
-        className="me-1"
-        width="32"
-        height="32"
-        color={"light-primary"}
-        content={
-          data.name ? `${data.name} ${data.surname ? data.surname : ""}` : "User"
-        }
-      />
-    )
-  }
-}
-
-const renderClient = (user) => {
-  return (
-    <div className="d-flex justify-content-left align-items-center">
-      {getAvatar(user)}
-      <div className="d-flex flex-column">
-        <span className="fw-bolder">
-          {
-          user.name ? `${user.name} ${user.surname ? user.surname : ""}` : user.login
-            }
-        </span>
-      </div>
-    </div>
-  )
-}
-
-const columns = [
+const columns = (t) => {
+  return [
   {
-    name: "Дата",
+    name: t('Date'),
     width: "130px",
     sortable: true,
     sortField: "date",
@@ -58,7 +25,7 @@ const columns = [
     )
   },
   {
-    name: "Услуга",
+    name: t('service'),
     width: "160px",
     sortable: true,
     sortField: "appointment_services",
@@ -72,15 +39,15 @@ const columns = [
     )
   },
   {
-    name: "Клиент",
+    name: t('customer'),
     width: "250px",
     sortable: true,
     sortField: "appointment_user_account.id",
-    cell: (row) => renderClient(row.appointment_user_account)
+    cell: row => renderClient(row.appointment_user_account, "user")
   },
   {
-    name: "Статус",
-    width: "120px",
+    name: t('Status'),
+    width: '120px',
     sortable: true,
     sortField: "appointment_status",
     cell: (row) => (
@@ -94,17 +61,18 @@ const columns = [
     )
   }
 ]
+}
 
-const MasterAppointmentsList = ({ appointments }) => {
+const MasterAppointmentsList = ({ appointments, t }) => {
   return appointments.length ? (
     <Card>
-      <CardHeader tag="h4">Список записей к специалисту</CardHeader>
+      <CardHeader tag="h4">{t('MastersData.appointmentsTitle')}</CardHeader>
       <div className="react-dataTable user-view-account-projects">
         <DataTable
           noHeader
           responsive
           size={"small"}
-          columns={columns}
+          columns={columns(t)}
           data={appointments}
           className="react-dataTable"
           sortIcon={<ChevronDown size={10} />}
@@ -113,7 +81,7 @@ const MasterAppointmentsList = ({ appointments }) => {
     </Card>
   ) : (
     <Card>
-      <CardHeader tag="h4">Записи отсутствуют</CardHeader>
+      <CardHeader tag="h4">{t('notFound')}</CardHeader>
     </Card>
   )
 }

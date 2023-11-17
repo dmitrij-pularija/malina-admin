@@ -1,69 +1,70 @@
 import { Card, CardHeader } from 'reactstrap'
 import { ChevronDown, Star } from 'react-feather'
-import { Link } from 'react-router-dom'
+import renderClient from '@components/renderClient'
 import DataTable from 'react-data-table-component'
 import Rating from 'react-rating'
 import { formatData } from '@utils'
 import Avatar from '@components/avatar'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-const getAvatar = data => {
-  if (data.avatar && data.avatar.includes("http")) {
-    return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={data.name}
-      />
-    )
+// const getAvatar = data => {
+//   if (data.avatar && data.avatar.includes("http")) {
+//     return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
+//   } else {
+//     return (
+//       <Avatar
+//         initials
+//         className='me-1'
+//         color={'light-primary'}
+//         content={data.name}
+//       />
+//     )
+//   }
+//   }
+
+const RewardsList = ({ ratings, users, t }) => {
+  const getUserInfo = id => {
+    const foundUser = users.find(item => item.id === id)
+    if (!foundUser) return {}
+    return foundUser
   }
-  }
+// const getUserInfo = id => {
+//   const foundUser = users.find(item => item.id === id)
+//   if (!foundUser) return {name: "User", avatar: ""}
+//   return {name: `${foundUser.name ? foundUser.name : 'Customer'} ${foundUser.surname ? foundUser.surname : foundUser.id}`, avatar: foundUser.avatar }
+// }
 
-const RewardsList = ({ ratings, users }) => {
+// const renderClient = (id) => {
+// const data = getUserInfo(id)
 
-const getUserInfo = id => {
-  const foundUser = users.find(item => item.id === id)
-  if (!foundUser) return {name: "User", avatar: ""}
-  return {name: `${foundUser.name ? foundUser.name : 'Customer'} ${foundUser.surname ? foundUser.surname : foundUser.id}`, avatar: foundUser.avatar }
-}
-
-const renderClient = (id) => {
-const data = getUserInfo(id)
-
-return (
-<div className='d-flex justify-content-left align-items-center'>
-{getAvatar(data)}
-<div className='d-flex flex-column'>
-    <span className='fw-bolder'>{data.name}</span>
-</div>
-</div>
-)
-}
+// return (
+// <div className='d-flex justify-content-left align-items-center'>
+// {getAvatar(data)}
+// <div className='d-flex flex-column'>
+//     <span className='fw-bolder'>{data.name}</span>
+// </div>
+// </div>
+// )
+// }
 const columns = [
   {
     name: '№',
     sortable: false,
     width: '50px',
-    selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Дата',
+    name: t('Date'),
     width: '120px',
     sortable: true,
     sortField: 'created_at',
-    selector: row => row.date,
     cell: row => <span className='text-capitalize'>{row.created_at ? formatData(row.created_at) : ''}</span>
   },
   {
-    name: 'Оценка',
+    name: t('rating'),
     width: '142px',
     sortable: true,
     sortField: 'master_stars',
-    selector: row => row.master_stars,
     cell: row => (
       <Rating
         readonly
@@ -75,26 +76,24 @@ const columns = [
       />)
   },
   {
-    name: 'Отзыв',
+    name: t('review'),
     width: '142px',
     sortable: true,
     sortField: 'master_review',
-    selector: row => row.totalprice,
     cell: row => <span className='text-capitalize'>{row.master_review}</span>
   },
   {
-    name: 'Клиент',
+    name: t('customer'),
     minWidth: '150px',
     sortable: true,
     sortField: 'master_rating_user',
-    selector: row => row.master_rating_user,
-    cell: row => renderClient(row.master_rating_user)
+    cell: row => renderClient(getUserInfo(row.master_rating_user), "user")
   }
 ]
 
   return ratings.length ? (
     <Card>
-      <CardHeader tag='h4'>Список отзывов о специалисте</CardHeader>
+      <CardHeader tag='h4'>{t('MastersData.rewardsTitle')}</CardHeader>
       <div className='react-dataTable user-view-account-projects'>
         <DataTable
           noHeader
@@ -107,7 +106,7 @@ const columns = [
         />
       </div>
     </Card>
-  ) : <Card><CardHeader tag='h4'>Отзывы отсутствуют</CardHeader></Card>
+  ) : <Card><CardHeader tag='h4'>{t('notFound')}</CardHeader></Card>
 }
 
 export default RewardsList

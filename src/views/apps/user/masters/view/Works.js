@@ -74,7 +74,7 @@ const renderSlide = (image) => {
   }
 }
 
-const MasterWorksList = ({ id, works }) => {
+const MasterWorksList = ({ id, works, t }) => {
   const [isRtl] = useRTL()
   // const dispatch = useDispatch()
   const [galery, setGalery] = useState(works && works.length ? works : [])
@@ -113,7 +113,7 @@ const MasterWorksList = ({ id, works }) => {
 
   return (
     <Card>
-      <CardHeader className="d-flex justify-content-center mt-1" tag="h4">Работы специалиста</CardHeader>
+      <CardHeader className="d-flex justify-content-center mt-1" tag="h4">{t('MastersData.works')}</CardHeader>
       {/* <CardBody className="w-400 mb-2"> */}
       <CardBody className="mb-2">
       <div className="d-flex align-items-center justify-content-center mb-2">
@@ -129,7 +129,7 @@ const MasterWorksList = ({ id, works }) => {
                       size="sm"
                       color="primary"
                     >
-                      Загрузить
+                      {t('download')}
                       <Input
                         type="file"
                         onChange={handleImg}
@@ -143,7 +143,7 @@ const MasterWorksList = ({ id, works }) => {
                       outline
                       onClick={handleImgReset}
                     >
-                      Очистить
+                      {t('clear')}
                     </Button>
                   </div>
                 </div>

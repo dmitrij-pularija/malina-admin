@@ -13,7 +13,7 @@ return [
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Категория',
+    name: t('Category'),
     sortable: true,
     minWidth: '300px',
     sortField: 'category_name',

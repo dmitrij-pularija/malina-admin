@@ -53,6 +53,7 @@ const defaultValues = {
 const requiredFields = ["login", "business"]
 
 const MasterModal = ({
+  t,
   open,
   stores,
   userData,
@@ -197,7 +198,7 @@ const MasterModal = ({
       <ModalBody className="px-sm-5 pt-50 pb-5">
         <div className="text-center mb-2">
           <h1 className="mb-1">
-            {selectedMaster ? "Изменение информации о специалисте" : "Добавление нового специалиста"}
+            {selectedMaster ? t('MastersData.titleEdit') : t('MastersData.titleAdd')}
           </h1>
         </div>
         <Form onSubmit={handleSubmit(onSubmit)}>
@@ -215,7 +216,7 @@ const MasterModal = ({
                     size="sm"
                     color="primary"
                   >
-                    Загрузить
+                    {t('download')}
                     <Input
                       type="file"
                       onChange={handleImg}
@@ -229,7 +230,7 @@ const MasterModal = ({
                     outline
                     onClick={handleImgReset}
                   >
-                    Очистить
+                    {t('clear')}
                   </Button>
                 </div>
               </div>
@@ -237,7 +238,7 @@ const MasterModal = ({
             <Col md={6} xs={12}>
               <div>
                 <Label className="form-label" for="name">
-                  Имя
+                {t('name')}
                 </Label>
                 <Controller
                   control={control}
@@ -248,18 +249,18 @@ const MasterModal = ({
                     <Input
                       {...field}
                       id="name"
-                      placeholder="Имя"
+                      placeholder={t('namePlaceholder')}
                       invalid={errors.name && true}
                     />
                   )}
                 />
                 {errors && errors.name && (
-                  <FormFeedback>Пожалуйста заполните имя</FormFeedback>
+                  <FormFeedback>{t('nameFeedback')}</FormFeedback>
                 )}
               </div>
               <div className="mt-1">
                 <Label className="form-label" for="surname">
-                  Фамилия
+                {t('surname')}
                 </Label>
                 <Controller
                   control={control}
@@ -270,19 +271,19 @@ const MasterModal = ({
                     <Input
                       {...field}
                       id="surname"
-                      placeholder="Фамилия"
+                      placeholder={t('surnamePlaceholder')}
                       invalid={errors.surname && true}
                     />
                   )}
                 />
                 {errors && errors.surname && (
-                  <FormFeedback>Пожалуйста заполните фамилию</FormFeedback>
+                  <FormFeedback>{t('surnameFeedback')}</FormFeedback>
                 )}
               </div>
             </Col>
             <Col md={6} xs={12}>
               <Label className="form-label" for="business">
-                Заведение <span className="text-danger">*</span>
+              {t('storeLabel')} <span className="text-danger">*</span>
               </Label>
               <Controller
                 name="business"
@@ -296,7 +297,7 @@ const MasterModal = ({
                     classNamePrefix="select"
                     options={storeOptions}
                     theme={selectThemeColors}
-                    placeholder="Выберите Заведение"
+                    placeholder={t('storePlaceholder')}
                     className={classnames("react-select", {
                       "is-invalid": errors.business && true,
                     })}
@@ -305,12 +306,12 @@ const MasterModal = ({
                 )}
               />
               {errors && errors.business && (
-                <FormFeedback>Пожалуйста выберите заведение</FormFeedback>
+                <FormFeedback>{t('storeFeedback')}</FormFeedback>
               )}
             </Col>
             <Col md={6} xs={12}>
               <Label className="form-label" for="specialty">
-                Специальность
+              {t('Specialty')}
               </Label>
               <Controller
                 name="specialty"
@@ -323,7 +324,7 @@ const MasterModal = ({
                     classNamePrefix="select"
                     options={specialtyOptions}
                     theme={selectThemeColors}
-                    placeholder="Выберите специальность"
+                    placeholder={t('SpecialtyPlaceholder')}
                     className={classnames("react-select", {
                       "is-invalid": errors.specialty && true,
                     })}
@@ -332,12 +333,12 @@ const MasterModal = ({
                 )}
               />
               {errors && errors.specialty && (
-                <FormFeedback>Пожалуйста выберите специальность</FormFeedback>
+                <FormFeedback>{t('SpecialtyFeedback')}</FormFeedback>
               )}
             </Col>
             <Col md={6} xs={12}>
               <Label className="form-label" for="login">
-                Логин <span className="text-danger">*</span>
+              {t('loginLabel')} <span className="text-danger">*</span>
               </Label>
               <Controller
                 name="login"
@@ -346,19 +347,19 @@ const MasterModal = ({
                 render={({ field }) => (
                   <Input
                     id="login"
-                    placeholder="Введите логин"
+                    placeholder={t('loginPlaceholder')}
                     invalid={errors.login && true}
                     {...field}
                   />
                 )}
               />
               {errors && errors.login && (
-                <FormFeedback>Введите логин</FormFeedback>
+                <FormFeedback>{t('loginFeedback')}</FormFeedback>
               )}
             </Col>
             <Col md={6} xs={12}>
               <Label className="form-label" for="phone">
-                Телефон
+              {t('phone')}
               </Label>
               <Controller
                 name="phone"
@@ -367,14 +368,14 @@ const MasterModal = ({
                 render={({ field }) => (
                   <Input
                     id="phone"
-                    placeholder="Введите теоефон"
+                    placeholder={t('phonePlaceholder')}
                     invalid={errors.phone && true}
                     {...field}
                   />
                 )}
               />
               {errors && errors.phone && (
-                <FormFeedback>Введите теоефон</FormFeedback>
+                <FormFeedback>{t('phoneFeedback')}</FormFeedback>
               )}
             </Col>
             {!selectedMaster && (
@@ -387,7 +388,7 @@ const MasterModal = ({
                     rules={{ required: false }}
                     render={({ field }) => (
                       <InputPasswordToggle
-                        label="Новый пароль"
+                        label={t('password')}
                         htmlFor="password"
                         className="input-group-merge"
                         invalid={errors.password && true}
@@ -409,7 +410,7 @@ const MasterModal = ({
                     name="confirmPassword"
                     render={({ field }) => (
                       <InputPasswordToggle
-                        label="Подтвердите новый пароль"
+                        label={t('confirmPassword')}
                         htmlFor="confirmPassword"
                         className="input-group-merge"
                         invalid={errors.confirmPassword && true}
@@ -427,7 +428,7 @@ const MasterModal = ({
             )}
             <Col xs={12} className="text-center mt-2 pt-50">
               <Button type="submit" className="me-1" color="primary">
-                Сохранить
+              {t('save')}
               </Button>
               <Button
                 type="reset"
@@ -435,7 +436,7 @@ const MasterModal = ({
                 outline
                 onClick={handleClose}
               >
-                Отменить
+                {t('cancel')}
               </Button>
             </Col>
           </Row>

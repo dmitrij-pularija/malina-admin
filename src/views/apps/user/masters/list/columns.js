@@ -1,84 +1,55 @@
 import { Link } from 'react-router-dom'
-import Avatar from '@components/avatar'
-// import Logo2 from '@components/logo2'
+import renderClient from '@components/renderClient'
 import Rating from 'react-rating'
-import { store } from '@store/store'
-import { getMaster } from '../store'
 import { Edit, MoreVertical, FileText, Trash2, Star } from 'react-feather'
 import { UncontrolledDropdown, DropdownToggle, DropdownMenu, DropdownItem } from 'reactstrap'
-
-const renderClient = (picture, name) => {
-  if (picture) {
-    return <Avatar className='me-1' img={picture} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={name}
-      />
-    )
-  }
-}
-
-
  
-export const columns = (stores, handleEdit, handleDel) => {
-
-const renderStore = id => {
-  const store = stores.find(store => parseInt(store.id) === parseInt(id))
-// console.log(stores)
-  return (
-    <div className='d-flex justify-content-left align-items-center'>
-      {renderClient(store ? store.image : '', store ? store.name : 'Заведение')}
-      <div className='d-flex flex-column ml3'>
-          <span className='fw-bolder'>{store ? store.name : ''}</span>
-          <span>{store && store.business_address ? `${store.business_address.city}, ${store.business_address.name}` : ''}</span>
-      </div>
-    </div>
-  )
-}
+export const columns = (stores, handleEdit, handleDel, userData, t) => {
+  const getStoreInfo = id => {
+    const foundStore = stores.find(item => item.id === id)
+    if (!foundStore) return {}
+    return foundStore
+  }
+// const renderStore = id => {
+//   const store = stores.find(store => parseInt(store.id) === parseInt(id))
+// // console.log(stores)
+//   return (
+//     <div className='d-flex justify-content-left align-items-center'>
+//       {renderClient(store ? store.image : '', store ? store.name : 'Заведение')}
+//       <div className='d-flex flex-column ml3'>
+//           <span className='fw-bolder'>{store ? store.name : ''}</span>
+//           <span>{store && store.business_address ? `${store.business_address.city}, ${store.business_address.name}` : ''}</span>
+//       </div>
+//     </div>
+//   )
+// }
 
 return [
   {
-    name: 'Специалист',
+    name: t('Master'),
     sortable: true,
     minWidth: '250px',
     sortField: 'master_name',
     selector: row => row,
-    cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row.master_profile_picture ? row.master_profile_picture : '', `${row.master_name ? row.master_name : "Специалист"} ${row.surname ? row.surname : ''}`)}
-        <div className='d-flex flex-column'>
-          <Link
-            to={`/apps/user/masters/view/${row.id}`}
-            className='user_name text-truncate text-body d-flex flex-column'
-            onClick={() => store.dispatch(getMaster(row.id))}
-          >
-            <span className='fw-bolder'>{`${row.master_name ? row.master_name : ''} ${row.surname ? row.surname : ''}`}</span>
-          <small className='text-truncate text-muted mb-0'>{row.phone ? row.phone : ''}</small>
-          </Link>
-        </div>
-      </div>
-    )
+    cell: row => renderClient(row, "master")
   },
   {
-    name: 'Специальность',
+    name: t('Specialty'),
     sortable: true,
     width: '200px',
     sortField: 'master_specialty',
      cell: row => (<span>{row.master_specialty && row.master_specialty.specialty_name ? row.master_specialty.specialty_name : ""}</span>)
   },
   {
-    name: 'Заведение',
+    name: t('store'),
     sortable: true,
-    minWidth: '350px',
+    minWidth: '250px',
     sortField: 'master_business',
-     cell: row => renderStore(row.master_business)
+    omit: userData && userData.type === 2,
+    cell: row => renderClient(getStoreInfo(row.master_business), "store")
   },
   {
-    name: 'Рейтинг',
+    name: t('rating'),
     width: '142px',
     sortable: true,
     sortField: 'average_rating',
@@ -94,7 +65,7 @@ return [
       />)
   },
   {
-    name: 'Действия',
+    name: t('action'),
     width: '120px',
     cell: row => (
       <div className='column-action'>
@@ -110,11 +81,11 @@ return [
               onClick={() => store.dispatch(getMaster(row.id))}
             >
               <FileText size={14} className='me-50' />
-              <span className='align-middle'>Подробнее</span>
+              <span className='align-middle'>{t('View')}</span>
             </DropdownItem>
             <DropdownItem tag='a' href='/' className='w-100' onClick={event => handleEdit(event, row)}>
               <Edit size={14} className='me-50' />
-              <span className='align-middle'>Редактировать</span>
+              <span className='align-middle'>{t('edit')}</span>
             </DropdownItem>
             <DropdownItem
               tag='a'
@@ -123,7 +94,7 @@ return [
               onClick={event => handleDel(event, row.id)}
             >
               <Trash2 size={14} className='me-50' />
-              <span className='align-middle'>Удалить</span>
+              <span className='align-middle'>{t('delete')}</span>
             </DropdownItem>
           </DropdownMenu>
         </UncontrolledDropdown>

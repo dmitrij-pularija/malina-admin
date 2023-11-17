@@ -12,7 +12,7 @@ const renderMasters = masterList => {
 
 return [
   {
-    name: 'Услуга',
+    name: t('service'),
     sortable: true,
     minWidth: '230px',
     sortField: 'beauty_service_name',

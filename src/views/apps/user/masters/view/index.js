@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react'
 import { useParams, Link } from 'react-router-dom'
+import { useTranslation } from 'react-i18next'
 import { getMaster } from '../store'
 import { getAllStores } from '../../../food/stores/store'
 import { getAllUsers } from "../../store"
@@ -16,6 +17,7 @@ import '@styles/react/apps/app-users.scss'
 
 const MasterView = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   // const [shifts, setShifts] = useState([])
   const [rating, setRating] = useState([])
   const { selectedMaster, loading } = useSelector(state => state.masters)
@@ -25,7 +27,7 @@ const MasterView = () => {
   const { userData } = useSelector(state => state.auth)
   const users = useSelector(state => state.users.allUsers)
   const { id } = useParams()
-  const appointments = allAppointments.filter(appointment => parseInt(appointment.appointment_master) === parseInt(id))  
+  const appointments = allAppointments.filter(appointment => parseInt(appointment.appointment_master.id) === parseInt(id))  
 
 
   useEffect(() => {
@@ -50,14 +52,14 @@ const MasterView = () => {
 
   return (
   <div className='app-user-view'>
-    <Breadcrumbs title='Детальная информация' data={[{ title: 'Специалисты' }, { title: 'Детали' }]} />
+    <Breadcrumbs title={t('DetailedInfo')} data={[{ title: t('Staff') }, { title: t('Masters') }, { title: t('Details') }]} />
       {selectedMaster !== null && selectedMaster !== undefined ? ( 
       <Row>
         <Col xl='4' lg='5' xs={{ order: 1 }} md={{ order: 0, size: 5 }}>
-          <MasterInfoCard userData={userData} specialties={specialties} stores={stores} selectedMaster={selectedMaster} />
+          <MasterInfoCard userData={userData} specialties={specialties} stores={stores} selectedMaster={selectedMaster} t={t} />
         </Col>
         <Col xl='8' lg='7' xs={{ order: 0 }} md={{ order: 1, size: 7 }}>
-          <MasterTabs id={selectedMaster ? selectedMaster.id : null} works={selectedMaster ? selectedMaster.master_works : []} ratings={rating} users={users} active={active} toggleTab={toggleTab} appointments={appointments} />
+          <MasterTabs id={selectedMaster ? selectedMaster.id : null} works={selectedMaster ? selectedMaster.master_works : []} ratings={rating} users={users} active={active} toggleTab={toggleTab} appointments={appointments}  t={t} />
         </Col>
       </Row>
       ) : (
@@ -65,9 +67,9 @@ const MasterView = () => {
         <Loading />
         ) : (
         <Alert color='danger'>
-        <h4 className='alert-heading'>Специалист не найден</h4>
+        <h4 className='alert-heading'>{t('MastersData.alert')}</h4>
         <div className='alert-body'>
-        Специалист с id: {id} не найден. Проверьте в списке специалистов: <Link to='/apps/user/masters/list'>Список специалистов</Link>
+        {t('MastersData.alertText1')}{id} {t('MastersData.alertText2')}<Link to='/apps/user/masters/list'>{t('MastersData.alertText3')}</Link>
         </div>
         </Alert>
         )
