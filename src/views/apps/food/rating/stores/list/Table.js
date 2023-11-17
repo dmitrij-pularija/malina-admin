@@ -36,9 +36,9 @@ const RatingStoresList = ({userData, users, stores, t}) => {
   const [currentPage, setCurrentPage] = useState(1)
   const [sortColumn, setSortColumn] = useState('date')
   const [rowsPerPage, setRowsPerPage] = useState(20)
-  const [currentStore, setCurrentStore] = useState({ value: '', label: t('selectStore') })
+  const [currentStore, setCurrentStore] = useState("")
  
-  const filtredStore = stores.filter(store => parseInt(store.business_type) === 1)  
+  const filtredStore = userData.business !== 0 ? stores.filter(store => parseInt(store.business_type) === parseInt(userData.business)) : stores
   const storeOptions = filtredStore.map((store) => ({
     value: String(store.id),
     label: store.name
@@ -53,7 +53,7 @@ const RatingStoresList = ({userData, users, stores, t}) => {
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id: userData.type === 2 ? userData.id : currentStore.value
+        business_id: userData.type === 2 ? userData.id : currentStore ? currentStore.value : ""
       })
     )
   }, [stores.length])
@@ -67,7 +67,7 @@ const RatingStoresList = ({userData, users, stores, t}) => {
         search: searchTerm,
         perPage: rowsPerPage,
         page: page.selected + 1,
-        business_id: currentStore.value
+        business_id: currentStore ? currentStore.value : ""
       })
     )
     setCurrentPage(page.selected + 1)
@@ -82,7 +82,7 @@ const RatingStoresList = ({userData, users, stores, t}) => {
         search: searchTerm,
         perPage: value,
         page: currentPage,
-        business_id: currentStore.value
+        business_id: currentStore ? currentStore.value : ""
       })
     )
     setRowsPerPage(value)
@@ -96,7 +96,7 @@ const RatingStoresList = ({userData, users, stores, t}) => {
         ordering: `${sort}${sortColumn}`,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id: currentStore.value
+        business_id: currentStore ? currentStore.value : ""
       })
     )
   }
@@ -127,7 +127,7 @@ const RatingStoresList = ({userData, users, stores, t}) => {
   // ** Table data to render
   const dataToRender = () => {
     const filters = {
-      business_id: currentStore.value,
+      business_id: currentStore ? currentStore.value : "",
       search: searchTerm
     }
 
@@ -153,7 +153,7 @@ const RatingStoresList = ({userData, users, stores, t}) => {
         search: searchTerm,
         page: currentPage,
         perPage: rowsPerPage,
-        business_id: currentStore.value
+        business_id: currentStore ? currentStore.value : ""
       })
     )
   }
@@ -173,6 +173,7 @@ const RatingStoresList = ({userData, users, stores, t}) => {
                 classNamePrefix='select'
                 options={storeOptions}
                 value={currentStore}
+                placeholder={t('selectStore')}
                 onChange={data => {
                   setCurrentStore(data)
                   dispatch(
@@ -209,7 +210,7 @@ const RatingStoresList = ({userData, users, stores, t}) => {
             noDataComponent={<h6 className='text-capitalize'>{t('notFound')}</h6>}
             subHeaderComponent={
               <CustomHeader
-                data={data}
+                data={dataToRender()}
                 searchTerm={searchTerm}
                 rowsPerPage={rowsPerPage}
                 handleFilter={handleFilter}

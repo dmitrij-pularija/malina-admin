@@ -1,5 +1,5 @@
 // ** React Imports
-import Avatar from '@components/avatar'
+import renderClient from '@components/renderClient'
 // import Logo2 from '@components/logo2'
 
 // ** Icons Imports
@@ -11,89 +11,77 @@ import Rating from 'react-rating'
 import '@styles/base/pages/app-ecommerce.scss'
 import { formatData } from '@utils'
 
-  const getAvatar = data => {
-  if (data.avatar && data.avatar.includes("http")) {
-    return <Avatar className='me-1' img={data.avatar} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={data.name}
-      />
-    )
-  }
-  }
-
-// ** Renders Client Columns
-
-
-export const columns = (users, stores) => {
-
-  const getMasterInfo = id => {
-    const foundMaster = waiters.find(item => item.id === id)
-    if (!foundMaster) return {name: "", avatar: ""}
-    return {name: foundMaster.master_name ? `${foundMaster.master_name} ${foundMaster.surname ? foundMaster.surname : ''}` : '', avatar: foundMaster.master_profile_picture}
-    }
-    
-    const getUserInfo = id => {
-      const foundUser = users.find(item => item.id === id)
-      if (!foundUser) return {name: "User", avatar: ""}
-      return {name: `${foundUser.name ? foundUser.name : 'Customer'} ${foundUser.surname ? foundUser.surname : foundUser.id}`, avatar: foundUser.avatar }
-    }
-
-  const renderClient = (id, type) => {
-    let data = {}
-    if (type === "master") data = getMasterInfo(id)
-    if (type === "user") data = getUserInfo(id)
-   
-    return (
-    <div className='d-flex justify-content-left align-items-center'>
-    {getAvatar(data)}
-    <div className='d-flex flex-column'>
-        <span className='fw-bolder'>{data.name}</span>
-    </div>
-  </div>
-    )
-  }
-
-  const renderStoore = (id) => {
-    if (!stores.length) return
+export const columns = (users, stores, userData, t) => {
+  const getStoreInfo = id => {
     const foundStore = stores.find(item => item.id === id)
-    return (
-      <div className='d-flex justify-content-left align-items-center'>
-      {getAvatar(foundStore)}  
-    <div className='d-flex flex-column ml3'>
-        <span className='fw-bolder'>{foundStore.name}</span>
-      <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
-    </div>
-  </div>
-    )
+    if (!foundStore) return {}
+    return foundStore
   }
+  const getUserInfo = id => {
+    const foundUser = users.find(item => item.id === id)
+    if (!foundUser) return {}
+    return foundUser
+  }
+  // const getMasterInfo = id => {
+  //   const foundMaster = waiters.find(item => item.id === id)
+  //   if (!foundMaster) return {name: "", avatar: ""}
+  //   return {name: foundMaster.master_name ? `${foundMaster.master_name} ${foundMaster.surname ? foundMaster.surname : ''}` : '', avatar: foundMaster.master_profile_picture}
+  //   }
+    
+  //   const getUserInfo = id => {
+  //     const foundUser = users.find(item => item.id === id)
+  //     if (!foundUser) return {name: "User", avatar: ""}
+  //     return {name: `${foundUser.name ? foundUser.name : 'Customer'} ${foundUser.surname ? foundUser.surname : foundUser.id}`, avatar: foundUser.avatar }
+  //   }
+
+  // const renderClient = (id, type) => {
+  //   let data = {}
+  //   if (type === "master") data = getMasterInfo(id)
+  //   if (type === "user") data = getUserInfo(id)
+   
+  //   return (
+  //   <div className='d-flex justify-content-left align-items-center'>
+  //   {getAvatar(data)}
+  //   <div className='d-flex flex-column'>
+  //       <span className='fw-bolder'>{data.name}</span>
+  //   </div>
+  // </div>
+  //   )
+  // }
+
+  // const renderStoore = (id) => {
+  //   if (!stores.length) return
+  //   const foundStore = stores.find(item => item.id === id)
+  //   return (
+  //     <div className='d-flex justify-content-left align-items-center'>
+  //     {getAvatar(foundStore)}  
+  //   <div className='d-flex flex-column ml3'>
+  //       <span className='fw-bolder'>{foundStore.name}</span>
+  //     <small className='text-truncate text-muted mb-0'>{foundStore.business_address ? `${foundStore.business_address.city} ${foundStore.business_address.name}` : ""}</small>
+  //   </div>
+  // </div>
+  //   )
+  // }
 
   return [
   {
     name: '№',
     sortable: false,
     width: '50px',
-    selector: row => row,
     cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
   },
   {
-    name: 'Заведение',
+    name: t('store'),
     minWidth: '250px',
     sortable: true,
     sortField: 'business.id',
-    selector: row => row.business.id,
-    cell: row => renderStoore(row.business.id)
+    cell: row => renderClient(getStoreInfo(row.business.id), "store")
   },
   {
-    name: 'Рейтинг',
+    name: t('rating'),
     width: '142px',
     sortable: true,
     sortField: 'star',
-    selector: row => row.star,
     cell: row => (
       <Rating
         readonly
@@ -105,23 +93,22 @@ export const columns = (users, stores) => {
       />)
   },
   {
-    name: 'Отзыв',
-    minWidth: '300px',
+    name: t('review'),
+    minWidth: '180px',
     sortable: true,
     sortField: 'text',
     selector: row => row.text,
     cell: row => <span className='text-capitalize'>{row.text}</span>
   },
   {
-    name: 'Клиент',
-    minWidth: '150px',
+    name: t('customer'),
+    minWidth: '180px',
     sortable: true,
     sortField: 'user.id',
-    selector: row => row.user,
-    cell: row => renderClient(row.user.id, "user")
+    cell: row => renderClient(getUserInfo(row.user.id), "user")
   },
   {
-    name: 'Дата',
+    name: t('Date'),
     width: '120px',
     sortable: true,
     sortField: 'date',

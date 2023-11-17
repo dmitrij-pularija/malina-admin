@@ -398,9 +398,13 @@
     "nameFeedback": "Пожалуйста введите название"
   },  
   "Staff": "Персонал",
+  "rewards": "Отзывы",
   "Reviews about Specialties": "о специалистах",
+  "ReviewsMastersTiile": "Отзывы о сециалистах",
   "Order Beauty Feedback": "о заказах",
+  "ReviewsBeautyOrdersTiile": "Отзывы о заказах",
   "Beauty Complaints": "о услугах",
+  "BeautyComplaintsTitle": "Отзывы о услугах",
   "Services": "Услуги",
   "Master": "Специалист",  
   "masterPlaceholder": "Выберите специалиста",

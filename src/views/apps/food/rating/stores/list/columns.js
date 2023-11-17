@@ -8,13 +8,13 @@ export const columns = (users, stores, userData, t) => {
 
   const getUserInfo = id => {
     const foundUser = users.find(item => item.id === id)
-    if (!foundUser) return {}
+    if (!foundUser) return ""
     return foundUser
   }
 
   const getStoreInfo = id => {
     const foundStore = stores.find(item => item.id === id)
-    if (!foundStore) return {}
+    if (!foundStore) return ""
     return foundStore
   }
   

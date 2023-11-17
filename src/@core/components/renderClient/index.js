@@ -82,8 +82,6 @@ if (type === "beautyProductCategory") name = data.category_name ? data.category_
 if (type === "beautyServiceCategory") name = data.category_name ? data.category_name : "Category"
 if (type === "beautySpecialty") name = data.specialty_name ? data.specialty_name : "Specialty"
 
-
-
   return (
     <Link
     to={redirectLink}
