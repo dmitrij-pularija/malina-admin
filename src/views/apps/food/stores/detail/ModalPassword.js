@@ -11,7 +11,7 @@ import InputPassword from "@components/input-password-toggle"
 import "@styles/react/apps/app-users.scss"
 import "@styles/base/pages/app-ecommerce-details.scss"
 
-const ModalPassword = ({isOpen, toggle, onChange, chengPassword, passwords, passwordsMatch }) => {
+const ModalPassword = ({isOpen, toggle, onChange, chengPassword, passwords, passwordsMatch, t }) => {
 
 
   return (
@@ -31,7 +31,7 @@ const ModalPassword = ({isOpen, toggle, onChange, chengPassword, passwords, pass
       >
         <div className="mb-1">
           <Label className="form-label" for="new-password">
-            Пароль
+          {t('password')}
           </Label>
           <InputPassword
             className="input-group-merge"
@@ -48,7 +48,7 @@ const ModalPassword = ({isOpen, toggle, onChange, chengPassword, passwords, pass
             for="confirmPassword"
             name="confirmPassword"
           >
-            Подтвердите пароль
+            {t('confirmPassword')}
           </Label>
           <InputPassword
             className="input-group-merge"
@@ -59,12 +59,12 @@ const ModalPassword = ({isOpen, toggle, onChange, chengPassword, passwords, pass
             invalid={!passwordsMatch && true}
           />
           {!passwordsMatch && (
-            <FormFeedback>Введенные пароли не совпадают</FormFeedback>
+            <FormFeedback>{t('passwordFeedback')}</FormFeedback>
           )}
         </div>
 
         <Button color="primary" block>
-          Сохранить пароль
+        {t('passwordSave')}
         </Button>
       </Form>
     </ModalBody>

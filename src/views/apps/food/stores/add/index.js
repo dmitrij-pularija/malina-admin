@@ -1,4 +1,5 @@
 import { useEffect, Fragment } from "react"
+import { useTranslation } from 'react-i18next'
 import StoreDetails from "../detail/StoreDetails"
 import BreadCrumbs from "@components/breadcrumbs"
 import Loading from '../../../../../../src/@core/components/spinner/Loading'
@@ -10,6 +11,7 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 
 const Details = () => {
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const categories = useSelector((state) => state.categories.allCategories)
   const subcategories = useSelector((state) => state.categories.subcategories)
 
@@ -22,11 +24,10 @@ const Details = () => {
     <>
     <Fragment>
       <BreadCrumbs
-        title="Создание заведения"
+        title={t('StoreData.titleAdd')}
         data={[
-          { title: "Структура" },
-          { title: "Заведения" },
-          { title: "Создание" }
+          { title: t('Store') },
+          { title: t('StoreData.titleAdd1') }
         ]}
       />
       <div className="app-ecommerce-details">
@@ -34,6 +35,7 @@ const Details = () => {
           <CardBody>
             {categories.length && subcategories.length && (
               <StoreDetails
+                t={t}
                 categories={categories}
                 subcategories={subcategories}
                 selectedStore={null}

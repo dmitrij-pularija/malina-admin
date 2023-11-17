@@ -33,7 +33,7 @@ const defaultValues = {
 const requiredFields = ["timeBeg", "timeEnd"]
 
 
-const ModalІShifts = ({isOpen, toggle, business }) => {
+const ModalІShifts = ({isOpen, toggle, business, t }) => {
   // const dispatch = useDispatch()
   const [shifts, setShifts] = useState([])
   const [selectedShifts, setSelectedShifts] = useState('')
@@ -127,7 +127,7 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
       cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
     },
     {
-      name: 'Начало',
+      name: t('StoreData.startTime'),
       minWidth: '70px',
       sortable: true,
       sortField: 'start_time',
@@ -135,7 +135,7 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
       cell: row => <span className='text-capitalize'>{formatStringTime(row.start_time)}</span>
     },
     {
-      name: 'Конец',
+      name: t('StoreData.endTime'),
       minWidth: '70px',
       sortable: true,
       sortField: 'end_time',
@@ -143,7 +143,7 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
       cell: row => <span className='text-capitalize'>{formatStringTime(row.end_time)}</span>
     },
     {
-      name: 'Описание',
+      name: t('descriptionLabel'),
       minWidth: '150px',
       sortable: true,
       sortField: 'description',
@@ -151,8 +151,8 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
       cell: row => <span className='text-capitalize'>{row.description}</span>
     },
     {
-      name: 'Действия',
-      minWidth: '80px',
+      name: t('action'),
+      width: '120px',
       cell: row => (
         <div className='column-action d-flex align-items-center p-0'>
           <Button.Ripple 
@@ -163,7 +163,7 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
           <Edit size={17} className='mx-1' />
           </Button.Ripple>
           <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
-            Редактировать
+          {t('edit')}
           </UncontrolledTooltip>
           <Button.Ripple 
           className='btn-icon cursor-pointer p-0' 
@@ -173,7 +173,7 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
             <Trash2 size={17} className='mx-1' />
           </Button.Ripple>
           <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
-            Удалить
+          {t('delete')}
           </UncontrolledTooltip>
         </div>
       )
@@ -195,7 +195,7 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
       <Row className="d-flex justify-content-center align-items-end gap-10">
        <Col md={4} >
                 <Label className="form-label" for="timeBeg">
-                  Время работы<span className="text-danger">*</span>
+                {t('StoreData.workTime')}<span className="text-danger">*</span>
                 </Label>
                 <div className="d-flex justify-content-center align-items-center gap-10">
                   <div>
@@ -252,12 +252,12 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
                       )}
                     />
                   </div>
-                  {(errors && errors.timeBeg) && (<FormFeedback id='ffb'>Пожалуйста введите время работы</FormFeedback>)}
+                  {(errors && errors.timeBeg) && (<FormFeedback id='ffb'>{t('StoreData.workTimeFeedback')}</FormFeedback>)}
                 </div>
               </Col>
               <Col md={4} >
                 <Label className="form-label" for="name">
-                  Описание
+                {t('descriptionLabel')}
                 </Label>
                 <Controller
                   name="description"
@@ -273,12 +273,12 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
                   )}
                 />
                 {errors && errors.description && (
-                  <FormFeedback>Пожалуйста введите описание</FormFeedback>
+                  <FormFeedback>{t('descriptionFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col md={3} className="d-flex justify-content-center align-items-end">
               <Button type="submit" color="primary" >
-              {selectedShifts ? "Изменить" : "Добавить"}
+              {selectedShifts ? t('StoreData.edit') : t('Add')}
               </Button>
               </Col>
           </Row>
@@ -294,7 +294,7 @@ const ModalІShifts = ({isOpen, toggle, business }) => {
           data={shifts}
           className='react-dataTable'
           sortIcon={<ChevronDown size={10} />}
-          noDataComponent={<h6 className='text-capitalize'>Смены не найдены</h6>}
+          noDataComponent={<h6 className='text-capitalize'>{t('notFound')}</h6>}
         />
       </div>
     </ModalBody>

@@ -141,7 +141,7 @@ const renderLogo = (avatar, name) => {
 const Store = (props) => {
   const dispatch = useDispatch()
   const navigate = useNavigate()
-  const { userData, selectedStore, categories, subcategories } = props
+  const { userData, selectedStore, categories, subcategories, t } = props
 
   const businessTypeOptions = Object.keys(businessType).map((key) => ({
     value: parseInt(key),
@@ -359,8 +359,8 @@ const Store = (props) => {
   }
 
   const handleBusinessChange = (selectedOption) => {
-    setValue("category", { value: "", label: "Выбирите категорию" })
-    setValue("subcategory", { value: "", label: "Выбирите подкатегорию" })
+    setValue("category", { value: "", label: t('categoryPlaceholder') })
+    setValue("subcategory", { value: "", label: t('subcategoryPlaceholder') })
     const filteredCategories = categories.filter(
       (category) => parseInt(category.category_type) === parseInt(selectedOption.value)
     )
@@ -374,7 +374,7 @@ const Store = (props) => {
   }
 
   const handleCategoryChange = (selectedOption) => {
-    setValue("subcategory", { value: "", label: "Выбирите подкатегорию" })
+    setValue("subcategory", { value: "", label: t('subcategoryPlaceholder') })
     const filteredSubCategories = subcategories.filter(
       (subcategory) => parseInt(subcategory.category) === parseInt(selectedOption.value)
     )
@@ -465,7 +465,7 @@ const Store = (props) => {
                       size="sm"
                       color="primary"
                     >
-                      Загрузить
+                    {t('download')}
                       <Input
                         type="file"
                         onChange={handleImg}
@@ -480,14 +480,14 @@ const Store = (props) => {
                       outline
                       onClick={handleImgReset}
                     >
-                      Очистить
+                      {t('clear')}
                     </Button>
                   </div>
                 </div>
               </Col>
               <Col className="mt-4">
                 <Label className="form-label" for="business">
-                  Направление деятельности<span className="text-danger">*</span>
+                {t('StoreData.businessLabel')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="business"
@@ -503,7 +503,7 @@ const Store = (props) => {
                       classNamePrefix="select"
                       options={businessTypeOptions}
                       theme={selectThemeColors}
-                      placeholder="Выберите направление"
+                      placeholder={t('StoreData.businessPlaceholder')}
                       className={classnames("react-select", {
                         "is-invalid": errors.business && true
                       })}
@@ -512,13 +512,13 @@ const Store = (props) => {
                 />
                 {errors && errors.business && (
                   <FormFeedback>
-                    Пожалуйста выберите направление деятельности
+                    {t('StoreData.businessFeedback')}
                   </FormFeedback>
                 )}
               </Col>
               <Col>
                 <Label className="form-label" for="category">
-                  Категория <span className="text-danger">*</span>
+                {t('Category')} <span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="category"
@@ -535,7 +535,7 @@ const Store = (props) => {
                       options={categoryOptions}
                       theme={selectThemeColors}
                       onChange={handleCategoryChange}
-                      placeholder="Выберите категорию"
+                      placeholder={t('categoryPlaceholder')}
                       className={classnames("react-select", {
                         "is-invalid": errors.category && true
                       })}
@@ -543,12 +543,12 @@ const Store = (props) => {
                   )}
                 />
                 {errors && errors.category && (
-                  <FormFeedback>Пожалуйста выберите категорию</FormFeedback>
+                  <FormFeedback>{t('categoryFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col>
                 <Label className="form-label" for="subcategory">
-                  Подкатегория
+                {t('subcategoryLabel')}
                 </Label>
                 <Controller
                   name="subcategory"
@@ -561,7 +561,7 @@ const Store = (props) => {
                       classNamePrefix="select"
                       options={subcategoryOptions}
                       theme={selectThemeColors}
-                      placeholder="Выберите подкатегорию"
+                      placeholder={t('subcategoryPlaceholder')}
                       className={classnames("react-select", {
                         "is-invalid": errors.subcategory && true
                       })}
@@ -569,10 +569,13 @@ const Store = (props) => {
                     />
                   )}
                 />
+                {errors && errors.subcategory && (
+                  <FormFeedback>{t('subcategoryFeedback')}</FormFeedback>
+                )}
               </Col>
               <Col>
                 <Label className="form-label" for="priceLevel">
-                  Уровень цен
+                {t('StoreData.priceLevelLabel')}
                 </Label>
                 <Controller
                   name="priceLevel"
@@ -584,7 +587,7 @@ const Store = (props) => {
                       classNamePrefix="select"
                       options={priceLevelOptions}
                       theme={selectThemeColors}
-                      placeholder="Уровень цен"
+                      placeholder={t('StoreData.priceLevelPlaceholder')}
                       className={classnames("react-select", {
                         "is-invalid": errors.priceLevel && true
                       })}
@@ -592,10 +595,13 @@ const Store = (props) => {
                     />
                   )}
                 />
+                       {errors && errors.priceLevel && (
+                  <FormFeedback>{t('StoreData.priceLevelFeedback')}</FormFeedback>
+                )}
                 </Col>
                 <Col>
                   <Label className="form-label" for="avgcheck">
-                    Средний чек, &#x0441;&#x332;
+                  {t('StoreData.avgcheckLabel')}&#x0441;&#x332;
                   </Label>
                   <Controller
                     name="avgcheck"
@@ -606,14 +612,14 @@ const Store = (props) => {
                         name="avgcheck"
                         id="avgcheck"
                         type="number"
-                        placeholder="0"
+                        placeholder=""
                         invalid={errors.avgcheck && true}
                         {...field}
                       />
                     )}
                   />
                   {errors && errors.avgcheck && (
-                    <FormFeedback>Пожалуйста введите cредний чек</FormFeedback>
+                    <FormFeedback>{t('StoreData.avgcheckFeedback')}</FormFeedback>
                   )}
               {/* </Col>
               <Col> */}
@@ -654,7 +660,7 @@ const Store = (props) => {
             <Col md={4} className="d-flex flex-column p-1">
               <Col>
                 <Label className="form-label" for="name">
-                  Название<span className="text-danger">*</span>
+                {t('StoreData.nameLabel')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="name"
@@ -663,19 +669,19 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="name"
-                      placeholder="Введите название заведения"
+                      placeholder={t('StoreData.namePlaceholder')}
                       invalid={errors.name && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.name && (
-                  <FormFeedback>Пожалуйста введите название</FormFeedback>
+                  <FormFeedback>{t('StoreData.nameFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col>
                 <Label className="form-label" for="email">
-                  Email
+                {t('Email')}
                 </Label>
                 <Controller
                   name="email"
@@ -684,19 +690,19 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="email"
-                      placeholder="Введите email"
+                      placeholder={t('EmailPlaceholder')}
                       invalid={errors.email && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.email && (
-                  <FormFeedback>Пожалуйста введите email</FormFeedback>
+                  <FormFeedback>{t('EmailFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col>
                 <Label className="form-label" for="phone">
-                  Телефон
+                {t('phone')}
                 </Label>
                 <Controller
                   name="phone"
@@ -705,19 +711,19 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="phone"
-                      placeholder="Введите телефон"
+                      placeholder={t('phonePlaceholder')}
                       invalid={errors.phone && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.phone && (
-                  <FormFeedback>Пожалуйста введите телефон</FormFeedback>
+                  <FormFeedback>{t('phoneFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col>
                 <Label className="form-label" for="login">
-                  Логин<span className="text-danger">*</span>
+                {t('loginLabel')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="login"
@@ -726,22 +732,22 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="login"
-                      placeholder="Введите логин"
+                      placeholder={t('loginPlaceholder')}
                       invalid={errors.login && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.login && (
-                  <FormFeedback>Пожалуйста введите логин</FormFeedback>
+                  <FormFeedback>{t('loginPlaceholder')}</FormFeedback>
                 )}
               </Col>
                 <Button className="mt-1 mb-1" color="warning" block onClick={toggleModal}>
-                Введите пароль<span className="text-danger">*</span>
+                {t('password')}<span className="text-danger">*</span>
                 </Button>
               <Col className="mt-0">
                 <Label className="form-label" for="instagram">
-                  Инстаграм
+                {t('StoreData.instagramLabel')}
                 </Label>
                 <InputGroup className="input-group-merge">
                   <InputGroupText>
@@ -761,7 +767,7 @@ const Store = (props) => {
                       <Input
                         {...field}
                         id="instagram"
-                        placeholder="Инстаграм"
+                        placeholder={t('StoreData.instagramPlaceholder')}
                       />
                     )}
                   />
@@ -769,7 +775,7 @@ const Store = (props) => {
               </Col>
               <Col>
                 <Label className="form-label" for="whatsapp">
-                  WhatsApp
+                {t('StoreData.whatsappLabel')}
                 </Label>
                 <InputGroup className="input-group-merge">
                   <InputGroupText>
@@ -786,14 +792,14 @@ const Store = (props) => {
                     control={control}
                     rules={{ required: false }}
                     render={({ field }) => (
-                      <Input {...field} id="whatsapp" placeholder="WhatsApp" />
+                      <Input {...field} id="whatsapp" placeholder={t('StoreData.whatsappPlaceholder')} />
                     )}
                   />
                 </InputGroup>
               </Col>
               <Col>
                 <Label className="form-label" for="telegram">
-                  Телеграм
+                {t('StoreData.telegramLabel')}
                 </Label>
                 <InputGroup className="input-group-merge">
                   <InputGroupText>
@@ -810,7 +816,7 @@ const Store = (props) => {
                     control={control}
                     rules={{ required: false }}
                     render={({ field }) => (
-                      <Input {...field} id="telegram" placeholder="Телеграм" />
+                      <Input {...field} id="telegram" placeholder={t('StoreData.telegramPlaceholder')} />
                     )}
                   />
                 </InputGroup>
@@ -818,7 +824,7 @@ const Store = (props) => {
               <Col className="d-flex justify-content-center gap-30 mt-1">
                 <div>
                   <Label className="form-label" for="percentage">
-                    Скидка
+                  {t('Discount')}
                   </Label>
                   <Controller
                     name="percentage"
@@ -842,7 +848,7 @@ const Store = (props) => {
                 </div>
                 <div>
                   <Label className="form-label" for="percentService">
-                    Обслуживание
+                  {t('StoreData.percentService')}
                   </Label>
                   <Controller
                     name="percentService"
@@ -876,7 +882,7 @@ const Store = (props) => {
             )}
           />
           <Label className='form-label' for='isStaff'>
-          Персонал
+          {t('StoreData.isStaff')}
           </Label>
         </div>
           </Col>
@@ -884,7 +890,7 @@ const Store = (props) => {
             <Col md={4} className="d-flex flex-column p-1">
               <Col>
                 <Label className="form-label" for="city">
-                  Город<span className="text-danger">*</span>
+                {t('City')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="city"
@@ -893,19 +899,19 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="city"
-                      placeholder="Введите город"
+                      placeholder={t('cityPlaceholder')}
                       invalid={errors.city && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.city && (
-                  <FormFeedback>Пожалуйста введите город</FormFeedback>
+                  <FormFeedback>{t('cityFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col>
                 <Label className="form-label" for="address">
-                  Адрес<span className="text-danger">*</span>
+                {t('Address')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="address"
@@ -914,19 +920,19 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="address"
-                      placeholder="Введите адрес"
+                      placeholder={t('addressPlaceholder')}
                       invalid={errors.address && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.address && (
-                  <FormFeedback>Пожалуйста введите адрес</FormFeedback>
+                  <FormFeedback>{t('addressFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col>
                 <Label className="form-label" for="longitude">
-                  Долгота<span className="text-danger">*</span>
+                {t('longitude')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="longitude"
@@ -936,19 +942,19 @@ const Store = (props) => {
                     <Input
                       disabled
                       id="longitude"
-                      placeholder="Введите долготу"
+                      placeholder={t('longitudePlaceholder')}
                       invalid={errors.longitude && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.longitude && (
-                  <FormFeedback>Пожалуйста введите долготу</FormFeedback>
+                  <FormFeedback>{t('longitudeFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col>
                 <Label className="form-label" for="latitude">
-                  Широта<span className="text-danger">*</span>
+                {t('latitude')}<span className="text-danger">*</span>
                 </Label>
                 <Controller
                   name="latitude"
@@ -958,24 +964,24 @@ const Store = (props) => {
                     <Input
                       disabled
                       id="latitude"
-                      placeholder="Введите широту"
+                      placeholder={t('latitudePlaceholder')}
                       invalid={errors.latitude && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.latitude && (
-                  <FormFeedback>Пожалуйста введите широту</FormFeedback>
+                  <FormFeedback>{t('latitudeFeedback')}</FormFeedback>
                 )}
               </Col>
               <Col className="mt-1">
                 <Button color="info" block onClick={() => toggleMap()}>
-                  Выбрать на карте
+                {t('SelectOnMap')}
                 </Button>
               </Col>
               <Col>
                 <Label className="form-label mt-2" for="timeBeg">
-                  Время работы
+                {t('StoreData.workTime')}
                 </Label>
                 <div className="d-flex justify-content-center align-items-center gap-10">
                   <div>
@@ -1029,7 +1035,7 @@ const Store = (props) => {
               
           <Col>
                 <Label className="form-label" for="adminTelegram">
-                  Телеграм ID
+                {t('StoreData.telegramIdLabel')}
                 </Label>
                 <Controller
                   name="adminTelegram"
@@ -1038,14 +1044,14 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="adminTelegram"
-                      placeholder="Введите Телеграм ID"
+                      placeholder={t('StoreData.telegramIdPlaceholder')}
                       invalid={errors.adminTelegram && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.adminTelegram && (
-                  <FormFeedback>Введите пожалуйста Телеграм ID</FormFeedback>
+                  <FormFeedback>{t('StoreData.telegramIdFeedback')}</FormFeedback>
                 )}
               </Col>
           <div className="d-flex flex-column justify-content-between h-100">         
@@ -1068,13 +1074,13 @@ const Store = (props) => {
             )}
           />
           <Label className='form-label' for='isCardPaymentAllow'>
-          Есть безналичная оплата
+          {t('StoreData.isCardPaymentAllow')}
           </Label>
         </div>
         </Col>
         {cardPaymentAllow && <Col>
                 <Label className="form-label" for="merchantId">
-                  Id Merchant
+                {t('StoreData.merchantIdLabel')}
                 </Label>
                 <Controller
                   name="merchantId"
@@ -1083,19 +1089,19 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="merchantId"
-                      placeholder="Введите Merchant Id магазина"
+                      placeholder={t('StoreData.merchantIdPlaceholder')}
                       invalid={errors.merchantId && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.merchantId && (
-                  <FormFeedback>Пожалуйста Merchant Id магазина</FormFeedback>
+                  <FormFeedback>{t('StoreData.merchantIdFeedback')}</FormFeedback>
                 )}
               </Col>} 
         {cardPaymentAllow && <Col>
                 <Label className="form-label" for="secretKey">
-                  Secret Key
+                {t('StoreData.secretKeyLabel')}
                 </Label>
                 <Controller
                   name="secretKey"
@@ -1104,14 +1110,14 @@ const Store = (props) => {
                   render={({ field }) => (
                     <Input
                       id="secretKey"
-                      placeholder="Введите Secret Key магазина"
+                      placeholder={t('StoreData.secretKeyPlaceholder')}
                       invalid={errors.secretKey && true}
                       {...field}
                     />
                   )}
                 />
                 {errors && errors.secretKey && (
-                  <FormFeedback>Пожалуйста Secret Key магазина</FormFeedback>
+                  <FormFeedback>{t('StoreData.secretKeyFeedback')}</FormFeedback>
                 )}
               </Col>}
               </div>          
@@ -1121,7 +1127,7 @@ const Store = (props) => {
         <Row>
           <Col className="d-flex flex-column mt-2" sm="12">
             <Label className="form-label" for="slogan">
-              Слоган
+            {t('StoreData.sloganLabel')}
             </Label>
             <Controller
               name="slogan"
@@ -1130,19 +1136,19 @@ const Store = (props) => {
               render={({ field }) => (
                 <Input
                   id="slogan"
-                  placeholder="Введите слоган"
+                  placeholder={t('StoreData.sloganPlaceholder')}
                   invalid={errors.slogan && true}
                   {...field}
                 />
               )}
             />
             {errors && errors.slogan && (
-              <FormFeedback>Пожалуйста введите слоган</FormFeedback>
+              <FormFeedback>{t('StoreData.sloganFeedback')}</FormFeedback>
             )}
           </Col>
           <Col className="d-flex flex-column mt-2" sm="12">
             <Label className="form-label" for="description">
-              Описание
+            {t('descriptionLabel')}
             </Label>
             <Controller
               name="description"
@@ -1152,37 +1158,37 @@ const Store = (props) => {
                 <Input
                   id="description"
                   type="textarea"
-                  placeholder="Введите описание"
+                  placeholder={t('descriptionPlaceholder')}
                   invalid={errors.description && true}
                   {...field}
                 />
               )}
             />
             {errors && errors.description && (
-              <FormFeedback>Пожалуйста введите описание</FormFeedback>
+              <FormFeedback>{t('descriptionFeedback')}</FormFeedback>
             )}
           </Col>
           <Col className="d-flex justify-content-center mt-2 gap-10" sm="12">
             <Button type="submit" color="primary">
-              Сохранить
+            {t('save')}
             </Button>
             <Button color="secondary" outline onClick={handleClose}>
-              Отменить
+            {t('cancel')}
             </Button>
             {selectedStore && <><Button color="secondary" outline onClick={toggleModalShifts}>
-              Смены
+            {t('StoreData.Shifts')}
             </Button>
             <Button color="secondary" outline onClick={toggleModalDelivery}>
-              Тарифы доставки
+            {t('StoreData.DeliveryTarif')}
             </Button>
             </>}
           </Col>
         </Row>
       </Form>
       <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedAddres={selectedStore && selectedStore.business_address ? selectedStore.business_address : null} />
-      <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} />
-      <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} business={selectedStore ? selectedStore.id : ''} />
-      <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : ''}/>
+      <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} t={t} />
+      <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} business={selectedStore ? selectedStore.id : ''} t={t} />
+      <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : ''} t={t} />
     </>
   )
 }

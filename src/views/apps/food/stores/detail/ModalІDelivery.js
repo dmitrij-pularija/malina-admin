@@ -32,7 +32,7 @@ const defaultValues = {
 const requiredFields = ["radius", "price"]
 
 
-const ModalІDelivery = ({isOpen, toggle, business }) => {
+const ModalІDelivery = ({isOpen, toggle, business, t }) => {
   // const dispatch = useDispatch()
   const [deliveryTariffs, setDeliveryTariffs] = useState([])
   const [selectedDelivery, setSelectedDelivery] = useState('')
@@ -111,12 +111,12 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
     {
       name: '№',
       sortable: false,
-      minWidth: '10px',
+      width: '50px',
       selector: row => row,
       cell: (row, index) => <span className='text-capitalize'>{index + 1}</span>
     },
     {
-      name: 'Радиус, м',
+      name: t('StoreData.DeliveryRadius'),
       minWidth: '100px',
       sortable: true,
       sortField: 'radius',
@@ -124,7 +124,7 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
       cell: row => <span className='text-capitalize'>{formatNumberInt(row.radius)}</span>
     },
     {
-      name: (<span dangerouslySetInnerHTML={{ __html: "Цена, &#x0441;&#x332;" }} />),
+      name: (<span dangerouslySetInnerHTML={{ __html: `${t('StoreData.DeliveryCost')} &#x0441;&#x332;` }} />),
       minWidth: '100px',
       sortable: true,
       sortField: 'price',
@@ -132,8 +132,8 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
       cell: row => <span className='text-capitalize'>{formatNumber(row.price)}</span>
     },
     {
-      name: 'Действия',
-      minWidth: '80px',
+      name: t('action'),
+      width: '120px',
       cell: row => (
         <div className='column-action d-flex align-items-center p-0'>
           <Button.Ripple 
@@ -144,7 +144,7 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
           <Edit size={17} className='mx-1' />
           </Button.Ripple>
           <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
-            Редактировать
+          {t('edit')}
           </UncontrolledTooltip>
           <Button.Ripple 
           className='btn-icon cursor-pointer p-0' 
@@ -154,7 +154,7 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
             <Trash2 size={17} className='mx-1' />
           </Button.Ripple>
           <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
-            Удалить
+          {t('delete')}
           </UncontrolledTooltip>
         </div>
       )
@@ -177,7 +177,7 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
       <Col className="d-flex justify-content-between gap-30">
                 <div>
                   <Label className="form-label" for="radius">
-                  Радиус доставки, м
+                  {t('StoreData.DeliveryRadius')}
                   </Label>
                   <Controller
                     name="radius"
@@ -196,13 +196,13 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
                   />
                   {errors && errors.radius && (
                     <FormFeedback>
-                      Пожалуйста введите радиус доставки
+                      {t('StoreData.DeliveryRadiusFeedback')}
                     </FormFeedback>
                   )}
                 </div>
                 <div>
                   <Label className="form-label" for="price">
-                    Стоимость, &#x0441;&#x332;
+                  {t('StoreData.priceLabel')} &#x0441;&#x332;
                   </Label>
                   <Controller
                     name="price"
@@ -220,13 +220,13 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
                     )}
                   />
                   {errors && errors.price && (
-                    <FormFeedback>Пожалуйста введите стоимость доставки</FormFeedback>
+                    <FormFeedback>{t('StoreData.priceFeedback')}</FormFeedback>
                   )}
                 </div>
               </Col>
               <Col md={3} className="d-flex justify-content-center align-items-end">
               <Button type="submit" color="primary" >
-              {selectedDelivery ? "Изменить" : "Добавить"}
+              {selectedDelivery ? t('Edit') : t('Add')}
               </Button>
               </Col>
           </Row>
@@ -242,7 +242,7 @@ const ModalІDelivery = ({isOpen, toggle, business }) => {
           data={deliveryTariffs}
           className='react-dataTable'
           sortIcon={<ChevronDown size={10} />}
-          noDataComponent={<h6 className='text-capitalize'>Цены доставки не найдены</h6>}
+          noDataComponent={<h6 className='text-capitalize'>{t('notFound')}</h6>}
         />
       </div>
     </ModalBody>

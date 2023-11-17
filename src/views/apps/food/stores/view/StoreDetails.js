@@ -61,7 +61,7 @@ import {
   }
 
   const StoreDetails = (props) => {
-    const { categories, subcategories, selectedStore, toggleModalDelivery, toggleModalShifts } = props
+    const { categories, subcategories, selectedStore, toggleModalDelivery, toggleModalShifts, t  } = props
     const navigate = useNavigate()
     const handleEdit = () => navigate(`/apps/food/stores/store-detail/${selectedStore.id}`)
 
@@ -97,7 +97,7 @@ import {
                   />
                   </li>
                   <li className='mb-75'>
-                    <span className='fw-bolder me-25'>Слоган:</span>
+                    <span className='fw-bolder me-25'>{t('StoreData.sloganLabel')}:</span>
                     <span>{selectedStore.slogan ? selectedStore.slogan : ""}</span>
                     </li>
                 </ul>
@@ -109,47 +109,47 @@ import {
     <Col sm={4} className='d-flex flex-column align-items-center justify-content-center' >
     <ul className='list-unstyled'>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Логин:</span>
+    <span className='fw-bolder me-25'>{t('loginLabel')}:</span>
     <span>{selectedStore.login ? selectedStore.login : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Email:</span>
+    <span className='fw-bolder me-25'>{t('Email')}:</span>
     <span>{selectedStore.email ? selectedStore.email : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Телефон:</span>
+    <span className='fw-bolder me-25'>{t('phone')}:</span>
     <span>{selectedStore.phone ? selectedStore.phone : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Телеграмм:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.telegramLabel')}:</span>
     <span>{selectedStore.telegram ? selectedStore.telegram : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Instagram:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.instagramLabel')}:</span>
     <span>{selectedStore.instagram ? selectedStore.instagram : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Whatsapp:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.whatsappLabel')}:</span>
     <span>{selectedStore.whatsapp ? selectedStore.whatsapp : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Бизнес:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.businessLabel')}:</span>
     <span>{selectedStore.business_type  ? businessType[selectedStore.business_type] : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Категория:</span>
+    <span className='fw-bolder me-25'>{t('Category')}:</span>
     <span>{getValue(selectedStore.category, categories)}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Подкатегория:</span>
+    <span className='fw-bolder me-25'>{t('subcategoryLabel')}:</span>
     <span>{getValue(selectedStore.subcategory, subcategories)}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Уровень цен:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.priceLevelLabel')}:</span>
     <span>{selectedStore.price_level ? priceLevels[selectedStore.price_level] : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Средний чек:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.avgcheckLabel')}:</span>
     <span dangerouslySetInnerHTML={{ __html: selectedStore.average_check ? `${formatNumber(selectedStore.average_check)} &#x0441;&#x332;` : "" }} />
     </li>
     </ul>
@@ -157,43 +157,43 @@ import {
     <Col sm={4} className='d-flex flex-column align-items-center justify-content-center' >
     <ul className='list-unstyled'>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Адрес:</span>
+    <span className='fw-bolder me-25'>{t('Address')}:</span>
     <span>{selectedStore.business_address ? selectedStore.business_address.name : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Город:</span>
+    <span className='fw-bolder me-25'>{t('City')}:</span>
     <span>{selectedStore.business_address ? selectedStore.business_address.city : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Долгота:</span>
+    <span className='fw-bolder me-25'>{t('longitude')}:</span>
     <span>{selectedStore.business_address ? selectedStore.business_address.longitude : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Широта:</span>
+    <span className='fw-bolder me-25'>{t('latitude')}:</span>
     <span>{selectedStore.business_address ? selectedStore.business_address.latitude : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Время работы:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.workTime')}:</span>
     <span>{selectedStore.work_time_start ? formatStringTime(selectedStore.work_time_start) : ""} - {selectedStore.work_time_end ? formatStringTime(selectedStore.work_time_end) : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Скидка:</span>
+    <span className='fw-bolder me-25'>{t('Discount')}:</span>
     <span>{selectedStore.percentage ? `${selectedStore.percentage} %` : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Обслуживание:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.percentService')}:</span>
     <span>{selectedStore.service_charge ? `${selectedStore.service_charge} %` : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Телеграм ID:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.telegramIdLabel')}:</span>
     <span>{selectedStore.admin_telegram_id ? selectedStore.admin_telegram_id : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Id Merchant:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.merchantIdLabel')}:</span>
     <span>{selectedStore.merchant_id ? selectedStore.merchant_id : ""}</span>
     </li>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Secret Key:</span>
+    <span className='fw-bolder me-25'>{t('StoreData.secretKeyLabel')}:</span>
     <span>{selectedStore.pay_secret_key ? selectedStore.pay_secret_key : ""}</span>
     </li>
     <li className='mb-75'>
@@ -203,7 +203,7 @@ import {
         className='me-25' 
         checked={!!selectedStore.is_card_payment_allow} 
         />    
-    <span className='fw-bolder'>Есть безналичная оплата</span>
+    <span className='fw-bolder'>{t('StoreData.isCardPaymentAllow')}</span>
     </li>
     </ul>
     </Col>
@@ -212,7 +212,7 @@ import {
     <Col sm={12}>
     <ul className='list-unstyled'>
     <li className='mb-75'>
-    <span className='fw-bolder me-25'>Описание:</span>
+    <span className='fw-bolder me-25'>{t('descriptionLabel')}:</span>
     </li>
     <li className='mb-75'>
     <span>{selectedStore.description ? selectedStore.description : ""}</span>
@@ -223,13 +223,13 @@ import {
     <Row>
     <Col className="d-flex justify-content-center mt-2 gap-10" sm="12">
     <Button color="secondary" outline onClick={handleEdit}>
-    Изменить
+    {t('edit')}
     </Button>
     {selectedStore.business_type === 1 && <Button color="secondary" outline onClick={toggleModalShifts}>
-    Смены
+    {t('StoreData.Shifts')}
     </Button>}
     <Button color="secondary" outline onClick={toggleModalDelivery}>
-    Тарифы доставки
+    {t('StoreData.DeliveryTarif')}
     </Button>
     </Col>
     </Row>

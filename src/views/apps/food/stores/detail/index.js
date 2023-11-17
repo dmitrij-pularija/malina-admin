@@ -1,5 +1,6 @@
 import { useEffect, Fragment } from "react"
 import { useParams, Link } from "react-router-dom"
+import { useTranslation } from 'react-i18next'
 import StoreDetails from "./StoreDetails"
 import BreadCrumbs from "@components/breadcrumbs"
 import { Alert, Card, CardBody } from "reactstrap"
@@ -13,6 +14,7 @@ import "@styles/base/pages/app-ecommerce-details.scss"
 const Details = () => {
   const { id } = useParams()
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   const { selectedStore, loading} = useSelector(state => state.stores)
   const { userData } = useSelector(state => state.auth)
   // const store = useSelector((state) => state.stores.selectedStore)
@@ -28,12 +30,11 @@ const Details = () => {
   return (
     <Fragment>
       <BreadCrumbs
-        title="Информация о заведении"
-        data={[
-          { title: "Структура" },
-          { title: "Заведения" },
-          { title: "Информация" }
-        ]}
+         title={t('StoreData.titleEdit')}
+         data={[
+           { title: t('Store') },
+           { title: t('StoreData.titleEdit1') }
+         ]}
       />
       <div className="app-ecommerce-details">
         <Card>
@@ -41,6 +42,7 @@ const Details = () => {
             {selectedStore ? (
               <>
               <StoreDetails
+                t={t}
                 userData={userData}
                 categories={categories}
                 subcategories={subcategories}
@@ -50,11 +52,10 @@ const Details = () => {
               </>
             ) : (
               loading ? <Loading /> : <Alert color="danger">
-                <h4 className="alert-heading">Заведение не найдено</h4>
+                <h4 className="alert-heading">{t('StoreData.alert')}</h4>
                 <div className="alert-body">
-                  Информация о заведении с id: {id} не доступка. Проверьте
-                  список заведений:{" "}
-                  <Link to="/apps/food/stores/list">Список заведений</Link>
+                {t('StoreData.alertText1')} {id} {t('StoreData.alertText2')} {" "}
+                  <Link to="/apps/food/stores/list">{t('StoreData.alertText3')}</Link>
                 </div>
               </Alert>
             )}

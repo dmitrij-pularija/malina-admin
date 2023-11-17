@@ -1,6 +1,7 @@
 import { useEffect, useState, Fragment } from "react"
 import { useParams, Link } from 'react-router-dom'
 import { useSelector, useDispatch } from 'react-redux'
+import { useTranslation } from 'react-i18next'
 import { getStore } from "../store"
 import { getAllCategories, getSubCategories } from "../../categories/store"
 import { Card, CardBody, Alert } from 'reactstrap'
@@ -15,6 +16,7 @@ import '@styles/react/apps/app-users.scss'
 const StoreView = () => {
   const dispatch = useDispatch()
   const { id } = useParams()
+  const { t } = useTranslation()
   // const [modalPasswordsShow, setModalPasswordsShow] = useState(false)
   const [modalShiftsShow, setModalShiftsShow] = useState(false)
   const [modalDeliveryShow, setModalDeliveryShow] = useState(false)
@@ -35,12 +37,12 @@ const StoreView = () => {
   return (
     <Fragment>
       <BreadCrumbs
-        title="Информация о заведении"
+        title={t('StoreData.storeInfo')}
         data={[
-          { title: "Структура" },
-          { title: "Заведения" },
-          { title: "Информация" }
+          { title: t('Store') },
+          { title: t('StoreData.Info') }
         ]}
+
       />
       <div className="app-ecommerce-details">
         <Card>
@@ -48,6 +50,7 @@ const StoreView = () => {
             {selectedStore ? (
               <>
               <StoreDetails
+                t={t}
                 categories={categories}
                 subcategories={subcategories}
                 selectedStore={selectedStore}
@@ -58,11 +61,10 @@ const StoreView = () => {
               </>
             ) : (
               loading ? <Loading /> : <Alert color="danger">
-                <h4 className="alert-heading">Заведение не найдено</h4>
+               <h4 className="alert-heading">{t('StoreData.alert')}</h4>
                 <div className="alert-body">
-                  Информация о заведении с id: {id} не доступка. Проверьте
-                  список заведений:{" "}
-                  <Link to="/apps/food/stores/list">Список заведений</Link>
+                {t('StoreData.alertText1')} {id} {t('StoreData.alertText2')} {" "}
+                  <Link to="/apps/food/stores/list">{t('StoreData.alertText3')}</Link>
                 </div>
               </Alert>
             )}
@@ -70,8 +72,8 @@ const StoreView = () => {
         </Card>
       </div>
       {/* <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} /> */}
-      <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} business={selectedStore ? selectedStore.id : ''}/>
-      <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : ''}/>  
+      <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} business={selectedStore ? selectedStore.id : ''} t={t} />
+      <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : ''} t={t} />  
     </Fragment>
   )
   }
