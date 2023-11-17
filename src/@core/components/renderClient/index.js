@@ -77,6 +77,10 @@ if (type === "beautyProduct") {
   redirectLink = `/apps/beauty/products/products/edit/${data.id}`
   avatar = data.beauty_product_images && data.beauty_product_images.length ? data.beauty_product_images[0].image : ""
 }
+if (type === "storeCategory") {
+  name = data.name ?  data.name : "Category"
+  avatar = data.icon ? data.icon : ""
+}
 if (type === "productsCategory") name = data.name ? data.name : "Category"
 if (type === "beautyProductCategory") name = data.category_name ? data.category_name : "Category"
 if (type === "beautyServiceCategory") name = data.category_name ? data.category_name : "Category"

@@ -1,4 +1,5 @@
 import { Fragment, useState, useEffect } from 'react'
+import CustomHeader from '@components/customHeader'
 import Sidebar from './Sidebar'
 import  { columns } from './columns'
 import Select from 'react-select'
@@ -25,128 +26,7 @@ import {
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 
-const CustomHeader = ({ data, toggleSidebar, handlePerPage, rowsPerPage, handleFilter, searchTerm }) => {
-  function convertArrayOfObjectsToCSV(array) {
-    let result
-
-    const columnDelimiter = ','
-    const lineDelimiter = '\n'
-    const keys = Object.keys(data[0])
-
-    result = ''
-    result += keys.join(columnDelimiter)
-    result += lineDelimiter
-
-    array.forEach(item => {
-      let ctr = 0
-      keys.forEach(key => {
-        if (ctr > 0) result += columnDelimiter
-
-        result += item[key]
-
-        ctr++
-      })
-      result += lineDelimiter
-    })
-
-    return result
-  }
-
-  function downloadCSV(array) {
-    const link = document.createElement('a')
-    let csv = convertArrayOfObjectsToCSV(array)
-    if (csv === null) return
-
-    const filename = 'export.csv'
-
-    if (!csv.match(/^data:text\/csv/i)) {
-      csv = `data:text/csv;charset=utf-8,${csv}`
-    }
-
-    link.setAttribute('href', encodeURI(csv))
-    link.setAttribute('download', filename)
-    link.click()
-  }
-
-  return (
-    <div className='invoice-list-table-header w-100 me-1 ms-50 mt-2 mb-75'>
-      <Row>
-        <Col xl='6' className='d-flex align-items-center p-0'>
-          <div className='d-flex align-items-center w-100'>
-            <label htmlFor='rows-per-page'>Показать</label>
-            <Input
-              className='mx-50'
-              type='select'
-              id='rows-per-page'
-              value={rowsPerPage}
-              onChange={handlePerPage}
-              style={{ width: '5rem' }}
-            >
-              <option value='20'>20</option>
-              <option value='50'>50</option>
-              <option value='100'>100</option>
-            </Input>
-            <label htmlFor='rows-per-page'>записей</label>
-          </div>
-        </Col>
-        <Col
-          xl='6'
-          className='d-flex align-items-sm-center justify-content-xl-end justify-content-start flex-xl-nowrap flex-wrap flex-sm-row flex-column pe-xl-1 p-0 mt-xl-0 mt-1'
-        >
-          <div className='d-flex align-items-center mb-sm-0 mb-1 me-1'>
-            <label className='mb-0' htmlFor='search-invoice'>
-              Поиск:
-            </label>
-            <Input
-              id='search-invoice'
-              className='ms-50 w-100'
-              type='text'
-              value={searchTerm}
-              onChange={e => handleFilter(e.target.value)}
-            />
-          </div>
-
-          <div className='d-flex align-items-center table-header-actions'>
-            <UncontrolledDropdown className='me-1'>
-              <DropdownToggle color='secondary' caret outline>
-                <Share className='font-small-4 me-50' />
-                <span className='align-middle'>Export</span>
-              </DropdownToggle>
-              <DropdownMenu>
-                <DropdownItem className='w-100'>
-                  <Printer className='font-small-4 me-50' />
-                  <span className='align-middle'>Print</span>
-                </DropdownItem>
-                <DropdownItem className='w-100' onClick={() => downloadCSV(data)}>
-                  <FileText className='font-small-4 me-50' />
-                  <span className='align-middle'>CSV</span>
-                </DropdownItem>
-                <DropdownItem className='w-100'>
-                  <Grid className='font-small-4 me-50' />
-                  <span className='align-middle'>Excel</span>
-                </DropdownItem>
-                <DropdownItem className='w-100'>
-                  <File className='font-small-4 me-50' />
-                  <span className='align-middle'>PDF</span>
-                </DropdownItem>
-                <DropdownItem className='w-100'>
-                  <Copy className='font-small-4 me-50' />
-                  <span className='align-middle'>Copy</span>
-                </DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-
-            {/* <Button className='add-new-user' color='primary' onClick={toggleSidebar}>
-              Добавить
-            </Button> */}
-          </div>
-        </Col>
-      </Row>
-    </div>
-  )
-}
-
-const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
+const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar, t }) => {
   const dispatch = useDispatch()
   const { data, subcategories, total } = useSelector(state => state.categories)
   const [sort, setSort] = useState('+')
@@ -158,7 +38,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const [selectedCategory, setSelectedCategory] = useState('')
   const [selectedSubCategory, setSelectedSubCategory] = useState('')
   const [sortColumn, setSortColumn] = useState('name')
-  const [currentType, setCurrentType] = useState({ value: '', label: 'Выбирите тип' })
+  const [currentType, setCurrentType] = useState("")
   
   // const typeOptions = [
   //   { value: '', label: 'Показать все' },
@@ -170,7 +50,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
     value: parseInt(key),
     label: businessType[key]
   }))
-  typeOptions.unshift({ value: '', label: 'Показать все' })
+  typeOptions.unshift({ value: '', label: t('showAll') })
 
   // const toggleSidebar = () => setSidebarOpen(!sidebarOpen)
   const handleClose = () => {
@@ -202,7 +82,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   useEffect(() => {
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      category_type: currentType.value,
+      category_type: currentType ? currentType.value : "",
       search: searchTerm,
       page: currentPage,
       perPage: rowsPerPage
@@ -213,7 +93,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
   const handlePagination = page => {
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      category_type: currentType.value,
+      category_type: currentType ? currentType.value : "",
       search: searchTerm,
       page: page.selected + 1,
       perPage: rowsPerPage
@@ -227,7 +107,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
     setRowsPerPage(value)
     dispatch(getCategories({
       ordering: `${sort}${sortColumn}`,
-      category_type: currentType.value,
+      category_type: currentType ? currentType.value : "",
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -270,7 +150,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
 
   const dataToRender = () => {
     const filters = {
-      category_type: currentType.value,
+      category_type: currentType ? currentType.value : "",
       search: searchTerm
     }
 
@@ -292,7 +172,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
     setSortColumn(column.sortField)
     dispatch(getCategories({
       ordering: `${sortDirection === "asc" ? "+" : "-"}${sortColumn}`,
-      category_type: currentType.value,
+      category_type: currentType ? currentType.value : "",
       search: searchTerm,
       page: 1,
       perPage: rowsPerPage
@@ -307,12 +187,12 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
     title={
       <Button size='sm' color='flat-secondary' onClick={toggleSidebar}>
       <Plus size={14} className='me-25' />
-      <span className='align-middle'>Добавить cубкатегорию</span>
+      <span className='align-middle'>{t('categoryData.titleExpandableTable')}</span>
       </Button>}
-    noDataComponent={<h6 className='text-capitalize'>Субкатегории отсутствуют</h6>}
+    noDataComponent={<h6 className='text-capitalize'>{t('categoryData.notFoundExpandableTable')}</h6>}
     noTableHead={true}
     data={subcategory}
-    columns={columns("subcategory", handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory)}
+    columns={columns("subcategory", handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory, t)}
     sortIcon={<ChevronDown />}
     className='react-dataTable ml-50'
     />
@@ -324,7 +204,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
         <CardBody>
           <Row>
             <Col className='my-md-0 my-1' md='4'>
-              <Label for='plan-select'>Тип</Label>
+              <Label for='plan-select'>{t('type')}</Label>
               <Select
                 theme={selectThemeColors}
                 isClearable={false}
@@ -332,6 +212,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
                 classNamePrefix='select'
                 options={typeOptions}
                 value={currentType}
+                placeholder={t('typePlaceholder')}
                 onChange={data => {
                   setCurrentType(data)
                   dispatch(getCategories({
@@ -360,7 +241,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
             expandableRows
             expandOnRowClicked
             paginationServer
-            columns={columns("category", handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory)}
+            columns={columns("category", handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory, t)}
             onSort={handleSort}
             sortIcon={<ChevronDown />}
             className='react-dataTable'
@@ -368,7 +249,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
             expandableRowsComponent={ExpandableTable}
             onRowExpandToggled={(bool, row) => { bool ? setSelectedId(row.id) : setSelectedId('') }}
             data={dataToRender()}
-            noDataComponent={<h6 className='text-capitalize'>Категории не найдены</h6>}
+            noDataComponent={<h6 className='text-capitalize'>{t('notFound')}</h6>}
             subHeaderComponent={
               <CustomHeader
                 data={data}
@@ -383,7 +264,7 @@ const CategoriesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar }) => {
          
         </div>
       </Card>
-      <Sidebar selectedId={selectedId} open={sidebarOpen} toggleSidebar={handleClose} categories={data} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} selectedSubCategory={selectedSubCategory} setSelectedSubCategory={setSelectedSubCategory}/>
+      <Sidebar selectedId={selectedId} open={sidebarOpen} toggleSidebar={handleClose} categories={data} selectedCategory={selectedCategory} setSelectedCategory={setSelectedCategory} selectedSubCategory={selectedSubCategory} setSelectedSubCategory={setSelectedSubCategory} t={t}/>
     </Fragment>
   )
 }

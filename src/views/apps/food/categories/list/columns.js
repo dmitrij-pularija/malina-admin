@@ -1,21 +1,7 @@
-import Avatar from '@components/avatar'
+import renderClient from '@components/renderClient'
 import { Edit, Trash2 } from 'react-feather'
 import { Badge, UncontrolledTooltip, Button, DropdownMenu, DropdownItem } from 'reactstrap'
 
-const renderClient = row => {
-  if (row.icon) {
-    return <Avatar className='me-1' img={row.icon} width='32' height='32' />
-  } else {
-    return (
-      <Avatar
-        initials
-        className='me-1'
-        color={'light-primary'}
-        content={row.name}
-      />
-    )
-  }
-}
 const availableObj = {
   false: 'light-danger',
   true: 'light-success'
@@ -25,26 +11,18 @@ const statusObj = {
   1: 'light-success'
 }
 
-export const columns = (type, handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory) => {
+export const columns = (type, handleEditCategory, handleEditSubCategory, handleDelCategory, handleDelSubCategory, t) => {
 return [
   {
-    name: type === "subcategory" ? 'Субкатегория' : 'Категория',
+    name: type === "subcategory" ? t('subcategoryLabel') : t('Category'),
     sortable: true,
-    minWidth: '300px',
+    minWidth: '150px',
     sortField: 'name',
-    selector: row => row.name,
-    cell: row => (
-      <div className='d-flex justify-content-left align-items-center'>
-        {renderClient(row)}
-        <div className='d-flex flex-column'>
-            <span className='fw-bolder'>{ row.name ? row.name : "" }</span>
-        </div>
-      </div>
-    )
+    cell: row => renderClient(row, "storeCategory")
   },
   {
     name: 'id',
-    minWidth: '30px',
+    width: '30px',
     sortable: true,
     omit: true,
     sortField: 'id',
@@ -52,21 +30,21 @@ return [
     cell: row => <span className='text-capitalize'>{row.id}</span>
   },
   {
-    name: 'Статус',
-    minWidth: '138px',
+    name: t('status'),
+    width: '200px',
     sortable: true,
     omit: !!(type === "subcategory"),
     sortField: 'available',
     selector: row => row.available,
     cell: row => (
       <Badge className='text-capitalize' color={availableObj[row.available]} pill>
-        {row.available ? "Активна" : "Не активна"}
+        {row.available ? t('categoryData.Active') : t('categoryData.Inactive')}
       </Badge>
     )
   },
   {
-    name: 'Тип',
-    minWidth: '138px',
+    name: t('type'),
+    width: '150px',
     sortable: true,
     omit: !!(type === "subcategory"),
     sortField: 'category_type',
@@ -78,29 +56,29 @@ return [
     )
   },
   {
-    name: 'Действия',
-    minWidth: '100px',
+    name: t('action'),
+    width: '120px',
     cell: row => (
       <div className='column-action d-flex align-items-center'>
         <Button.Ripple 
-        className='btn-icon cursor-pointer' 
+        className='btn-icon cursor-pointer p-0' 
         color='transparent' 
         id={`edit-tooltip-${row.id}`}  
         onClick={event => (type === "subcategory" ? handleEditSubCategory(event, row) : handleEditCategory(event, row))}>
         <Edit size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`edit-tooltip-${row.id}`}>
-          Редактировать
+        {t('edit')}
         </UncontrolledTooltip>
         <Button.Ripple 
-        className='btn-icon cursor-pointer' 
+        className='btn-icon cursor-pointer p-0' 
         color='transparent' 
         id={`del-tooltip-${row.id}`} 
         onClick={event => (type === "subcategory" ? handleDelSubCategory(event, row.id) : handleDelCategory(event, row.id))}>
           <Trash2 size={17} className='mx-1' />
         </Button.Ripple>
         <UncontrolledTooltip placement='top' target={`del-tooltip-${row.id}`}>
-          Удалить
+        {t('delete')}
         </UncontrolledTooltip>
       </div>
     )

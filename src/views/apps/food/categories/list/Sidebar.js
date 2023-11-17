@@ -49,7 +49,7 @@ const renderAvatar = data => {
   }
 }
 
-const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory }) => {
+const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selectedCategory, setSelectedCategory, selectedSubCategory, setSelectedSubCategory, t }) => {
   const dispatch = useDispatch()
   // const [data, setData] = useState(null)
   const [item, setItem] = useState('')
@@ -175,7 +175,7 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
     <Sidebar
       size='lg'
       open={open}
-      title={selectedCategory ? 'Редактирование категории' : selectedSubCategory ? 'Редактирование субкатегории' : selectedId ? 'Создание новой субкатегории' : 'Создание новой категории'}
+      title={selectedCategory ? t('categoryData.titleEditCategory') : selectedSubCategory ? t('categoryData.titleEditSubcategory') : selectedId ? t('categoryData.titleAddSubcategory') : t('categoryData.titleAddCategory')}
       headerClassName='mb-1'
       contentClassName='pt-0'
       toggleSidebar={handleClose}
@@ -189,32 +189,32 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
         <div className='d-flex align-items-center justify-content-center mt-75'>
               <div>
                 <Button tag={Label} className='mb-75 me-75' size='sm' color='primary'>
-                  Загрузить
+                {t('download')}
                   <Input type='file' onChange={handleImg} hidden accept='image/*' />
                 </Button>
                 <Button className='mb-75' color='secondary' size='sm' outline onClick={handleImgReset}>
-                  Очистить
+                {t('clear')}
                 </Button>
               </div>
         </div>
         </div>
         <div className='mb-1'>
           <Label className='form-label' for='name'>
-          Название <span className='text-danger'>*</span>
+          {t('categoryData.nameLabel')} <span className='text-danger'>*</span>
           </Label>
           <Controller
             name='name'
             control={control}
             rules={{ required: true }}
             render={({ field }) => (
-              <Input id='name' placeholder='Введите название' invalid={errors.name && true} {...field} />
+              <Input id='name' placeholder={t('categoryData.namePlaceholder')} invalid={errors.name && true} {...field} />
             )}
           />
-          {errors && errors.name && (<FormFeedback>Пожалуйста введите название</FormFeedback>)}
+          {errors && errors.name && (<FormFeedback>{t('categoryData.nameFeedback')}</FormFeedback>)}
         </div>  
         <div className='mb-1'>
           <Label className='form-label' for='type'>
-          {selectedId ? "Категория" : "Тип"}
+          {selectedId ? t('Category') : t('type')}
           <span className='text-danger'>*</span>
           </Label>
           <Controller
@@ -228,13 +228,13 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
                 classNamePrefix='select'
                 options={selectedId ? categoryOptions : businessOptions}
                 theme={selectThemeColors}
-                placeholder={selectedId ? "Выберите категорию" : "Выберите тип"}
+                placeholder={selectedId ? t('categoryPlaceholder') : t('typePlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.type && true })}
                 {...field}
               />
             )}
           />
-        {errors && errors.type && (<FormFeedback>{`Пожалуйста выберите ${selectedId ? "Категорию" : "Тип"}`}</FormFeedback>)}
+        {errors && errors.type && (<FormFeedback>{selectedId ? t('categoryFeedback') : t('typeFeedback')}</FormFeedback>)}
         </div>
         {(selectedCategory || !selectedId) && 
         <div className='form-check form-check-success mb-3 mt-2'>
@@ -247,14 +247,14 @@ const SidebarNewCategory = ({ selectedId, open, toggleSidebar, categories, selec
             )}
           />
           <Label className='form-label' for='available'>
-          Активна
+          {t('categoryData.Active')}
           </Label>
         </div> }
         <Button type='submit' className='me-1' color='primary'>
-          Сохранить
+        {t('save')}
         </Button>
         <Button type='reset' color='secondary' outline onClick={handleClose}>
-          Отменить
+        {t('cancel')}
         </Button>
       </Form>
     </Sidebar>
