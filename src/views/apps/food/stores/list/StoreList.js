@@ -12,7 +12,7 @@ import { Pagination, PaginationItem, PaginationLink } from 'reactstrap'
 const MySwal = withReactContent(Swal)
 
 const StoreList = props => {
-  const { activeView, setActiveView } = props
+  const { activeView, setActiveView, t } = props
   const dispatch = useDispatch()
   const stores = useSelector(state => state.stores)
   // const { userData } = useSelector(state => state.auth)
@@ -21,13 +21,13 @@ const StoreList = props => {
   const [rowsPerPage, setRowsPerPage] = useState(20)
   const [sortColumn, setSortColumn] = useState('name')
   const [currentPage, setCurrentPage] = useState(1)
-  const [businessType, setBusinessType] = useState({ value: '', label: 'Выбирите бизнес' })
+  const [businessType, setBusinessType] = useState("")
 
   useEffect(() => {
     dispatch(
       getData({
         ordering: `${sort}${sortColumn}`,
-        business_type: businessType.value,
+        business_type: businessType ? businessType.value : "",
         search: searchTerm, 
         perPage: rowsPerPage, 
         page: currentPage 
@@ -40,7 +40,7 @@ const StoreList = props => {
     setRowsPerPage(value)
     dispatch(getData({
       ordering: `${sort}${sortColumn}`,
-      business_type: businessType.value,
+      business_type: businessType ? businessType.value : "",
       search: searchTerm,
       page: 1,
       perPage: value
@@ -92,7 +92,7 @@ const StoreList = props => {
     setSearchTerm(val)
     dispatch(getData({
       ordering: `${sort}${sortColumn}`,
-      business_type: businessType.value,
+      business_type: businessType ? businessType.value : "",
       search: val,
       page: currentPage,
       perPage: rowsPerPage
@@ -101,7 +101,7 @@ const StoreList = props => {
 
   const dataToRender = () => {
     const filters = {
-      business_type: businessType.value,
+      business_type: businessType ? businessType.value : "",
       search: searchTerm
     }
 
@@ -185,9 +185,10 @@ const StoreList = props => {
     <div className='content-detached'>
       <div className='content-body'>
       <div className='d-flex align-items-center justify-content-between gap-10'>
-        <StoresFilter businessType={businessType} rowsPerPage={rowsPerPage} handlePerPage={handlePerPage} handleChangeBuseness={handleChangeBuseness} />
-        <StoresSearchbar handleFilter={handleFilter} />
+        <StoresFilter businessType={businessType} rowsPerPage={rowsPerPage} handlePerPage={handlePerPage} handleChangeBuseness={handleChangeBuseness} t={t} />
+        <StoresSearchbar handleFilter={handleFilter} t={t} />
         <StoresHeader
+          t={t} 
           activeView={activeView}
           setActiveView={setActiveView}
         />
@@ -195,6 +196,7 @@ const StoreList = props => {
         {stores.data.length ? (
           <Fragment>
             <StoreCard
+              t={t} 
               handleDel={handleDel}
               activeView={activeView}
               data={dataToRender()}
@@ -219,7 +221,7 @@ const StoreList = props => {
           </Fragment>
         ) : (
           <div className='d-flex justify-content-center mt-2'>
-            <p>Информация не найдена</p>
+            <p>{t('notFound')}</p>
           </div>
         )}
       </div>

@@ -193,6 +193,15 @@
   },
   "Structure": "Structures",
   "Store": "Stores",
+  "StoreData": {
+    "businessLabel": "Business",
+    "businessPlaceholder": "Select a business",
+    "businessFeedback": "Please select a business",
+    "searchPlaceholder": "Search for a store",
+    "edit": "Edit",
+    "storeRate": "store:",
+    "staffRate": "staff:"
+  },
   "Categories": "Categories",
   "Branches": "Branches",
   "Tables": "Tables",

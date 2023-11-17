@@ -1,14 +1,14 @@
 import { Search } from 'react-feather'
 import { InputGroup, Input, InputGroupText } from 'reactstrap'
 
-const StoresSearchbar = ({ handleFilter }) => {
+const StoresSearchbar = ({ handleFilter, t }) => {
 
   return (
 
           <InputGroup className='input-group-merge'>
             <Input
               className='search-product'
-              placeholder='Поиск заведения'
+              placeholder={t('StoreData.searchPlaceholder')}
               onChange={e => handleFilter(e.target.value)}
             />
             <InputGroupText>

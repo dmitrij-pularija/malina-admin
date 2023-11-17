@@ -57,7 +57,7 @@ const renderLogo = (avatar, name) => {
 const StoreCard = props => {
   // const dispatch = useDispatch()  
   // ** Props
-  const { handleDel, data, activeView } = props
+  const { handleDel, data, activeView, t } = props
 
   // ** Handle Move/Add to cart
   // const handleCartBtn = (id, val) => {
@@ -87,7 +87,7 @@ const StoreCard = props => {
         return (
           <Card className='ecommerce-card' key={item.name}>
             {/* <div className='item-img text-center mx-auto'> */}
-              {renderLogo(item.avatar, item.name)}
+              {renderLogo(item.images && item.images.length ? item.images[0].image : item.avatar, item.name)}
             {/* </div> */}
             <CardBody>
                 <CardText tag='span' className='company-name'>
@@ -97,7 +97,7 @@ const StoreCard = props => {
                 </CardText>
               <div className='item-wrapper'>
                 <div className='item-cost'>
-                  <h6 className='item-price'>заведение:</h6>
+                  <h6 className='item-price'>{t('StoreData.storeRate')}</h6>
                 </div>
                 <div className='item-rating'>
                   <ul className='unstyled-list list-inline'>
@@ -118,7 +118,7 @@ const StoreCard = props => {
               </div>
               <div className='item-wrapper'>
                 <div className='item-cost'>
-                  <h6 className='item-price'>персонал:</h6>
+                  <h6 className='item-price'>{t('StoreData.staffRate')}</h6>
                 </div>
                 <div className='item-rating'>
                   <ul className='unstyled-list list-inline'>
@@ -159,7 +159,7 @@ const StoreCard = props => {
                 // onClick={() => handleCartBtn(item.id, item.isInCart)}
               >
                 {/* <Edit className='me-50' size={14} /> */}
-                <span>Изменить</span>
+                <span>{t('StoreData.edit')}</span>
               </Button>
               </Link>
               <Button
@@ -171,7 +171,7 @@ const StoreCard = props => {
                   className='me-50'
                   size={14}
                 /> */}
-                <span>Удалить</span>
+                <span>{t('delete')}</span>
               </Button>
             </div>
           </Card>

@@ -192,6 +192,15 @@
   },
   "Structure": "Структура",
   "Store": "Заведения",
+  "StoreData": {
+    "businessLabel": "Бизнес",
+    "businessPlaceholder": "Выбирите бизнес",
+    "businessFeedback": "Пожалуйста выбирите бизнес",
+    "searchPlaceholder": "Поиск заведения",
+    "edit": "Изменить",
+    "storeRate": "заведение:",
+    "staffRate": "персонал:"
+  },
   "Categories": "Категории",
   "Branches": "Филиалы",
   "Tables": "Столы",

@@ -6,11 +6,11 @@ import { Row, Col, Label, Input, InputGroupText } from "reactstrap"
 import "@styles/react/libs/react-select/_react-select.scss"
 import "@styles/react/libs/tables/react-dataTable-component.scss"
 
-const StoresFilter = ({ businessType, rowsPerPage, handlePerPage, handleChangeBuseness }) => {
+const StoresFilter = ({ businessType, rowsPerPage, handlePerPage, handleChangeBuseness, t }) => {
   // ** Props
   // const { dispatch, getProducts, store } = props
   const typeOptions = [
-    { value: '', label: 'Показать все' },
+    { value: '', label: t('showAll') },
     { value: '1', label: 'Food' },
     { value: '2', label: 'Beauty' }
   ]  
@@ -20,7 +20,7 @@ const StoresFilter = ({ businessType, rowsPerPage, handlePerPage, handleChangeBu
       <Row>
         <Col>
           <div className="d-flex align-items-center">
-            <label htmlFor="rows-per-page">Показать</label>
+            <label htmlFor="rows-per-page">{t('CustomHeaderData.show')}</label>
             <Input
               className="mx-50"
               type="select"
@@ -47,6 +47,7 @@ const StoresFilter = ({ businessType, rowsPerPage, handlePerPage, handleChangeBu
             classNamePrefix="select"
             options={typeOptions}
             value={businessType}
+            placeholder={t('StoreData.businessPlaceholder')}
             onChange={data => handleChangeBuseness(data)}
           />
         {/* </div>   */}

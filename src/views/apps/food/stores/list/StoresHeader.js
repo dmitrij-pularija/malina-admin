@@ -14,7 +14,7 @@ import {
 
 const StoresHeader = props => {
   // ** Props
-  const { activeView, setActiveView } = props
+  const { activeView, setActiveView, t } = props
 
   // ** Sorting obj
   // const sortToggleText = {
