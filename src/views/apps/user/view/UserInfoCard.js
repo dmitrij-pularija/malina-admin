@@ -107,7 +107,7 @@ const typeOptions = [
 
 const MySwal = withReactContent(Swal)
 
-const UserInfoCard = ({ selectedUser }) => {
+const UserInfoCard = ({ selectedUser, t }) => {
   const navigate = useNavigate()
   // ** State
   // const initDate = selectedUser.datebirth ? selectedUser.datebirth : (new Date())
@@ -264,7 +264,7 @@ const UserInfoCard = ({ selectedUser }) => {
           {/* <div className='d-flex justify-content-around my-2'>
             <h4 className='mb-0'>{`ID: ${selectedUser.id}`}</h4>
           </div> */}
-          <h4 className='fw-bolder border-bottom pb-50 mb-1'>Информация:</h4>
+          <h4 className='fw-bolder border-bottom pb-50 mb-1'>{t('Info')}</h4>
           <div className='info-container'>
             {selectedUser !== null ? (
               <ul className='list-unstyled'>
@@ -273,38 +273,38 @@ const UserInfoCard = ({ selectedUser }) => {
                   <span>{selectedUser.id}</span>
                 </li>  
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Роль:</span>
+                  <span className='fw-bolder me-25'>{t('Role')}:</span>
                   <Badge color={roleObj[selectedUser.type].color} className='text-capitalize'>
                       {roleObj[selectedUser.type].role}
                   </Badge>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Логин:</span>
-                  <span>{selectedUser.login ? selectedUser.login : "Не указан"}</span>
+                  <span className='fw-bolder me-25'>{t('Login')}</span>
+                  <span>{selectedUser.login ? selectedUser.login : ""}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Email:</span>
-                  <span>{selectedUser.email ? selectedUser.email : "Не указан"}</span>
+                  <span className='fw-bolder me-25'>{t('Email')}:</span>
+                  <span>{selectedUser.email ? selectedUser.email : ""}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Телефон:</span>
-                  <span>{selectedUser.phone ? selectedUser.phone : "Не указан"}</span>
+                  <span className='fw-bolder me-25'>{t('Phone')}</span>
+                  <span>{selectedUser.phone ? selectedUser.phone : ""}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Код:</span>
-                  <span>{selectedUser.code ? selectedUser.code : "Не указан"}</span>
+                  <span className='fw-bolder me-25'>{t('UsersData.code')}:</span>
+                  <span>{selectedUser.code ? selectedUser.code : ""}</span>
                 </li>
 
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>День рождения:</span>
-                  <span>{selectedUser.datebirth ? formatData(selectedUser.datebirth) : "Не указан"}</span>
+                  <span className='fw-bolder me-25'>{t('UsersData.birth')}:</span>
+                  <span>{selectedUser.datebirth ? formatData(selectedUser.datebirth) : ""}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Пол:</span>
+                  <span className='fw-bolder me-25'>{t('UsersData.gender')}:</span>
                   <span>{genderObj[selectedUser.gender]}</span>
                 </li>
                 <li className='mb-75'>
-                  <span className='fw-bolder me-25'>Статус:</span>
+                  <span className='fw-bolder me-25'>{t('Status')}:</span>
                   <Badge className='text-capitalize' color={statusColors[selectedUser.is_archive]}>
                     {selectedUser.is_archive ? "Не активный" : "Активный"}
                   </Badge>
@@ -314,15 +314,15 @@ const UserInfoCard = ({ selectedUser }) => {
           </div>
           <div className='d-flex justify-content-center pt-2 gap-10'>
             <Button color='primary' onClick={toggleModal}>
-              Изменить
+            {t('Edit')}
             </Button>
             <Button color="secondary" outline onClick={handleClose}>
-              Отменить
+            {t('delete')}
             </Button>
           </div>
         </CardBody>
       </Card>
-      <UserModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} setSelectedUser={() => {}} />
+      <UserModal open={modalOpen} toggleModal={toggleModal} selectedUser={selectedUser} setSelectedUser={() => {}} t={t} />
     </Fragment>
   )
 }

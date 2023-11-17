@@ -76,7 +76,7 @@ const requiredFields = ["login"]
 //   })
 // }
 
-const UserModal = ({ open, toggleModal, selectedUser }) => {
+const UserModal = ({ open, toggleModal, selectedUser, t }) => {
   const dispatch = useDispatch()
   const [avatar, setAvatar] = useState(selectedUser && selectedUser.avatar && selectedUser.avatar.includes("http") ? selectedUser.avatar : '')
   const values = selectedUser ? {
@@ -226,7 +226,7 @@ return (
   <ModalHeader className='bg-transparent' toggle={handleClose}></ModalHeader>
   <ModalBody className='px-sm-5 pt-50 pb-5'>
     <div className='text-center mb-2'>
-      <h1 className='mb-1'>{selectedUser ? "Изменение информации о пользователе" : "Добавление нового пользователя"}</h1>
+      <h1 className='mb-1'>{selectedUser ? t('UsersData.titleEdit') : t('UsersData.titleAdd')}</h1>
     </div>
     <Form onSubmit={handleSubmit(onSubmit)}>
       <Row className='gy-1 pt-75'>
@@ -235,11 +235,11 @@ return (
       {renderUserImg(avatar, selectedUser ? `${selectedUser.name} ${selectedUser.surname}` : "User")}
               <div className='d-flex align-items-center gap-10'>
                 <Button className='mb-0' tag={Label} size='sm' color='primary'>
-                  Загрузить
+                {t('download')}
                   <Input type='file' onChange={handleImg} hidden accept='image/*' />
                 </Button>
                 <Button color='secondary' size='sm' outline onClick={handleImgReset}>
-                  Очистить
+                {t('clear')}
                 </Button>
               </div>
         </div>
@@ -247,7 +247,7 @@ return (
         <Col md={6} xs={12}>
         <div>
           <Label className='form-label' for='name'>
-            Имя
+          {t('name')}
           </Label>
           <Controller
             control={control}
@@ -255,13 +255,13 @@ return (
             id='name'
             name='name'
             render={({ field }) => (
-              <Input {...field} id='name' placeholder='John' invalid={errors.name && true} />
+              <Input {...field} id='name' placeholder={t('namePlaceholder')} invalid={errors.name && true} />
             )}
           />
         </div>
         <div className='mt-1'>
           <Label className='form-label' for='surname'>
-            Фамилия
+          {t('surname')}
           </Label>
           <Controller
             control={control}
@@ -269,14 +269,14 @@ return (
             id='surname'
             name='surname'
             render={({ field }) => (
-              <Input {...field} id='surname' placeholder='Doe' invalid={errors.surname && true} />
+              <Input {...field} id='surname' placeholder={t('surnamePlaceholder')} invalid={errors.surname && true} />
             )}
           />
           </div> 
         </Col>
         <Col md={6} xs={12} >
           <Label className='form-label' for='birthday'>
-            День рождения
+          {t('UsersData.birth')}
           </Label>
           <Controller
                       id="birthday"
@@ -297,7 +297,7 @@ return (
         </Col>
         <Col md={6} xs={12} >
           <Label className='form-label' for='login'>
-            Login<span className='text-danger'>*</span>
+          {t('loginLabel')}<span className='text-danger'>*</span>
           </Label>
           <Controller
             control={control}
@@ -305,14 +305,14 @@ return (
             id='login'
             name='login'
             render={({ field }) => (
-              <Input {...field} id='login' placeholder='john.doe.007' invalid={errors.login && true} />
+              <Input {...field} id='login' placeholder={t('loginPlaceholder')} invalid={errors.login && true} />
             )}
           />
-          {errors && errors.login && (<FormFeedback>Пожалуйста выберите логин</FormFeedback>)}
+          {errors && errors.login && (<FormFeedback>{t('loginFeedback')}</FormFeedback>)}
         </Col>
         <Col md={6} xs={12}>
           <Label className='form-label' for='type'>
-          Роль
+          {t('Role')}
           </Label>
           <Controller
             id='type'
@@ -327,7 +327,7 @@ return (
                 classNamePrefix='select'
                 options={typeOptions}
                 theme={selectThemeColors}
-                placeholder="Выберите тип пользователя"
+                placeholder={t('RolePlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.type && true })}
                 {...field}
               />
@@ -356,7 +356,7 @@ return (
         </Col>
         <Col md={6} xs={12}>
           <Label className='form-label' for='clientType'>
-          Тип пользователя
+          {t('UsersData.clientTypeLabel')}
           </Label>
           <Controller
             id='clientType'
@@ -371,7 +371,7 @@ return (
                 classNamePrefix='select'
                 options={clientTypeOptions}
                 theme={selectThemeColors}
-                placeholder="Выберите роль пользователя"
+                placeholder={t('UsersData.clientTypePlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.clientType && true })}
                 {...field}
               />
@@ -380,7 +380,7 @@ return (
         </Col>
         <Col md={6} xs={12}>
           <Label className='form-label' for='phone'>
-          Телефон
+          {t('phone')}
           </Label>
           <Controller
                   id='phone'
@@ -392,7 +392,7 @@ return (
           id='phone' 
           name='phone' 
           type='tel'
-          placeholder='+9 967 933 4422' 
+          placeholder={t('phonePlaceholder')} 
           {...field}
           />
           )}
@@ -400,7 +400,7 @@ return (
         </Col>
         <Col md={6} xs={12}>
           <Label className='form-label' for='gender'>
-          Пол
+          {t('UsersData.gender')}
           </Label>
           <Controller
             id='gender'
@@ -415,7 +415,7 @@ return (
                 classNamePrefix='select'
                 options={genderOptions}
                 theme={selectThemeColors}
-                placeholder="Выберите пол пользователя"
+                placeholder={t('UsersData.genderPlaceholder')}
                 className={classnames('react-select', { 'is-invalid': errors.gender && true })}
                 {...field}
               />
@@ -424,7 +424,7 @@ return (
         </Col>
         <Col md={6} xs={12}>
           <Label className='form-label' for='device'>
-          Device id
+          {t('UsersData.deviceLabel')}
           </Label>
           <Controller
                   id='device'
@@ -436,7 +436,7 @@ return (
           id='device' 
           name='device' 
           type='tel'
-          placeholder='123456' 
+          placeholder={t('UsersData.devicePlaceholder')} 
           {...field}
           />
           )}
@@ -450,7 +450,7 @@ return (
                   rules={{ required: false }}
                   render={({ field }) => (
                     <InputPasswordToggle
-                      label='Новый пароль'
+                      label={t('password')}
                       htmlFor='password'
                       className='input-group-merge'
                       invalid={errors.password && true}
@@ -468,7 +468,7 @@ return (
                   name='confirmPassword'
                   render={({ field }) => (
                     <InputPasswordToggle
-                      label='Подтвердите новый пароль'
+                      label={t('confirmPassword')}
                       htmlFor='confirmPassword'
                       className='input-group-merge'
                       invalid={errors.confirmPassword && true}
@@ -482,7 +482,7 @@ return (
               </Col>      
         <Col xs={12} className='text-center mt-2 pt-50'>
           <Button type='submit' className='me-1' color='primary'>
-            Сохранить
+          {t('save')}
           </Button>
           <Button
             type='reset'
@@ -490,7 +490,7 @@ return (
             outline
             onClick={handleClose}
           >
-            Отменить
+            {t('cancel')}
           </Button>
         </Col>
       </Row>

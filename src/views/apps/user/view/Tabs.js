@@ -5,7 +5,7 @@ import SecurityTab from './SecurityTab'
 import Rewards from './Rewards'
 import UserOrdersList from './UserOrdersList'
 
-const UserTabs = ({ active, toggleTab, score }) => {
+const UserTabs = ({ active, toggleTab, score, data, t }) => {
 
   return (
     <Fragment>
@@ -13,7 +13,7 @@ const UserTabs = ({ active, toggleTab, score }) => {
         <NavItem>
           <NavLink active={active === '1'} onClick={() => toggleTab('1')}>
             <ShoppingCart className='font-medium-3 me-50' />
-            <span className='fw-bold'>История заказов</span>
+            <span className='fw-bold'>{t('History')}</span>
           </NavLink>
         </NavItem>
         {/* <NavItem>
@@ -31,7 +31,7 @@ const UserTabs = ({ active, toggleTab, score }) => {
       </Nav>
       <TabContent activeTab={active}>
         <TabPane tabId='1'>
-          <UserOrdersList />
+          <UserOrdersList data={data} t={t} />
         </TabPane>
         {/* <TabPane tabId='2'>
           <Rewards score={score} />

@@ -279,6 +279,25 @@
     "add": "Creating a new table"
   },
   "Users": "Users",
+  "UsersData": {
+    "titleEdit": "Editing user information",
+    "titleAdd": "Creating a new user",
+    "titleInfo": "User information",
+    "alert": "User is not found",
+    "alertText1": "User with id: ",
+    "alertText2": " not found. Check in the list of users: ",
+    "alertText3": "User list",
+    "code": "Code",
+    "birth": "Birthday",
+    "gender": "Gender",
+    "genderPlaceholder": "Select user gender",
+    "clientTypeLabel": "User type",
+    "clientTypePlaceholder": "Select user type",
+    "clientTypeFeedback": "Please select a user type",
+    "deviceLabel": "Device ID",
+    "devicePlaceholder": "Enter device id",
+    "ordersListTitle": "List of user orders"
+  }, 
   "User": "User",
   "Waiters": "Waiters",
   "waiterData": {
@@ -406,6 +425,9 @@
     "telegramIdFeedback": "Please enter Telegram ID"
   },
   "Role": "Role",
+  "RolePlaceholder": "Select user role",
+  "RoleFeedback": "Please select a user role",
+  "LogOut": "LogOut",
   "guest": "Guest",
   "superadmin": "Superadmin",
   "Active": "Active",

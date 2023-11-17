@@ -1,7 +1,7 @@
 // ** React Imports
 import { Link } from 'react-router-dom'
 import { useEffect, useState } from 'react'
-
+import { useTranslation } from 'react-i18next'
 
 // ** Custom Components
 import Avatar from '@components/avatar'
@@ -25,6 +25,7 @@ import defaultAvatar from '@src/assets/images/portrait/small/avatar-s-11.jpg'
 const UserDropdown = () => {
   // ** Store Vars
   const dispatch = useDispatch()
+  const { t } = useTranslation()
   // ** State
   const [userData, setUserData] = useState(null)
 // console.log(userData)
@@ -60,7 +61,7 @@ const UserDropdown = () => {
       <DropdownMenu end>
         <DropdownItem tag={Link} to={`${getLink()}`}>
           <User size={14} className='me-75' />
-          <span className='align-middle'>Профиль</span>
+          <span className='align-middle'>{t('Profile')}</span>
         </DropdownItem>
         {/* <DropdownItem tag={Link} to='/apps/email'>
           <Mail size={14} className='me-75' />
@@ -89,7 +90,7 @@ const UserDropdown = () => {
         </DropdownItem> */}
         <DropdownItem tag={Link} to='/login' onClick={() => dispatch(handleLogout())}>
           <Power size={14} className='me-75' />
-          <span className='align-middle'>Выход</span>
+          <span className='align-middle'>{t('LogOut')}</span>
         </DropdownItem>
       </DropdownMenu>
     </UncontrolledDropdown>
