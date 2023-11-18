@@ -43,6 +43,9 @@
   "changeStatus": "Change status",
   "paymentPaid": "Paid",
   "paymentNotPaid": "Not paid",
+  "Delivery": "Delivery",
+  "Pickup": "Pickup",
+  "Inside": "Inside",
   "ordersData": {
     "titleEdit": "Editing a order",
     "titleAdd": "Create a new order",

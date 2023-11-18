@@ -8,6 +8,11 @@ import { formatData, formatNumber, getRate } from '../../../../../utility/Utils'
 import { statusObj } from '../../../../../configs/initial'
 
 export const columns = (userData, handleDel, t) => {
+  const orderType = {
+    1: t('Delivery'),
+    2: t('Pickup'),
+    3: t('Inside')
+  }
 
   return [ 
   // {
@@ -69,11 +74,18 @@ export const columns = (userData, handleDel, t) => {
     cell: row => renderClient(row.business_id, "store")
   },
   {
-    name: t('deliveryAddress'),
+    name: t('type'),
+    minWidth: '180px',
+    sortable: false,
+    sortField: 'order_type',
+    cell: row => <span className='text-capitalize'>{orderType[row.order_type]}</span>
+  },
+  {
+    name: t('Address'),
     minWidth: '180px',
     sortable: false,
     sortField: 'delivery_address.location',
-    cell: row => <span className='text-capitalize'>{row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "Внутри заведения"}</span>
+    cell: row => <span className='text-capitalize'>{row.order_type === 1 ? row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "" : orderType[row.order_type]}</span>
   },
   {
     name: t('Table'),

@@ -43,6 +43,9 @@
   "changeStatus": "Изменить статус",
   "paymentPaid": "Оплачен",
   "paymentNotPaid": "Не оплачен",
+  "Delivery": "Доставка",
+  "Pickup": "Самовывоз",
+  "Inside": "Внутри заведения",
   "ordersData": {
     "titleEdit": "Редактирование заказа",
     "titleAdd": "Создание заказа",
