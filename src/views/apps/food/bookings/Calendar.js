@@ -25,6 +25,7 @@ const getDateTime = (date, time) => {
 const Calendar = props => {
   // ** Refs
   const calendarRef = useRef(null)
+  const [viewType, setViewType] = useState(false)
   const [currentLanguage, setCurrentLanguage] = useState(i18next.language === 'en' ? enLocale : ruLocale)
   // ** Props
   const {
@@ -58,6 +59,8 @@ const Calendar = props => {
     return () => i18next.off('languageChanged', handleLanguageChange)
   }, [])
 
+  const handleViewChange = (arg) => setViewType(arg.view.type !== 'dayGridMonth')
+  
   const dataEvents = data && data.length ? data.map(event => ({id: event.id, title: `${event.name} | ${event.phone} | Количество гостей ${event.guests}`, start: getDateTime(event.date, event.time), end: getDateTime(event.date, endTime), extendedProps: { calendar: event.status }})) : []
 // ** calendarOptions(Props)
 // console.log(dataEvents)
@@ -105,6 +108,9 @@ const Calendar = props => {
     */
     navLinks: true,
     datesSet: handleDatesSet,
+    viewDidMount: handleViewChange,
+    eventDisplay: 'block',
+    displayEventTime: viewType,
     eventClassNames({ event: calendarEvent }) {
       // eslint-disable-next-line no-underscore-dangle
       const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]

@@ -21,6 +21,7 @@ import { formatDataTimeSave } from '@utils'
 const Calendar = props => {
   // ** Refs
   const calendarRef = useRef(null)
+  const [viewType, setViewType] = useState(false)
   const [currentLanguage, setCurrentLanguage] = useState(i18next.language === 'en' ? enLocale : ruLocale)
   // ** Props
   const {
@@ -52,6 +53,8 @@ const Calendar = props => {
     i18next.on('languageChanged', handleLanguageChange)
     return () => i18next.off('languageChanged', handleLanguageChange)
   }, [])
+  
+  const handleViewChange = (arg) => setViewType(arg.view.type !== 'dayGridMonth')
 
   const dataEvents = data && data.length ? data.map(event => ({id: event.id, title: `${event.appointment_services ? event.appointment_services.map(service => service.beauty_service_name).join(', ') : ''} | ${event.name} | ${event.phone}`, start: event.appointment_time, end: event.appointment_end_time, extendedProps: { calendar: event.appointment_status }})) : []
 // const dataEvents = data && data.length ? data.map(event => ({id: event.id, title: `${formatTimeSave(event.appointment_time)} - ${formatTimeSave(event.appointment_end_time)} <br> ${event.appointment_services ? event.appointment_services.map(service => service.beauty_service_name).join(', ') : ''} <br> ${event.name} | ${event.phone}`, start: event.appointment_time, end: event.appointment_end_time})) : []
@@ -101,16 +104,21 @@ const Calendar = props => {
     */
     navLinks: true,
     datesSet: handleDatesSet,
+    viewDidMount: handleViewChange,
+    eventDisplay: 'block',
+    displayEventTime: viewType,
     eventClassNames({ event: calendarEvent }) {
       // eslint-disable-next-line no-underscore-dangle
       const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]
-
+      
       return [
         // Background Color
         `bg-light-${colorName}`
       ]
     },
-
+    // eventContent: (arg) => {
+    //   if (arg.view.type === 'dayGridMonth') calendarOptions.displayEventTime = false
+    // },
     eventClick({ event: clickedEvent }) {
       dispatch(getAppointment(clickedEvent._def.publicId))
       handleAddEventSidebar()
@@ -172,10 +180,6 @@ const Calendar = props => {
     <Card className='shadow-none border-0 mb-0 rounded-0'>
       <CardBody className='pb-0'>
         <FullCalendar 
-        // eventContent={(info) => {
-        //   const title = info.event.title
-        //   return { html: `<div>${title}</div>` }
-        // }}
         locale={currentLanguage} 
         {...calendarOptions} 
         />{' '}
