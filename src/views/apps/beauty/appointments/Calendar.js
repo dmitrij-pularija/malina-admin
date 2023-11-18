@@ -36,6 +36,7 @@ const Calendar = props => {
     selectEvent,
     currentMaster,
     getAppointment,
+    handleDatesSet,
     updateEvent
   } = props
 
@@ -99,7 +100,7 @@ const Calendar = props => {
       ? Docs: https://fullcalendar.io/docs/navLinks
     */
     navLinks: true,
-
+    datesSet: handleDatesSet,
     eventClassNames({ event: calendarEvent }) {
       // eslint-disable-next-line no-underscore-dangle
       const colorName = calendarsColor[calendarEvent._def.extendedProps.calendar]

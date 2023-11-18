@@ -7,7 +7,7 @@ import Calendar from './Calendar'
 import SidebarLeft from './SidebarLeft'
 import AddEventSidebar from './AddEventSidebar'
 import { useRTL } from '@hooks/useRTL'
-import { initSelect } from '@utils'
+import { initSelect, formatDataSave } from '@utils'
 import { useTranslation } from 'react-i18next'
 import { getAllUsers } from "../../user/store"
 import { getAllStores } from '../../food/stores/store'
@@ -48,8 +48,8 @@ const CalendarComponent = () => {
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
   const [isRtl] = useRTL()
 
-  const [currentStore, setCurrentStore] = useState({ value: '', label: `${t('appointmentsData.notChosen')}` })
-  const [currentMaster, setCurrentMaster] = useState({ value: '', label: `${t('appointmentsData.notSelected')}` })
+  const [currentStore, setCurrentStore] = useState("")
+  const [currentMaster, setCurrentMaster] = useState("")
   const [selectedCalendars, setSelectedCalendars] = useState(filterValues)
   const [appointments, setAppointments] = useState([])
   // console.log(data)
@@ -61,6 +61,15 @@ const CalendarComponent = () => {
   const handleAddEventSidebar = () => setAddSidebarOpen(!addSidebarOpen)
 
   const toggleSidebar = val => setLeftSidebarOpen(val)
+  const handleDatesSet = (arg) => {
+    // dispatch(getData({
+    //   perPage: 1000,
+    //   business_id: currentStore ? currentStore.value : "",
+    //   date: `${formatDataSave(arg.start)}/${formatDataSave(arg.end)}`
+    // }))  
+    // console.log('Отображаемый диапазон дат:', formatDataSave(arg.start), formatDataSave(arg.end))
+  }
+
   const masterIds = id => {
     const filtredMasters = masters.filter(master => parseInt(master.master_business) === parseInt(id))
     return filtredMasters.map(master => parseInt(master.id))
@@ -75,7 +84,11 @@ const CalendarComponent = () => {
 
   const handleMasterChange = data => {
     setCurrentMaster(data)
-    // dispatch(getData(data.value))
+    dispatch(getData({
+      perPage: 1000
+      // master_id: data.value
+      // business_id: data.value
+    }))
   }
 
   const updateAllFilters = value => {
@@ -150,20 +163,26 @@ const CalendarComponent = () => {
     if (!services.length) dispatch(getAllServices())
   }, [])
 
-  useEffect(() => {
-    dispatch(getData(currentMaster.value))
-  }, [currentMaster.value])
+  // useEffect(() => {
+  //   dispatch(getData(currentMaster.value))
+  // }, [currentMaster])
 
   useEffect(() => {
-  const filtredAppointments = data.filter(item => selectedCalendars.includes(item.appointment_status) && parseInt(item.appointment_master.id) === parseInt(currentMaster.value))  
-  setAppointments(filtredAppointments)
-}, [data, selectedCalendars, currentMaster.value])
+    const filtredAppointments = data.filter(item => selectedCalendars.includes(item.appointment_status) && parseInt(item.appointment_master.id) === parseInt(currentMaster ? currentMaster.value : ""))  
+    // const filtredAppointments = data.filter(item => selectedCalendars.includes(item.appointment_status))  
+
+    setAppointments(filtredAppointments)
+  }, [data, selectedCalendars, currentMaster])
 
   useEffect(() => {
     if (userData.type === 2 && stores.length) {
       setCurrentStore(initSelect(storeOptions, userData.id))
       setFiltredMasters(masters.filter(master => parseInt(master.master_business) === parseInt(userData.id)))
       setSelectedMasters(masterIds(userData.id))
+      dispatch(getData({
+        perPage: 1000,
+        business_id: userData.id
+      }))
     }
   }, [stores.length, masters.length])
 
@@ -207,6 +226,7 @@ const CalendarComponent = () => {
               getAppointment={getAppointment}
               updateEvent={editAppointment}
               toggleSidebar={toggleSidebar}
+              handleDatesSet={handleDatesSet}
               calendarsColor={calendarsColor}
               setCalendarApi={setCalendarApi}
               handleAddEventSidebar={handleAddEventSidebar}

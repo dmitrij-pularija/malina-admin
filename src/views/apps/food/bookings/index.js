@@ -7,7 +7,7 @@ import Calendar from './Calendar'
 import SidebarLeft from './SidebarLeft'
 import AddEventSidebar from './AddEventSidebar'
 import { useRTL } from '@hooks/useRTL'
-import { initSelect } from '@utils'
+import { initSelect, formatDataSave } from '@utils'
 import { useTranslation } from 'react-i18next'
 import { getAllUsers } from "../../user/store"
 import { getAllStores } from '../stores/store'
@@ -59,10 +59,20 @@ const CalendarComponent = () => {
   const handleAddEventSidebar = () => setAddSidebarOpen(!addSidebarOpen)
 
   const toggleSidebar = val => setLeftSidebarOpen(val)
+  const handleDatesSet = (arg) => {
+    // dispatch(getData({
+    //   perPage: 1000,
+    //   business_id: currentStore ? currentStore.value : "",
+    //   date: `${formatDataSave(arg.start)}/${formatDataSave(arg.end)}`
+    // }))  
+    // console.log('Отображаемый диапазон дат:', formatDataSave(arg.start), formatDataSave(arg.end))
+  }
+
   const handleStoreChange = data => {
     setCurrentStore(data)
     setEndTime(getEndTime(data.value))
     dispatch(getData({
+      perPage: 1000,
       business_id: data.value
     }))
   }
@@ -112,6 +122,7 @@ const CalendarComponent = () => {
     if (!users.length) dispatch(getAllUsers())
     if (!stores.length) dispatch(getAllStores())
     if (userData.type === 2) dispatch(getData({
+      perPage: 1000,
       business_id: userData.id
     }))
     // dispatch(getData({
@@ -174,6 +185,7 @@ const CalendarComponent = () => {
               getBooking={getBooking}
               updateEvent={editBooking}
               toggleSidebar={toggleSidebar}
+              handleDatesSet={handleDatesSet}
               calendarsColor={calendarsColor}
               setCalendarApi={setCalendarApi}
               handleAddEventSidebar={handleAddEventSidebar}
