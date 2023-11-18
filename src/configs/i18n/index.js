@@ -17,6 +17,11 @@ const languages = {
   en
 }
 
+const getLanguages = () => {
+  const item = window.localStorage.getItem('i18nextLng')
+  return item ? item : 'ru'
+}
+
 i18n
 
   // Enables the i18next backend
@@ -28,12 +33,12 @@ i18n
   // Enables the hook initialization module
   .use(initReactI18next)
   .init({
-    lng: 'ru',
+    lng: getLanguages(),
     backend: {
       /* translation file path */
       loadPath: lng => languages[lng]
     },
-    fallbackLng: 'ru',
+    fallbackLng: getLanguages(),
     debug: false,
     // keySeparator: false,
     react: {
