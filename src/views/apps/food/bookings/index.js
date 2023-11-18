@@ -46,7 +46,7 @@ const CalendarComponent = () => {
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
   const [isRtl] = useRTL()
   const [endTime, setEndTime] = useState("23:59:00")
-  const [currentStore, setCurrentStore] = useState({ value: '', label: `${t('bookingsData.notChosen')}` })
+  const [currentStore, setCurrentStore] = useState("")
   const [selectedCalendars, setSelectedCalendars] = useState(filterValues)
   const [bookings, setBookings] = useState([])
   // console.log(data)
@@ -62,6 +62,9 @@ const CalendarComponent = () => {
   const handleStoreChange = data => {
     setCurrentStore(data)
     setEndTime(getEndTime(data.value))
+    dispatch(getData({
+      business_id: data.value
+    }))
   }
   const updateAllFilters = value => {
     if (value === true) {
@@ -108,16 +111,25 @@ const CalendarComponent = () => {
   useEffect(() => {
     if (!users.length) dispatch(getAllUsers())
     if (!stores.length) dispatch(getAllStores())
+    if (userData.type === 2) dispatch(getData({
+      business_id: userData.id
+    }))
+    // dispatch(getData({
+    //   business_id: userData.type === 2 ? userData.id : currentStore ? currentStore.value : ""
+    // }))
   }, [])
 
-  useEffect(() => {
-    dispatch(getData(currentStore.value))
-  }, [currentStore.value])
+  // useEffect(() => {
+  //   dispatch(getData(currentStore.value))
+  // }, [currentStore.value])
 
   useEffect(() => {
-  const filtredBooking = data.filter(item => selectedCalendars.includes(item.status) && parseInt(item.business.id) === parseInt(currentStore.value))
+  const filtredBooking = data.filter(item => selectedCalendars.includes(item.status))
+
+  // const filtredBooking = data.filter(item => selectedCalendars.includes(item.status) && parseInt(item.business.id) === parseInt(currentStore.value))
   setBookings(filtredBooking)
-}, [data, selectedCalendars, currentStore.value])
+}, [data, selectedCalendars])
+// }, [data, selectedCalendars, currentStore.value])
 
   useEffect(() => {
     if (userData.type === 2 && stores.length) {
