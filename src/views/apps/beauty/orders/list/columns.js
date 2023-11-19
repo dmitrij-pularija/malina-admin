@@ -27,6 +27,12 @@ export const columns = (stores, users, userData, status, handleDel, t) => {
     } else return ''
   }
 
+  const orderType = {
+    1: t('Delivery'),
+    2: t('Pickup'),
+    3: t('Inside')
+  }
+
   return [ 
     {
       name: '№',
@@ -67,12 +73,26 @@ export const columns = (stores, users, userData, status, handleDel, t) => {
      cell: row => renderClient(getStoreInfo(row.order_business), "store")
   },
   {
-    name: t('deliveryAddress'),
+    name: t('type'),
     minWidth: '180px',
     sortable: false,
-    sortField: 'delivery_address.name',
-    cell: row => <span className='text-capitalize'>{row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "Внутри заведения"}</span>
+    sortField: 'order_type',
+    cell: row => <span className='text-capitalize'>{orderType[row.order_type]}</span>
   },
+  {
+    name: t('Address'),
+    minWidth: '180px',
+    sortable: false,
+    sortField: 'delivery_address.location',
+    cell: row => <span className='text-capitalize'>{row.order_type === 1 ? row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "" : orderType[row.order_type]}</span>
+  },
+  // {
+  //   name: t('deliveryAddress'),
+  //   minWidth: '180px',
+  //   sortable: false,
+  //   sortField: 'delivery_address.name',
+  //   cell: row => <span className='text-capitalize'>{row.delivery_address ? (row.delivery_address.location ? row.delivery_address.location : row.delivery_address.name) : "Внутри заведения"}</span>
+  // },
   {
     name: t('customer'),
     sortable: true,
