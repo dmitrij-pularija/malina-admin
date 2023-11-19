@@ -1,4 +1,4 @@
-import { Fragment, useState, useEffect } from 'react'
+import React, { Fragment, useState, useEffect } from 'react'
 import CustomHeader from '@components/customHeader'
 import { columns } from './columns'
 import { getData, deleteOrder } from '../store'
@@ -216,8 +216,7 @@ storeOptions.unshift({ value: '', label: t('showAll') })
         </CardBody>
       </Card>
 
-      <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
+      <Card id="beauty-orders-list" className='overflow-hidden'>
           <DataTable
             dataKey="id"
             noHeader
@@ -243,7 +242,6 @@ storeOptions.unshift({ value: '', label: t('showAll') })
               />
             }
           />
-        </div>
       </Card>
     </Fragment>
   )
