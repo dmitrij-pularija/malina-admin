@@ -184,9 +184,6 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
       </Row>
     </div>
   )
-  // useImperativeHandle(ref, () => ({
-  //   downloadPDF
-  // }))
 }
 
 export default CustomHeader
