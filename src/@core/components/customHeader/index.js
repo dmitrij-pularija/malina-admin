@@ -66,6 +66,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
 // ** Downloads PDF
   function downloadPDF() {
     const input =  document.querySelector('.react-dataTable')
+    if (!input) return console.error('Table element not found')
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL('image/png')
       const pdf = new jsPDF()

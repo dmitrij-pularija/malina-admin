@@ -54,7 +54,9 @@ export default () => {
         { find: 'assert', replacement: 'rollup-plugin-node-polyfills/polyfills/assert' },
         { find: 'buffer', replacement: 'rollup-plugin-node-polyfills/polyfills/buffer-es6' },
         { find: 'process', replacement: 'rollup-plugin-node-polyfills/polyfills/process-es6' },
-        { find: '@components', replacement: path.resolve(__dirname, 'src/@core/components') }
+        { find: '@components', replacement: path.resolve(__dirname, 'src/@core/components') },
+        { find: '../internals/define-globalThis-property', replacement: 'globalthis' },
+        { find: '../internals/globalThis', replacement: 'globalthis' }
       ]
     },
     esbuild: {
