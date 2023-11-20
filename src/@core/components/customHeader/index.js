@@ -65,7 +65,6 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
 
 // ** Downloads PDF
   function downloadPDF() {
-    // const input = document.getElementById('beauty-orders-list')
     const input =  document.querySelector('.react-dataTable')
     html2canvas(input).then((canvas) => {
       const imgData = canvas.toDataURL('image/png')
@@ -78,7 +77,6 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   }
 // ** Downloads XLS
   function downloadExcel(array) {
-    // const dataToExport = dataToRender()
     const dataToExport = array
     const ws = XLSX.utils.json_to_sheet(dataToExport)
     const wb = XLSX.utils.book_new()
