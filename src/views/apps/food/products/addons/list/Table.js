@@ -195,7 +195,6 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar, t 
         </CardBody>
       </Card>   */}
       <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
         <DataTable
             dataKey="id"
             noHeader
@@ -225,7 +224,6 @@ const CategoriesList = ({ stores, sidebarOpen, setSidebarOpen, toggleSidebar, t 
             }
           />
          
-        </div>
       </Card>
       <Sidebar open={sidebarOpen} toggleSidebar={handleClose} selectedAddon={selectedAddon} setSelectedAddon={setSelectedAddon} t={t} />
     </Fragment>

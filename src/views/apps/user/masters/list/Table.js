@@ -273,7 +273,6 @@ const handleEdit = (event, row) => {
       </Card>
 
       <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
           <DataTable
             noHeader
             subHeader
@@ -298,7 +297,6 @@ const handleEdit = (event, row) => {
               />
             }
           />
-        </div>
       </Card>
 
       {/* <Sidebar open={sidebarOpen} toggleSidebar={toggleSidebar} selectedMaster={selectedMaster} setSelectedMaster={setSelectedMaster} stores={stores} specialties={specialties} /> */}

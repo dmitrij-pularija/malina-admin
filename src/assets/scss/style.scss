@@ -178,7 +178,14 @@ background: #f8f8f821;
     z-index: 999;
   }
 
-
+  @media print {
+    .main-menu, .header-navbar, .content-header, .card-body, header *, .footer {
+      display: none;
+    }
+    .react-dataTable, .react-dataTable * {
+      display: block;
+    }
+  }
   // #timeEnd_time {
   //   position: absolute;
   //   width: 100px;

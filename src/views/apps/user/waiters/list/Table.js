@@ -216,7 +216,6 @@ const handleEditWaiter = (event, row) => {
       </Card>
 
       <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
           <DataTable
             noHeader
             subHeader
@@ -242,7 +241,6 @@ const handleEditWaiter = (event, row) => {
               />
             }
           />
-        </div>
       </Card>
 
       <Sidebar shifts={shifts} open={sidebarOpen} toggleSidebar={toggleSidebar} selectedWaiter={selectedWaiter} setSelectedWaiter={setSelectedWaiter} stores={stores} userData={userData} t={t} />

@@ -249,7 +249,6 @@ const ProductsList = ({t}) => {
       </Card>
 
       <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
           <DataTable
             noHeader
             subHeader
@@ -274,7 +273,6 @@ const ProductsList = ({t}) => {
               />
             }
           />
-        </div>
       </Card>
     </Fragment>
   )

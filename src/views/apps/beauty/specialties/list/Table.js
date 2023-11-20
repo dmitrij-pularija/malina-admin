@@ -215,7 +215,6 @@ const SpecialtiesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar, t }) => {
         </CardBody>
       </Card>   */}
       <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
         <DataTable
             dataKey="id"
             noHeader
@@ -243,7 +242,6 @@ const SpecialtiesList = ({ sidebarOpen, setSidebarOpen, toggleSidebar, t }) => {
             }
           />
          
-        </div>
       </Card>
       <Sidebar open={sidebarOpen} toggleSidebar={handleClose} selectedSpecialty={selectedSpecialty} setSelectedSpecialty={setSelectedSpecialty} t={t} />
     </Fragment>

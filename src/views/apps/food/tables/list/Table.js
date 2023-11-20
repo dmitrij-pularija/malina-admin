@@ -215,7 +215,6 @@ const TablesList = ({waiters, store, sidebarOpen, toggleSidebar, t }) => {
       </Card> */}
 
       <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
           <DataTable
             noHeader
             subHeader
@@ -240,7 +239,6 @@ const TablesList = ({waiters, store, sidebarOpen, toggleSidebar, t }) => {
               />
             }
           />
-        </div>
       </Card>
       <Sidebar store={store} open={sidebarOpen} toggleSidebar={handleClose} waiters={waiters} selectedTable={selectedTable} setSelectedTable={setSelectedTable} t={t} />
       <Modal isOpen={modalShow} toggle={toggleModal} className='modal-dialog-centered'>

@@ -358,7 +358,6 @@ const RatingWaitersList = ({userData, users, waiters, stores, t}) => {
       </Card>
 
       <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
           <DataTable
             noHeader
             subHeader
@@ -383,7 +382,6 @@ const RatingWaitersList = ({userData, users, waiters, stores, t}) => {
               />
             }
           />
-        </div>
       </Card>
     </Fragment>
   )

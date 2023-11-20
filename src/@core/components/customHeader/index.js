@@ -95,24 +95,7 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
 // ** Print table
   function printTable() {   
     const input = document.querySelector('.react-dataTable')
-
-    const printWindow = window.open('', '_blank')
-    printWindow.document.write('<html><head><title>Print</title></head><body>')
-    const cloneTable = input.cloneNode(true)
-    printWindow.document.body.appendChild(cloneTable)
-    
-    const styles = document.head.querySelectorAll('style')
-    styles.forEach(style => {
-      printWindow.document.head.appendChild(style.cloneNode(true))
-    })
-  
-    printWindow.document.write('</body></html>')
-    printWindow.document.close()
-  
-    printWindow.onload = function () {
-      printWindow.print()
-      printWindow.close()
-    }   
+    window.print()
     // const input = document.querySelector('.react-dataTable')
 
     // const printWindow = window.open('', '_blank')

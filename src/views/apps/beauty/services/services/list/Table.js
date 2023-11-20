@@ -330,7 +330,6 @@ const ServicesList = ({store, stores, masters, categories, modalOpen, toggleModa
       </Card>
 
       <Card className='overflow-hidden'>
-        <div className='react-dataTable'>
           <DataTable
             noHeader
             subHeader
@@ -355,7 +354,6 @@ const ServicesList = ({store, stores, masters, categories, modalOpen, toggleModa
               />
             }
           />
-        </div>
       </Card>
       <ServicesModal masters={masters} store={store} stores={stores} categories={categories} open={modalOpen} toggleModal={toggleModal} selectedService={selectedService} setSelectedService={setSelectedService} t={t}/>
     </Fragment>
