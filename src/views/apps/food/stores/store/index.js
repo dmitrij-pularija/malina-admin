@@ -3,6 +3,44 @@ import { handlePending, handleFulfilled, handleRejected, dataURLtoBlob } from "@
 import errorMessage from "../../../../../@core/components/errorMessage"
 import axios from 'axios'
 
+export const addStoreImage = async ({ formData }) => {
+  // const formDataImage = new FormData()
+  // const imageBlob = dataURLtoBlob(galery.image)
+  // formDataImage.append('image', imageBlob, 'work.jpg')
+  // try {
+  //   const { data: { image } } = await axios.post(`/image/upload/`, formDataImage)
+  //   store.image = image
+  //   } catch (error) {
+  //     errorMessage(error.response.data ? Object.entries(error.response.data).flatMap(errors => errors).join(', ') : error.message)
+  //   }
+  try {
+  const { data } = await axios.post('/users/business-images/', formData)
+  return data
+} catch (error) {
+  errorMessage(error.response.data.detail)
+}
+}
+
+export const delStoreImage = async id => {
+  try {
+  await axios.delete(`/users/business-images/${id}/`)
+} catch (error) {
+  errorMessage(error.response.data.detail)
+}
+}
+
+export const getStoreImage = async id => {
+  try {
+  const { data: { results } } = await axios.get(`/users/business-images/${id}/`)
+  return results
+} catch (error) {
+  errorMessage(error.response ? error.response.data.detail : error.message)
+}
+}
+
+
+
+
 export const getDelivery = async id => {
   try {
   const { data: { results }} = await axios.get(`/users/deliverytariffs?business__id=${id}`)

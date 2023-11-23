@@ -94,7 +94,6 @@ const CustomHeader = ({ data, handlePerPage, rowsPerPage, handleFilter, searchTe
   }
 // ** Print table
   function printTable() {   
-    const input = document.querySelector('.react-dataTable')
     window.print()
     // const input = document.querySelector('.react-dataTable')
 

@@ -9,6 +9,7 @@ import StoreDetails from "./StoreDetails"
 import BreadCrumbs from "@components/breadcrumbs"
 // import ModalPassword from "../detail/ModalPassword"
 import ModalІShifts from "../detail/ModalІShifts"
+import ModalGalery from "../detail/ModalGalery"
 import ModalІDelivery from "../detail/ModalІDelivery"
 import Loading from '../../../../../../src/@core/components/spinner/Loading'
 import '@styles/react/apps/app-users.scss'
@@ -18,6 +19,7 @@ const StoreView = () => {
   const { id } = useParams()
   const { t } = useTranslation()
   // const [modalPasswordsShow, setModalPasswordsShow] = useState(false)
+  const [modalGaleryShow, setModalGaleryShow] = useState(false)
   const [modalShiftsShow, setModalShiftsShow] = useState(false)
   const [modalDeliveryShow, setModalDeliveryShow] = useState(false)
 
@@ -31,7 +33,7 @@ const StoreView = () => {
     dispatch(getStore(parseInt(id)))
   }, [])
   
-  // const toggleModalPasswords = () => setModalPasswordsShow(!modalPasswordsShow)
+  const toggleModalGalery = () => setModalGaleryShow(!modalGaleryShow)
   const toggleModalShifts = () => setModalShiftsShow(!modalShiftsShow)
   const toggleModalDelivery = () => setModalDeliveryShow(!modalDeliveryShow)
   return (
@@ -54,6 +56,7 @@ const StoreView = () => {
                 categories={categories}
                 subcategories={subcategories}
                 selectedStore={selectedStore}
+                toggleModalGalery={toggleModalGalery}
                 toggleModalShifts={toggleModalShifts}
                 toggleModalDelivery={toggleModalDelivery}
               />
@@ -71,8 +74,8 @@ const StoreView = () => {
           </CardBody>
         </Card>
       </div>
-      {/* <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} /> */}
       <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} business={selectedStore ? selectedStore.id : ''} t={t} />
+      <ModalGalery id={id} isOpen={modalGaleryShow} toggle={toggleModalGalery} data={selectedStore ? selectedStore.images : ''} t={t} />
       <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : ''} t={t} />  
     </Fragment>
   )

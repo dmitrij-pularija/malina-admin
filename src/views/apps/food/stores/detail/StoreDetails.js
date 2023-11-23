@@ -13,6 +13,7 @@ import ModalMap from '../../../../../@core/components/map/ModalMap'
 import ModalPassword from "./ModalPassword"
 import ModalІShifts from "./ModalІShifts"
 import ModalІDelivery from "./ModalІDelivery"
+import ModalGalery from "./ModalGalery"
 import classnames from "classnames"
 import { Plus, Minus } from "react-feather"
 import {
@@ -184,6 +185,7 @@ const Store = (props) => {
   const [categoryOptions, setCategoryOptions] = useState(initCategoryOptions())
   const [subcategoryOptions, setSubcategoryOptions] = useState(initSubcategoryOptions())
   const [modalShow, setModalShow] = useState(false)
+  const [modalGaleryShow, setModalGaleryShow] = useState(false)
   const [modalShiftsShow, setModalShiftsShow] = useState(false)
   const [modalDeliveryShow, setModalDeliveryShow] = useState(false)
   const [passwords, setPasswords] = useState({ newPassword: "", confirmPassword: "" })
@@ -263,6 +265,7 @@ const Store = (props) => {
 
   const handleImgReset = () => setAvatar("")
   const toggleModal = () => setModalShow(!modalShow)
+  const toggleModalGalery = () => setModalGaleryShow(!modalGaleryShow)
   const toggleModalShifts = () => setModalShiftsShow(!modalShiftsShow)
   const toggleModalDelivery = () => setModalDeliveryShow(!modalDeliveryShow)
 
@@ -1181,12 +1184,16 @@ const Store = (props) => {
             <Button color="secondary" outline onClick={toggleModalDelivery}>
             {t('StoreData.DeliveryTarif')}
             </Button>
+            <Button color="secondary" outline onClick={toggleModalGalery}>
+            {t('Galery')}
+            </Button>
             </>}
           </Col>
         </Row>
       </Form>
       <ModalMap isOpen={mapOpen} toggle={toggleMap} onCoordinateSelected={handleCoordinateSelected} selectedAddres={selectedStore && selectedStore.business_address ? selectedStore.business_address : null} />
       <ModalPassword isOpen={modalShow} toggle={toggleModal} onChange={handlePasswordChange} chengPassword={handleChengPassword} passwords={passwords} passwordsMatch={passwordsMatch} t={t} />
+      <ModalGalery id={selectedStore ? selectedStore.id : ''} isOpen={modalGaleryShow} toggle={toggleModalGalery} data={selectedStore ? selectedStore.images : ''} t={t} />
       <ModalІShifts isOpen={modalShiftsShow} toggle={toggleModalShifts} business={selectedStore ? selectedStore.id : ''} t={t} />
       <ModalІDelivery isOpen={modalDeliveryShow} toggle={toggleModalDelivery} business={selectedStore ? selectedStore.id : ''} t={t} />
     </>

@@ -61,7 +61,7 @@ import {
   }
 
   const StoreDetails = (props) => {
-    const { categories, subcategories, selectedStore, toggleModalDelivery, toggleModalShifts, t  } = props
+    const { categories, subcategories, selectedStore, toggleModalGalery,  toggleModalDelivery, toggleModalShifts, t  } = props
     const navigate = useNavigate()
     const handleEdit = () => navigate(`/apps/food/stores/store-detail/${selectedStore.id}`)
 
@@ -230,6 +230,9 @@ import {
     </Button>}
     <Button color="secondary" outline onClick={toggleModalDelivery}>
     {t('StoreData.DeliveryTarif')}
+    </Button>
+    <Button color="secondary" outline onClick={toggleModalGalery}>
+    {t('Galery')}
     </Button>
     </Col>
     </Row>
