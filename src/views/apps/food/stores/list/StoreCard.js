@@ -86,6 +86,7 @@ const StoreCard = props => {
 
         return (
           <Card className='ecommerce-card' key={item.name}>
+            <Link to={`/apps/food/stores/view/${item.id}`}>
             {/* <div className='item-img text-center mx-auto'> */}
               {renderLogo(item.images && item.images.length ? item.images[0].image : item.avatar, item.name)}
             {/* </div> */}
@@ -140,6 +141,7 @@ const StoreCard = props => {
               
               <CardText className='item-description'>{item.description}</CardText>
             </CardBody>
+            </Link>
             <div className='item-options text-center'>
               {/* <div className='item-wrapper'>
                 <div className='item-cost'>

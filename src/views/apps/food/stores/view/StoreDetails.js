@@ -64,6 +64,7 @@ import {
     const { categories, subcategories, selectedStore, toggleModalGalery,  toggleModalDelivery, toggleModalShifts, t  } = props
     const navigate = useNavigate()
     const handleEdit = () => navigate(`/apps/food/stores/store-detail/${selectedStore.id}`)
+    const handleBack = () => navigate(-1)
 
     return (
     <>    
@@ -222,6 +223,9 @@ import {
     </Row>
     <Row>
     <Col className="d-flex justify-content-center mt-2 gap-10" sm="12">
+    <Button color="secondary" outline onClick={handleBack}>
+    {t('cancel')}
+    </Button>  
     <Button color="secondary" outline onClick={handleEdit}>
     {t('edit')}
     </Button>
