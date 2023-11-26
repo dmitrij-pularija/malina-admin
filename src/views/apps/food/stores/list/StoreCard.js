@@ -107,8 +107,8 @@ const StoreCard = props => {
                         <li key={index} className='ratings-list-item me-25'>
                           <Star
                             className={classnames({
-                              'filled-star': index + 1 <= item.avg_store,
-                              'unfilled-star': index + 1 > item.avg_store
+                              'filled-star': index + 1 <= item.average_business_rating,
+                              'unfilled-star': index + 1 > item.average_business_rating
                             })}
                           />
                         </li>
@@ -128,8 +128,8 @@ const StoreCard = props => {
                         <li key={index} className='ratings-list-item me-25'>
                           <Star
                             className={classnames({
-                              'filled-star': index + 1 <= item.avg_personal,
-                              'unfilled-star': index + 1 > item.avg_personal
+                              'filled-star': index + 1 <= item.average_staff_rating,
+                              'unfilled-star': index + 1 > item.average_staff_rating
                             })}
                           />
                         </li>
