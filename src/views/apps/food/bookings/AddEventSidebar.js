@@ -260,7 +260,7 @@ const AddEventSidebar = props => {
       if (data.response) statusData.response = data.response
       }
       if (selectedBooking && selectedBooking.user) {
-        dispatch(updateEvent({ id: selectedBooking.id, booking: newData })).then(response => response.meta.requestStatus === 'fulfilled' && !statusData && handleClose())
+        if (!statusData) dispatch(updateEvent({ id: selectedBooking.id, booking: newData })).then(response => response.meta.requestStatus === 'fulfilled' && !statusData && handleClose())
         if (statusData) dispatch(changeStatus({ id: selectedBooking.id, booking: statusData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
         dispatch(addEvent({ booking: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())

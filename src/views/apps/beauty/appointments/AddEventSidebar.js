@@ -340,7 +340,7 @@ const AddEventSidebar = props => {
       if (servicesValues) newData.appointment_services = servicesValues
       if (data.status) statusData.appointment_status = data.status.value
       if (selectedAppointment && selectedAppointment.appointment_user_account) {
-        dispatch(updateEvent({ id: selectedAppointment.id, appointment: newData })).then(response => response.meta.requestStatus === 'fulfilled' && !statusData && handleClose())
+        if (!statusData) dispatch(updateEvent({ id: selectedAppointment.id, appointment: newData })).then(response => response.meta.requestStatus === 'fulfilled' && !statusData && handleClose())
         if (statusData) dispatch(changeStatus({ id: selectedAppointment.id, appointment: statusData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
       } else {
         dispatch(addEvent({ appointment: newData })).then(response => response.meta.requestStatus === 'fulfilled' && handleClose())
