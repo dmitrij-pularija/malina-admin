@@ -1,11 +1,11 @@
 import { Fragment, useState, useEffect, forwardRef } from 'react'
 // import { useDispatch, useSelector } from "react-redux"
-import { useForm, Controller } from "react-hook-form"
+import { useForm } from "react-hook-form"
 import  { columns } from './columns'
 // import  ExpandableTable from './expandableTable'
-import { createProductCart, addProductList, editProductList } from "../../store"
-import Select from 'react-select'
-import { selectThemeColors, checkIsValid, initSelect, arraysAreEqual } from '@utils'
+import { createProductCart } from "../../store"
+// import Select from 'react-select'
+import { arraysAreEqual } from '@utils'
 import ReactPaginate from 'react-paginate'
 import DataTable from 'react-data-table-component'
 import { ChevronDown, Share, Printer, FileText, File, Grid, Copy, Plus, ArrowLeft, ArrowRight } from 'react-feather'
@@ -15,9 +15,9 @@ import '@styles/react/libs/tables/react-dataTable-component.scss'
 const defaultValues = {
   orderCart: ''
   }
-const requiredFields = ["orderCart"]
+// const requiredFields = ["orderCart"]
 
-const price = row => row.cost * (1 - (row.prime_cost / 100))
+// const price = row => row.cost * (1 - (row.prime_cost / 100))
 
 // const BootstrapCheckbox = forwardRef((props, ref) => (
 //   <div className='form-check'>
@@ -85,7 +85,7 @@ const Cart = ({ categories, stepper, orderData, handleUpdate, products, selected
   const [searchTerm, setSearchTerm] = useState('')
   const [currentPage, setCurrentPage] = useState(1)
   const [rowsPerPage, setRowsPerPage] = useState(20)
-  const [filteredData, setFilteredData] = useState([])
+  // const [filteredData, setFilteredData] = useState([])
 // console.log(products)
   const getQuantity = id => {
     if (selectedOrder && selectedOrder.carts[0].products_list.length > 0) {

@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
+import { FOOD_BOOKINGS_WS_URL } from '../../../../../configs/initial'
 import axios from 'axios'
+
+export const foodBookingSocket = new WebSocket(FOOD_BOOKINGS_WS_URL)
 
 export const getAllBooking = createAsyncThunk('appBooking/getAllBooking', async () => {
   try {
@@ -110,6 +113,7 @@ export const appBookingSlice = createSlice({
     allBooking: [],
     total: 0,
     params: {},
+    messages: [],
     loading: false,
     error: null,
     selectedBooking: null
@@ -117,6 +121,9 @@ export const appBookingSlice = createSlice({
   reducers: {
     selectEvent: (state, action) => {
       state.selectedBooking = action.payload
+    },
+    addFoodBookingMessage: (state, action) => {
+      state.messages.push(action.payload)
     }
   },
   extraReducers: builder => {
@@ -162,6 +169,6 @@ export const appBookingSlice = createSlice({
   }
 })
 
-export const { selectEvent } = appBookingSlice.actions
+export const { selectEvent, addFoodBookingMessage } = appBookingSlice.actions
 
 export default appBookingSlice.reducer

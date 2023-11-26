@@ -1,7 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
+import { FOOD_ORDERS_WS_URL } from '../../../../../configs/initial'
 import axios from 'axios'
+
+export const foodOrderSocket = new WebSocket(FOOD_ORDERS_WS_URL)
 
 export const getAddressList = async () => {
   try {
@@ -195,11 +198,16 @@ export const appOrdersSlice = createSlice({
     total: 1,
     params: {},
     status: [],
+    messages: [],
     loading: false,
     error: null,
     selectedOrder: null
   },
-  reducers: {},
+  reducers: {
+    addFoodOrdersMessage: (state, action) => {
+      state.messages.push(action.payload)
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(getAllOrders.fulfilled, (state, action) => {
@@ -247,3 +255,4 @@ export const appOrdersSlice = createSlice({
 })
 
 export default appOrdersSlice.reducer
+export const { addFoodOrdersMessage } = appOrdersSlice.actions

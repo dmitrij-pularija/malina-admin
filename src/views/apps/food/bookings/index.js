@@ -40,7 +40,7 @@ const CalendarComponent = () => {
   const { userData } = useSelector(state => state.auth)
   const users = useSelector(state => state.users.allUsers)
   const stores = useSelector(state => state.stores.allStores)
-  const {data, selectedBooking, loading} = useSelector(state => state.bookings)
+  const {data, selectedBooking, messages} = useSelector(state => state.bookings)
   const [calendarApi, setCalendarApi] = useState(null)
   const [addSidebarOpen, setAddSidebarOpen] = useState(false)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
@@ -129,6 +129,16 @@ const CalendarComponent = () => {
     //   business_id: userData.type === 2 ? userData.id : currentStore ? currentStore.value : ""
     // }))
   }, [])
+
+  useEffect(() => {
+    if (currentStore) {
+    dispatch(getData({
+      perPage: 1000,
+      business_id: currentStore.value
+    }))
+  }
+  }, [messages.length])
+
 
   // useEffect(() => {
   //   dispatch(getData(currentStore.value))

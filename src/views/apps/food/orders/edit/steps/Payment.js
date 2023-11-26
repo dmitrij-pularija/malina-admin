@@ -251,7 +251,7 @@ const Payment = ({ stepper, orderData, selectedOrder, handleUpdate, t }) => {
             <span className='align-middle d-sm-inline-block d-none'>{t('Prev')}</span>
           </Button>
           <Button  type='submit' color='success' className='btn-submit' >
-            {selectedOrder ? t('edit') : t('add')}
+            {selectedOrder ? t('Edit') : t('Add')}
           </Button>
         </div>
       </Form>

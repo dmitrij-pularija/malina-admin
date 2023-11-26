@@ -9,9 +9,15 @@ import DataTable from 'react-data-table-component'
 import { ChevronDown } from 'react-feather'
 import { selectThemeColors, initSelect } from '@utils'
 import { Row, Col, Card, Label, CardBody } from 'reactstrap'
+// import notification from '@src/assets/mp3/notification.ogg'
 import '@styles/react/libs/react-select/_react-select.scss'
 import '@styles/react/libs/tables/react-dataTable-component.scss'
 import '@styles/base/pages/app-ecommerce.scss'
+
+// const playAudio = () => {
+//   const audio = new Audio(notification)
+//   audio.play()
+// }
 
 const OrdersList = ({users, userData, stores, status, t}) => {
 const dispatch = useDispatch()
@@ -43,7 +49,17 @@ storeOptions.unshift({ value: '', label: t('showAll') })
         business_id: userData.type === 2 ? userData.id : currentStore ? currentStore.value : ""
       })
     )
-  }, [stores])
+  }, [stores, store.messages.length])
+
+  // useEffect(() => {
+  //   socket.onmessage = (event) => {
+  //     const data = JSON.parse(event.data)
+  //     dispatch(addMessage(data))
+  //     playAudio()
+  //     console.log('Received data:', data)
+  //   }
+  // }, [])
+
 
   const statusOptions = status.map((stat) => ({
     value: String(stat.id),

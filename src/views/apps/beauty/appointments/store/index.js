@@ -1,8 +1,10 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected, dataURLtoBlob } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
+import { BEAUTY_APPOINTMENTS_WS_URL } from '../../../../../configs/initial'
 import axios from 'axios'
 
+export const beautyAppointmentsSocket = new WebSocket(BEAUTY_APPOINTMENTS_WS_URL)
 // export const delImages = async id => {
 //   try {
 //   await axios.delete(`/beauty/beauty-product-images/${id}/`)
@@ -136,6 +138,7 @@ export const appBeautyAppointmentsSlice = createSlice({
     allAppointments: [],
     total: 0,
     params: {},
+    messages: [],
     loading: false,
     error: null,
     selectedAppointment: null
@@ -143,6 +146,9 @@ export const appBeautyAppointmentsSlice = createSlice({
   reducers: {
     selectEvent: (state, action) => {
       state.selectedAppointment = action.payload
+    },
+    addBeautyAppointmentsMessage: (state, action) => {
+      state.messages.push(action.payload)
     }
   },
   extraReducers: builder => {
@@ -188,6 +194,6 @@ export const appBeautyAppointmentsSlice = createSlice({
   }
 })
 
-export const { selectEvent } = appBeautyAppointmentsSlice.actions
+export const { selectEvent, addBeautyAppointmentsMessage } = appBeautyAppointmentsSlice.actions
 
 export default appBeautyAppointmentsSlice.reducer

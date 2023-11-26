@@ -90,7 +90,7 @@ storeOptions.unshift({ value: '', label: t('showAll') })
         business_id: userData.type === 2 ? userData.id : currentStore ? currentStore.value : ""
       })
     )
-  }, [stores.length])
+  }, [stores.length, store.messages.length])
  
   const statusOptions = status.map((stat) => ({
     value: String(stat.id),

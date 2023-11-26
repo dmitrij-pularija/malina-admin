@@ -60,6 +60,16 @@ export const feedsType = {
   1: "Новость",
   2: "Акция"
 }
+export const wsActions = {
+  update: { label: 'Обновление', colorName: 'light-success' },
+  create: { label: 'Создание',  colorName: 'light-warning' },
+  delete: { label: 'Удаление', colorName: 'light-danger' }
+}
+
+export const FOOD_ORDERS_WS_URL = "ws://167.99.246.103:8080/api/v2/malina/products/user-order/"
+export const FOOD_BOOKINGS_WS_URL = "ws://167.99.246.103:8080/api/v2/malina/products/bookings/"
+export const BEAUTY_ORDERS_WS_URL = "ws://167.99.246.103:8080/api/v2/malina/beauty/beauty_orders/"
+export const BEAUTY_APPOINTMENTS_WS_URL = "ws://167.99.246.103:8080/api/v2/malina/beauty/beauty_appointments/"
 
 export const BASE_URL = "https://malina-proxy.onrender.com"
 // export const BASE_URL = "http://167.99.246.103:8080"

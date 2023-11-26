@@ -105,7 +105,7 @@ const ModalGalery = ({id, isOpen, toggle, data, t }) => {
   useEffect(() => {
     setGalery(data && data.length ? data : [])
 }, [data])
-console.log(galery)
+// console.log(galery)
 
 
 const handleImg = (e) => {

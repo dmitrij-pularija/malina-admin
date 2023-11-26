@@ -42,7 +42,7 @@ const CalendarComponent = () => {
   const stores = useSelector(state => state.stores.allStores)
   const masters = useSelector(state => state.masters.allMasters)
   const services = useSelector(state => state.services.allServices)
-  const {data, selectedAppointment, loading} = useSelector(state => state.appointments)
+  const {data, selectedAppointment, messages } = useSelector(state => state.appointments)
   const [calendarApi, setCalendarApi] = useState(null)
   const [addSidebarOpen, setAddSidebarOpen] = useState(false)
   const [leftSidebarOpen, setLeftSidebarOpen] = useState(false)
@@ -185,6 +185,16 @@ const CalendarComponent = () => {
       }))
     }
   }, [stores.length, masters.length])
+
+
+  useEffect(() => {
+    if (currentStore) {
+    dispatch(getData({
+      perPage: 1000,
+      business_id: currentStore.value
+    }))
+  }
+  }, [messages.length])
 
   return (
     <Fragment>

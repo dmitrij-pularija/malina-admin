@@ -1,6 +1,6 @@
 // ** Dropdowns Imports
 import IntlDropdown from './IntlDropdown'
-import CartDropdown from './CartDropdown'
+// import CartDropdown from './CartDropdown'
 import UserDropdown from './UserDropdown'
 import NavbarSearch from './NavbarSearch'
 import NotificationDropdown from './NotificationDropdown'
@@ -13,7 +13,7 @@ import { NavItem, NavLink } from 'reactstrap'
 
 const NavbarUser = props => {
   // ** Props
-  const { skin, setSkin } = props
+  const { skin, setSkin, userData, isMute, toggleMute, beautyOrders, beautyAppointments, foodOrders, foodBookings, t } = props
 
   // ** Function to toggle Theme (Light/Dark)
   const ThemeToggler = () => {
@@ -34,7 +34,7 @@ const NavbarUser = props => {
       </NavItem>
       <NavbarSearch />
       {/* <CartDropdown /> */}
-      <NotificationDropdown />
+      <NotificationDropdown userData={userData} isMute={isMute} toggleMute={toggleMute} beautyOrders={beautyOrders} beautyAppointments={beautyAppointments} foodOrders={foodOrders} foodBookings={foodBookings} t={t}/>
       <UserDropdown />
     </ul>
   )

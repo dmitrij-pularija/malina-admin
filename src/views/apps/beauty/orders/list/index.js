@@ -61,6 +61,8 @@ const OrdersList = () => {
   //   avg = total ? sum / total : 0
   // }
 
+ 
+
   return (
     <div className='app-user-list'>
 <Breadcrumbs title={t('Orders')} data={[{ title: t('Orders') }]} onClick={userData.type === 3 ? null : handleAdd} /> 

@@ -1,7 +1,30 @@
 import { createSlice, createAsyncThunk } from '@reduxjs/toolkit'
 import { handlePending, handleFulfilled, handleRejected } from "@utils"
 import errorMessage from "../../../../../@core/components/errorMessage"
+import { BEAUTY_ORDERS_WS_URL } from '../../../../../configs/initial'
 import axios from 'axios'
+
+export const beautyOrderSocket = new WebSocket(BEAUTY_ORDERS_WS_URL)
+
+
+
+
+// export const getSocketMessge = async () => {
+//   let message = ''
+//   try {
+//     socket.onmessage = (event) => {
+//       console.log(event)
+//       message = JSON.parse(event.data)
+//       // const data = JSON.parse(event.data)
+//       console.log('Received data:', message)
+//     }
+//   return message
+// } catch (error) {
+//   console.log(error)
+//   errorMessage(error)
+//   return []
+// }
+// }
 
 export const getAddressList = async () => {
   try {
@@ -178,7 +201,7 @@ export const editOrder = createAsyncThunk('appBeautyOrders/editOrder', async ({ 
 export const deleteOrder = createAsyncThunk('appBeautyOrders/deleteOrder', async (id, { dispatch, getState }) => {
   try {
   await axios.delete(`/beauty/beauty_orders/${id}/`)
-  // await dispatch(getData(getState().orderes.params))
+  await dispatch(getData(getState().beautyOrders.params))
   return id
 } catch (error) {
   errorMessage(error.response.data.detail)
@@ -194,11 +217,16 @@ export const appBeautyOrdersSlice = createSlice({
     count: { totalOrder: 0, totalPrice: 0,  avgPrice: 0,  avgRait: 0 },
     total: 0,
     params: {},
+    messages: [],
     loading: false,
     error: null,
     selectedOrder: null
   },
-  reducers: {},
+  reducers: {
+    addBeautyOrdersMessage: (state, action) => {
+      state.messages.push(action.payload)
+    }
+  },
   extraReducers: builder => {
     builder
       .addCase(getAllOrders.fulfilled, (state, action) => {
@@ -239,3 +267,4 @@ export const appBeautyOrdersSlice = createSlice({
 })
 
 export default appBeautyOrdersSlice.reducer
+export const { addBeautyOrdersMessage } = appBeautyOrdersSlice.actions
