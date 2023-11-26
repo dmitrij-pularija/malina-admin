@@ -2,6 +2,7 @@ import renderClient from '@components/renderClient'
 import InputNumber from "rc-input-number"
 import { Plus, Minus } from "react-feather"
 import { formatNumber, formatNumberInt } from '@utils'
+import '@styles/react/libs/input-number/input-number.scss'
 
 const price = (row, quantity) => row.cost * (1 - (row.prime_cost / 100)) * quantity
 

@@ -23,6 +23,7 @@ import {
 } from "../../../../../configs/initial"
 import "@styles/react/libs/flatpickr/flatpickr.scss"
 import "@styles/react/pages/page-authentication.scss"
+import '@styles/react/libs/input-number/input-number.scss'
 import telegramIcon from "@src/assets/images/icons/social/telegram.svg"
 import instagramIcon from "@src/assets/images/icons/social/instagram.svg"
 import whatsappIcon from "@src/assets/images/icons/social/whatsapp.svg"
