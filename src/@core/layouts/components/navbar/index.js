@@ -10,12 +10,20 @@ import { addFoodBookingMessage, foodBookingSocket } from '../../../../views/apps
 // ** Custom Components
 import NavbarUser from './NavbarUser'
 import NavbarBookmarks from './NavbarBookmarks'
-import notification from '@src/assets/mp3/notification.ogg'
+import beautyOrderNotification from '@src/assets/mp3/beautyOrderNotification.ogg'
+import beautyAppointmentsNotification from '@src/assets/mp3/beautyAppointmentsNotification.ogg'
+import foodOrderNotification from '@src/assets/mp3/foodOrderNotification.ogg'
+import foodBookingNotification from '@src/assets/mp3/foodBookingNotification.ogg'
 
-const playAudio = () => {
-  const audio = new Audio(notification)
-  audio.play()
-}
+const beautyOrderAudio = new Audio(beautyOrderNotification)
+const beautyAppointmentsAudio = new Audio(beautyAppointmentsNotification)
+const foodOrderAudio = new Audio(foodOrderNotification)
+const foodBookingAudio = new Audio(foodBookingNotification)
+
+// const playAudio = () => {
+//   const audio = new Audio(notification)
+//   audio.play()
+// }
 
 const ThemeNavbar = props => {
   const { skin, setSkin, setMenuVisibility } = props
@@ -34,22 +42,22 @@ const ThemeNavbar = props => {
     if (userData.business === 2 || userData.type === 3) beautyOrderSocket.onmessage = (event) => {
       const data = JSON.parse(event.data)
       dispatch(addBeautyOrdersMessage(data))
-      if (!isMute) playAudio()
+      if (!isMute) beautyOrderAudio.play()
     }
     if (userData.business === 2 || userData.type === 3 || userData.type === 4) beautyAppointmentsSocket.onmessage = (event) => {
       const data = JSON.parse(event.data)
       dispatch(addBeautyAppointmentsMessage(data))
-      if (!isMute) playAudio()
+      if (!isMute) beautyAppointmentsAudio.play()
     }
     if (userData.business === 1 || userData.type === 3) foodOrderSocket.onmessage = (event) => {
       const data = JSON.parse(event.data)
       dispatch(addFoodOrdersMessage(data))
-      if (!isMute) playAudio()
+      if (!isMute) foodOrderAudio.play()
     }
     if (userData.business === 1 || userData.type === 3) foodBookingSocket.onmessage = (event) => {
       const data = JSON.parse(event.data)
       dispatch(addFoodBookingMessage(data))
-      if (!isMute) playAudio()
+      if (!isMute) foodBookingAudio.play()
     }
   }, [isMute])
 
