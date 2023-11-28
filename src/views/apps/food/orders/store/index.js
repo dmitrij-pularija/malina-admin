@@ -181,7 +181,7 @@ export const editOrder = createAsyncThunk('appOrders/editOrder', async ({ id, or
 export const deleteOrder = createAsyncThunk('appOrders/deleteOrder', async (id, { dispatch, getState }) => {
   try {
   await axios.delete(`/products/user-order/${id}/`)
-  // await dispatch(getData(getState().orderes.params))
+  await dispatch(getData(getState().orderes.params))
   return id
 } catch (error) {
   errorMessage(error.response.data.detail)
